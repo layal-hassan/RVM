@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>On-Call Booking Detail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'electricity/css/dashboard.css' %}">
+</head>
+<body class="dash-body">
+  <div class="dash-shell">
+    <aside class="dash-sidebar">
+      <div class="dash-brand">
+        <div class="brand-dot"></div>
+        <div>
+          <div class="brand-title">On-Call Booking</div>
+          <div class="brand-sub">Provider Console</div>
+        </div>
+      </div>
+      <nav class="dash-nav">
+        <a href="{% url 'electricity:provider_dashboard' %}">Back to Orders</a>
+      </nav>
+    </aside>
+
+    <main class="dash-main">
+      <div class="dash-top">
+        <div>
+          <h1>{{ booking.organization_name|default:booking.contact_person }}</h1>
+          <p class="dash-subtitle">{{ booking.city|default:"-" }}</p>
+        </div>
+      </div>
+
+      <section class="dash-panel dash-panel-wide">
+        <div class="panel-header">
+          <div>
+            <h2>Booking Details</h2>
+            <div class="panel-meta">Status: {{ booking.get_status_display }}</div>
+          </div>
+        </div>
+        <div class="panel-table">
+          <div class="panel-row"><span>Entity Type</span><span>{{ booking.get_entity_type_display|default:"-" }}</span></div>
+          <div class="panel-row"><span>Contact Person</span><span>{{ booking.contact_person|default:"-" }}</span></div>
+          <div class="panel-row"><span>Phone</span><span>{{ booking.phone|default:"-" }}</span></div>
+          <div class="panel-row"><span>Email</span><span>{{ booking.email|default:"-" }}</span></div>
+          <div class="panel-row"><span>Address</span><span>{{ booking.company_address|default:"-" }}</span></div>
+          <div class="panel-row"><span>ZIP</span><span>{{ booking.zip_code|default:"-" }}</span></div>
+          <div class="panel-row"><span>Coverage</span><span>{{ booking.coverage_scope|default:"-" }}</span></div>
+          <div class="panel-row"><span>Response Speed</span><span>{{ booking.get_response_speed_display|default:"-" }}</span></div>
+          <div class="panel-row"><span>Plan</span><span>{{ booking.service_plan }}</span></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

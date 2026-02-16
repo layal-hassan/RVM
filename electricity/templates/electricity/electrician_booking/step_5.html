@@ -1,0 +1,23 @@
+﻿{% extends "electricity/electrician_booking/base.html" %}
+
+{% block booking_content %}
+<form method="post" class="eb-form">
+  {% csrf_token %}
+  <section class="eb-card">
+    <div class="eb-card-header">
+      <span class="eb-step-badge">5</span>
+      <div>
+        <h1>Additional notes</h1>
+        <p>Optional details that may help the electrician prepare.</p>
+      </div>
+    </div>
+    <label class="eb-label">Notes</label>
+    <textarea class="form-control eb-textarea" name="additional_notes" rows="5" placeholder="Any extra details, preferences, or constraints...">{{ data.additional_notes|default:'' }}</textarea>
+  </section>
+
+  <div class="eb-actions">
+    <a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 4 %}">Back</a>
+    <button class="btn btn-primary" type="submit">Continue to Step 6 -></button>
+  </div>
+</form>
+{% endblock %}

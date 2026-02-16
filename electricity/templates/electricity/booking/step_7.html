@@ -1,0 +1,46 @@
+{% extends "electricity/booking/base_booking.html" %}
+
+{% block subtitle %}
+<p class="booking-subtitle">Confirm your details before submitting your request.</p>
+{% endblock %}
+
+{% block content %}
+{% if consultation_free %}
+  <div class="success-banner">Your first consultation is free.</div>
+{% endif %}
+<div class="review-grid">
+    <div class="review-card">
+        <div class="review-title">Contact Information</div>
+        <div class="review-row"><span>Full Name</span><span>{{ data.full_name }}</span></div>
+        <div class="review-row"><span>Email Address</span><span>{{ data.email|default:"-" }}</span></div>
+        <div class="review-row"><span>Phone Number</span><span>{{ data.phone|default:"-" }}</span></div>
+    </div>
+    <div class="review-card">
+        <div class="review-title">Consultation Topics</div>
+        <div class="review-row"><span>Type</span><span>{{ data.consultation_type|default:"-" }}</span></div>
+        <div class="review-row"><span>Services</span><span>{{ data.services|join:", " }}</span></div>
+        <div class="review-row"><span>Urgent</span><span>{{ data.urgent }}</span></div>
+    </div>
+    <div class="review-card">
+        <div class="review-title">Preferred Schedule</div>
+        <div class="review-row">
+            <span>Preferred Date</span>
+            <span>{{ form.preferred_date }}</span>
+        </div>
+        <div class="review-row">
+            <span>Time Slot</span>
+            <span>{{ form.preferred_time_slot }}</span>
+        </div>
+    </div>
+    <div class="review-card">
+        <div class="review-title">Consultation Pricing</div>
+        <div class="review-row"><span>Status</span><span>{% if consultation_free %}Free (first time){% else %}Paid{% endif %}</span></div>
+        <div class="review-row"><span>Price</span><span>{% if consultation_free %}0{% else %}{{ consultation_price }}{% endif %} {{ currency }}</span></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block actions %}
+<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_6' %}">Back</a>
+<button type="submit" class="btn btn-primary booking-btn">Request Consultation</button>
+{% endblock %}

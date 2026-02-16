@@ -1,0 +1,131 @@
+﻿{% extends "electricity/electrician_booking/base.html" %}
+
+{% block booking_content %}
+<form method="post" class="eb-form">
+  {% csrf_token %}
+  <div class="eb-complete-header">
+    <div>
+      <h1>Complete Your Booking</h1>
+      <p>Finalize your schedule and confirm the details below.</p>
+    </div>
+    <div class="eb-complete-step">Step 6-8 of 8</div>
+  </div>
+
+  <div class="eb-complete-grid">
+    <div class="eb-complete-main">
+      <section class="eb-card">
+        <div class="eb-card-header">
+          <span class="eb-step-badge">6</span>
+          <div>
+            <h2>Preferred Date &amp; Time</h2>
+            <p>Select date and arrival window.</p>
+          </div>
+        </div>
+        <div class="eb-schedule-grid">
+          <div>
+            <div class="eb-label">Select Date</div>
+            <div class="eb-calendar" data-selected="{{ data.preferred_date|default:'' }}"></div>
+            <input type="hidden" name="preferred_date" id="preferred_date" value="{{ data.preferred_date|default:'' }}">
+          </div>
+          <div>
+            <div class="eb-label">Arrival Window</div>
+            <div class="eb-arrival">
+              <label class="eb-arrival-card">
+                <input type="radio" name="arrival_window" value="Morning (08:00 AM - 12:00 PM)" {% if data.arrival_window == "Morning (08:00 AM - 12:00 PM)" %}checked{% endif %}>
+                <div class="eb-arrival-icon">AM</div>
+                <div>
+                  <div class="eb-service-title">Morning</div>
+                  <div class="eb-service-sub">08:00 AM - 12:00 PM</div>
+                </div>
+              </label>
+              <label class="eb-arrival-card">
+                <input type="radio" name="arrival_window" value="Afternoon (12:00 PM - 05:00 PM)" {% if data.arrival_window == "Afternoon (12:00 PM - 05:00 PM)" %}checked{% endif %}>
+                <div class="eb-arrival-icon">PM</div>
+                <div>
+                  <div class="eb-service-title">Afternoon</div>
+                  <div class="eb-service-sub">12:00 PM - 05:00 PM</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="eb-card">
+        <div class="eb-card-header">
+          <span class="eb-step-badge">7</span>
+          <div>
+            <h2>Pricing Transparency</h2>
+            <p>Estimated cost calculation.</p>
+          </div>
+        </div>
+        <div class="eb-pricing-box">
+          <div class="eb-price-row">
+            <span>Minimum Callout Fee (1st hr)</span>
+            <strong>{{ pricing.currency }} {{ pricing.minimum_callout|floatformat:2 }}</strong>
+          </div>
+          <div class="eb-price-row">
+            <span>Estimated Additional Time ({{ pricing.additional_hours }} hrs x {{ pricing.currency }} {{ pricing.hourly_rate|floatformat:2 }}/hr)</span>
+            <strong>{{ pricing.currency }} {{ pricing.additional_total|floatformat:2 }}</strong>
+          </div>
+          <div class="eb-price-total">
+            <span>Total Estimated Booking</span>
+            <strong>{{ pricing.currency }} {{ pricing.total|floatformat:2 }}</strong>
+          </div>
+        </div>
+        <label class="eb-checkbox eb-pricing-check">
+          <input type="checkbox" name="pricing_ack" value="yes" {% if data.pricing_ack %}checked{% endif %}>
+          <span>I understand this is an estimate. Final pricing is based on actual time spent on site and any material costs incurred.</span>
+        </label>
+      </section>
+    </div>
+
+    <aside class="eb-summary">
+      <div class="eb-summary-card">
+        <div class="eb-summary-header">
+          <div>
+            <div class="eb-summary-title">Review &amp; Confirm</div>
+            <div class="eb-summary-step">8</div>
+          </div>
+        </div>
+        <div class="eb-summary-row">
+          <span class="eb-summary-label">Service type</span>
+          <strong>{{ data.service_type|default:"Residential Electrical Repair"|title }}</strong>
+        </div>
+        <div class="eb-summary-row">
+          <span class="eb-summary-label">Location</span>
+          <strong>{{ data.street_address|default:"1248 Oakwood Ave" }}, {{ data.city|default:"Silver Springs" }}</strong>
+        </div>
+        <div class="eb-summary-row">
+          <span class="eb-summary-label">Appointment</span>
+          <strong>
+            {% if data.preferred_date %}{{ data.preferred_date }}{% else %}Thursday, Oct 5{% endif %}
+            {% if data.arrival_window %} | {{ data.arrival_window }}{% else %} | 8 AM - 12 PM{% endif %}
+          </strong>
+        </div>
+        <label class="eb-checkbox">
+          <input type="checkbox" name="confirm_info" value="yes">
+          <span>I confirm all the provided information above is correct.</span>
+        </label>
+        <label class="eb-checkbox">
+          <input type="checkbox" name="accept_terms" value="yes">
+          <span>I accept the <a href="{% url 'electricity:terms' %}">Terms of Service</a> and <a href="{% url 'electricity:privacy' %}">Cancellation Policy</a>.</span>
+        </label>
+        <button class="btn btn-primary eb-confirm-btn" type="submit">Confirm Booking -></button>
+        <div class="eb-disclaimer">No immediate charge will be made to your card.</div>
+      </div>
+      <div class="eb-help-card">
+        <div class="eb-help-icon">TEL</div>
+        <div>
+          <div class="eb-help-title">Need help with your booking?</div>
+          <div class="eb-help-phone">Call (555) 012-3456</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="eb-actions eb-actions-center">
+    <a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 7 %}">Back</a>
+  </div>
+</form>
+{% endblock %}

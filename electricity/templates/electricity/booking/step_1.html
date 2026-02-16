@@ -1,0 +1,43 @@
+{% extends "electricity/booking/base_booking.html" %}
+
+{% block subtitle %}
+<p class="booking-subtitle">Select the format that best fits your project needs. On-site visits allow for the most accurate engineering assessments and safety audits.</p>
+{% endblock %}
+
+{% block content %}
+<div class="option-grid">
+    {% for choice in form.consultation_type %}
+        <label class="option-card option-card-large">
+            {{ choice.tag }}
+            {% if forloop.counter == 1 %}
+                <div class="option-pill">Recommended</div>
+            {% endif %}
+            <div class="option-icon">
+                {% if forloop.counter == 1 %}
+                    <span>ON</span>
+                {% elif forloop.counter == 2 %}
+                    <span>VIDEO</span>
+                {% else %}
+                    <span>CALL</span>
+                {% endif %}
+            </div>
+            <div class="option-body">
+                <div class="option-title">{{ choice.choice_label }}</div>
+                {% if forloop.counter == 1 %}
+                    <div class="option-text">Comprehensive physical inspection of your facility or project site.</div>
+                {% elif forloop.counter == 2 %}
+                    <div class="option-text">Remote visual assessment via real-time screen sharing and mobile video.</div>
+                {% else %}
+                    <div class="option-text">Initial verbal briefing and high-level scope discussion.</div>
+                {% endif %}
+            </div>
+            <span class="option-check"></span>
+        </label>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block actions %}
+<a class="btn btn-light booking-btn" href="{% url 'electricity:home' %}">Back to Home</a>
+<button type="submit" class="btn btn-primary booking-btn">Continue</button>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "electricity/dashboard/base.html" %}
+{% load electricity_extras %}
+
+{% block page_title %}Service Bookings{% endblock %}
+{% block page_subtitle %}Summary view for service booking flow.{% endblock %}
+
+{% block content %}
+<section class="dash-panel dash-panel-wide">
+    <div class="panel-header">
+        <div>
+            <h2>Service Bookings</h2>
+            <div class="panel-meta">{{ items|length }} records</div>
+        </div>
+    </div>
+    <div class="panel-table">
+        <div class="panel-row panel-row-head">
+            {% for field in fields %}
+                <span>{{ field|title }}</span>
+            {% endfor %}
+        </div>
+        {% for row in items %}
+            <div class="panel-row">
+                {% for field in fields %}
+                    <span>{{ row|attr:field|pretty_value }}</span>
+                {% endfor %}
+            </div>
+        {% empty %}
+            <div class="panel-empty">No records yet.</div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

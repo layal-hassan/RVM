@@ -1,0 +1,217 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign Up</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;600;700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css">
+  <link rel="stylesheet" href="{% static 'electricity/css/admin_login.css' %}">
+</head>
+<body class="admin-login-body">
+  <div class="admin-login-shell">
+    <div class="admin-login-card">
+      <div class="admin-login-brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="brand-title">Create Account</div>
+          <div class="brand-sub">Customer portal</div>
+        </div>
+      </div>
+
+      <h1>Create your account</h1>
+      <p class="admin-login-subtitle">A quick profile helps us personalize your consultations.</p>
+
+      {% if form.errors %}
+        <div class="admin-alert">Please fix the errors below.</div>
+      {% endif %}
+
+      <form method="post" class="signup-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <section class="signup-section">
+          <div class="section-header">
+            <h2>Account type</h2>
+            <p>Choose the profile that matches your booking needs.</p>
+          </div>
+          <div class="choice-row choice-pill">
+            {% for choice in form.account_type %}
+              <label class="pill-option">{{ choice.tag }} <span>{{ choice.choice_label }}</span></label>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="signup-section">
+          <div class="section-header">
+            <h2>Personal details</h2>
+            <p>We use this information to contact you about appointments.</p>
+          </div>
+          <div class="form-grid">
+            <div class="admin-field">
+              <label>Full name</label>
+              {{ form.full_name }}
+              {% if form.full_name.errors %}<div class="field-error">{{ form.full_name.errors }}</div>{% endif %}
+            </div>
+            <div class="admin-field">
+              <label>Username</label>
+              {{ form.username }}
+              {% if form.username.errors %}<div class="field-error">{{ form.username.errors }}</div>{% endif %}
+            </div>
+            <div class="admin-field">
+              <label>Email</label>
+              {{ form.email }}
+              {% if form.email.errors %}<div class="field-error">{{ form.email.errors }}</div>{% endif %}
+            </div>
+            <div class="admin-field">
+              <label>Phone</label>
+              {{ form.phone }}
+              {% if form.phone.errors %}<div class="field-error">{{ form.phone.errors }}</div>{% endif %}
+            </div>
+          </div>
+        </section>
+
+        <section class="signup-section">
+          <div class="section-header">
+            <h2>Address</h2>
+            <p>Used for on-site visits and local scheduling.</p>
+          </div>
+          <div class="form-grid">
+            <div class="admin-field">
+              <label>Street address</label>
+              {{ form.street_address }}
+              {% if form.street_address.errors %}<div class="field-error">{{ form.street_address.errors }}</div>{% endif %}
+            </div>
+            <div class="admin-field">
+              <label>City</label>
+              {{ form.city }}
+              {% if form.city.errors %}<div class="field-error">{{ form.city.errors }}</div>{% endif %}
+            </div>
+            <div class="admin-field">
+              <label>Postal code</label>
+              {{ form.postal_code }}
+              {% if form.postal_code.errors %}<div class="field-error">{{ form.postal_code.errors }}</div>{% endif %}
+            </div>
+            <div class="admin-field">
+              <label>Country</label>
+              {{ form.country }}
+              {% if form.country.errors %}<div class="field-error">{{ form.country.errors }}</div>{% endif %}
+            </div>
+          </div>
+        </section>
+
+        <section class="signup-section">
+          <div class="section-header">
+            <h2>Property & interests</h2>
+            <p>Help us recommend the right services for you.</p>
+          </div>
+          <div class="form-grid">
+            <div class="admin-field">
+              <label>Property type</label>
+              {{ form.property_type }}
+              {% if form.property_type.errors %}<div class="field-error">{{ form.property_type.errors }}</div>{% endif %}
+            </div>
+            <div class="admin-field full-width">
+              <label>Interests</label>
+              <div class="interest-grid">{{ form.interests }}</div>
+              {% if form.interests.errors %}<div class="field-error">{{ form.interests.errors }}</div>{% endif %}
+            </div>
+          </div>
+        </section>
+
+        <section class="signup-section private-only" data-private>
+          <div class="section-header">
+            <h2>Private verification</h2>
+            <p>Required for private bookings.</p>
+          </div>
+          <div class="form-grid">
+            <div class="admin-field">
+              <label>Personal ID</label>
+              {{ form.personal_id }}
+              {% if form.personal_id.errors %}<div class="field-error">{{ form.personal_id.errors }}</div>{% endif %}
+            </div>
+          </div>
+        </section>
+
+        <section class="signup-section business-only" data-business>
+          <div class="section-header">
+            <h2>Business details</h2>
+            <p>Required for company bookings.</p>
+          </div>
+          <div class="form-grid">
+            <div class="admin-field">
+              <label>Company name</label>
+              {{ form.company_name }}
+              {% if form.company_name.errors %}<div class="field-error">{{ form.company_name.errors }}</div>{% endif %}
+            </div>
+            <div class="admin-field">
+              <label>Organization number</label>
+              {{ form.organization_number }}
+              {% if form.organization_number.errors %}<div class="field-error">{{ form.organization_number.errors }}</div>{% endif %}
+            </div>
+            <div class="admin-field full-width">
+              <label>Company address</label>
+              {{ form.company_address }}
+              {% if form.company_address.errors %}<div class="field-error">{{ form.company_address.errors }}</div>{% endif %}
+            </div>
+          </div>
+        </section>
+
+        <section class="signup-section">
+          <div class="section-header">
+            <h2>Security</h2>
+            <p>Create a strong password to protect your account.</p>
+          </div>
+          <div class="form-grid">
+            <div class="admin-field">
+              <label>Password</label>
+              {{ form.password1 }}
+              {% if form.password1.errors %}<div class="field-error">{{ form.password1.errors }}</div>{% endif %}
+            </div>
+            <div class="admin-field">
+              <label>Confirm password</label>
+              {{ form.password2 }}
+              {% if form.password2.errors %}<div class="field-error">{{ form.password2.errors }}</div>{% endif %}
+            </div>
+          </div>
+        </section>
+
+        <div class="consent-grid">
+          <label class="consent-item">{{ form.accepted_terms }} <span>I accept the Terms & Conditions.</span></label>
+          <label class="consent-item">{{ form.accepted_privacy }} <span>I accept the Privacy Policy.</span></label>
+          <label class="consent-item">{{ form.marketing_opt_in }} <span>I agree to receive updates and offers.</span></label>
+        </div>
+
+        {% if form.errors %}
+          <div class="admin-alert">Please fix the errors above.</div>
+        {% endif %}
+
+        <button type="submit" class="admin-btn">Create account</button>
+      </form>
+
+      <div class="admin-login-note">
+        Already have an account? <a href="{% url 'electricity:login' %}">Sign in</a>
+      </div>
+    </div>
+  </div>
+  <script defer src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+  <script defer src="{% static 'electricity/js/selects.js' %}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const accountInputs = document.querySelectorAll("input[name='account_type']");
+    const privateBlock = document.querySelector("[data-private]");
+    const businessBlock = document.querySelector("[data-business]");
+    const update = () => {
+      let type = "private";
+      accountInputs.forEach((input) => {
+        if (input.checked) type = input.value;
+      });
+      if (privateBlock) privateBlock.classList.toggle("is-visible", type === "private");
+      if (businessBlock) businessBlock.classList.toggle("is-visible", type === "business");
+    };
+    accountInputs.forEach((input) => input.addEventListener("change", update));
+    update();
+  });
+</script>
+</body>
+</html>

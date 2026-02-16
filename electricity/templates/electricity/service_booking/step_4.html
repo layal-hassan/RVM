@@ -1,0 +1,93 @@
+{% extends "electricity/service_booking/base.html" %}
+{% load static %}
+{% block booking_content %}
+<form method="post" class="booking-form">
+  {% csrf_token %}
+  <div class="booking-grid">
+    <div class="booking-section">
+      <div class="section-header">
+        <span class="section-index">5</span>
+        What do you need help with?
+      </div>
+      <div class="pricing-type-grid">
+        <label class="pricing-type-card">
+          <input type="radio" name="pricing_type" value="hourly" {% if data.pricing_type == "hourly" %}checked{% endif %} required>
+          <div class="pricing-type-title">Hourly Electrician</div>
+          <div class="pricing-type-note">Book a licensed electrician by the hour.</div>
+        </label>
+        <label class="pricing-type-card">
+          <input type="radio" name="pricing_type" value="fixed" {% if data.pricing_type == "fixed" or not data.pricing_type %}checked{% endif %}>
+          <div class="pricing-type-title">Fixed Service Price</div>
+          <div class="pricing-type-note">Choose a service with a fixed price.</div>
+        </label>
+      </div>
+      <div class="service-grid">
+        {% for service in services %}
+          <label class="service-card">
+            <input type="checkbox" name="services" value="{{ service.id }}" {% if service.id|stringformat:"s" in data.services %}checked{% endif %}>
+            <span class="service-icon">
+              {% if service.icon %}
+                <img src="{{ service.icon.url }}" alt="{{ service.title }}">
+              {% else %}
+                <span class="service-fallback">•</span>
+              {% endif %}
+            </span>
+            <span class="service-name">{{ service.title }}</span>
+          </label>
+        {% empty %}
+          <div class="empty-state">No services available.</div>
+        {% endfor %}
+      </div>
+    </div>
+    <aside class="summary-card">
+      <div class="summary-title">Request Summary</div>
+      <div class="summary-row">
+        <span class="summary-label">Appointment</span>
+        <span>{{ data.preferred_date|default:"Oct 24, 2023" }} · {{ data.preferred_time_slot|default:"09:00 AM" }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Location</span>
+        <span>{{ data.street_address|default:"452 Oak Street" }}, {{ data.city|default:"Chicago" }}</span>
+      </div>
+      <div class="summary-row">
+        {% if data.pricing_type == "hourly" %}
+          <span class="summary-label">Hourly Rate</span>
+          <span>{{ hourly_rate_electrician|default:"0" }} {{ currency }} / hour</span>
+        {% else %}
+          <span class="summary-label">Fixed Services Total</span>
+          <span>{{ fixed_services_total|default:"0" }} {{ currency }}</span>
+        {% endif %}
+      </div>
+      <div class="summary-map">
+        <img src="{% static 'electricity/img/service-area-map.png' %}" alt="Map">
+      </div>
+      <div class="summary-note">
+        <strong>Guaranteed Pro</strong>
+        <span>All RWM EL pros are licensed, bonded, and insured for your peace of mind.</span>
+      </div>
+    </aside>
+  </div>
+
+  <div class="booking-actions">
+    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 3 %}">Back</a>
+    <button class="btn btn-primary" type="submit">Continue</button>
+  </div>
+</form>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const pricingInputs = document.querySelectorAll("input[name='pricing_type']");
+    const serviceGrid = document.querySelector(".service-grid");
+    const update = () => {
+      let type = "fixed";
+      pricingInputs.forEach((input) => {
+        if (input.checked) type = input.value;
+      });
+      if (serviceGrid) {
+        serviceGrid.classList.toggle("is-hidden", type === "hourly");
+      }
+    };
+    pricingInputs.forEach((input) => input.addEventListener("change", update));
+    update();
+  });
+</script>
+{% endblock %}

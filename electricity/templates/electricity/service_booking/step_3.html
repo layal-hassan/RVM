@@ -1,0 +1,46 @@
+{% extends "electricity/service_booking/base.html" %}
+{% block booking_content %}
+<form method="post" class="booking-form">
+  {% csrf_token %}
+  <div class="booking-section">
+    <div class="section-header">
+      <span class="section-index">4</span>
+      Tell us about the property
+    </div>
+    <p class="booking-description left">Engineering details help us prepare the right equipment for your system.</p>
+    <div class="form-grid">
+      <label class="form-label">Property Type
+        <select class="form-select" name="property_type">
+          <option value="">Select type</option>
+          <option value="Apartment" {% if data.property_type == "Apartment" %}selected{% endif %}>Apartment</option>
+          <option value="Villa" {% if data.property_type == "Villa" %}selected{% endif %}>Villa</option>
+          <option value="Commercial" {% if data.property_type == "Commercial" %}selected{% endif %}>Commercial</option>
+        </select>
+      </label>
+      <label class="form-label">Year of Construction
+        <select class="form-select" name="year_built">
+          <option value="">Select range</option>
+          <option value="before_1980" {% if data.year_built == "before_1980" %}selected{% endif %}>Before 1980</option>
+          <option value="1980_2000" {% if data.year_built == "1980_2000" %}selected{% endif %}>1980 - 2000</option>
+          <option value="after_2000" {% if data.year_built == "after_2000" %}selected{% endif %}>After 2000</option>
+        </select>
+      </label>
+    </div>
+    <div class="toggle-card">
+      <div>
+        <div class="toggle-title">Has the electrical system been upgraded?</div>
+        <div class="toggle-subtitle">Major renewals of fuse box, wiring, or grounding.</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" name="system_upgraded" {% if data.system_upgraded %}checked{% endif %}>
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="booking-actions">
+    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 2 %}">Back</a>
+    <button class="btn btn-primary" type="submit">Continue</button>
+  </div>
+</form>
+{% endblock %}

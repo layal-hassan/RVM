@@ -1,0 +1,157 @@
+﻿{% extends "electricity/electrician_booking/base.html" %}
+
+{% block booking_content %}
+<div class="eb-confirmation">
+  <div class="eb-confirmation-mark">OK</div>
+  <h1>Booking received</h1>
+  <p>Thank you for choosing RWM EL luxury services. Your booking request has been successfully submitted and is now being processed.</p>
+
+  <div class="eb-confirmation-ref">
+    <div>Booking Reference</div>
+    <strong>#{{ reference }}</strong>
+    <div class="eb-confirmation-actions">
+      <button class="btn btn-light eb-receipt-print" type="button">Print Receipt</button>
+      <button class="btn btn-light eb-receipt-pdf" type="button">Save as PDF</button>
+    </div>
+  </div>
+
+  <div class="eb-receipt-details">
+    <div class="eb-receipt-section">
+      <div class="eb-receipt-title">Booking Details</div>
+      <div class="eb-receipt-row">
+        <span>Service type</span>
+        <strong>{{ data.service_type|default:"Residential Electrical Repair"|title }}</strong>
+      </div>
+      <div class="eb-receipt-row">
+        <span>Hours booked</span>
+        <strong>{{ data.hours|default:"1" }} hour(s)</strong>
+      </div>
+      <div class="eb-receipt-row">
+        <span>Property type</span>
+        <strong>{{ data.property_type|default:"Residential Property"|title }}</strong>
+      </div>
+      <div class="eb-receipt-row">
+        <span>Location</span>
+        <strong>{{ data.street_address|default:"1248 Oakwood Ave" }}, {{ data.city|default:"Silver Springs" }}</strong>
+      </div>
+      <div class="eb-receipt-row">
+        <span>Appointment</span>
+        <strong>
+          {% if data.preferred_date %}{{ data.preferred_date }}{% else %}Thursday, Oct 5{% endif %}
+          {% if data.arrival_window %} | {{ data.arrival_window }}{% else %} | 8 AM - 12 PM{% endif %}
+        </strong>
+      </div>
+      <div class="eb-receipt-row eb-receipt-note">
+        <span>Work description</span>
+        <strong>{{ data.work_description|default:"Electrical service request details." }}</strong>
+      </div>
+    </div>
+
+    <div class="eb-receipt-section">
+      <div class="eb-receipt-title">Estimated Cost</div>
+      <div class="eb-receipt-row">
+        <span>Minimum Callout Fee (1st hr)</span>
+        <strong>{{ pricing.currency }} {{ pricing.minimum_callout|floatformat:2 }}</strong>
+      </div>
+      <div class="eb-receipt-row">
+        <span>Additional Time ({{ pricing.additional_hours }} hrs x {{ pricing.currency }} {{ pricing.hourly_rate|floatformat:2 }}/hr)</span>
+        <strong>{{ pricing.currency }} {{ pricing.additional_total|floatformat:2 }}</strong>
+      </div>
+      <div class="eb-receipt-total">
+        <span>Total Estimated Booking</span>
+        <strong>{{ pricing.currency }} {{ pricing.total|floatformat:2 }}</strong>
+      </div>
+      <div class="eb-receipt-disclaimer">Final pricing may vary based on actual time and materials.</div>
+    </div>
+  </div>
+
+  <div class="eb-next">
+    <div class="eb-next-title">What happens next</div>
+    <div class="eb-next-grid">
+      <div class="eb-next-card">
+        <div class="eb-next-step">1</div>
+        <h3>Review</h3>
+        <p>Our concierge team reviews your booking details and confirms vehicle availability for your requested time.</p>
+      </div>
+      <div class="eb-next-card">
+        <div class="eb-next-step">2</div>
+        <h3>Confirmation</h3>
+        <p>A formal confirmation email and digital itinerary will be sent to your registered email address within 2 hours.</p>
+      </div>
+      <div class="eb-next-card">
+        <div class="eb-next-step">3</div>
+        <h3>Follow-up</h3>
+        <p>Your designated chauffeur will contact you via SMS exactly 15 minutes before the scheduled arrival.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eb-confirmation-footer">
+    <a class="btn btn-primary" href="{% url 'electricity:home' %}">Back to Home</a>
+    <div class="eb-support">Need assistance? <a href="{% url 'electricity:support' %}">Contact Support</a></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script>
+    (function () {
+      const printBtn = document.querySelector(".eb-receipt-print");
+      const pdfBtn = document.querySelector(".eb-receipt-pdf");
+      const refEl = document.querySelector(".eb-confirmation-ref strong");
+      const receiptEl = document.querySelector(".eb-receipt-details");
+
+      function openReceiptWindow(title) {
+        if (!receiptEl) return null;
+        const win = window.open("", "_blank", "width=900,height=700");
+        if (!win) return null;
+
+        const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
+          .map((node) => node.outerHTML)
+          .join("\n");
+
+        const content = `
+          <!doctype html>
+          <html>
+            <head>
+              <meta charset="utf-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+              <title>${title}</title>
+              ${styles}
+              <style>
+                body { margin: 24px; background: #ffffff; }
+                .eb-receipt-details { box-shadow: none; }
+              </style>
+            </head>
+            <body>
+              ${receiptEl.outerHTML}
+            </body>
+          </html>
+        `;
+
+        win.document.open();
+        win.document.write(content);
+        win.document.close();
+        return win;
+      }
+
+      function doPrint() {
+        const ref = refEl ? refEl.textContent.trim() : "receipt";
+        const win = openReceiptWindow(`RWM-Receipt-${ref}`);
+        if (!win) return;
+        win.focus();
+        win.onload = () => {
+          win.print();
+        };
+      }
+
+      if (printBtn) {
+        printBtn.addEventListener("click", doPrint);
+      }
+      if (pdfBtn) {
+        pdfBtn.addEventListener("click", doPrint);
+      }
+    })();
+  </script>
+{% endblock %}

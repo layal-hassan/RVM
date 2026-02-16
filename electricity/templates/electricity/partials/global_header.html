@@ -1,0 +1,42 @@
+{% load static electricity_extras %}
+<header class="rwm-electricity-global-header rwm-egh-root" data-rwmh>
+  <div class="rwm-electricity-global-header__inner">
+    <a class="rwm-egh-logo" href="{% url 'electricity:home' %}" aria-label="RWM EL Home">
+      <img src="{% static 'electricity/img/electricity_logo.jpg' %}" alt="RWM EL">
+    </a>
+    <button class="rwm-egh-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" data-rwmh-toggle>
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="rwm-egh-navwrap" data-rwmh-menu>
+      <nav class="rwm-egh-nav" aria-label="Main navigation">
+        <a class="rwm-egh-link" href="{% url 'electricity:home' %}">Home</a>
+        <a class="rwm-egh-link" href="{% url 'electricity:about' %}">About</a>
+        <a class="rwm-egh-link" href="{% url 'electricity:services' %}">Services</a>
+        <a class="rwm-egh-link" href="{% url 'electricity:services' %}#pricing">Pricing</a>
+        <a class="rwm-egh-link" href="{% url 'electricity:contact' %}">Contact</a>
+      </nav>
+      <div class="rwm-egh-actions">
+        <a class="rwm-egh-btn rwm-egh-btn-primary" href="http://hembla-experten.se/" target="_blank" rel="noopener">
+          Back to Hembla Experten
+        </a>
+        {% if request.user.is_authenticated %}
+          {% if request.user.provider_profile %}
+            <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:provider_dashboard' %}">My Profile</a>
+            <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:logout' %}">Sign out</a>
+          {% else %}
+            {% is_electricity_admin as show_dashboard %}
+            {% if show_dashboard %}
+              <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:dashboard' %}">Dashboard</a>
+            {% endif %}
+            <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:logout' %}">Sign out</a>
+          {% endif %}
+        {% else %}
+          <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:login' %}">Sign in</a>
+          <a class="rwm-egh-btn rwm-egh-btn-primary" href="{% url 'electricity:signup' %}">Sign up</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</header>

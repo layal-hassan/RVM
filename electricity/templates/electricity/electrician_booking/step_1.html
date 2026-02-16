@@ -1,0 +1,83 @@
+﻿{% extends "electricity/electrician_booking/base.html" %}
+
+{% block booking_content %}
+<form method="post" class="eb-form">
+  {% csrf_token %}
+  <section class="eb-card">
+    <div class="eb-card-header">
+      <span class="eb-step-badge">1</span>
+      <div>
+        <h1>How many hours do you want to book?</h1>
+        <p>Select an initial duration for your professional service.</p>
+      </div>
+    </div>
+    <div class="eb-hours">
+      <label class="eb-hour-card">
+        <input type="radio" name="hours" value="1" {% if data.hours == "1" or data.hours == 1 %}checked{% endif %}>
+        <span class="eb-hour-value">1</span>
+        <span class="eb-hour-label">Hour</span>
+      </label>
+      <label class="eb-hour-card">
+        <input type="radio" name="hours" value="2" {% if data.hours == "2" or data.hours == 2 %}checked{% endif %}>
+        <span class="eb-hour-value">2</span>
+        <span class="eb-hour-label">Hours</span>
+      </label>
+      <label class="eb-hour-card">
+        <input type="radio" name="hours" value="3" {% if data.hours == "3" or data.hours == 3 %}checked{% endif %}>
+        <span class="eb-hour-value">3</span>
+        <span class="eb-hour-label">Hours</span>
+      </label>
+      <label class="eb-hour-card">
+        <input type="radio" name="hours" value="4" {% if data.hours == "4" or data.hours == 4 %}checked{% endif %}>
+        <span class="eb-hour-value">4+</span>
+        <span class="eb-hour-label">Hours</span>
+      </label>
+    </div>
+    <div class="eb-note">
+      <strong>Proactive Notice:</strong>
+      Booked hours are an estimate. Final cost is adjusted based on actual time spent on site to ensure you only pay for what you need.
+    </div>
+  </section>
+
+  <section class="eb-card">
+    <div class="eb-card-header">
+      <span class="eb-step-badge">2</span>
+      <div>
+        <h2>Describe the work</h2>
+        <p>Provide as much detail as possible to help us prepare.</p>
+      </div>
+    </div>
+    <label class="eb-label">Project scope</label>
+    <textarea class="form-control eb-textarea" name="work_description" rows="5" placeholder="Tell us what needs to be done (e.g., install ceiling fans, fix circuit breaker...)">{{ data.work_description|default:"" }}</textarea>
+    <div class="eb-inline-note">Incomplete information may affect time and price.</div>
+
+    <div class="eb-split">
+      <div>
+        <label class="eb-label">Property type</label>
+        <div class="eb-radio-grid">
+          <label class="eb-radio-card">
+            <input type="radio" name="property_type" value="residential" {% if data.property_type == "residential" %}checked{% endif %}>
+            <span>Residential Property</span>
+          </label>
+          <label class="eb-radio-card">
+            <input type="radio" name="property_type" value="commercial" {% if data.property_type == "commercial" %}checked{% endif %}>
+            <span>Commercial Space</span>
+          </label>
+        </div>
+      </div>
+      <div class="eb-logistics">
+        <div class="eb-logistics-title">Logistics</div>
+        <label class="eb-checkbox">
+          <input type="checkbox" name="access_confirm" value="yes" {% if data.access_confirm %}checked{% endif %}>
+          <span>I confirm that the service professional will have full access to the work area at the scheduled time.</span>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <div class="eb-actions">
+    <a class="btn btn-light" href="{% url 'electricity:home' %}">Back</a>
+    <button class="btn btn-primary" type="submit">Continue to Step 2 -></button>
+  </div>
+</form>
+{% endblock %}

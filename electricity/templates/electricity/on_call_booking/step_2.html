@@ -1,0 +1,82 @@
+{% extends "electricity/on_call_booking/base.html" %}
+{% load static %}
+{% block booking_content %}
+<form method="post" class="on-call-form">
+  {% csrf_token %}
+  <div class="oncall-header">
+    <div class="section-label">Registration Progress</div>
+    <div class="section-title">Who is applying?</div>
+    <p>
+      Select the entity type for your registration. <strong>Note:</strong> Our smart on-call
+      service is available for professional entities only. Private individuals are not eligible.
+    </p>
+  </div>
+
+  <div class="entity-grid">
+    <label class="entity-card">
+      <input type="radio" name="entity_type" value="business" {% if data.entity_type == "business" %}checked{% endif %}>
+      <img src="{% static 'electricity/img/hero-services.jpg' %}" alt="Business / Organization">
+      <div class="entity-body">
+        <h4>Business / Organization</h4>
+        <p>For corporate entities and startups.</p>
+      </div>
+    </label>
+    <label class="entity-card">
+      <input type="radio" name="entity_type" value="housing" {% if data.entity_type == "housing" %}checked{% endif %}>
+      <img src="{% static 'electricity/img/landing-hero.jpg' %}" alt="Housing Association">
+      <div class="entity-body">
+        <h4>Housing Association</h4>
+        <p>For property owners and co-ops.</p>
+      </div>
+    </label>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">Organization Information</div>
+    <div class="form-grid">
+      <div>
+        <label>Organization Name</label>
+        <input class="form-control" name="organization_name" placeholder="e.g. Acme Corp" value="{{ data.organization_name|default:'' }}">
+      </div>
+      <div>
+        <label>Org Number</label>
+        <input class="form-control" name="organization_number" placeholder="556XXX-XXXX" value="{{ data.organization_number|default:'' }}">
+      </div>
+      <div>
+        <label>Contact Person</label>
+        <input class="form-control" name="contact_person" placeholder="Full Name" value="{{ data.contact_person|default:'' }}">
+      </div>
+      <div>
+        <label>Phone Number</label>
+        <input class="form-control" name="phone" placeholder="+46 00 000 00 00" value="{{ data.phone|default:'' }}">
+      </div>
+      <div class="full">
+        <label>Email Address</label>
+        <input class="form-control" name="email" placeholder="contact@organization.com" value="{{ data.email|default:'' }}">
+      </div>
+    </div>
+
+    <div class="form-card-divider"></div>
+    <div class="form-card-subtitle">Address Details</div>
+    <div class="form-grid">
+      <div class="full">
+        <label>Company Address</label>
+        <input class="form-control" name="company_address" placeholder="Street Name 123" value="{{ data.company_address|default:'' }}">
+      </div>
+      <div>
+        <label>ZIP Code</label>
+        <input class="form-control" name="zip_code" placeholder="123 45" value="{{ data.zip_code|default:'' }}">
+      </div>
+      <div>
+        <label>City</label>
+        <input class="form-control" name="city" placeholder="Stockholm" value="{{ data.city|default:'' }}">
+      </div>
+    </div>
+  </div>
+
+  <div class="booking-actions">
+    <a class="btn btn-light" href="{% url 'electricity:on_call_booking_step' 1 %}">Back</a>
+    <button class="btn btn-primary" type="submit">Continue to Next Step →</button>
+  </div>
+</form>
+{% endblock %}

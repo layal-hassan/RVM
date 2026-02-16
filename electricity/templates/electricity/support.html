@@ -1,0 +1,167 @@
+{% extends "electricity/base.html" %}
+{% load static %}
+
+{% block title %}Customer Support | Hembla experten{% endblock %}
+{% block body_class %}support-page{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'electricity/css/support.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="support-hero">
+  <div class="container">
+    <div class="support-hero-content">
+      <h1>Customer Support</h1>
+      <div class="support-badge">Clear answers. Responsible support.</div>
+      <div class="support-actions">
+        <a class="btn btn-secondary btn-pill" href="#faqs">View FAQs</a>
+        <a class="btn btn-primary btn-pill" href="#support-form">Submit Ticket</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="support-section">
+  <div class="container">
+    <h2 class="support-title">What We Can Help You With</h2>
+    <div class="support-card-grid">
+      <article class="support-card">
+        <div class="support-icon">🛠</div>
+        <h3>Ongoing Work</h3>
+        <p>Real-time updates on your current electrical installation. Monitor progress and scheduled inspections in real-time.</p>
+      </article>
+      <article class="support-card">
+        <div class="support-icon">✅</div>
+        <h3>Follow-ups</h3>
+        <p>Quality checks and premium maintenance support after project completion. We ensure long-term system integrity.</p>
+      </article>
+      <article class="support-card">
+        <div class="support-icon">📄</div>
+        <h3>Documentation</h3>
+        <p>Direct access to your safety certificates, warranties, and technical drawings in our secure client portal.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="support-section light">
+  <div class="container">
+    <h2 class="support-title">Premium Contact Channels</h2>
+    <div class="support-channel-grid">
+      <div class="support-channel">
+        <div class="support-icon">📞</div>
+        <h3>Priority Line</h3>
+        <p>+46 8 200 888 00</p>
+        <span>Mon - Fri 08:00 - 17:00</span>
+      </div>
+      <div class="support-channel">
+        <div class="support-icon">✉️</div>
+        <h3>Concierge Email</h3>
+        <p>priority@rwmel.se</p>
+        <span>24-hour response guarantee</span>
+      </div>
+      <div class="support-channel">
+        <div class="support-icon">💬</div>
+        <h3>Digital Portal</h3>
+        <p>Open Support Ticket</p>
+        <span>Trackable request system</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="support-section" id="support-form">
+  <div class="container">
+    <h2 class="support-title">Direct Support Form</h2>
+    <p class="support-subtitle">Submit your detailed request and our technical team will review it within 2 business hours.</p>
+
+    {% if submitted %}
+      <div class="support-success">
+        Ticket received. Your reference ID is <strong>{{ ticket_id }}</strong>.
+      </div>
+    {% endif %}
+
+    {% if errors %}
+      <div class="support-errors">
+        <ul>
+          {% for error in errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <form method="post" class="support-form">
+      {% csrf_token %}
+      <div class="form-grid">
+        <div>
+          <label>Full Name</label>
+          <input class="form-control" name="full_name" value="{{ data.full_name|default:'' }}">
+        </div>
+        <div>
+          <label>Email Address</label>
+          <input class="form-control" name="email" value="{{ data.email|default:'' }}">
+        </div>
+        <div>
+          <label>Phone Number</label>
+          <input class="form-control" name="phone" value="{{ data.phone|default:'' }}">
+        </div>
+        <div>
+          <label>Type of Request</label>
+          <select class="form-control" name="request_type">
+            <option value="">Select</option>
+            <option value="technical" {% if data.request_type == "technical" %}selected{% endif %}>Technical Issue</option>
+            <option value="billing" {% if data.request_type == "billing" %}selected{% endif %}>Billing</option>
+            <option value="maintenance" {% if data.request_type == "maintenance" %}selected{% endif %}>Maintenance</option>
+            <option value="documentation" {% if data.request_type == "documentation" %}selected{% endif %}>Documentation</option>
+          </select>
+        </div>
+        <div>
+          <label>Customer Type</label>
+          <select class="form-control" name="customer_type">
+            <option value="">Select</option>
+            <option value="residential" {% if data.customer_type == "residential" %}selected{% endif %}>Residential Client</option>
+            <option value="business" {% if data.customer_type == "business" %}selected{% endif %}>Business Client</option>
+            <option value="brf" {% if data.customer_type == "brf" %}selected{% endif %}>Housing Association</option>
+          </select>
+        </div>
+        <div class="full">
+          <label>Project Address</label>
+          <input class="form-control" name="project_address" value="{{ data.project_address|default:'' }}">
+        </div>
+        <div class="full">
+          <label>Message</label>
+          <textarea class="form-control" name="message" rows="5">{{ data.message|default:'' }}</textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary btn-pill" type="submit">Submit Request</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="support-section light" id="faqs">
+  <div class="container">
+    <h2 class="support-title">What Happens Next</h2>
+    <div class="support-steps">
+      <div class="support-step">
+        <div class="step-circle">01</div>
+        <h4>Request Logged</h4>
+        <p>Our system instantly assigns a ticket number and notifies our technical lead.</p>
+      </div>
+      <div class="support-step">
+        <div class="step-circle">02</div>
+        <h4>Expert Review</h4>
+        <p>A certified electrician reviews your request to prepare the best solution.</p>
+      </div>
+      <div class="support-step">
+        <div class="step-circle">03</div>
+        <h4>Active Support</h4>
+        <p>You receive a direct response or site visit confirmation within the promised timeframe.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

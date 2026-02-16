@@ -1,0 +1,215 @@
+.rwm-electricity-global-header {
+  --rwmh-bg: #0b0c0e;
+  --rwmh-border: rgba(255, 255, 255, 0.08);
+  --rwmh-text: #ffffff;
+  --rwmh-gold: #c7a45b;
+  --rwmh-gold-dark: #2a1b00;
+  --rwmh-ghost: rgba(255, 255, 255, 0.25);
+  --rwmh-height: 78px;
+}
+
+.rwm-electricity-global-header {
+  background: var(--rwmh-bg);
+  border-bottom: 1px solid var(--rwmh-border);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  font-family: "Vesper Libre", serif;
+}
+
+.rwm-electricity-global-header .rwm-electricity-global-header__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  justify-content: space-between;
+  height: 78px;
+}
+
+.rwm-electricity-global-header .rwm-egh-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.rwm-electricity-global-header .rwm-egh-logo img {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 2px solid #f5f5f5;
+  background: #ffffff;
+  object-fit: cover;
+}
+
+body.electricity-body,
+body.dash-body {
+  padding-top: 78px;
+}
+
+.rwm-electricity-global-header .rwm-egh-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid var(--rwmh-ghost);
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.rwm-electricity-global-header .rwm-egh-toggle span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--rwmh-text);
+  border-radius: 999px;
+}
+
+.rwm-electricity-global-header .rwm-egh-navwrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  gap: 24px;
+}
+
+.rwm-electricity-global-header .rwm-egh-nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  flex-wrap: wrap;
+}
+
+.rwm-electricity-global-header .rwm-egh-link {
+  color: var(--rwmh-text);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: "Vesper Libre", serif;
+  transition: color 0.2s ease;
+}
+
+.rwm-electricity-global-header .rwm-egh-link:hover,
+.rwm-electricity-global-header .rwm-egh-link:focus-visible {
+  color: var(--rwmh-gold);
+}
+
+.rwm-electricity-global-header .rwm-egh-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.rwm-electricity-global-header .rwm-egh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 12px 24px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  text-decoration: none;
+  font-family: "Vesper Libre", serif;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.rwm-electricity-global-header .rwm-egh-btn-primary {
+  background: var(--rwmh-gold);
+  color: var(--rwmh-gold-dark);
+  border: 1px solid transparent;
+  box-shadow: 0 10px 20px rgba(199, 164, 91, 0.25);
+}
+
+.rwm-electricity-global-header .rwm-egh-btn-primary:hover,
+.rwm-electricity-global-header .rwm-egh-btn-primary:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(199, 164, 91, 0.35);
+}
+
+.rwm-electricity-global-header .rwm-egh-btn-ghost {
+  color: var(--rwmh-text);
+  border: 1px solid var(--rwmh-ghost);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rwm-electricity-global-header .rwm-egh-btn-ghost:hover,
+.rwm-electricity-global-header .rwm-egh-btn-ghost:focus-visible {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 1200px) {
+  .rwm-electricity-global-header .rwm-egh-nav {
+    gap: 18px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-actions {
+    gap: 10px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-btn {
+    padding: 11px 20px;
+    letter-spacing: 0.18em;
+  }
+}
+
+@media (max-width: 980px) {
+  .rwm-electricity-global-header .rwm-electricity-global-header__inner {
+    flex-wrap: wrap;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-toggle {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-navwrap {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease, padding-top 0.25s ease;
+  }
+
+  .rwm-electricity-global-header.is-open .rwm-egh-navwrap {
+    max-height: 500px;
+    padding-top: 16px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .rwm-electricity-global-header .rwm-egh-logo img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-nav {
+    row-gap: 12px;
+    column-gap: 16px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

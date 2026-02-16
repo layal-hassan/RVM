@@ -1,0 +1,198 @@
+{% extends "electricity/base.html" %}
+{% load static %}
+
+{% block title %}About RWM EL - Deep Storytelling Version{% endblock %}
+{% block body_class %}about-page{% endblock %}
+
+{% block extra_head %}
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#f4c025",
+            "navy": "#0a192f",
+            "charcoal": "#1a1a1a",
+            "soft-gray": "#f2f2f2",
+            "background-light": "#fdfdfd"
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"],
+            "serif": ["Playfair Display", "serif"]
+          },
+          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "9999px"}
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      body {
+        @apply bg-background-light text-navy antialiased;
+      }
+    }
+    .scandi-border {
+      border-color: rgba(10, 25, 47, 0.1);
+    }
+    .story-text {
+      line-height: 1.8;
+      letter-spacing: 0.01em;
+    }
+  </style>
+  <style>
+    body.electricity-body.about-page {
+      background: #fdfdfd;
+      color: #0a192f;
+      font-family: "Manrope", sans-serif;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="relative h-[80vh] w-full flex items-center justify-center overflow-hidden">
+  <div class="absolute inset-0 z-0">
+    <div class="absolute inset-0 bg-navy/40 z-10"></div>
+    <div class="w-full h-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDU9zuAaRWDEx-ZxOOUKThUVV90oghaqF_QXBHrXzXC_Lat7pyzM_WHLfKkDrUmO-7UgAl8GvJ5DRIbJMmk2HGv5y6lIGIJiUqo9WPlcA4BdIadipJaJzm9_r6y3bcGviPt3Jg2M6vrtNLuuN29FQ3I9Z-zG66XDp230IYkg1ssMRL5sbi4YqLjezL-2QFX4AzoyLvanxT6Vy5HPY-x_xvP2rd1aL6dFUkv6o5boZ_XmbVz5P3eRs1S8mSEZpSd8bmIjZ_7kv6gKYA");'></div>
+  </div>
+  <div class="relative z-20 text-center px-4 max-w-5xl mx-auto">
+    <h1 class="text-white text-6xl md:text-8xl font-serif font-bold mb-8 tracking-tight">About RWM EL</h1>
+    <p class="text-white text-xl md:text-2xl font-light mb-12 max-w-3xl mx-auto leading-relaxed italic">
+      Because electrical work is a responsibility ' not a shortcut.
+    </p>
+    <div class="flex flex-wrap gap-6 justify-center">
+      <a class="bg-primary text-navy px-10 py-4 font-bold text-sm tracking-widest uppercase transition-all hover:bg-white" href="{% url 'electricity:electrician_booking_step' 1 %}">
+        Book an Electrician
+      </a>
+      <a class="border border-white text-white hover:bg-white hover:text-navy px-10 py-4 font-bold text-sm tracking-widest uppercase transition-all" href="{% url 'electricity:booking_step_1' %}">
+        Book Consultation
+      </a>
+    </div>
+  </div>
+</div>
+
+<section class="max-w-[1000px] mx-auto px-6 py-32 lg:py-48">
+  <div class="flex flex-col gap-12 text-center md:text-left">
+    <h2 class="text-primary text-sm font-bold tracking-[0.3em] uppercase">The Origin</h2>
+    <blockquote class="text-navy dark:text-white text-4xl md:text-6xl font-serif font-bold leading-tight">
+      "We started with a simple question: In a world of fast fixes, who is looking out for the next twenty years?"
+    </blockquote>
+    <div class="max-w-3xl story-text text-gray-600 dark:text-gray-400 text-xl font-light">
+      <p>
+        RWM EL was founded on the belief that technical skill is only half of the job. The other half is the integrity to do things right when no one is watching. In the Swedish electrical landscape, precision isn't an option?it's the foundation of every safe home.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="bg-soft-gray dark:bg-navy/30 py-32">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      <div class="space-y-8">
+        <h2 class="text-navy dark:text-white text-4xl font-serif font-bold leading-tight">What RWM EL Stands For</h2>
+        <div class="story-text text-gray-700 dark:text-gray-300 text-lg space-y-6">
+          <p>We stand for the quiet confidence that comes from knowing your infrastructure is handled by professionals who respect the craft. Our approach is methodical, Scandinavian in its simplicity, and uncompromising in its execution.</p>
+          <p>Every wire we pull and every panel we install is a testament to our commitment to Swedish engineering excellence and local safety regulations.</p>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-navy p-12 border-l-8 border-primary shadow-sm">
+        <p class="text-navy dark:text-white text-2xl font-serif italic leading-relaxed">
+          "Electrical work is regulated in Sweden because incorrect installations are dangerous. We don't just follow the law; we champion the safety it provides."
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-32 text-center bg-white dark:bg-charcoal">
+  <div class="max-w-2xl mx-auto px-6">
+    <div class="flex flex-col items-center mb-10">
+      <span class="material-symbols-outlined text-primary text-6xl mb-6">shield_with_heart</span>
+      <div class="w-16 h-px bg-navy/20 dark:bg-white/20 mb-8"></div>
+      <h2 class="text-navy dark:text-white text-4xl font-serif font-bold mb-8">Why We Do This</h2>
+    </div>
+    <div class="story-text text-gray-600 dark:text-gray-400 text-lg font-light leading-relaxed">
+      <p>
+        We do this because a home should be a sanctuary, not a source of technical anxiety. We do this because we believe in the longevity of quality. When we leave a site, we leave behind more than just working lights?we leave behind the peace of mind that your family or business is protected by a system designed to endure.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-[1200px] mx-auto px-6 py-32">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
+    <div class="relative h-[500px] bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDQyMsr3zZk37efVhVnY8Qo20KkzlwpKRVnHXH1rhgkPDVtHaM2LMbG1z1FlwY-RzoSOw-kA-YHy4HBRI2C9WdJ0PTz99hPDOo8Td89dxU5wlJy_x5iI5sHDOUszM1GiLtneVitFj0IMEcys1ml-iy3bT6ILKOnJojuepYIAopsd1iSCo_xNfRHhpklfOgMh9ZFdbHTw7XS_5P3bX_xYdqN5a4c3-mye6nmd-ACBCTN90qJCeqF_fAGX8GJow84VZpk0vqeyoIGHi8");'></div>
+    <div class="flex flex-col justify-center">
+      <h2 class="text-navy dark:text-white text-4xl font-serif font-bold mb-8">More Than Just Today?s Installation</h2>
+      <p class="story-text text-gray-700 dark:text-gray-300 text-lg mb-8">
+        The modern home is changing. Energy consumption, smart integration, and high-demand appliances require a forward-thinking electrical foundation.
+      </p>
+      <ul class="space-y-4">
+        <li class="flex items-start gap-4 text-navy dark:text-gray-300">
+          <span class="material-symbols-outlined text-primary">check_circle</span>
+          <span>Future-proofing for modern appliance loads</span>
+        </li>
+        <li class="flex items-start gap-4 text-navy dark:text-gray-300">
+          <span class="material-symbols-outlined text-primary">check_circle</span>
+          <span>Smart home ecosystem planning and integration</span>
+        </li>
+        <li class="flex items-start gap-4 text-navy dark:text-gray-300">
+          <span class="material-symbols-outlined text-primary">check_circle</span>
+          <span>Energy usage optimization and monitoring</span>
+        </li>
+        <li class="flex items-start gap-4 text-navy dark:text-gray-300">
+          <span class="material-symbols-outlined text-primary">check_circle</span>
+          <span>Safe-load management for EV charging stations</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="bg-navy py-32 text-white">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <h2 class="text-3xl font-serif font-bold mb-20 text-center tracking-tight">The RWM EL Standard</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-px bg-white/10">
+      <div class="bg-navy p-10 flex flex-col items-center text-center group transition-all">
+        <span class="material-symbols-outlined text-primary text-4xl mb-8">gavel</span>
+        <h3 class="font-bold text-sm tracking-widest uppercase mb-4">Compliance</h3>
+        <p class="text-gray-400 text-sm leading-relaxed font-light">Rigorous adherence to every Swedish electrical safety standard.</p>
+      </div>
+      <div class="bg-navy p-10 flex flex-col items-center text-center group transition-all">
+        <span class="material-symbols-outlined text-primary text-4xl mb-8">health_and_safety</span>
+        <h3 class="font-bold text-sm tracking-widest uppercase mb-4">Long-term safety</h3>
+        <p class="text-gray-400 text-sm leading-relaxed font-light">Solutions designed to remain secure for decades, not just years.</p>
+      </div>
+      <div class="bg-navy p-10 flex flex-col items-center text-center group transition-all">
+        <span class="material-symbols-outlined text-primary text-4xl mb-8">visibility</span>
+        <h3 class="font-bold text-sm tracking-widest uppercase mb-4">Clarity</h3>
+        <p class="text-gray-400 text-sm leading-relaxed font-light">Transparent documentation and straightforward communication.</p>
+      </div>
+      <div class="bg-navy p-10 flex flex-col items-center text-center group transition-all">
+        <span class="material-symbols-outlined text-primary text-4xl mb-8">architecture</span>
+        <h3 class="font-bold text-sm tracking-widest uppercase mb-4">Modern planning</h3>
+        <p class="text-gray-400 text-sm leading-relaxed font-light">Anticipating your future energy needs before they arise.</p>
+      </div>
+      <div class="bg-navy p-10 flex flex-col items-center text-center group transition-all">
+        <span class="material-symbols-outlined text-primary text-4xl mb-8">verified_user</span>
+        <h3 class="font-bold text-sm tracking-widest uppercase mb-4">No fixes needed</h3>
+        <p class="text-gray-400 text-sm leading-relaxed font-light">Done right the first time, ensuring no corrections are ever required.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-white dark:bg-charcoal py-40 text-center border-t border-gray-100 dark:border-gray-800">
+  <div class="max-w-4xl mx-auto px-6">
+    <h2 class="text-navy dark:text-white text-4xl md:text-6xl font-serif font-bold mb-12 leading-tight">
+      Electrical work should be done right ' not corrected later.
+    </h2>
+    <button class="bg-navy dark:bg-primary text-white dark:text-navy px-16 py-5 font-bold text-sm tracking-widest uppercase transition-all hover:bg-primary hover:text-navy shadow-2xl">
+      Contact RWM EL
+    </button>
+  </div>
+</section>
+{% endblock %}

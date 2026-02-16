@@ -1,0 +1,68 @@
+{% extends "electricity/service_booking/base.html" %}
+{% block booking_content %}
+<form method="post" class="booking-form">
+  {% csrf_token %}
+  <div class="final-review">
+    <div>
+      <div class="final-card">
+        <div class="final-card-header">
+          <span class="section-index">13</span>
+          <span>Service Details</span>
+          <a class="final-edit" href="{% url 'electricity:service_booking_step' 4 %}">Edit</a>
+        </div>
+        <div class="review-row"><span>Service Type</span><span>Licensed Master Electrician</span></div>
+        <div class="review-row">
+          <span>Tasks</span>
+          <span>
+            {% if pricing_type == "hourly" %}
+              Hourly electrician booking
+            {% else %}
+              {{ data.service_names|default:"Install 3 Light Fixtures, Upgrade Main Circuit Panel, Replace 2 GFCI Outlets" }}
+            {% endif %}
+          </span>
+        </div>
+        <div class="review-row"><span>Priority</span><span>{% if data.urgent %}Urgent{% else %}Standard (Next Available){% endif %}</span></div>
+      </div>
+      <div class="final-card">
+        <div class="final-card-header">
+          <span class="section-index">14</span>
+          <span>Arrival Information</span>
+          <a class="final-edit" href="{% url 'electricity:service_booking_step' 6 %}">Edit</a>
+        </div>
+        <div class="review-row"><span>Date &amp; Time</span><span>{{ data.preferred_date|default:"Thursday, Oct 24th, 2024" }} · {{ data.preferred_time_slot|default:"09:00 AM - 11:00 AM" }}</span></div>
+        <div class="review-row"><span>Service Address</span><span>{{ data.street_address|default:"4522 Evergreen Terrace" }}, {{ data.city|default:"San Francisco" }}</span></div>
+        <div class="review-row"><span>Contact Person</span><span>{{ data.full_name|default:"Alex Thompson" }}</span></div>
+      </div>
+      <div class="final-note">
+        By clicking "BOOK ELECTRICIAN", you agree to our Terms of Service and Privacy Policy.
+        {% if pricing_type == "hourly" %}
+          The price below is calculated based on {{ hourly_hours }} hour(s) at {{ hourly_rate_electrician }} {{ currency }}/hr.
+        {% else %}
+          The price below reflects the fixed services you selected.
+        {% endif %}
+      </div>
+    </div>
+    <div class="final-cost">
+      <div class="cost-title">Estimated Cost</div>
+      <div class="cost-amount">{{ cost_total }} {{ currency }}</div>
+      {% if pricing_type == "hourly" %}
+        <div class="cost-sub">hourly booking</div>
+        <div class="cost-row"><span>Hourly Rate</span><span>{{ hourly_rate_electrician }} {{ currency }}</span></div>
+        <div class="cost-row"><span>Estimated Hours</span><span>{{ hourly_hours }} hr</span></div>
+      {% else %}
+        <div class="cost-sub">fixed service price</div>
+        <div class="cost-row"><span>Fixed Services Total</span><span>{{ fixed_services_total }} {{ currency }}</span></div>
+      {% endif %}
+      <button class="btn btn-primary w-100 mt-3" type="submit">Book Electrician →</button>
+      <div class="secure-note">Secure encrypted checkout</div>
+      <div class="guarantee-card">
+        <div class="guarantee-icon">100</div>
+        <div>
+          <strong>Guaranteed Safety</strong>
+          <div>Background checked &amp; certified</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}

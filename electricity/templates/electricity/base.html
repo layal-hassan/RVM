@@ -1,0 +1,74 @@
+{% load static electricity_extras %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Electrical & Smart Home{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css">
+  <link rel="stylesheet" href="{% static 'electricity/css/electricity.css' %}">
+  {% block extra_head %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'electricity/css/global_header.css' %}">
+</head>
+<body class="electricity-body {% block body_class %}{% endblock %}">
+
+  {% include "electricity/partials/global_header.html" %}
+  {% block content %}{% endblock %}
+
+  <footer class="site-footer footer-ref footer-v2">
+    <div class="container footer-grid footer-grid-v2">
+      <div class="footer-brand">
+        <div class="brand-mark-ref footer-logo">
+          <img src="{% static 'electricity/img/electricity_logo.jpg' %}" alt="RWM EL">
+        </div>
+        <h4>Electrical &amp; Infrastructure Solutions</h4>
+        <p class="footer-copy">
+          Licensed electrical work, upgrades, and system installations—built right and built to last.
+          Delivering the gold standard in smart home technology and enterprise power systems.
+        </p>
+        <div class="footer-cert">
+          <img class="cert-logo" src="{% static 'electricity/img/Certified_logo.png' %}" alt="Certified Electrical Work">
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="{% url 'electricity:about' %}">About us</a></li>
+          <li><a href="{% url 'electricity:terms' %}">Terms &amp; Conditions</a></li>
+          <li><a href="{% url 'electricity:privacy' %}">Privacy Policy</a></li>
+          <li><a href="{% url 'electricity:cookies' %}">Cookies</a></li>
+          <li><a href="{% url 'electricity:support' %}">Customer Support</a></li>
+          <li><a href="{% url 'electricity:contact' %}">Contact us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-contact">
+          <li><span>Address</span> Rådmansgatan 12, 114 44 Stockholm, Sweden</li>
+          <li><span>Phone</span> +46 8 123 456 00</li>
+          <li><span>Email</span> support@rwmel.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom footer-bottom-v2">
+      <div class="footer-rights">© 2026 RWM EL. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="{% url 'electricity:privacy' %}">Privacy</a>
+        <a href="{% url 'electricity:cookies' %}">Cookies</a>
+        <a href="{% url 'electricity:faq' %}">FAQ</a>
+        <a href="{% url 'electricity:terms' %}">Terms</a>
+      </div>
+      <div class="footer-lang">Sweden (EN)</div>
+    </div>
+  </footer>
+  <script defer src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+  <script defer src="{% static 'electricity/js/selects.js' %}"></script>
+  <script defer src="{% static 'electricity/js/global_header.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
+
+

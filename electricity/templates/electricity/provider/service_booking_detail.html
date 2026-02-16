@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Service Booking Detail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'electricity/css/dashboard.css' %}">
+</head>
+<body class="dash-body">
+  <div class="dash-shell">
+    <aside class="dash-sidebar">
+      <div class="dash-brand">
+        <div class="brand-dot"></div>
+        <div>
+          <div class="brand-title">Service Booking</div>
+          <div class="brand-sub">Provider Console</div>
+        </div>
+      </div>
+      <nav class="dash-nav">
+        <a href="{% url 'electricity:provider_dashboard' %}">Back to Orders</a>
+      </nav>
+    </aside>
+
+    <main class="dash-main">
+      <div class="dash-top">
+        <div>
+          <h1>{{ booking.full_name }}</h1>
+          <p class="dash-subtitle">{{ booking.preferred_date|default:"-" }} {{ booking.preferred_time_slot|default:"" }}</p>
+        </div>
+      </div>
+
+      <section class="dash-panel dash-panel-wide">
+        <div class="panel-header">
+          <div>
+            <h2>Booking Details</h2>
+            <div class="panel-meta">Status: {{ booking.get_status_display }}</div>
+          </div>
+        </div>
+        <div class="panel-table">
+          <div class="panel-row"><span>Account Type</span><span>{{ booking.get_account_type_display }}</span></div>
+          <div class="panel-row"><span>Address</span><span>{{ booking.street_address|default:"-" }}</span></div>
+          <div class="panel-row"><span>City</span><span>{{ booking.city|default:"-" }}</span></div>
+          <div class="panel-row"><span>Region</span><span>{{ booking.region|default:"-" }}</span></div>
+          <div class="panel-row"><span>Phone</span><span>{{ booking.phone|default:"-" }}</span></div>
+          <div class="panel-row"><span>Email</span><span>{{ booking.email|default:"-" }}</span></div>
+          <div class="panel-row"><span>Property Type</span><span>{{ booking.property_type|default:"-" }}</span></div>
+          <div class="panel-row"><span>Work Description</span><span>{{ booking.work_description|default:"-" }}</span></div>
+          <div class="panel-row"><span>Urgent</span><span>{% if booking.urgent %}Yes{% else %}No{% endif %}</span></div>
+        </div>
+      </section>
+
+      <section class="dash-panel dash-panel-wide">
+        <div class="panel-header">
+          <div>
+            <h2>Update Status</h2>
+            <div class="panel-meta">Changes are recorded in the timeline.</div>
+          </div>
+        </div>
+        <form method="post" action="{% url 'electricity:provider_service_booking_update_status' booking.id %}" class="dash-form">
+          {% csrf_token %}
+          <div class="form-actions">
+            <button name="status" value="on_the_way" class="dash-btn ghost" type="submit">On the way</button>
+            <button name="status" value="started" class="dash-btn ghost" type="submit">Started</button>
+            <button name="status" value="paused" class="dash-btn ghost" type="submit">Paused</button>
+            <button name="status" value="resumed" class="dash-btn ghost" type="submit">Resumed</button>
+            <button name="status" value="completed" class="dash-btn primary" type="submit">Completed</button>
+          </div>
+          <div class="form-row">
+            <label>Customer not available (add note)</label>
+            <textarea name="note" rows="3" placeholder="Write a short note for admin..."></textarea>
+            <div class="form-actions">
+              <button name="status" value="not_available" class="dash-btn danger" type="submit">
+                Arrived but customer not available
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <section class="dash-panel dash-panel-wide">
+        <div class="panel-header">
+          <div>
+            <h2>Extend Service</h2>
+            <div class="panel-meta">Extend the active booking duration (minutes).</div>
+          </div>
+        </div>
+        {% if extension_error %}
+          <div class="panel-empty">{{ extension_error }}</div>
+        {% endif %}
+        {% if extension_success %}
+          <div class="panel-empty">{{ extension_success }}</div>
+        {% endif %}
+        <form method="post" action="{% url 'electricity:provider_service_booking_extend' booking.id %}" class="dash-form">
+          {% csrf_token %}
+          <div class="form-row">
+            <label>Extend by (minutes)</label>
+            <input type="number" name="extend_minutes" min="15" step="15" value="30">
+            <div class="form-actions">
+              <button class="dash-btn primary" type="submit">Extend Service</button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <section class="dash-panel dash-panel-wide">
+        <div class="panel-header">
+          <div>
+            <h2>Timeline</h2>
+            <div class="panel-meta">Latest updates from this order.</div>
+          </div>
+        </div>
+        <div class="panel-table">
+          {% for update in updates %}
+            <div class="panel-row">
+              <span>{{ update.created_at|date:"M d, Y H:i" }}</span>
+              <span>{{ update.get_status_display }}</span>
+              <span>{{ update.note|default:"-" }}</span>
+            </div>
+          {% empty %}
+            <div class="panel-empty">No updates yet.</div>
+          {% endfor %}
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

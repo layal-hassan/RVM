@@ -1,0 +1,50 @@
+{% extends "electricity/on_call_booking/base.html" %}
+{% block booking_content %}
+<form method="post" class="on-call-form">
+  {% csrf_token %}
+  <div class="oncall-header">
+    <div class="section-label">Registration Flow</div>
+    <div class="section-title">Property &amp; Risk Profile</div>
+    <p>Tell us about the physical infrastructure we’ll be supporting.</p>
+  </div>
+
+  <div class="form-card">
+    <div class="form-grid">
+      <div class="full">
+        <label>Property Type</label>
+        <select class="form-control" name="property_type">
+          <option value="">Select property type</option>
+          <option value="commercial" {% if data.property_type == "commercial" %}selected{% endif %}>Commercial</option>
+          <option value="industrial" {% if data.property_type == "industrial" %}selected{% endif %}>Industrial</option>
+          <option value="mixed_use" {% if data.property_type == "mixed_use" %}selected{% endif %}>Mixed Use</option>
+          <option value="residential" {% if data.property_type == "residential" %}selected{% endif %}>Residential</option>
+        </select>
+      </div>
+      <div class="full">
+        <label>Number of Assets/Properties</label>
+        <input class="form-control" name="assets_count" placeholder="e.g. 12" value="{{ data.assets_count|default:'' }}">
+      </div>
+      <div class="full">
+        <label>Primary City / Region</label>
+        <input class="form-control" name="primary_region" placeholder="Search region..." value="{{ data.primary_region|default:'' }}">
+      </div>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <strong>Shared Critical Systems</strong>
+        <p>Are HVAC, plumbing, or electrical systems shared?</p>
+      </div>
+      <label class="switch">
+        <input type="checkbox" name="shared_critical_systems" {% if data.shared_critical_systems %}checked{% endif %}>
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="booking-actions">
+    <a class="btn btn-light" href="{% url 'electricity:on_call_booking_step' 2 %}">Back</a>
+    <button class="btn btn-primary" type="submit">Review &amp; Finalize</button>
+  </div>
+</form>
+{% endblock %}

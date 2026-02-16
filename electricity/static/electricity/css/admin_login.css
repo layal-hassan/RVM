@@ -1,0 +1,502 @@
+:root {
+  --navy: #003366;
+  --gold: #ffb800;
+  --ink: #1f2937;
+  --muted: #6b7280;
+  --cream: #f8f6f1;
+  --nm-surface: #f3ede3;
+  --nm-highlight: rgba(255, 255, 255, 0.9);
+  --nm-shadow: rgba(153, 130, 95, 0.35);
+  --nm-ink: #1f2937;
+  --nm-arrow: #7a5a12;
+  --nm-ring: rgba(201, 162, 74, 0.28);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  background: radial-gradient(circle at top, #ffffff 0%, #f6f2ea 55%, #f1ece3 100%);
+  color: var(--ink);
+}
+
+.admin-login-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: center;
+  gap: 24px;
+  padding: 48px;
+}
+
+.admin-login-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 24px 60px rgba(0, 51, 102, 0.12);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.admin-login-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.brand-mark {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1f2b3a;
+}
+
+.brand-title {
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.brand-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.admin-login-card h1 {
+  font-family: "Vesper Libre", serif;
+  margin: 0 0 10px;
+  color: var(--navy);
+}
+
+.admin-login-subtitle {
+  margin: 0 0 24px;
+  color: var(--muted);
+}
+
+.admin-field {
+  margin-bottom: 18px;
+}
+
+.admin-field label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: var(--navy);
+}
+
+.admin-field input {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid #e6dccb;
+  padding: 10px 12px;
+  font-size: 1rem;
+  background: #fffaf0;
+}
+
+.admin-field input,
+.admin-field select,
+.admin-field textarea {
+  font-family: "Sora", sans-serif;
+}
+
+.admin-field input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(255, 184, 0, 0.2);
+}
+
+.admin-field select,
+.signup-form select {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  color: var(--ink);
+  padding: 12px 44px 12px 16px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--navy) 50%),
+    linear-gradient(135deg, var(--navy) 50%, transparent 50%),
+    linear-gradient(180deg, var(--nm-surface, #f3ede3), var(--nm-surface, #f3ede3));
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 12px) 52%,
+    0 0;
+  background-size: 7px 7px, 7px 7px, 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow:
+    -6px -6px 14px var(--nm-highlight, rgba(255, 255, 255, 0.9)),
+    6px 6px 14px var(--nm-shadow, rgba(153, 130, 95, 0.35));
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.admin-field select:hover,
+.signup-form select:hover {
+  transform: translateY(-1px);
+}
+
+.admin-field select:focus,
+.signup-form select:focus {
+  outline: none;
+  box-shadow:
+    inset 3px 3px 8px rgba(0, 0, 0, 0.12),
+    inset -3px -3px 8px var(--nm-highlight, rgba(255, 255, 255, 0.9)),
+    0 0 0 4px var(--nm-ring, rgba(201, 162, 74, 0.28));
+}
+
+.admin-btn {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.brand-mark svg,
+.btn-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.admin-alert {
+  background: #fff2e0;
+  color: #8a5b00;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
+.admin-login-note {
+  margin-top: 18px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.admin-login-note a {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.signup-form .form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.signup-form .full-width {
+  grid-column: 1 / -1;
+}
+
+.signup-section {
+  border: 1px solid #f0e3cf;
+  border-radius: 18px;
+  padding: 18px 20px;
+  background: #fffdf9;
+  margin-bottom: 18px;
+}
+
+.signup-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.signup-section .section-header h2 {
+  margin: 0;
+  font-family: "Vesper Libre", serif;
+  font-size: 1.2rem;
+  color: var(--navy);
+}
+
+.signup-section .section-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.signup-form select,
+.signup-form textarea {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid #e6dccb;
+  padding: 12px 14px;
+  background: #fffaf0;
+}
+
+.choice-row {
+  display: flex;
+  gap: 16px;
+}
+
+.choice-row.choice-pill {
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 14px;
+}
+
+.choice-row.choice-pill label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.choice-row.choice-pill label input {
+  margin: 0;
+}
+
+.pill-option {
+  border: 1px solid #e6dccb;
+  background: #fffaf0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.ts-wrapper {
+  width: 100%;
+}
+
+.ts-wrapper.form-select,
+.ts-wrapper.form-control {
+  background: transparent;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.ts-control {
+  border-radius: 14px;
+  border: 1px solid transparent;
+  padding: 10px 44px 10px 16px;
+  background: var(--nm-surface);
+  color: var(--nm-ink);
+  box-shadow:
+    -6px -6px 14px var(--nm-highlight),
+    6px 6px 14px var(--nm-shadow);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  min-height: 44px;
+}
+
+.ts-control:hover {
+  transform: translateY(-1px);
+}
+
+.ts-wrapper.focus .ts-control {
+  box-shadow:
+    inset 3px 3px 8px rgba(0, 0, 0, 0.12),
+    inset -3px -3px 8px var(--nm-highlight),
+    0 0 0 4px var(--nm-ring);
+}
+
+.ts-control > input {
+  color: var(--nm-ink);
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.ts-control .item,
+.ts-control .item[data-value] {
+  background: transparent;
+  color: var(--nm-ink);
+}
+
+.ts-wrapper.multi .ts-control .item {
+  background: #efe5d6;
+  color: var(--nm-ink);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.ts-dropdown {
+  border: 1px solid rgba(215, 196, 163, 0.6);
+  border-radius: 16px;
+  background: #f7f2e9;
+  box-shadow: 0 18px 30px rgba(10, 25, 47, 0.12);
+  overflow: hidden;
+  margin-top: 8px;
+  z-index: 50;
+}
+
+.ts-dropdown .option {
+  padding: 10px 14px;
+  color: var(--nm-ink);
+}
+
+.ts-dropdown .option.active,
+.ts-dropdown .option:hover {
+  background: #e7dcc8;
+}
+
+.ts-dropdown .option.selected {
+  background: #d9c6a8;
+  color: #1f2937;
+}
+
+.ts-dropdown .ts-dropdown-content {
+  max-height: 260px;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #d1c2a7 #f2ece1;
+}
+
+.ts-dropdown .ts-dropdown-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ts-dropdown .ts-dropdown-content::-webkit-scrollbar-thumb {
+  background: #d1c2a7;
+  border-radius: 999px;
+}
+
+.ts-dropdown .ts-dropdown-content::-webkit-scrollbar-track {
+  background: #f2ece1;
+}
+
+html[dir="rtl"] .ts-control,
+body[dir="rtl"] .ts-control {
+  direction: rtl;
+  text-align: right;
+  padding: 10px 16px 10px 44px;
+}
+
+html[dir="rtl"] .ts-dropdown,
+body[dir="rtl"] .ts-dropdown {
+  direction: rtl;
+  text-align: right;
+}
+
+.pill-option input {
+  margin: 0;
+}
+
+.choice-pill label {
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid #e6dccb;
+  background: #fffaf0;
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.interest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.interest-grid label {
+  border: 1px solid #efe1cc;
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #fffaf0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.interest-grid input {
+  width: 18px;
+  height: 18px;
+}
+
+.choice-grid label,
+.choice-row label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.consent-grid {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 12px;
+}
+
+.consent-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.private-only,
+.business-only {
+  display: none;
+}
+
+.private-only.is-visible,
+.business-only.is-visible {
+  display: grid;
+}
+
+.admin-login-side {
+  display: flex;
+  justify-content: center;
+}
+
+.side-card {
+  background: rgba(0, 51, 102, 0.9);
+  color: #fff;
+  border-radius: 24px;
+  padding: 36px;
+  max-width: 360px;
+  box-shadow: 0 24px 60px rgba(0, 51, 102, 0.2);
+}
+
+.side-title {
+  font-family: "Vesper Libre", serif;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.side-text {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 18px;
+}
+
+.side-pill {
+  display: inline-block;
+  background: rgba(255, 184, 0, 0.2);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 800px) {
+  .admin-login-shell {
+    padding: 28px;
+  }
+}

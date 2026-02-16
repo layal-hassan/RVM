@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Provider Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'electricity/css/dashboard.css' %}">
+</head>
+<body class="dash-body">
+  <div class="dash-shell">
+    <aside class="dash-sidebar">
+      <div class="dash-brand">
+        <div class="brand-dot"></div>
+        <div>
+          <div class="brand-title">{{ provider.display_name }}</div>
+          <div class="brand-sub">Provider Console</div>
+        </div>
+      </div>
+      <nav class="dash-nav">
+        <a class="is-active" href="{% url 'electricity:provider_dashboard' %}">My Orders</a>
+        <a href="{% url 'electricity:services' %}">View Website</a>
+      </nav>
+      <div class="dash-card">
+        <div class="dash-card-title">Status Tips</div>
+        <ul class="dash-notes">
+          <li>Keep orders updated for admin visibility.</li>
+          <li>Use "Customer not available" with a note.</li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="dash-main">
+      <div class="dash-top">
+        <div>
+          <h1>Assigned Orders</h1>
+          <p class="dash-subtitle">Only your orders are shown here.</p>
+        </div>
+      </div>
+
+      <div class="provider-tabs">
+        <button class="provider-tab is-active" type="button" data-tab="consultations">Consultations</button>
+        <button class="provider-tab" type="button" data-tab="service">Service Bookings</button>
+        <button class="provider-tab" type="button" data-tab="oncall">On-Call Bookings</button>
+      </div>
+
+      <section class="dash-panel dash-panel-wide">
+        <div class="panel-table provider-tab-panel is-active" data-panel="consultations">
+          <div class="panel-row panel-row-head">
+            <span>Customer</span>
+            <span>Date</span>
+            <span>Service</span>
+            <span>Status</span>
+            <span>Actions</span>
+          </div>
+          {% for booking in bookings %}
+            <div class="panel-row">
+              <span>{{ booking.full_name }}</span>
+              <span>{{ booking.preferred_date|default:"-" }} {{ booking.preferred_time_slot|default:"" }}</span>
+              <span>{{ booking.consultation_type|default:"-" }}</span>
+              <span>{{ booking.get_status_display }}</span>
+              <span class="row-actions">
+                <a href="{% url 'electricity:provider_order_detail' booking.id %}">Open</a>
+              </span>
+            </div>
+          {% empty %}
+            <div class="panel-empty">No orders assigned yet.</div>
+          {% endfor %}
+        </div>
+
+        <div class="panel-table provider-tab-panel" data-panel="service">
+          <div class="panel-row panel-row-head">
+            <span>Customer</span>
+            <span>Date</span>
+            <span>Type</span>
+            <span>Status</span>
+            <span>Actions</span>
+          </div>
+          {% for booking in service_bookings %}
+            <div class="panel-row">
+              <span>{{ booking.full_name }}</span>
+              <span>{{ booking.preferred_date|default:"-" }} {{ booking.preferred_time_slot|default:"" }}</span>
+              <span>{{ booking.account_type|default:"-" }}</span>
+              <span>{{ booking.get_status_display }}</span>
+              <span class="row-actions">
+                <a href="{% url 'electricity:provider_service_booking_detail' booking.id %}">Open</a>
+              </span>
+            </div>
+          {% empty %}
+            <div class="panel-empty">No service bookings assigned yet.</div>
+          {% endfor %}
+        </div>
+
+        <div class="panel-table provider-tab-panel" data-panel="oncall">
+          <div class="panel-row panel-row-head">
+            <span>Organization</span>
+            <span>Contact</span>
+            <span>City</span>
+            <span>Status</span>
+            <span>Actions</span>
+          </div>
+          {% for booking in on_call_bookings %}
+            <div class="panel-row">
+              <span>{{ booking.organization_name|default:"-" }}</span>
+              <span>{{ booking.contact_person|default:"-" }}</span>
+              <span>{{ booking.city|default:"-" }}</span>
+              <span>{{ booking.get_status_display }}</span>
+              <span class="row-actions">
+                <a href="{% url 'electricity:provider_on_call_booking_detail' booking.id %}">Open</a>
+              </span>
+            </div>
+          {% empty %}
+            <div class="panel-empty">No on-call bookings assigned yet.</div>
+          {% endfor %}
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.querySelectorAll(".provider-tab").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-tab");
+        document.querySelectorAll(".provider-tab").forEach((b) => b.classList.remove("is-active"));
+        document.querySelectorAll(".provider-tab-panel").forEach((panel) => {
+          panel.classList.toggle("is-active", panel.getAttribute("data-panel") === target);
+        });
+        btn.classList.add("is-active");
+      });
+    });
+  </script>
+</body>
+</html>

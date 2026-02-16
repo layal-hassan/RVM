@@ -1,0 +1,75 @@
+{% extends "electricity/on_call_booking/base.html" %}
+{% block booking_content %}
+<form method="post" class="on-call-form">
+  {% csrf_token %}
+
+  {% if submitted %}
+    <div class="success-banner">
+      <strong>Application received.</strong>
+      Your on-call registration has been submitted. Reference ID: {{ booking_id }}.
+    </div>
+  {% endif %}
+
+  <div class="oncall-header">
+    <div class="section-label">Finalize Registration</div>
+    <div class="section-title">Finalize Your Registration</div>
+    <p>Review and complete the last few steps to activate your on-call electrical service.</p>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">Current electrical situation</div>
+    <label>When was your last electrical issue?</label>
+    <input class="form-control" type="date" name="last_issue_date" value="{{ data.last_issue_date|default:'' }}">
+
+    <div class="toggle-row compact">
+      <div>
+        <strong>Are you currently with another provider?</strong>
+        <p>Active contract elsewhere</p>
+      </div>
+      <label class="switch">
+        <input type="checkbox" name="active_contract" {% if data.active_contract %}checked{% endif %}>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <label>Briefly describe any recurring electrical issues</label>
+    <textarea class="form-control" name="recurring_issues" rows="4" placeholder="e.g., Occasional flickering in the main hall...">{{ data.recurring_issues|default:'' }}</textarea>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">Additional notes (Optional)</div>
+    <textarea class="form-control" name="additional_notes" rows="4" placeholder="Enter any additional details here...">{{ data.additional_notes|default:'' }}</textarea>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">Emergency pricing estimate</div>
+    <label>Estimated emergency hours</label>
+    <input class="form-control" type="number" min="1" name="emergency_hours" value="{{ data.emergency_hours|default:'1' }}">
+    <div class="summary-note">
+      Estimated total: <strong>{{ emergency_estimated_total|default:"0" }} {{ currency|default:"SEK" }}</strong>
+      ({{ hourly_rate_emergency|default:"0" }} {{ currency|default:"SEK" }}/hr)
+    </div>
+  </div>
+
+  <div class="form-card review-card">
+    <div class="form-card-title">Review &amp; Submit</div>
+    <div class="review-row">
+      <span>Service Plan</span>
+      <strong>{{ data.service_plan|default:"On-Call Pro (Monthly)" }}</strong>
+    </div>
+    <div class="review-row">
+      <span>Site Address</span>
+      <strong>{{ data.company_address|default:"123 Industrial Way" }}, {{ data.city|default:"Stockholm" }}</strong>
+    </div>
+    <div class="notice">
+      Notice of Activation: By clicking "Submit Application", you acknowledge that your service
+      agreement will be activated immediately upon verification. A site inspection will be scheduled
+      within 48 hours.
+    </div>
+    <div class="review-actions">
+      <a class="btn btn-light" href="{% url 'electricity:on_call_booking_step' 3 %}">Back</a>
+      <button class="btn btn-primary" type="submit">Submit Application</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

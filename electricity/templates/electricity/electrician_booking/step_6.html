@@ -1,0 +1,49 @@
+﻿{% extends "electricity/electrician_booking/base.html" %}
+
+{% block booking_content %}
+<form method="post" class="eb-form">
+  {% csrf_token %}
+  <section class="eb-card">
+    <div class="eb-card-header">
+      <span class="eb-step-badge">6</span>
+      <div>
+        <h1>Preferred Date &amp; Time</h1>
+        <p>Select the best time for your visit.</p>
+      </div>
+    </div>
+    <div class="eb-schedule-grid">
+      <div>
+        <div class="eb-label">Select Date</div>
+        <div class="eb-calendar" data-selected="{{ data.preferred_date|default:'' }}"></div>
+        <input type="hidden" name="preferred_date" id="preferred_date" value="{{ data.preferred_date|default:'' }}">
+      </div>
+      <div>
+        <div class="eb-label">Arrival Window</div>
+        <div class="eb-arrival">
+          <label class="eb-arrival-card">
+            <input type="radio" name="arrival_window" value="Morning (08:00 AM - 12:00 PM)" {% if data.arrival_window == "Morning (08:00 AM - 12:00 PM)" %}checked{% endif %}>
+            <div class="eb-arrival-icon">AM</div>
+            <div>
+              <div class="eb-service-title">Morning</div>
+              <div class="eb-service-sub">08:00 AM - 12:00 PM</div>
+            </div>
+          </label>
+          <label class="eb-arrival-card">
+            <input type="radio" name="arrival_window" value="Afternoon (12:00 PM - 05:00 PM)" {% if data.arrival_window == "Afternoon (12:00 PM - 05:00 PM)" %}checked{% endif %}>
+            <div class="eb-arrival-icon">PM</div>
+            <div>
+              <div class="eb-service-title">Afternoon</div>
+              <div class="eb-service-sub">12:00 PM - 05:00 PM</div>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="eb-actions">
+    <a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 5 %}">Back</a>
+    <button class="btn btn-primary" type="submit">Continue to Step 7 -></button>
+  </div>
+</form>
+{% endblock %}

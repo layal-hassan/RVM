@@ -1,0 +1,82 @@
+{% extends "electricity/booking/base_booking.html" %}
+
+{% block subtitle %}
+<p class="booking-subtitle">Select all that apply so we can match you with the right specialist.</p>
+{% endblock %}
+
+{% block content %}
+<div class="service-grid">
+    {% for choice in form.services %}
+        <label class="service-card">
+            {{ choice.tag }}
+            <div class="service-icon">
+                {% if forloop.counter == 1 %}
+                    <svg class="service-svg" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M13 2L4 13h6l-1 9 9-11h-6l1-9z"/>
+                    </svg>
+                {% elif forloop.counter == 2 %}
+                    <svg class="service-svg" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M9 21h6v-2H9v2zm3-19C8.7 2 6 4.7 6 8c0 2.2 1.2 4.1 3 5.1V16h6v-2.9c1.8-1 3-2.9 3-5.1 0-3.3-2.7-6-6-6z"/>
+                    </svg>
+                {% elif forloop.counter == 3 %}
+                    <svg class="service-svg" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M7 2h7v4H7V2zm8 0h3v7h-3V2zM5 8h14v12H5V8zm4 2v8h6v-8H9z"/>
+                    </svg>
+                {% elif forloop.counter == 4 %}
+                    <svg class="service-svg" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M8 11a3 3 0 1 1 6 0c0 1.7-1.3 3-3 3s-3-1.3-3-3zm8.5-3.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zM5 19c0-2.2 3.6-3.5 6-3.5s6 1.3 6 3.5v1H5v-1z"/>
+                    </svg>
+                {% elif forloop.counter == 5 %}
+                    <svg class="service-svg" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M21 7l-5 5-2-2-5 5-4-4 5-5-2-2 5-5 8 8zM3 19h6v2H3v-2z"/>
+                    </svg>
+                {% else %}
+                    <svg class="service-svg" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm8 4h-2.1a6.9 6.9 0 0 1-1 2.4l1.6 1.6-1.4 1.4-1.6-1.6a6.9 6.9 0 0 1-2.4 1V20h-2v-2.1a6.9 6.9 0 0 1-2.4-1l-1.6 1.6-1.4-1.4 1.6-1.6a6.9 6.9 0 0 1-1-2.4H4v-2h2.1a6.9 6.9 0 0 1 1-2.4L5.5 6.9l1.4-1.4 1.6 1.6a6.9 6.9 0 0 1 2.4-1V4h2v2.1a6.9 6.9 0 0 1 2.4 1l1.6-1.6 1.4 1.4-1.6 1.6a6.9 6.9 0 0 1 1 2.4H20v2z"/>
+                    </svg>
+                {% endif %}
+            </div>
+            <div class="service-text">
+                <div class="service-title">{{ choice.choice_label }}</div>
+                {% if forloop.counter == 1 %}
+                    <div class="service-note">Panel upgrades, rewiring, outlets</div>
+                {% elif forloop.counter == 2 %}
+                    <div class="service-note">Indoor/outdoor, recessed, landscape</div>
+                {% elif forloop.counter == 3 %}
+                    <div class="service-note">Home station installation</div>
+                {% elif forloop.counter == 4 %}
+                    <div class="service-note">Smart locks, cameras, thermostat</div>
+                {% elif forloop.counter == 5 %}
+                    <div class="service-note">Repairing sparks, shorts, or failures</div>
+                {% else %}
+                    <div class="service-note">Routine inspections and testing</div>
+                {% endif %}
+            </div>
+            <span class="service-check"></span>
+        </label>
+    {% endfor %}
+</div>
+
+<div class="urgent-box">
+    <div class="urgent-left">
+        <div class="urgent-icon">!</div>
+        <div>
+            <div class="urgent-title">Is this urgent?</div>
+            <div class="urgent-subtitle">Select "Yes" if you have an active electrical hazard or no power.</div>
+        </div>
+    </div>
+    <div class="urgent-actions">
+        {% for choice in form.urgent %}
+            <label class="urgent-option">
+                {{ choice.tag }}
+                <span>{{ choice.choice_label }}</span>
+            </label>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block actions %}
+<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_2' %}">Back</a>
+<button type="submit" class="btn btn-primary booking-btn">Continue</button>
+{% endblock %}

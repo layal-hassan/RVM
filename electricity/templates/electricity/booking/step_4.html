@@ -1,0 +1,24 @@
+{% extends "electricity/booking/base_booking.html" %}
+
+{% block subtitle %}
+<p class="booking-subtitle">The more detail you share, the better we can prepare.</p>
+{% endblock %}
+
+{% block content %}
+<div class="form-row">
+    {{ form.project_description }}
+</div>
+<div class="tip-box">
+    <div class="tip-title">Helpful tips:</div>
+    <ul class="tip-list">
+        <li>Mention any specific brands or technologies you prefer.</li>
+        <li>Describe the size or layout of the area involved.</li>
+        <li>Highlight any urgent deadlines or concerns.</li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block actions %}
+<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_3' %}">Back</a>
+<button type="submit" class="btn btn-primary booking-btn">Continue</button>
+{% endblock %}

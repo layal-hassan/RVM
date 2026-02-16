@@ -1,0 +1,58 @@
+{% extends "electricity/dashboard/base.html" %}
+{% load electricity_extras %}
+
+{% block page_title %}{{ title }}{% endblock %}
+{% block page_subtitle %}Fill the details and save.{% endblock %}
+
+{% block content %}
+{% if request.GET.view %}
+<section class="dash-panel dash-panel-wide dash-readonly">
+    <div class="panel-header">
+        <div>
+            <h2>{{ title }}</h2>
+            <div class="panel-meta">View-only details. Click edit to make changes.</div>
+        </div>
+        <div class="panel-actions">
+            <a class="dash-btn primary" href="{{ request.path }}">Edit</a>
+        </div>
+    </div>
+    <div class="panel-table">
+        {% for field in form %}
+            <div class="panel-row">
+                <span class="row-title">{{ field.label }}</span>
+                <span class="row-meta">{{ field.value|default:"-" }}</span>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="form-actions">
+        <a class="dash-btn ghost" href="{% url back_url %}">Back</a>
+    </div>
+</section>
+{% else %}
+<section class="dash-panel dash-panel-wide">
+    <div class="panel-header">
+        <div>
+            <h2>{{ title }}</h2>
+            <div class="panel-meta">All changes stay in this dashboard.</div>
+        </div>
+    </div>
+    <form method="post" enctype="multipart/form-data" class="dash-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div class="form-row">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="field-error">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="form-actions">
+            <a class="dash-btn ghost" href="{% url back_url %}">Back</a>
+            <button type="submit" class="dash-btn primary">Save</button>
+        </div>
+    </form>
+</section>
+{% endif %}
+{% endblock %}

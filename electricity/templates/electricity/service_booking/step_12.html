@@ -1,0 +1,38 @@
+{% extends "electricity/service_booking/base.html" %}
+{% block booking_content %}
+<div class="confirmation-card">
+  <div class="confirmation-icon">OK</div>
+  <h2>Booking Received!</h2>
+  <p>
+    Your Nessafe electrician is scheduled and on the way for
+    {% if booking and booking.preferred_date %}
+      {{ booking.preferred_date }}
+    {% else %}
+      {{ data.preferred_date|default:"Oct 24th" }}
+    {% endif %}.
+    A confirmation has been sent to your email.
+  </p>
+  <div class="confirmation-meta">
+    <div class="meta-card">
+      <div class="meta-label">Confirmation ID</div>
+      <div class="meta-value">{{ booking_id }}</div>
+    </div>
+    <div class="meta-card">
+      <div class="meta-label">Time Assigned</div>
+      <div class="meta-value">
+        {% if booking and booking.preferred_time_slot %}
+          {{ booking.preferred_time_slot }}
+        {% else %}
+          {{ data.preferred_time_slot|default:"09:00 AM" }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="confirmation-actions">
+    {% if booking %}
+      <a class="btn btn-light" href="{% url 'electricity:service_booking_calendar' booking.id %}">Add to Calendar</a>
+    {% endif %}
+    <a class="btn btn-primary" href="{% url 'electricity:home' %}">Go To Home</a>
+  </div>
+</div>
+{% endblock %}

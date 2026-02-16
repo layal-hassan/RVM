@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'electricity/css/dashboard.css' %}">
+</head>
+<body class="dash-body">
+  <div class="dash-shell">
+    <aside class="dash-sidebar">
+      <div class="dash-brand">
+        <div class="brand-dot"></div>
+        <div>
+          <div class="brand-title">Order Detail</div>
+          <div class="brand-sub">Provider Console</div>
+        </div>
+      </div>
+      <nav class="dash-nav">
+        <a href="{% url 'electricity:provider_dashboard' %}">Back to Orders</a>
+      </nav>
+    </aside>
+
+    <main class="dash-main">
+      <div class="dash-top">
+        <div>
+          <h1>{{ booking.full_name }}</h1>
+          <p class="dash-subtitle">{{ booking.preferred_date }} {{ booking.preferred_time_slot }}</p>
+        </div>
+      </div>
+
+      <section class="dash-panel dash-panel-wide">
+        <div class="panel-header">
+          <div>
+            <h2>Order Details</h2>
+            <div class="panel-meta">Status: {{ booking.get_status_display }}</div>
+          </div>
+        </div>
+        <div class="panel-table">
+          <div class="panel-row"><span>Service</span><span>{{ booking.consultation_type }}</span></div>
+          <div class="panel-row"><span>Property</span><span>{{ booking.property_type }}</span></div>
+          <div class="panel-row"><span>Address</span><span>{{ booking.company_address|default:"-" }}</span></div>
+          <div class="panel-row"><span>Phone</span><span>{{ booking.phone|default:"-" }}</span></div>
+          <div class="panel-row"><span>Email</span><span>{{ booking.email|default:"-" }}</span></div>
+          <div class="panel-row"><span>Notes</span><span>{{ booking.project_description|default:"-" }}</span></div>
+        </div>
+      </section>
+
+      <section class="dash-panel dash-panel-wide">
+        <div class="panel-header">
+          <div>
+            <h2>Update Status</h2>
+            <div class="panel-meta">Changes are recorded in the timeline.</div>
+          </div>
+        </div>
+        <form method="post" action="{% url 'electricity:provider_update_status' booking.id %}" class="dash-form">
+          {% csrf_token %}
+          <div class="form-actions">
+            <button name="status" value="on_the_way" class="dash-btn ghost" type="submit">On the way</button>
+            <button name="status" value="started" class="dash-btn ghost" type="submit">Started</button>
+            <button name="status" value="paused" class="dash-btn ghost" type="submit">Paused</button>
+            <button name="status" value="resumed" class="dash-btn ghost" type="submit">Resumed</button>
+            <button name="status" value="completed" class="dash-btn primary" type="submit">Completed</button>
+          </div>
+          <div class="form-row">
+            <label>Customer not available (add note)</label>
+            <textarea name="note" rows="3" placeholder="Write a short note for admin..."></textarea>
+            <div class="form-actions">
+              <button name="status" value="not_available" class="dash-btn danger" type="submit">
+                Arrived but customer not available
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <section class="dash-panel dash-panel-wide">
+        <div class="panel-header">
+          <div>
+            <h2>Timeline</h2>
+            <div class="panel-meta">Latest updates from this order.</div>
+          </div>
+        </div>
+        <div class="panel-table">
+          {% for update in updates %}
+            <div class="panel-row">
+              <span>{{ update.created_at|date:"M d, Y H:i" }}</span>
+              <span>{{ update.get_status_display }}</span>
+              <span>{{ update.note|default:"-" }}</span>
+            </div>
+          {% empty %}
+            <div class="panel-empty">No updates yet.</div>
+          {% endfor %}
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

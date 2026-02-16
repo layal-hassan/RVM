@@ -1,0 +1,44 @@
+﻿{% extends "electricity/electrician_booking/base.html" %}
+
+{% block booking_content %}
+<form method="post" class="eb-form">
+  {% csrf_token %}
+  <section class="eb-card">
+    <div class="eb-card-header">
+      <span class="eb-step-badge">2</span>
+      <div>
+        <h1>Select the service type</h1>
+        <p>Choose the category that best matches your booking.</p>
+      </div>
+    </div>
+    <div class="eb-service-grid">
+      <label class="eb-service-card">
+        <input type="radio" name="service_type" value="residential" {% if data.service_type == "residential" %}checked{% endif %}>
+        <div>
+          <div class="eb-service-title">Residential Electrical Repair</div>
+          <div class="eb-service-sub">Troubleshooting, outlets, lighting, and home upgrades.</div>
+        </div>
+      </label>
+      <label class="eb-service-card">
+        <input type="radio" name="service_type" value="installation" {% if data.service_type == "installation" %}checked{% endif %}>
+        <div>
+          <div class="eb-service-title">New Installations</div>
+          <div class="eb-service-sub">Panels, circuits, EV chargers, and appliance hookups.</div>
+        </div>
+      </label>
+      <label class="eb-service-card">
+        <input type="radio" name="service_type" value="commercial" {% if data.service_type == "commercial" %}checked{% endif %}>
+        <div>
+          <div class="eb-service-title">Commercial Maintenance</div>
+          <div class="eb-service-sub">Offices, retail, and property maintenance support.</div>
+        </div>
+      </label>
+    </div>
+  </section>
+
+  <div class="eb-actions">
+    <a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 1 %}">Back</a>
+    <button class="btn btn-primary" type="submit">Continue to Step 3 -></button>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "electricity/base.html" %}
+
+{% block title %}FAQ | RWM EL{% endblock %}
+{% block body_class %}faq-page{% endblock %}
+
+{% block content %}
+<section class="faq-hero">
+  <div class="container">
+    <div class="faq-kicker">FAQ</div>
+    <h1>Frequently Asked Questions</h1>
+    <p>Clear answers to the most common questions about bookings, pricing, and services.</p>
+  </div>
+</section>
+
+<section class="faq-section">
+  <div class="container">
+    <div class="faq-list">
+      {% for faq in faqs %}
+        <details class="faq-item">
+          <summary>
+            <span>{{ faq.question }}</span>
+            <span class="faq-icon">+</span>
+          </summary>
+          <div class="faq-answer">
+            {{ faq.answer|linebreaksbr }}
+          </div>
+        </details>
+      {% empty %}
+        <div class="faq-empty">No FAQ entries yet. Please check back soon.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

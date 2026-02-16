@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Electrical Admin Dashboard{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css">
+    <link rel="stylesheet" href="{% static 'electricity/css/electricity.css' %}">
+    <link rel="stylesheet" href="{% static 'electricity/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'electricity/css/global_header.css' %}">
+</head>
+<body class="dash-body">
+
+    {% include "electricity/partials/global_header.html" %}
+    <div class="dash-shell">
+        <aside class="dash-sidebar">
+            <div class="dash-brand">
+                <div class="brand-dot"></div>
+                <div>
+                    <div class="brand-title">Electrical Admin</div>
+                    <div class="brand-sub">Operations Console</div>
+                </div>
+            </div>
+            <nav class="dash-nav">
+                <a href="{% url 'electricity:dashboard' %}">Overview</a>
+                <a href="{% url 'electricity:dashboard_services' %}">Services</a>
+                <a href="{% url 'electricity:dashboard_pricing' %}">Pricing</a>
+                <a href="{% url 'electricity:dashboard_requests' %}">Requests</a>
+                <a href="{% url 'electricity:dashboard_bookings' %}">Bookings</a>
+                <a href="{% url 'electricity:dashboard_service_bookings' %}">Service Bookings</a>
+                <a href="{% url 'electricity:dashboard_electrician_bookings' %}">Electrician Bookings</a>
+                <a href="{% url 'electricity:dashboard_on_call_bookings' %}">On-Call Bookings</a>
+                <a href="{% url 'electricity:dashboard_profiles' %}">Customers</a>
+                <a href="{% url 'electricity:dashboard_providers' %}">Providers</a>
+                <a href="{% url 'electricity:dashboard_provider_shifts' %}">Provider Shifts</a>
+                <a href="{% url 'electricity:dashboard_users' %}">Users</a>
+                <a href="{% url 'electricity:dashboard_faq' %}">FAQ</a>
+                <a href="{% url 'electricity:dashboard_support_tickets' %}">Support Tickets</a>
+                <a href="{% url 'electricity:dashboard_zip_codes' %}">ZIP Codes</a>
+                <a href="{% url 'electricity:dashboard_outside_area_requests' %}">Outside Area Requests</a>
+                <a href="{% url 'electricity:services' %}">View Website</a>
+            </nav>
+            <div class="dash-card" id="notifications">
+                <div class="dash-card-title">Notifications</div>
+                <ul class="dash-notes">
+                    <li>Use the sections to manage all tables.</li>
+                    <li>All edits stay inside this dashboard.</li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="dash-main">
+            <div class="dash-top">
+                <div class="dash-title">
+                    <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+                    <p class="dash-subtitle">{% block page_subtitle %}Manage all data in one place.{% endblock %}</p>
+                </div>
+                <div class="dash-actions">
+                    <div class="dash-notify">
+                        <button class="dash-notify-btn" id="dash-bell-btn" type="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="dash-notify-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M13.7 21a2 2 0 0 1-3.4 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </span>
+                            <span class="dash-notify-badge{% if unread_count %} is-active{% endif %}" id="dash-unread-badge">{{ unread_count|default:0 }}</span>
+                            <span class="sr-only">Notifications</span>
+                        </button>
+                        <div class="dash-notify-panel" id="dash-notify-panel"
+                             data-url-consultation="{% url 'electricity:dashboard_bookings' %}"
+                             data-url-service="{% url 'electricity:dashboard_service_bookings' %}"
+                             data-url-electrician="{% url 'electricity:dashboard_electrician_bookings' %}"
+                             data-url-oncall="{% url 'electricity:dashboard_on_call_bookings' %}">
+                            <div class="dash-notify-head">
+                                <div>
+                                    <div class="dash-notify-title">Notifications</div>
+                                    <div class="dash-notify-sub"><span id="dash-unread-text">{{ unread_count|default:0 }}</span> unread</div>
+                                </div>
+                                <button class="dash-btn ghost" id="enable-notifications" type="button">Enable desktop alerts</button>
+                            </div>
+                            <div class="dash-notify-list">
+                                {% for note in notifications %}
+                                    <div class="dash-notify-item" data-message="{{ note.message|default:'' }}">
+                                        <div class="dash-notify-time">{{ note.created_at|date:"M d, H:i" }}</div>
+                                        <div class="dash-notify-msg">{{ note.message }}</div>
+                                    </div>
+                                {% empty %}
+                                    <div class="dash-notify-empty">No notifications yet.</div>
+                                {% endfor %}
+                            </div>
+                            <div class="dash-notify-actions">
+                                <form method="post" action="{% url 'electricity:admin_notifications_mark_read' %}">
+                                    {% csrf_token %}
+                                    <button class="dash-btn primary" type="submit">Mark all as read</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="dash-btn ghost" href="{% url 'admin:logout' %}">Sign out</a>
+                </div>
+            </div>
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+    <script defer src="{% static 'electricity/js/selects.js' %}"></script>
+    <script defer src="{% static 'electricity/js/global_header.js' %}"></script>
+</body>
+</html>

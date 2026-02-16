@@ -1,0 +1,85 @@
+{% extends "electricity/booking/base_booking.html" %}
+
+{% block subtitle %}
+<p class="booking-subtitle">We'll use these details to confirm your consultation slot.</p>
+{% endblock %}
+
+{% block content %}
+{% if consultation_free %}
+  <div class="success-banner">Your first consultation is free.</div>
+{% endif %}
+<div class="form-row">
+    <label class="form-label">Are you a private individual or a business?</label>
+    <div class="toggle-group">
+        {% for choice in form.contact_type %}
+            <label class="toggle-option">
+                {{ choice.tag }}
+                <span>{{ choice.choice_label }}</span>
+            </label>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="form-row contact-private" data-private>
+    <label class="form-label">Personal ID number</label>
+    {{ form.personal_id }}
+</div>
+
+<div class="form-row contact-business" data-business>
+    <label class="form-label">Company name</label>
+    {{ form.company_name }}
+</div>
+<div class="form-row contact-business" data-business>
+    <label class="form-label">Organization number</label>
+    {{ form.organization_number }}
+</div>
+<div class="form-row contact-business" data-business>
+    <label class="form-label">Company address</label>
+    {{ form.company_address }}
+</div>
+
+<div class="form-row">
+    <label class="form-label">Full Name</label>
+    {{ form.full_name }}
+</div>
+
+<div class="form-row split-row">
+    <div>
+        <label class="form-label">Email</label>
+        {{ form.email }}
+    </div>
+    <div>
+        <label class="form-label">Phone Number</label>
+        {{ form.phone }}
+    </div>
+</div>
+
+<div class="form-row">
+    <label class="form-label">When are you available for a call?</label>
+    <div class="day-grid">
+        {% for choice in form.availability_days %}
+            <label class="day-pill">
+                {{ choice.tag }}
+                <span>{{ choice.choice_label }}</span>
+            </label>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="form-row">
+    <label class="form-label">Preferred time window</label>
+    <div class="time-grid">
+        {% for choice in form.time_window %}
+            <label class="time-card">
+                {{ choice.tag }}
+                <div class="time-title">{{ choice.choice_label }}</div>
+            </label>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block actions %}
+<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_5' %}">Back</a>
+<button type="submit" class="btn btn-primary booking-btn">Next Step</button>
+{% endblock %}

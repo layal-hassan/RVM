@@ -1,0 +1,31 @@
+﻿{% extends "electricity/electrician_booking/base.html" %}
+
+{% block booking_content %}
+<form method="post" class="eb-form">
+  {% csrf_token %}
+  <section class="eb-card">
+    <div class="eb-card-header">
+      <span class="eb-step-badge">4</span>
+      <div>
+        <h1>Access &amp; preparation</h1>
+        <p>Help us prepare for a smooth appointment.</p>
+      </div>
+    </div>
+    <div class="eb-form-grid">
+      <div class="eb-full">
+        <label class="eb-label">Access notes</label>
+        <input class="form-control" name="access_notes" placeholder="Gate code, concierge, or access instructions" value="{{ data.access_notes|default:'' }}">
+      </div>
+      <div class="eb-full">
+        <label class="eb-label">Parking details</label>
+        <input class="form-control" name="parking_info" placeholder="Parking availability or restrictions" value="{{ data.parking_info|default:'' }}">
+      </div>
+    </div>
+  </section>
+
+  <div class="eb-actions">
+    <a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 3 %}">Back</a>
+    <button class="btn btn-primary" type="submit">Continue to Step 5 -></button>
+  </div>
+</form>
+{% endblock %}

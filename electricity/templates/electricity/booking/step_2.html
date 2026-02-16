@@ -1,0 +1,61 @@
+{% extends "electricity/booking/base_booking.html" %}
+
+{% block subtitle %}
+<p class="booking-subtitle">Provide the basic details so we can tailor your consultation.</p>
+{% endblock %}
+
+{% block content %}
+<div class="option-grid">
+    {% for choice in form.property_type %}
+        <label class="option-card">
+            {{ choice.tag }}
+            <div class="option-body option-body-inline">
+                <span class="option-icon-sm">
+                    {% if forloop.counter == 1 %}
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 20h16v-2H4v2zm2-4h3v-3H6v3zm0-5h3V8H6v3zm5 5h3v-3h-3v3zm0-5h3V8h-3v3zm5 5h3v-3h-3v3zm0-5h3V8h-3v3zM5 6h14V4H5v2z"/>
+                        </svg>
+                    {% elif forloop.counter == 2 %}
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 3l9 8h-2v9h-6v-6H11v6H5v-9H3l9-8z"/>
+                        </svg>
+                    {% elif forloop.counter == 3 %}
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 3h12v4h4v14H4V3zm12 6H6v2h10V9zm0 4H6v2h10v-2z"/>
+                        </svg>
+                    {% else %}
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="6" cy="12" r="2"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <circle cx="18" cy="12" r="2"></circle>
+                        </svg>
+                    {% endif %}
+                </span>
+                <div class="option-title">{{ choice.choice_label }}</div>
+            </div>
+            <span class="option-check"></span>
+        </label>
+    {% endfor %}
+</div>
+
+<div class="form-row other-field" data-other-field>
+    <label class="form-label">Other property type</label>
+    {{ form.property_type_other }}
+</div>
+
+<div class="form-row">
+    <label class="form-label">What is the approximate size?</label>
+    {{ form.property_size }}
+</div>
+
+<div class="form-row">
+    <label class="form-label">Year built or last renovated?</label>
+    {{ form.year_built }}
+    <div class="form-note">If you're not sure, provide an approximate year.</div>
+</div>
+{% endblock %}
+
+{% block actions %}
+<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_1' %}">Back</a>
+<button type="submit" class="btn btn-primary booking-btn">Continue</button>
+{% endblock %}

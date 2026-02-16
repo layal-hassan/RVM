@@ -1,0 +1,43 @@
+{% extends "electricity/dashboard/base.html" %}
+{% load electricity_extras %}
+
+{% block page_title %}{{ title }}{% endblock %}
+{% block page_subtitle %}Manage all records directly in this dashboard.{% endblock %}
+
+{% block content %}
+<section class="dash-panel dash-panel-wide">
+    <div class="panel-header">
+        <div>
+            <h2>{{ title }}</h2>
+            <div class="panel-meta">{{ items|length }} records</div>
+        </div>
+        <div class="panel-actions">
+            <a class="dash-btn primary" href="{% url create_url %}">Add New</a>
+        </div>
+    </div>
+    <div class="panel-table">
+        <div class="panel-row panel-row-head">
+            {% for field in fields %}
+                <span>{{ field|title }}</span>
+            {% endfor %}
+            <span>Actions</span>
+        </div>
+        {% for row in items %}
+            <div class="panel-row">
+                {% for field in fields %}
+                    <span>{{ row|attr:field|pretty_value }}</span>
+                {% endfor %}
+                <span class="row-actions">
+                    {% if assign_url %}
+                      <a href="{% url assign_url row.id %}">Assign</a>
+                    {% endif %}
+                    <a href="{% url edit_url row.id %}?view=1">View</a>
+                    <a class="danger" href="{% url delete_url row.id %}">Delete</a>
+                </span>
+            </div>
+        {% empty %}
+            <div class="panel-empty">No records yet.</div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

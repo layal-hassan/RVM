@@ -1,0 +1,28 @@
+{% extends "electricity/base.html" %}
+{% load static %}
+
+{% block title %}Coverage Check | Hembla experten{% endblock %}
+
+{% block content %}
+<section class="zip-check">
+  <div class="container zip-shell">
+    <div class="zip-card">
+      <div class="zip-badge">Coverage check</div>
+      <h1>Let's confirm your ZIP code</h1>
+      <p>We currently serve selected areas in Sweden. Enter your ZIP code to continue with your booking.</p>
+      <form method="post" class="zip-form">
+        {% csrf_token %}
+        <label class="zip-label">Swedish ZIP Code</label>
+        <div class="zip-input-row">
+          <input type="text" name="zip_code" placeholder="114 44" value="{{ form.zip_code.value|default:'' }}" required>
+          <button type="submit" class="btn btn-primary">Check</button>
+        </div>
+        {% if form.errors %}
+          <div class="zip-error">Please enter a valid ZIP code (e.g. 114 44).</div>
+        {% endif %}
+      </form>
+      <div class="zip-note">We never share your information. This step only checks coverage.</div>
+    </div>
+  </div>
+</section>
+{% endblock %}

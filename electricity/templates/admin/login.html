@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Access</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;600;700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css">
+  <link rel="stylesheet" href="{% static 'electricity/css/admin_login.css' %}">
+</head>
+<body class="admin-login-body">
+  <div class="admin-login-shell">
+    <div class="admin-login-card">
+      <div class="admin-login-brand">
+        <div class="brand-mark"></div>
+        <div>
+          <div class="brand-title">Electrical Admin</div>
+          <div class="brand-sub">Secure access portal</div>
+        </div>
+      </div>
+
+      <h1>Sign in to your workspace</h1>
+      <p class="admin-login-subtitle">This area is restricted to authorized administrators.</p>
+
+      {% if form.errors and not form.non_field_errors %}
+        <div class="admin-alert">Please correct the errors below.</div>
+      {% endif %}
+      {% if form.non_field_errors %}
+        <div class="admin-alert">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      <form method="post" action="{% url 'admin:login' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <div class="admin-field">
+          <label for="id_username">Username</label>
+          <input type="text" name="username" id="id_username" autocomplete="username" required>
+        </div>
+        <div class="admin-field">
+          <label for="id_password">Password</label>
+          <input type="password" name="password" id="id_password" autocomplete="current-password" required>
+        </div>
+
+        <button type="submit" class="admin-btn">Sign in</button>
+      </form>
+
+      <div class="admin-login-note">
+        Need access? Contact the system administrator.
+      </div>
+    </div>
+
+    <div class="admin-login-side">
+      <div class="side-card">
+        <div class="side-title">Operations Dashboard</div>
+        <div class="side-text">
+          Monitor bookings, review consultation requests, and manage services with clarity.
+        </div>
+        <div class="side-pill">Internal Use Only</div>
+      </div>
+    </div>
+  </div>
+  <script defer src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+  <script defer src="{% static 'electricity/js/selects.js' %}"></script>
+</body>
+</html>

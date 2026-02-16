@@ -1,0 +1,388 @@
+{% extends "electricity/dashboard/base.html" %}
+{% load electricity_extras %}
+
+{% block page_title %}Admin Dashboard{% endblock %}
+{% block page_subtitle %}Control center for services, bookings, and operations.{% endblock %}
+
+{% block content %}
+<section class="dash-stats">
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-services" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4 13.5l4-4 4 4 4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 19h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Services</div>
+            <div class="stat-value">{{ stats.services }}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-requests" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M7 7h10M7 11h10M7 15h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M5 3h14a2 2 0 0 1 2 2v13l-4-3H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Consultation Requests</div>
+            <div class="stat-value">{{ stats.requests }}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-bookings" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M8 3v4M16 3v4M4 9h16M6 7h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Bookings</div>
+            <div class="stat-value">{{ stats.bookings }}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-service" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M6 4h12l-1.5 7h-9L6 4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M7 16h10M9 20h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Service Bookings</div>
+            <div class="stat-value">{{ stats.service_bookings }}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-electrician" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 3v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M5 13a7 7 0 1 0 14 0" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Electrician Bookings</div>
+            <div class="stat-value">{{ stats.electrician_bookings }}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-oncall" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 4v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M7 4h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="12" cy="16" r="4" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">On-Call Bookings</div>
+            <div class="stat-value">{{ stats.on_call_bookings }}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-zip" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M7 4h10v4H7zM5 8h14v12H5z" stroke="currentColor" stroke-width="2"/>
+                <path d="M9 12h6M9 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">ZIP Codes</div>
+            <div class="stat-value">{{ stats.zip_codes }}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-outside" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4 12h16M12 4v16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M8 8l8 8M16 8l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Outside Area</div>
+            <div class="stat-value">{{ stats.outside_area }}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-total" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+                <rect x="4" y="4" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                <rect x="13" y="4" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                <rect x="4" y="13" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                <rect x="13" y="13" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Total Tables</div>
+            <div class="stat-value">{{ stats.total_models }}</div>
+        </div>
+    </div>
+</section>
+
+<section class="dash-panel dash-panel-wide dash-section dash-editable" data-editable>
+    <div class="panel-header">
+        <div>
+            <h2>Alert Settings</h2>
+            <div class="panel-meta">Control how admin alerts surface in your console.</div>
+        </div>
+        <button class="dash-edit-toggle" type="button" aria-label="Edit alert settings">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4 20h4l10-10-4-4L4 16v4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M14 6l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="dash-edit-body">
+        <div class="dash-edit-view">
+            <div class="dash-edit-row">
+                <span class="dash-edit-label">Desktop alerts</span>
+                <span class="dash-edit-value" id="dash-desktop-status">Disabled</span>
+            </div>
+            <div class="dash-edit-row">
+                <span class="dash-edit-label">Unread notifications</span>
+                <span class="dash-edit-value"><span id="dash-unread-view">{{ unread_count|default:0 }}</span> items</span>
+            </div>
+        </div>
+        <form class="dash-edit-form" method="post" action="{% url 'electricity:admin_notifications_mark_read' %}">
+            {% csrf_token %}
+            <div class="dash-edit-fields">
+                <label class="dash-switch">
+                    <input type="checkbox" id="dash-desktop-toggle">
+                    <span>Enable desktop alerts for new admin events</span>
+                </label>
+                <div class="dash-edit-help">Turning this on will show browser notifications when new alerts arrive.</div>
+            </div>
+            <div class="dash-edit-actions">
+                <button class="dash-btn primary" type="submit" data-edit-save>Save changes</button>
+                <button class="dash-btn ghost" type="button" data-edit-cancel>Cancel</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section class="dash-panel dash-panel-wide dash-section">
+    <div class="panel-header">
+        <div>
+            <h2>Electrician Bookings</h2>
+            <div class="panel-meta">Latest bookings for electrician visits.</div>
+        </div>
+    </div>
+    <div class="panel-table">
+        <div class="panel-row panel-row-head">
+            <span>Created</span>
+            <span>Name</span>
+            <span>Phone</span>
+            <span>City</span>
+            <span>Preferred Date</span>
+            <span>Status</span>
+        </div>
+        {% for booking in electrician_bookings %}
+            <div class="panel-row">
+                <span>{{ booking.created_at|date:"M d, H:i" }}</span>
+                <span>{{ booking.full_name }}</span>
+                <span>{{ booking.phone|default:"-" }}</span>
+                <span>{{ booking.city|default:"-" }}</span>
+                <span>{{ booking.preferred_date|date:"M d, Y"|default:"-" }}</span>
+                <span>{{ booking.get_status_display }}</span>
+            </div>
+        {% empty %}
+            <div class="panel-empty">No electrician bookings yet.</div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="dash-panel dash-panel-wide dash-section">
+    <div class="panel-header">
+        <div>
+            <h2>Quick Actions</h2>
+            <div class="panel-meta">Create new records fast.</div>
+        </div>
+    </div>
+    <div class="panel-actions" style="flex-wrap: wrap; gap: 10px;">
+        <a class="dash-btn primary" href="{% url 'electricity:dashboard_services_add' %}">Add Service</a>
+        <a class="dash-btn primary" href="{% url 'electricity:dashboard_pricing_add' %}">Add Pricing</a>
+        <a class="dash-btn primary" href="{% url 'electricity:dashboard_requests_add' %}">Add Consultation Request</a>
+        <a class="dash-btn primary" href="{% url 'electricity:dashboard_bookings_add' %}">Add Consultation Booking</a>
+        <a class="dash-btn primary" href="{% url 'electricity:dashboard_service_bookings_add' %}">Add Service Booking</a>
+        <a class="dash-btn primary" href="{% url 'electricity:dashboard_electrician_bookings_add' %}">Add Electrician Booking</a>
+        <a class="dash-btn primary" href="{% url 'electricity:dashboard_on_call_bookings_add' %}">Add On-Call Booking</a>
+        <a class="dash-btn primary" href="{% url 'electricity:dashboard_users_add' %}">Add User</a>
+        <a class="dash-btn primary" href="{% url 'electricity:dashboard_support_tickets_add' %}">Add Support Ticket</a>
+    </div>
+</section>
+
+<section class="dash-grid dash-section">
+    {% for card in model_cards %}
+        <div class="dash-panel">
+            <div class="panel-header">
+                <div>
+                    <h2>{{ card.name }}</h2>
+                    <div class="panel-meta">{{ card.count }} records</div>
+                </div>
+                <div class="panel-actions">
+                    {% if card.manage_url %}
+                        <a class="panel-link" href="{% url card.manage_url %}">Manage</a>
+                    {% endif %}
+                    <div class="panel-icon">{{ forloop.counter }}</div>
+                </div>
+            </div>
+            <div class="panel-table">
+                <div class="panel-row panel-row-head">
+                    {% for field in card.fields %}
+                        <span>{{ field.verbose_name|title }}</span>
+                    {% endfor %}
+                </div>
+                {% for row in card.rows %}
+                    <div class="panel-row">
+                        {% for field in card.fields %}
+                            <span>{{ row|attr:field.name|pretty_value }}</span>
+                        {% endfor %}
+                    </div>
+                {% empty %}
+                    <div class="panel-empty">No records yet.</div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</section>
+
+<script>
+    (function () {
+        const enableBtn = document.getElementById("enable-notifications");
+        const badge = document.getElementById("dash-unread-badge");
+        const unreadText = document.getElementById("dash-unread-text");
+        const unreadView = document.getElementById("dash-unread-view");
+        const bellBtn = document.getElementById("dash-bell-btn");
+        const panel = document.getElementById("dash-notify-panel");
+        const storageKey = "adminNotificationsLastId";
+        const desktopKey = "adminDashboardDesktopAlerts";
+        const desktopStatus = document.getElementById("dash-desktop-status");
+        const desktopToggle = document.getElementById("dash-desktop-toggle");
+        const editableSections = document.querySelectorAll("[data-editable]");
+
+        function updateBanner(count) {
+            if (!badge || !unreadText) return;
+            badge.textContent = count;
+            unreadText.textContent = count;
+            if (unreadView) unreadView.textContent = count;
+            badge.classList.toggle("is-active", count > 0);
+        }
+
+        function requestPermission() {
+            if (!("Notification" in window)) return;
+            Notification.requestPermission().then(() => {});
+        }
+
+        if (enableBtn) {
+            enableBtn.addEventListener("click", requestPermission);
+        }
+
+        function updateDesktopStatus(value) {
+            if (!desktopStatus) return;
+            desktopStatus.textContent = value ? "Enabled" : "Disabled";
+        }
+
+        if (desktopToggle) {
+            const stored = localStorage.getItem(desktopKey) === "true";
+            desktopToggle.checked = stored;
+            updateDesktopStatus(stored);
+        }
+
+        editableSections.forEach((section) => {
+            const toggleBtn = section.querySelector(".dash-edit-toggle");
+            const cancelBtn = section.querySelector("[data-edit-cancel]");
+            const saveBtn = section.querySelector("[data-edit-save]");
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener("click", () => {
+                    section.classList.add("is-editing");
+                });
+            }
+
+            if (cancelBtn) {
+                cancelBtn.addEventListener("click", () => {
+                    section.classList.remove("is-editing");
+                    if (desktopToggle) {
+                        const stored = localStorage.getItem(desktopKey) === "true";
+                        desktopToggle.checked = stored;
+                        updateDesktopStatus(stored);
+                    }
+                });
+            }
+
+            if (saveBtn) {
+                saveBtn.addEventListener("click", () => {
+                    if (desktopToggle) {
+                        localStorage.setItem(desktopKey, desktopToggle.checked ? "true" : "false");
+                        updateDesktopStatus(desktopToggle.checked);
+                    }
+                    section.classList.remove("is-editing");
+                });
+            }
+        });
+
+        if (bellBtn && panel) {
+            bellBtn.addEventListener("click", () => {
+                const isOpen = panel.classList.toggle("is-open");
+                bellBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+            });
+
+            document.addEventListener("click", (event) => {
+                if (!panel.classList.contains("is-open")) return;
+                const target = event.target;
+                if (bellBtn.contains(target) || panel.contains(target)) return;
+                panel.classList.remove("is-open");
+                bellBtn.setAttribute("aria-expanded", "false");
+            });
+        }
+
+        if (panel) {
+            const urlMap = {
+                electrician: panel.dataset.urlElectrician,
+                oncall: panel.dataset.urlOncall,
+                service: panel.dataset.urlService,
+                consultation: panel.dataset.urlConsultation,
+            };
+
+            panel.querySelectorAll(".dash-notify-item").forEach((item) => {
+                item.addEventListener("click", () => {
+                    const message = (item.dataset.message || "").toLowerCase();
+                    if (message.includes("electrician")) {
+                        window.location.href = urlMap.electrician;
+                        return;
+                    }
+                    if (message.includes("on-call") || message.includes("on call")) {
+                        window.location.href = urlMap.oncall;
+                        return;
+                    }
+                    if (message.includes("service")) {
+                        window.location.href = urlMap.service;
+                        return;
+                    }
+                    window.location.href = urlMap.consultation;
+                });
+            });
+        }
+
+        async function poll() {
+            try {
+                const res = await fetch("{% url 'electricity:admin_notifications_feed' %}", { credentials: "same-origin" });
+                if (!res.ok) return;
+                const data = await res.json();
+                updateBanner(data.unread_count || 0);
+
+                const lastId = Number(localStorage.getItem(storageKey) || 0);
+                const newest = data.items && data.items.length ? data.items[0] : null;
+                if (newest && newest.id > lastId) {
+                    localStorage.setItem(storageKey, String(newest.id));
+                    if ("Notification" in window && Notification.permission === "granted") {
+                        new Notification("Admin Alert", { body: newest.message });
+                    }
+                }
+            } catch (e) {}
+        }
+
+        poll();
+        setInterval(poll, 10000);
+    })();
+</script>
+{% endblock %}

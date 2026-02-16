@@ -1,0 +1,94 @@
+﻿{% extends "electricity/electrician_booking/base.html" %}
+
+{% block booking_content %}
+<form method="post" class="eb-form">
+  {% csrf_token %}
+  <section class="eb-card">
+    <div class="eb-card-header">
+      <span class="eb-step-badge">3</span>
+      <div>
+        <h1>Where is the work located?</h1>
+        <p>Provide the job site address so we can plan the visit.</p>
+      </div>
+    </div>
+    <div class="eb-form-grid">
+      <div class="eb-full">
+        <label class="eb-label">Street Address</label>
+        <input class="form-control" name="street_address" placeholder="e.g. 123 Artisan Street" value="{{ data.street_address|default:'' }}">
+      </div>
+      <div>
+        <label class="eb-label">Postal Code</label>
+        <input class="form-control" name="zip_code" placeholder="XXXXX" value="{{ data.zip_code|default:'' }}">
+      </div>
+      <div>
+        <label class="eb-label">City</label>
+        <input class="form-control" name="city" placeholder="City Name" value="{{ data.city|default:'' }}">
+      </div>
+    </div>
+    <div class="eb-alert">
+      <strong>Please note:</strong> Ensure the address is accurate to avoid scheduling delays. Incorrect addresses or locations outside our service area may incur additional travel fees.
+    </div>
+  </section>
+
+  <section class="eb-card">
+    <div class="eb-card-header">
+      <span class="eb-step-badge">4</span>
+      <div>
+        <h2>Customer type</h2>
+        <p>Select who is booking this service.</p>
+      </div>
+    </div>
+    <div class="eb-customer-grid">
+      <label class="eb-customer-card">
+        <input type="radio" name="customer_type" value="private" {% if data.customer_type == "private" %}checked{% endif %}>
+        <div class="eb-customer-icon">P</div>
+        <div>
+          <div class="eb-service-title">Private individual</div>
+          <div class="eb-service-sub">Personal home services and residential repairs.</div>
+        </div>
+      </label>
+      <label class="eb-customer-card">
+        <input type="radio" name="customer_type" value="business" {% if data.customer_type == "business" %}checked{% endif %}>
+        <div class="eb-customer-icon">B</div>
+        <div>
+          <div class="eb-service-title">Business</div>
+          <div class="eb-service-sub">Commercial or organization bookings.</div>
+        </div>
+      </label>
+    </div>
+  </section>
+
+  <section class="eb-card">
+    <div class="eb-card-header">
+      <span class="eb-step-badge">5</span>
+      <div>
+        <h2>Your contact details</h2>
+        <p>We will send updates to this information.</p>
+      </div>
+    </div>
+    <div class="eb-form-grid">
+      <div class="eb-full">
+        <label class="eb-label">Full Name</label>
+        <input class="form-control" name="full_name" placeholder="John Doe" value="{{ data.full_name|default:'' }}">
+      </div>
+      <div>
+        <label class="eb-label">Phone Number</label>
+        <input class="form-control" name="phone" placeholder="+1 (555) 000-0000" value="{{ data.phone|default:'' }}">
+      </div>
+      <div>
+        <label class="eb-label">Email Address</label>
+        <input class="form-control" name="email" placeholder="john@example.com" value="{{ data.email|default:'' }}">
+      </div>
+    </div>
+    <label class="eb-checkbox">
+      <input type="checkbox" name="contact_confirm" value="yes" {% if data.contact_confirm %}checked{% endif %}>
+      <span>I confirm these contact details are correct. I understand that communication regarding this booking will be sent to the email provided.</span>
+    </label>
+  </section>
+
+  <div class="eb-actions">
+    <a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 2 %}">Back</a>
+    <button class="btn btn-primary" type="submit">Continue to Step 4 -></button>
+  </div>
+</form>
+{% endblock %}
