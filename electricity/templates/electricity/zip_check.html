@@ -1,27 +1,27 @@
-{% extends "electricity/base.html" %}
-{% load static %}
+﻿{% extends "electricity/base.html" %}
+{% load static i18n %}
 
-{% block title %}Coverage Check | Hembla experten{% endblock %}
+{% block title %}{% trans "Coverage Check | Hembla experten" %}{% endblock %}
 
 {% block content %}
 <section class="zip-check">
   <div class="container zip-shell">
     <div class="zip-card">
-      <div class="zip-badge">Coverage check</div>
-      <h1>Let's confirm your ZIP code</h1>
-      <p>We currently serve selected areas in Sweden. Enter your ZIP code to continue with your booking.</p>
+      <div class="zip-badge">{% trans "Coverage check" %}</div>
+      <h1>{% trans "Let's confirm your ZIP code" %}</h1>
+      <p>{% trans "We currently serve selected areas in Sweden. Enter your ZIP code to continue with your booking." %}</p>
       <form method="post" class="zip-form">
         {% csrf_token %}
-        <label class="zip-label">Swedish ZIP Code</label>
+        <label class="zip-label">{% trans "Swedish ZIP Code" %}</label>
         <div class="zip-input-row">
-          <input type="text" name="zip_code" placeholder="114 44" value="{{ form.zip_code.value|default:'' }}" required>
-          <button type="submit" class="btn btn-primary">Check</button>
+          <input type="text" name="zip_code" placeholder="{% trans '114 44' %}" value="{{ form.zip_code.value|default:'' }}" required>
+          <button type="submit" class="btn btn-primary">{% trans "Check" %}</button>
         </div>
         {% if form.errors %}
-          <div class="zip-error">Please enter a valid ZIP code (e.g. 114 44).</div>
+          <div class="zip-error">{% trans "Please enter a valid ZIP code (e.g. 114 44)." %}</div>
         {% endif %}
       </form>
-      <div class="zip-note">We never share your information. This step only checks coverage.</div>
+      <div class="zip-note">{% trans "We never share your information. This step only checks coverage." %}</div>
     </div>
   </div>
 </section>

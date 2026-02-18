@@ -1,24 +1,36 @@
-{% extends "electricity/service_booking/base.html" %}
+﻿{% extends "electricity/service_booking/base.html" %}
+{% load i18n %}
 {% block booking_content %}
+
 <div class="confirmation-card">
+
   <div class="confirmation-icon">OK</div>
-  <h2>Booking Received!</h2>
+
+  <h2>{% trans "Booking Received!" %}</h2>
+
   <p>
-    Your Nessafe electrician is scheduled and on the way for
     {% if booking and booking.preferred_date %}
-      {{ booking.preferred_date }}
+      {% blocktrans with date=booking.preferred_date %}
+      Your Nessafe electrician is scheduled for {{ date }}.
+      A confirmation has been sent to your email.
+      {% endblocktrans %}
     {% else %}
-      {{ data.preferred_date|default:"Oct 24th" }}
-    {% endif %}.
-    A confirmation has been sent to your email.
+      {% blocktrans with date=data.preferred_date|default:"Oct 24th" %}
+      Your Nessafe electrician is scheduled for {{ date }}.
+      A confirmation has been sent to your email.
+      {% endblocktrans %}
+    {% endif %}
   </p>
+
   <div class="confirmation-meta">
+
     <div class="meta-card">
-      <div class="meta-label">Confirmation ID</div>
+      <div class="meta-label">{% trans "Confirmation ID" %}</div>
       <div class="meta-value">{{ booking_id }}</div>
     </div>
+
     <div class="meta-card">
-      <div class="meta-label">Time Assigned</div>
+      <div class="meta-label">{% trans "Time Assigned" %}</div>
       <div class="meta-value">
         {% if booking and booking.preferred_time_slot %}
           {{ booking.preferred_time_slot }}
@@ -27,12 +39,22 @@
         {% endif %}
       </div>
     </div>
+
   </div>
+
   <div class="confirmation-actions">
     {% if booking %}
-      <a class="btn btn-light" href="{% url 'electricity:service_booking_calendar' booking.id %}">Add to Calendar</a>
+      <a class="btn btn-light"
+         href="{% url 'electricity:service_booking_calendar' booking.id %}">
+         {% trans "Add to Calendar" %}
+      </a>
     {% endif %}
-    <a class="btn btn-primary" href="{% url 'electricity:home' %}">Go To Home</a>
+
+    <a class="btn btn-primary" href="{% url 'electricity:home' %}">
+      {% trans "Go To Home" %}
+    </a>
   </div>
+
 </div>
+
 {% endblock %}

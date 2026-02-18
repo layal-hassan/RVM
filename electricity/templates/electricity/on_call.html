@@ -1,43 +1,41 @@
-{% extends "electricity/base.html" %}
-{% load static %}
+﻿{% extends "electricity/base.html" %}
+{% load static i18n %}
 
-{% block title %}On-Call & Emergency Service{% endblock %}
+{% block title %}{% trans "On-Call & Emergency Service" %}{% endblock %}
 {% block body_class %}on-call-page{% endblock %}
 
 {% block content %}
 <section class="oncall-hero">
   <div class="container oncall-hero-grid">
     <div>
-      <div class="oncall-eyebrow">On-Call Availability</div>
-      <h1 class="oncall-title">On-Call &amp;<br><span>Emergency</span> Service</h1>
+      <div class="oncall-eyebrow">{% trans "On-Call Availability" %}</div>
+      <h1 class="oncall-title">{% trans "Service" %} &amp;<br><span>{% trans "Emergency" %}</span> {% trans "On-Call" %}</h1>
       <p class="oncall-subtitle">
-        Immediate access for businesses, property owners, and housing associations. We ensure
-        critical operations stay powered through every incident.
+        {% trans "Immediate access for businesses, property owners, and housing associations. We ensure critical operations stay powered through every incident." %}
       </p>
       <div class="oncall-actions">
-        <a class="btn btn-primary" href="{% url 'electricity:on_call_booking_step' 1 %}">Apply for On-Call Service</a>
-        <a class="btn btn-secondary" href="{% url 'electricity:services' %}#pricing">View Pricing</a>
+        <a class="btn btn-primary" href="{% url 'electricity:on_call_booking_step' 1 %}">{% trans "Apply for On-Call Service" %}</a>
+        <a class="btn btn-secondary" href="{% url 'electricity:services' %}#pricing">{% trans "View Pricing" %}</a>
       </div>
     </div>
     <div class="oncall-hero-card">
-      <div class="eyebrow">Service Reliability</div>
-      <h3>Priority Dispatch &amp; Direct Contact</h3>
+      <div class="eyebrow">{% trans "Service Reliability" %}</div>
+      <h3>{% trans "Priority Dispatch & Direct Contact" %}</h3>
       <p class="oncall-subtitle">
-        Our emergency service provides direct access to certified electricians. With no intermediaries,
-        you talk directly to the dispatched partners on duty.
+        {% trans "Our emergency service provides direct access to certified electricians. With no intermediaries, you talk directly to the dispatched partners on duty." %}
       </p>
       <div class="oncall-metric-list">
         <div class="oncall-metric">
-          <strong>60 Min</strong>
-          <span>Average response time</span>
+          <strong>{% trans "60 Min" %}</strong>
+          <span>{% trans "Average response time" %}</span>
         </div>
         <div class="oncall-metric">
-          <strong>Certified</strong>
-          <span>Master electricians only</span>
+          <strong>{% trans "Certified" %}</strong>
+          <span>{% trans "Master electricians only" %}</span>
         </div>
         <div class="oncall-metric">
-          <strong>24/7</strong>
-          <span>On-call coverage</span>
+          <strong>{% trans "24/7" %}</strong>
+          <span>{% trans "On-call coverage" %}</span>
         </div>
       </div>
     </div>
@@ -47,22 +45,13 @@
 <section class="oncall-section light">
   <div class="container oncall-grid">
     <div>
-      <div class="eyebrow">Priority Dispatch</div>
-      <h2>Priority Dispatch &amp; Direct Contact</h2>
+      <div class="eyebrow">{% trans "Priority Dispatch" %}</div>
+      <h2>{% trans "Priority Dispatch & Direct Contact" %}</h2>
       <p class="oncall-subtitle">
-        We prioritize core equipment partners to ensure minimal downtime and maximum safety. With a
-        dedicated on-call agreement, you receive immediate dispatch status updates and certified
-        documentation for every visit.
+        {% trans "We prioritize core equipment partners to ensure minimal downtime and maximum safety. With a dedicated on-call agreement, you receive immediate dispatch status updates and certified documentation for every visit." %}
       </p>
       <div class="oncall-actions">
-        <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">Request a Call Back</a>
-      </div>
-    </div>
-    <div class="oncall-photo-wrap">
-      <img class="oncall-photo" src="{% static 'electricity/img/oncall-electrician.jpg' %}" alt="Emergency response team">
-      <div class="oncall-photo-badge">
-        <span class="oncall-photo-dot"></span>
-        Nessafe Certified On-Duty Team
+        <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Request a Call Back" %}</a>
       </div>
     </div>
   </div>
@@ -71,45 +60,25 @@
 <section class="oncall-section light">
   <div class="container">
     <div class="oncall-section-header">
-      <div class="eyebrow">Enterprise Partnerships</div>
-      <h2>Who this is for</h2>
+      <div class="eyebrow">{% trans "Enterprise Partnerships" %}</div>
+      <h2>{% trans "Who this is for" %}</h2>
     </div>
     <div class="oncall-cards">
       <article class="oncall-card">
-        <div class="oncall-card-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="currentColor" d="M4 21V7l8-4 8 4v14h-6v-6H10v6H4z"/>
-          </svg>
-        </div>
-        <h4>Businesses</h4>
-        <p>Protect critical systems and keep operations running with priority dispatch.</p>
+        <h4>{% trans "Businesses" %}</h4>
+        <p>{% trans "Protect critical systems and keep operations running with priority dispatch." %}</p>
       </article>
       <article class="oncall-card">
-        <div class="oncall-card-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="currentColor" d="M3 21h18v-2H3v2zm2-4h14V3H5v14zm4-2h2V5H9v10zm4 0h2V9h-2v6z"/>
-          </svg>
-        </div>
-        <h4>Property Owners</h4>
-        <p>Rapid resolution for technical incidents across managed properties.</p>
+        <h4>{% trans "Property Owners" %}</h4>
+        <p>{% trans "Rapid resolution for technical incidents across managed properties." %}</p>
       </article>
       <article class="oncall-card">
-        <div class="oncall-card-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="currentColor" d="M12 3l9 6-1 2-8-5-8 5-1-2 9-6zm-7 9h14v9H5v-9zm5 2v5h4v-5h-4z"/>
-          </svg>
-        </div>
-        <h4>Housing Assocs (BRF)</h4>
-        <p>Maintain resident safety with structured emergency escalation.</p>
+        <h4>{% trans "Housing Assocs (BRF)" %}</h4>
+        <p>{% trans "Maintain resident safety with structured emergency escalation." %}</p>
       </article>
       <article class="oncall-card">
-        <div class="oncall-card-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="currentColor" d="M4 5h16v14H4V5zm2 2v10h12V7H6zm2 2h8v2H8V9zm0 4h6v2H8v-2z"/>
-          </svg>
-        </div>
-        <h4>Managed Properties</h4>
-        <p>Guaranteed response windows for multi-site operations and facilities.</p>
+        <h4>{% trans "Managed Properties" %}</h4>
+        <p>{% trans "Guaranteed response windows for multi-site operations and facilities." %}</p>
       </article>
     </div>
   </div>
@@ -118,58 +87,26 @@
 <section class="oncall-section light">
   <div class="container">
     <div class="oncall-section-header">
-      <div class="eyebrow">When to Call Us</div>
-      <div class="oncall-section-title">
-        <h2>Typical Situations We Resolve</h2>
-        <p class="oncall-section-note">Certified response for all commercial and industrial failures.</p>
-      </div>
+      <div class="eyebrow">{% trans "When to Call Us" %}</div>
+      <h2>{% trans "Typical Situations We Resolve" %}</h2>
+      <p class="oncall-section-note">{% trans "Certified response for all commercial and industrial failures." %}</p>
     </div>
     <div class="oncall-list">
       <div class="oncall-list-item">
-        <div class="oncall-list-head">
-          <span class="oncall-list-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M13 2L4 13h6l-1 9 11-14h-6l1-6z"/>
-            </svg>
-          </span>
-          <strong>Power Outages</strong>
-        </div>
-        <p>Total loss of power in commercial units or apartment blocks.</p>
+        <strong>{% trans "Power Outages" %}</strong>
+        <p>{% trans "Total loss of power in commercial units or apartment blocks." %}</p>
       </div>
       <div class="oncall-list-item">
-        <div class="oncall-list-head">
-          <span class="oncall-list-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 3l10 18H2L12 3zm0 6v4m0 4h.01"/>
-            </svg>
-          </span>
-          <strong>Circuit Tripping</strong>
-        </div>
-        <p>Repeated breaker trips causing critical system shutdowns.</p>
+        <strong>{% trans "Circuit Tripping" %}</strong>
+        <p>{% trans "Repeated breaker trips causing critical system shutdowns." %}</p>
       </div>
       <div class="oncall-list-item">
-        <div class="oncall-list-head">
-          <span class="oncall-list-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 3l8 4v5c0 5-3.5 9.5-8 11-4.5-1.5-8-6-8-11V7l8-4z"/>
-              <path d="M12 8v6"/>
-              <path d="M12 17h.01"/>
-            </svg>
-          </span>
-          <strong>Safety Faults</strong>
-        </div>
-        <p>Exposed wiring, burning smells, or water-damaged electricals.</p>
+        <strong>{% trans "Safety Faults" %}</strong>
+        <p>{% trans "Exposed wiring, burning smells, or water-damaged electricals." %}</p>
       </div>
       <div class="oncall-list-item">
-        <div class="oncall-list-head">
-          <span class="oncall-list-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M4 3h16v18H4V3zm3 3h3v3H7V6zm5 0h3v3h-3V6zm5 0h3v3h-3V6zM7 11h3v3H7v-3zm5 0h3v3h-3v-3zm5 0h3v3h-3v-3zM7 16h10v3H7v-3z"/>
-            </svg>
-          </span>
-          <strong>Common Areas</strong>
-        </div>
-        <p>Failure in hallway lighting, elevators, or garage security gates.</p>
+        <strong>{% trans "Common Areas" %}</strong>
+        <p>{% trans "Failure in hallway lighting, elevators, or garage security gates." %}</p>
       </div>
     </div>
   </div>
@@ -178,23 +115,15 @@
 <section class="oncall-section light">
   <div class="container">
     <div class="oncall-cta">
-      <div class="oncall-cta-icon" aria-hidden="true">
-        <svg viewBox="0 0 48 48">
-          <rect x="12" y="8" width="24" height="30" rx="4" ry="4"></rect>
-          <line x1="18" y1="18" x2="30" y2="18"></line>
-          <line x1="18" y1="25" x2="30" y2="25"></line>
-        </svg>
-      </div>
-      <h2>Want access to on-call service? Register your property for an agreement.</h2>
+      <h2>{% trans "Want access to on-call service? Register your property for an agreement." %}</h2>
       <p>
-        Joining the RWM EL On-Call Network ensures your property is already in our system for the
-        fastest possible dispatch when an emergency strikes.
+        {% trans "Joining the RWM EL On-Call Network ensures your property is already in our system for the fastest possible dispatch when an emergency strikes." %}
       </p>
-      <a class="btn btn-primary" href="{% url 'electricity:on_call_booking_step' 1 %}">Apply for On-Call Service</a>
+      <a class="btn btn-primary" href="{% url 'electricity:on_call_booking_step' 1 %}">{% trans "Apply for On-Call Service" %}</a>
       <div class="oncall-cta-notes">
-        <span>No setup fee</span>
-        <span>Priority queue</span>
-        <span>Fixed night rates</span>
+        <span>{% trans "No setup fee" %}</span>
+        <span>{% trans "Priority queue" %}</span>
+        <span>{% trans "Fixed night rates" %}</span>
       </div>
     </div>
   </div>

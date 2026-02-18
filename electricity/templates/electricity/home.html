@@ -1,7 +1,7 @@
 ﻿{% extends "electricity/base_minimal.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Electrical & Smart Home | The Gold Standard{% endblock %}
+{% block title %}{% trans "Electrical & Smart Home | The Gold Standard" %}{% endblock %}
 
 {% block content %}
 <section class="hero hero-minimal">
@@ -9,20 +9,19 @@
   <div class="hero-content minimal-content">
     <div class="hero-kicker minimal-kicker">
       <span class="line"></span>
-      <span>Integrated Infrastructure Group</span>
+      <span>{% trans "Integrated Infrastructure Group" %}</span>
     </div>
     <h1 class="hero-title minimal-title">
-      THE <span class="accent">GOLD</span><br>
-      STANDARD.
+      {% blocktrans trimmed %}THE <span class="accent">GOLD</span><br>STANDARD.{% endblocktrans %}
     </h1>
     <p class="hero-subtitle minimal-subtitle">
-      Delivering mission-critical electrical, smart home, and energy solutions for modern homes, properties, and businesses.
+      {% trans "Delivering mission-critical electrical, smart home, and energy solutions for modern homes, properties, and businesses." %}
     </p>
     <div class="hero-actions minimal-actions">
-      <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">Book an Electrician</a>
-      <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">Schedule a Consultation</a>
+      <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an Electrician" %}</a>
+      <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a Consultation" %}</a>
     </div>
-    <div class="hero-note minimal-note">Fully operational today. Our website is expanding — our standards are not.</div>
+    <div class="hero-note minimal-note">{% trans "Fully operational today. Our website is expanding — our standards are not." %}</div>
   </div>
 </section>
 {% endblock %}

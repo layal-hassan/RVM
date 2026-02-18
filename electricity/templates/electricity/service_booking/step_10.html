@@ -1,31 +1,43 @@
-{% extends "electricity/service_booking/base.html" %}
+﻿{% extends "electricity/service_booking/base.html" %}
+{% load i18n %}
 {% block booking_content %}
 <form method="post" enctype="multipart/form-data" class="booking-form">
   {% csrf_token %}
+
   <div class="booking-section">
     <div class="section-header">
       <span class="section-index">12</span>
-      Visual Documentation
+      {% trans "Visual Documentation" %}
     </div>
+
     <p class="booking-description left">
-      Please upload photos of the area or existing electrical cabinet.
-      This allows our experts to bring the correct parts and reduces site time.
-      Supports JPG, PNG, PDF, and MP4 (Max 20MB).
+      {% trans "Please upload photos of the area or existing electrical cabinet." %}
+      {% trans "This allows our experts to bring the correct parts and reduces site time." %}
+      {% trans "Supports JPG, PNG, PDF, and MP4 (Max 20MB)." %}
     </p>
+
     <div class="upload-box">
       <div class="upload-icon">⬆</div>
-      <div class="upload-title">Drag and drop files here</div>
-      <div class="upload-hint">or click to browse from your computer</div>
+
+      <div class="upload-title">
+        {% trans "Drag and drop files here" %}
+      </div>
+
+      <div class="upload-hint">
+        {% trans "or click to browse from your computer" %}
+      </div>
+
       <label class="upload-btn">
-        Choose Files
+        {% trans "Choose Files" %}
         <input type="file" name="uploads" multiple>
       </label>
     </div>
+
     {% if data.uploads %}
       <div class="upload-list">
         {% for file in data.uploads %}
           <div class="upload-item">
-            <span class="file-icon">📄</span>
+            <span class="file-icon">📎</span>
             <span>{{ file }}</span>
             <span class="file-meta">1.1 MB</span>
           </div>
@@ -35,8 +47,13 @@
   </div>
 
   <div class="booking-actions">
-    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 9 %}">Back</a>
-    <button class="btn btn-primary" type="submit">Continue</button>
+    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 9 %}">
+      {% trans "Back" %}
+    </a>
+    <button class="btn btn-primary" type="submit">
+      {% trans "Continue" %}
+    </button>
   </div>
+
 </form>
 {% endblock %}

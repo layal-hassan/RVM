@@ -22,12 +22,13 @@
 .rwm-electricity-global-header .rwm-electricity-global-header__inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 6px 40px;
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 32px;
   justify-content: space-between;
-  height: 78px;
+  min-height: 84px;
+  flex-wrap: nowrap;
 }
 
 .rwm-electricity-global-header .rwm-egh-logo {
@@ -35,6 +36,7 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  flex: 0 0 auto;
 }
 
 .rwm-electricity-global-header .rwm-egh-logo img {
@@ -48,7 +50,7 @@
 
 body.electricity-body,
 body.dash-body {
-  padding-top: 78px;
+  padding-top: 84px;
 }
 
 .rwm-electricity-global-header .rwm-egh-toggle {
@@ -76,16 +78,20 @@ body.dash-body {
 .rwm-electricity-global-header .rwm-egh-navwrap {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex: 1;
   gap: 24px;
+  flex-wrap: nowrap;
 }
 
 .rwm-electricity-global-header .rwm-egh-nav {
   display: flex;
   align-items: center;
-  gap: 26px;
-  flex-wrap: wrap;
+  gap: 32px;
+  flex-wrap: nowrap;
+  justify-content: center;
+  flex: 1 1 auto;
+  white-space: nowrap;
 }
 
 .rwm-electricity-global-header .rwm-egh-link {
@@ -107,9 +113,104 @@ body.dash-body {
 .rwm-electricity-global-header .rwm-egh-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 16px;
+  flex-wrap: nowrap;
   justify-content: flex-end;
+  margin-left: auto;
+}
+
+.rwm-electricity-global-header .rwm-egh-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: nowrap;
+}
+
+.rwm-electricity-global-header .rwm-egh-lang {
+  position: relative;
+  margin-right: 6px;
+  width: 56px;
+  flex: 0 0 56px;
+}
+
+.rwm-electricity-global-header .rwm-egh-lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--rwmh-ghost);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--rwmh-text);
+  border-radius: 999px;
+  padding: 8px 0;
+  width: 56px;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.rwm-electricity-global-header .rwm-egh-lang-trigger:hover,
+.rwm-electricity-global-header .rwm-egh-lang-trigger:focus-visible {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.rwm-electricity-global-header .rwm-egh-lang-caret {
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.rwm-electricity-global-header .rwm-egh-lang-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.rwm-electricity-global-header .rwm-egh-lang-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 160px;
+  background: #0f1114;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.35);
+  z-index: 5;
+}
+
+.rwm-electricity-global-header .rwm-egh-lang:hover .rwm-egh-lang-menu,
+.rwm-electricity-global-header .rwm-egh-lang:focus-within .rwm-egh-lang-menu {
+  display: flex;
+}
+
+.rwm-electricity-global-header .rwm-egh-lang-option {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--rwmh-text);
+  border-radius: 10px;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.rwm-electricity-global-header .rwm-egh-lang-option:hover,
+.rwm-electricity-global-header .rwm-egh-lang-option:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.rwm-electricity-global-header .rwm-egh-lang-option.is-active {
+  background: var(--rwmh-gold);
+  color: var(--rwmh-gold-dark);
+  border-color: var(--rwmh-gold);
 }
 
 .rwm-electricity-global-header .rwm-egh-btn {
@@ -117,7 +218,7 @@ body.dash-body {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  padding: 12px 24px;
+  padding: 12px 26px;
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
@@ -154,15 +255,15 @@ body.dash-body {
 
 @media (max-width: 1200px) {
   .rwm-electricity-global-header .rwm-egh-nav {
-    gap: 18px;
+    gap: 22px;
   }
 
   .rwm-electricity-global-header .rwm-egh-actions {
-    gap: 10px;
+    gap: 12px;
   }
 
   .rwm-electricity-global-header .rwm-egh-btn {
-    padding: 11px 20px;
+    padding: 11px 22px;
     letter-spacing: 0.18em;
   }
 }
@@ -181,6 +282,7 @@ body.dash-body {
     width: 100%;
     flex-direction: column;
     align-items: flex-start;
+    gap: 18px;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.25s ease, padding-top 0.25s ease;

@@ -1,23 +1,21 @@
-{% extends "electricity/base.html" %}
-{% load static %}
+﻿{% extends "electricity/base.html" %}
+{% load static i18n %}
 
-{% block title %}Cookie Policy | RWM EL Pro Edition{% endblock %}
+{% block title %}{% trans "Cookie Policy | RWM EL Pro Edition" %}{% endblock %}
 {% block body_class %}terms-page{% endblock %}
 
 {% block content %}
 <section class="terms-hero">
   <div class="container terms-hero-inner">
-    <span class="terms-badge">Compliance Center</span>
-    <h1>Cookie Policy</h1>
+    <span class="terms-badge">{% trans "Compliance Center" %}</span>
+    <h1>{% trans "Cookie Policy" %}</h1>
     <div class="terms-meta">
-      <span>Last updated: 30 January 2026</span>
+      <span>{% trans "Last updated: 30 January 2026" %}</span>
       <span class="terms-meta-sep">|</span>
-      <span>Org.-/personnummer: 559545-1351</span>
+      <span>{% trans "Org.-/personnummer: 559545-1351" %}</span>
     </div>
     <p class="terms-lead">
-      This policy explains how RWM EL uses cookies and similar technologies to provide, customize,
-      and improve our electrical services and digital experiences in accordance with Swedish law
-      and EU GDPR regulations.
+      {% trans "This policy explains how RWM EL uses cookies and similar technologies to provide, customize, and improve our electrical services and digital experiences in accordance with Swedish law and EU GDPR regulations." %}
     </p>
   </div>
 </section>
@@ -25,121 +23,117 @@
 <section class="terms-body">
   <div class="container terms-layout">
     <aside class="terms-nav">
-      <div class="terms-nav-title">Cookie Sections</div>
+      <div class="terms-nav-title">{% trans "Cookie Sections" %}</div>
       <nav class="terms-nav-links">
-        <a class="terms-link" href="#what-are-cookies">01. What Are Cookies</a>
-        <a class="terms-link" href="#why-we-use">02. Why We Use Cookies</a>
-        <a class="terms-link" href="#cookie-types">03. Types of Cookies</a>
-        <a class="terms-link" href="#preferences">04. Managing Preferences</a>
-        <a class="terms-link" href="#inventory">05. Cookie Inventory</a>
-        <a class="terms-link" href="#browser-controls">06. Browser Controls</a>
+        <a class="terms-link" href="#what-are-cookies">{% trans "01. What Are Cookies" %}</a>
+        <a class="terms-link" href="#why-we-use">{% trans "02. Why We Use Cookies" %}</a>
+        <a class="terms-link" href="#cookie-types">{% trans "03. Types of Cookies" %}</a>
+        <a class="terms-link" href="#preferences">{% trans "04. Managing Preferences" %}</a>
+        <a class="terms-link" href="#inventory">{% trans "05. Cookie Inventory" %}</a>
+        <a class="terms-link" href="#browser-controls">{% trans "06. Browser Controls" %}</a>
       </nav>
     </aside>
 
     <div class="terms-content">
       <section class="terms-section" id="what-are-cookies">
         <span class="terms-index">01.</span>
-        <h2>What Are Cookies?</h2>
+        <h2>{% trans "What Are Cookies?" %}</h2>
         <p>
-          Cookies are small text files placed on your device by websites you visit. They help
-          websites function, remember your preferences, and provide usage insights so services can
-          be improved.
+          {% trans "Cookies are small text files placed on your device by websites you visit. They help websites function, remember your preferences, and provide usage insights so services can be improved." %}
         </p>
       </section>
 
       <section class="terms-section" id="why-we-use">
         <span class="terms-index">02.</span>
-        <h2>Why RWM EL Uses Cookies</h2>
+        <h2>{% trans "Why RWM EL Uses Cookies" %}</h2>
         <p>
-          We use cookies to ensure our digital platforms operate reliably, protect customer data,
-          and deliver a tailored experience during service requests and quote configurations.
+          {% trans "We use cookies to ensure our digital platforms operate reliably, protect customer data, and deliver a tailored experience during service requests and quote configurations." %}
         </p>
         <div class="terms-grid">
           <div class="terms-info-card">
-            <div class="terms-info-title">Core Functionality</div>
-            <p>Secure login, request tracking, and session management during service workflows.</p>
+            <div class="terms-info-title">{% trans "Core Functionality" %}</div>
+            <p>{% trans "Secure login, request tracking, and session management during service workflows." %}</p>
           </div>
           <div class="terms-info-card">
-            <div class="terms-info-title">Security Monitoring</div>
-            <p>Protecting user data and preventing unauthorized access to client information.</p>
+            <div class="terms-info-title">{% trans "Security Monitoring" %}</div>
+            <p>{% trans "Protecting user data and preventing unauthorized access to client information." %}</p>
           </div>
         </div>
       </section>
 
       <section class="terms-section" id="cookie-types">
         <span class="terms-index">03.</span>
-        <h2>Types of Cookies We Use</h2>
+        <h2>{% trans "Types of Cookies We Use" %}</h2>
         <div class="terms-grid">
           <div class="terms-box">
-            <span class="terms-box-kicker">Necessary</span>
-            <p>Essential site functionality, including authentication and security features.</p>
+            <span class="terms-box-kicker">{% trans "Necessary" %}</span>
+            <p>{% trans "Essential site functionality, including authentication and security features." %}</p>
           </div>
           <div class="terms-box">
-            <span class="terms-box-kicker">Functional</span>
-            <p>Preferences such as language selection and localized electrical standards.</p>
+            <span class="terms-box-kicker">{% trans "Functional" %}</span>
+            <p>{% trans "Preferences such as language selection and localized electrical standards." %}</p>
           </div>
           <div class="terms-box">
-            <span class="terms-box-kicker">Analytics</span>
-            <p>Understanding site traffic to improve performance and usability.</p>
+            <span class="terms-box-kicker">{% trans "Analytics" %}</span>
+            <p>{% trans "Understanding site traffic to improve performance and usability." %}</p>
           </div>
           <div class="terms-box">
-            <span class="terms-box-kicker">Marketing</span>
-            <p>Showing relevant advertising on other sites based on your interests.</p>
+            <span class="terms-box-kicker">{% trans "Marketing" %}</span>
+            <p>{% trans "Showing relevant advertising on other sites based on your interests." %}</p>
           </div>
         </div>
       </section>
 
       <section class="terms-section" id="preferences">
         <span class="terms-index">04.</span>
-        <h2>Managing Your Preferences</h2>
+        <h2>{% trans "Managing Your Preferences" %}</h2>
         <div class="terms-glass">
-          <div class="terms-glass-title">Your Cookie Choices</div>
-          <p>Non-essential cookies remain disabled until you provide explicit consent.</p>
+          <div class="terms-glass-title">{% trans "Your Cookie Choices" %}</div>
+          <p>{% trans "Non-essential cookies remain disabled until you provide explicit consent." %}</p>
           <div class="terms-glass-note">
-            <span>Control Center</span>
-            You can update your cookie settings at any time through your browser or the preferences
-            banner when available.
+            <span>{% trans "Control Center" %}</span>
+            {% trans "You can update your cookie settings at any time through your browser or the preferences banner when available." %}
           </div>
         </div>
       </section>
 
       <section class="terms-section" id="inventory">
         <span class="terms-index">05.</span>
-        <h2>Cookie Inventory</h2>
+        <h2>{% trans "Cookie Inventory" %}</h2>
         <div class="terms-soft-card">
-          <table style="width: 100%; border-collapse: collapse;">
+          <table class="cookies-table" style="width: 100%; border-collapse: collapse;">
             <thead>
               <tr>
-                <th style="text-align: left; padding: 8px 0;">Category</th>
-                <th style="text-align: left; padding: 8px 0;">Provider / Purpose</th>
-                <th style="text-align: left; padding: 8px 0;">Legal Basis</th>
-                <th style="text-align: left; padding: 8px 0;">Duration</th>
+                <th style="text-align: left; padding: 8px 0;">{% trans "Category" %}</th>
+                <th style="text-align: left; padding: 8px 0;">{% trans "Provider / Purpose" %}</th>
+                <th style="text-align: left; padding: 8px 0;">{% trans "Legal Basis" %}</th>
+                <th style="text-align: left; padding: 8px 0;">{% trans "Duration" %}</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="padding: 6px 0;">Necessary</td>
-                <td style="padding: 6px 0;">__XSRF-TOKEN (Security)</td>
-                <td style="padding: 6px 0;">Art. 6(1)(b)</td>
-                <td style="padding: 6px 0;">Session</td>
+                <td style="padding: 6px 0;">{% trans "Necessary" %}</td>
+                <td style="padding: 6px 0;">{% trans "__XSRF-TOKEN (Security)" %}</td>
+                <td style="padding: 6px 0;">{% trans "Art. 6(1)(b)" %}</td>
+                <td style="padding: 6px 0;">{% trans "Session" %}</td>
               </tr>
               <tr>
-                <td style="padding: 6px 0;">Necessary</td>
-                <td style="padding: 6px 0;">RWM_SESSION (Authentication)</td>
-                <td style="padding: 6px 0;">Art. 6(1)(b)</td>
-                <td style="padding: 6px 0;">24 Hours</td>
+                <td style="padding: 6px 0;">{% trans "Necessary" %}</td>
+                <td style="padding: 6px 0;">{% trans "RWM_SESSION (Authentication)" %}</td>
+                <td style="padding: 6px 0;">{% trans "Art. 6(1)(b)" %}</td>
+                <td style="padding: 6px 0;">{% trans "24 Hours" %}</td>
               </tr>
               <tr>
-                <td style="padding: 6px 0;">Analytics</td>
-                <td style="padding: 6px 0;">_ga (Google Analytics tracking)</td>
-                <td style="padding: 6px 0;">Art. 6(1)(a)</td>
-                <td style="padding: 6px 0;">2 Years</td>
+                <td style="padding: 6px 0;">{% trans "Analytics" %}</td>
+                <td style="padding: 6px 0;">{% trans "_ga (Google Analytics tracking)" %}</td>
+                <td style="padding: 6px 0;">{% trans "Art. 6(1)(a)" %}</td>
+                <td style="padding: 6px 0;">{% trans "2 Years" %}</td>
               </tr>
               <tr>
-                <td style="padding: 6px 0;">Marketing</td>
-                <td style="padding: 6px 0;">_fbp (Meta/FB ad targeting)</td>
-                <td style="padding: 6px 0;">Art. 6(1)(a)</td>
-                <td style="padding: 6px 0;">3 Months</td>
+                <td style="padding: 6px 0;">{% trans "Marketing" %}</td>
+                <td style="padding: 6px 0;">{% trans "_fbp (Meta/FB ad targeting)" %}</td>
+                <td style="padding: 6px 0;">{% trans "Art. 6(1)(a)" %}</td>
+                <td style="padding: 6px 0;">{% trans "3 Months" %}</td>
               </tr>
             </tbody>
           </table>
@@ -148,15 +142,12 @@
 
       <section class="terms-section terms-section-last" id="browser-controls">
         <span class="terms-index">06.</span>
-        <h2>Browser Controls &amp; Third-Party Information</h2>
+        <h2>{% trans "Browser Controls &amp; Third-Party Information" %}</h2>
         <p>
-          Most web browsers allow some control of most cookies through browser settings. To learn
-          more about cookies, including how to see what cookies have been set, visit
-          <a href="https://www.aboutcookies.org" rel="noopener" target="_blank">www.aboutcookies.org</a>.
+          {% blocktrans %}Most web browsers allow some control of most cookies through browser settings. To learn more about cookies, including how to see what cookies have been set, visit <a href="https://www.aboutcookies.org" rel="noopener" target="_blank">www.aboutcookies.org</a>.{% endblocktrans %}
         </p>
         <p style="margin-top: 12px;">
-          For information on cookie regulations in Sweden, visit the Integritetsskyddsmyndigheten
-          (IMY) website or reference the EU ePrivacy Directive (2002/58/EC).
+          {% trans "For information on cookie regulations in Sweden, visit the Integritetsskyddsmyndigheten (IMY) website or reference the EU ePrivacy Directive (2002/58/EC)." %}
         </p>
       </section>
     </div>

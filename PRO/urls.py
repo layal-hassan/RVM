@@ -23,6 +23,7 @@ from electricity.admin_site import electricity_admin_site
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('electricity-admin/', electricity_admin_site.urls),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('', include('electricity.urls')),
 ]
 

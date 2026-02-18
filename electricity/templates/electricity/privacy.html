@@ -1,7 +1,7 @@
 {% extends "electricity/base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Privacy Policy | RWM EL Pro Edition{% endblock %}
+{% block title %}{% trans "Privacy Policy | RWM EL Pro Edition" %}{% endblock %}
 {% block body_class %}privacy-page{% endblock %}
 
 {% block extra_head %}
@@ -70,12 +70,12 @@
 {% block content %}
 <section class="w-full bg-white pt-24 pb-20 px-8 border-b border-navy-deep/5">
   <div class="max-w-[1200px] mx-auto text-center">
-    <span class="inline-block py-1 px-3 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-[0.2em] rounded mb-6">Transparency &amp; Security</span>
-    <h1 class="text-6xl md:text-7xl font-bold leading-tight mb-8">Privacy Policy</h1>
-    <p class="text-navy-deep/40 text-sm font-semibold uppercase tracking-widest mb-10">Effective Date: 30 January 2026</p>
+    <span class="inline-block py-1 px-3 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-[0.2em] rounded mb-6">{% trans "Transparency & Security" %}</span>
+    <h1 class="text-6xl md:text-7xl font-bold leading-tight mb-8">{% trans "Privacy Policy" %}</h1>
+    <p class="text-navy-deep/40 text-sm font-semibold uppercase tracking-widest mb-10">{% trans "Effective Date: 30 January 2026" %}</p>
     <div class="max-w-3xl mx-auto">
       <p class="text-navy-deep/60 text-xl font-medium leading-relaxed font-serif italic">
-        At RWM EL, we believe data protection is a fundamental pillar of professional service. This policy details our commitment to your privacy under Swedish and EU regulations.
+        {% trans "At RWM EL, we believe data protection is a fundamental pillar of professional service. This policy details our commitment to your privacy under Swedish and EU regulations." %}
       </p>
     </div>
   </div>
@@ -84,42 +84,42 @@
 <div class="w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row px-8 py-16 gap-16">
   <aside class="hidden lg:block w-72 shrink-0">
     <div class="sticky top-32 max-h-[calc(100vh-160px)] overflow-y-auto pr-4 scrollbar-hide">
-      <h4 class="text-[10px] font-black uppercase tracking-widest text-navy-deep/30 mb-6 px-3">Contents</h4>
+      <h4 class="text-[10px] font-black uppercase tracking-widest text-navy-deep/30 mb-6 px-3">{% trans "Contents" %}</h4>
       <nav class="flex flex-col gap-1">
-        <a class="nav-link" href="#controller">01. Data Controller</a>
-        <a class="nav-link" href="#scope">02. Scope of Policy</a>
-        <a class="nav-link" href="#sources">03. Data Sources</a>
-        <a class="nav-link" href="#collect">04. Data Collection</a>
-        <a class="nav-link" href="#purpose">05. Purpose</a>
-        <a class="nav-link" href="#legal">06. Legal Basis</a>
-        <a class="nav-link" href="#retention">07. Data Retention</a>
-        <a class="nav-link" href="#security">08. Data Security</a>
-        <a class="nav-link" href="#sharing">09. Data Sharing</a>
-        <a class="nav-link" href="#international">10. Int. Transfers</a>
-        <a class="nav-link" href="#rights">11. Your GDPR Rights</a>
-        <a class="nav-link" href="#cookies">12. Cookies</a>
-        <a class="nav-link" href="#onsite">13. On-Site Protocol</a>
-        <a class="nav-link" href="#marketing">14. Marketing</a>
-        <a class="nav-link" href="#automated">15. Automation</a>
-        <a class="nav-link" href="#children">16. Children's Privacy</a>
-        <a class="nav-link" href="#updates">17. Policy Updates</a>
-        <a class="nav-link" href="#complaints">18. Complaints</a>
+        <a class="nav-link" href="#controller">{% trans "01. Data Controller" %}</a>
+        <a class="nav-link" href="#scope">{% trans "02. Scope of Policy" %}</a>
+        <a class="nav-link" href="#sources">{% trans "03. Data Sources" %}</a>
+        <a class="nav-link" href="#collect">{% trans "04. Data Collection" %}</a>
+        <a class="nav-link" href="#purpose">{% trans "05. Purpose" %}</a>
+        <a class="nav-link" href="#legal">{% trans "06. Legal Basis" %}</a>
+        <a class="nav-link" href="#retention">{% trans "07. Data Retention" %}</a>
+        <a class="nav-link" href="#security">{% trans "08. Data Security" %}</a>
+        <a class="nav-link" href="#sharing">{% trans "09. Data Sharing" %}</a>
+        <a class="nav-link" href="#international">{% trans "10. Int. Transfers" %}</a>
+        <a class="nav-link" href="#rights">{% trans "11. Your GDPR Rights" %}</a>
+        <a class="nav-link" href="#cookies">{% trans "12. Cookies" %}</a>
+        <a class="nav-link" href="#onsite">{% trans "13. On-Site Protocol" %}</a>
+        <a class="nav-link" href="#marketing">{% trans "14. Marketing" %}</a>
+        <a class="nav-link" href="#automated">{% trans "15. Automation" %}</a>
+        <a class="nav-link" href="#children">{% trans "16. Children's Privacy" %}</a>
+        <a class="nav-link" href="#updates">{% trans "17. Policy Updates" %}</a>
+        <a class="nav-link" href="#complaints">{% trans "18. Complaints" %}</a>
       </nav>
     </div>
   </aside>
   <main class="flex-1 max-w-4xl">
     <section class="policy-section pt-0" id="controller">
       <span class="section-number">01.</span>
-      <h2 class="text-3xl font-bold mb-6">Data Controller</h2>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Data Controller" %}</h2>
       <div class="prose prose-lg text-navy-deep/80 leading-loose">
-        <p>RWM EL is the designated data controller for all processing activities described herein. We are a registered Swedish electrical service provider operating with full technical compliance.</p>
+        <p>{% trans "RWM EL is the designated data controller for all processing activities described herein. We are a registered Swedish electrical service provider operating with full technical compliance." %}</p>
         <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="bg-white border border-navy-deep/5 p-5 rounded-lg">
-            <span class="text-[10px] font-black text-primary uppercase block mb-1">Email Enquiries</span>
+            <span class="text-[10px] font-black text-primary uppercase block mb-1">{% trans "Email Enquiries" %}</span>
             <span class="text-lg font-medium">privacy@rwmel.se</span>
           </div>
           <div class="bg-white border border-navy-deep/5 p-5 rounded-lg">
-            <span class="text-[10px] font-black text-primary uppercase block mb-1">Direct Line</span>
+            <span class="text-[10px] font-black text-primary uppercase block mb-1">{% trans "Direct Line" %}</span>
             <span class="text-lg font-medium">+46 (0) XX XXX XX XX</span>
           </div>
         </div>
@@ -128,21 +128,21 @@
 
     <section class="policy-section" id="scope">
       <span class="section-number">02.</span>
-      <h2 class="text-3xl font-bold mb-6">Scope of Policy</h2>
-      <p class="text-lg text-navy-deep/80 leading-relaxed">This policy applies to all customers, website visitors, and partners of RWM EL. It covers data collected via our website, on-site electrical service visits, telephone inquiries, and digital communications.</p>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Scope of Policy" %}</h2>
+      <p class="text-lg text-navy-deep/80 leading-relaxed">{% trans "This policy applies to all customers, website visitors, and partners of RWM EL. It covers data collected via our website, on-site electrical service visits, telephone inquiries, and digital communications." %}</p>
     </section>
 
     <section class="policy-section" id="sources">
       <span class="section-number">03.</span>
-      <h2 class="text-3xl font-bold mb-6">Sources of Personal Data</h2>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Sources of Personal Data" %}</h2>
       <div class="space-y-6">
         <div class="flex gap-6 items-start">
           <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
             <span class="material-symbols-outlined text-primary">person_check</span>
           </div>
           <div>
-            <h4 class="font-bold text-lg mb-1">Direct Interaction</h4>
-            <p class="text-navy-deep/70">Information provided when you request a quote or book a service.</p>
+            <h4 class="font-bold text-lg mb-1">{% trans "Direct Interaction" %}</h4>
+            <p class="text-navy-deep/70">{% trans "Information provided when you request a quote or book a service." %}</p>
           </div>
         </div>
         <div class="flex gap-6 items-start">
@@ -150,8 +150,8 @@
             <span class="material-symbols-outlined text-primary">language</span>
           </div>
           <div>
-            <h4 class="font-bold text-lg mb-1">Automated Systems</h4>
-            <p class="text-navy-deep/70">Data collected through cookies and website analytics.</p>
+            <h4 class="font-bold text-lg mb-1">{% trans "Automated Systems" %}</h4>
+            <p class="text-navy-deep/70">{% trans "Data collected through cookies and website analytics." %}</p>
           </div>
         </div>
         <div class="flex gap-6 items-start">
@@ -159,8 +159,8 @@
             <span class="material-symbols-outlined text-primary">account_balance</span>
           </div>
           <div>
-            <h4 class="font-bold text-lg mb-1">Public Registries</h4>
-            <p class="text-navy-deep/70">Verified data from SPAR for Swedish tax (ROT) eligibility.</p>
+            <h4 class="font-bold text-lg mb-1">{% trans "Public Registries" %}</h4>
+            <p class="text-navy-deep/70">{% trans "Verified data from SPAR for Swedish tax (ROT) eligibility." %}</p>
           </div>
         </div>
       </div>
@@ -168,146 +168,146 @@
 
     <section class="policy-section" id="collect">
       <span class="section-number">04.</span>
-      <h2 class="text-3xl font-bold mb-6">Personal Data We Collect</h2>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Personal Data We Collect" %}</h2>
       <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <li class="bg-white p-4 rounded-lg flex items-center gap-4">
           <span class="w-2 h-2 bg-primary rounded-full"></span>
-          <span class="font-medium">Identity &amp; Swedish PIN (for ROT)</span>
+          <span class="font-medium">{% trans "Identity & Swedish PIN (for ROT)" %}</span>
         </li>
         <li class="bg-white p-4 rounded-lg flex items-center gap-4">
           <span class="w-2 h-2 bg-primary rounded-full"></span>
-          <span class="font-medium">Contact &amp; Property Address</span>
+          <span class="font-medium">{% trans "Contact & Property Address" %}</span>
         </li>
         <li class="bg-white p-4 rounded-lg flex items-center gap-4">
           <span class="w-2 h-2 bg-primary rounded-full"></span>
-          <span class="font-medium">Technical Installation Specs</span>
+          <span class="font-medium">{% trans "Technical Installation Specs" %}</span>
         </li>
         <li class="bg-white p-4 rounded-lg flex items-center gap-4">
           <span class="w-2 h-2 bg-primary rounded-full"></span>
-          <span class="font-medium">Billing &amp; Payment History</span>
+          <span class="font-medium">{% trans "Billing & Payment History" %}</span>
         </li>
       </ul>
     </section>
 
     <section class="policy-section" id="purpose">
       <span class="section-number">05.</span>
-      <h2 class="text-3xl font-bold mb-6">Purpose of Processing</h2>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Purpose of Processing" %}</h2>
       <div class="glass-card my-10">
         <div class="flex items-center gap-4 mb-8">
           <div class="p-3 bg-primary/20 rounded-lg text-primary">
             <span class="material-symbols-outlined text-3xl">gavel</span>
           </div>
           <div>
-            <h3 class="text-2xl text-white font-serif">ROT &amp; Legal Disclosures</h3>
+            <h3 class="text-2xl text-white font-serif">{% trans "ROT & Legal Disclosures" %}</h3>
           </div>
         </div>
         <p class="text-white/80 text-lg leading-relaxed mb-6">
-          For Swedish residential customers, we are legally required to collect your Personal Identity Number (personnummer) to facilitate the ROT tax deduction. This data is transmitted securely to the Swedish Tax Agency (Skatteverket).
+          {% trans "For Swedish residential customers, we are legally required to collect your Personal Identity Number (personnummer) to facilitate the ROT tax deduction. This data is transmitted securely to the Swedish Tax Agency (Skatteverket)." %}
         </p>
         <div class="p-4 bg-white/5 rounded border border-white/10">
           <p class="text-primary text-sm font-bold uppercase tracking-widest mb-0 flex items-center gap-2">
             <span class="material-symbols-outlined text-sm">warning</span>
-            Required Action
+            {% trans "Required Action" %}
           </p>
-          <p class="text-white/60 text-sm italic mt-1">Failure to provide this information may result in the full invoice amount being charged without the tax benefit.</p>
+          <p class="text-white/60 text-sm italic mt-1">{% trans "Failure to provide this information may result in the full invoice amount being charged without the tax benefit." %}</p>
         </div>
       </div>
-      <p class="text-navy-deep/80">Beyond tax compliance, data is used for service execution, scheduling, safety certification, and mandatory bookkeeping under the Swedish Bookkeeping Act.</p>
+      <p class="text-navy-deep/80">{% trans "Beyond tax compliance, data is used for service execution, scheduling, safety certification, and mandatory bookkeeping under the Swedish Bookkeeping Act." %}</p>
     </section>
 
     <section class="policy-section" id="legal">
       <span class="section-number">06.</span>
-      <h2 class="text-3xl font-bold mb-6">Legal Basis for Processing</h2>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Legal Basis for Processing" %}</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="p-6 border border-navy-deep/5 bg-white rounded-xl">
-          <h4 class="font-bold mb-2">Contract</h4>
-          <p class="text-sm text-navy-deep/60">Fulfilling our service agreement with you.</p>
+          <h4 class="font-bold mb-2">{% trans "Contract" %}</h4>
+          <p class="text-sm text-navy-deep/60">{% trans "Fulfilling our service agreement with you." %}</p>
         </div>
         <div class="p-6 border border-navy-deep/5 bg-white rounded-xl">
-          <h4 class="font-bold mb-2">Legal Obligation</h4>
-          <p class="text-sm text-navy-deep/60">Adhering to tax laws and safety regulations.</p>
+          <h4 class="font-bold mb-2">{% trans "Legal Obligation" %}</h4>
+          <p class="text-sm text-navy-deep/60">{% trans "Adhering to tax laws and safety regulations." %}</p>
         </div>
         <div class="p-6 border border-navy-deep/5 bg-white rounded-xl">
-          <h4 class="font-bold mb-2">Interest</h4>
-          <p class="text-sm text-navy-deep/60">Improving site performance and security.</p>
+          <h4 class="font-bold mb-2">{% trans "Interest" %}</h4>
+          <p class="text-sm text-navy-deep/60">{% trans "Improving site performance and security." %}</p>
         </div>
       </div>
     </section>
 
     <section class="policy-section" id="retention">
       <span class="section-number">07.</span>
-      <h2 class="text-3xl font-bold mb-6">Data Retention</h2>
-      <p class="text-lg text-navy-deep/80">We store your data only as long as necessary. Service records are kept for <span class="font-bold text-navy-deep">10 years</span> to comply with technical warranty periods and Swedish bookkeeping laws.</p>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Data Retention" %}</h2>
+      <p class="text-lg text-navy-deep/80">{% blocktrans %}We store your data only as long as necessary. Service records are kept for <span class="font-bold text-navy-deep">10 years</span> to comply with technical warranty periods and Swedish bookkeeping laws.{% endblocktrans %}</p>
     </section>
 
     <section class="policy-section" id="security">
       <span class="section-number">08.</span>
-      <h2 class="text-3xl font-bold mb-6">Data Security</h2>
-      <p class="text-lg text-navy-deep/80">We implement high-tier technical and organizational measures, including AES-256 encrypted servers and strict limited-access protocols, to protect your data against unauthorized access or loss.</p>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Data Security" %}</h2>
+      <p class="text-lg text-navy-deep/80">{% trans "We implement high-tier technical and organizational measures, including AES-256 encrypted servers and strict limited-access protocols, to protect your data against unauthorized access or loss." %}</p>
     </section>
 
     <section class="policy-section" id="sharing">
       <span class="section-number">09.</span>
-      <h2 class="text-3xl font-bold mb-6">Sharing with Third Parties</h2>
-      <p class="mb-6">We never sell your data. We only share with:</p>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Sharing with Third Parties" %}</h2>
+      <p class="mb-6">{% trans "We never sell your data. We only share with:" %}</p>
       <div class="flex flex-wrap gap-3">
         <span class="px-4 py-2 bg-navy-deep text-white text-sm font-medium rounded-full">Skatteverket</span>
-        <span class="px-4 py-2 bg-navy-deep text-white text-sm font-medium rounded-full">Specialist Subcontractors</span>
-        <span class="px-4 py-2 bg-navy-deep text-white text-sm font-medium rounded-full">Billing Platforms</span>
-        <span class="px-4 py-2 bg-navy-deep text-white text-sm font-medium rounded-full">IT Infrastructure</span>
+        <span class="px-4 py-2 bg-navy-deep text-white text-sm font-medium rounded-full">{% trans "Specialist Subcontractors" %}</span>
+        <span class="px-4 py-2 bg-navy-deep text-white text-sm font-medium rounded-full">{% trans "Billing Platforms" %}</span>
+        <span class="px-4 py-2 bg-navy-deep text-white text-sm font-medium rounded-full">{% trans "IT Infrastructure" %}</span>
       </div>
     </section>
 
     <section class="policy-section" id="international">
       <span class="section-number">10.</span>
-      <h2 class="text-3xl font-bold mb-6">International Transfers</h2>
-      <p class="text-lg text-navy-deep/80">RWM EL primarily processes data within the EU/EEA. If data is transferred outside this zone, we ensure Standard Contractual Clauses (SCCs) are in place to maintain GDPR levels of protection.</p>
+      <h2 class="text-3xl font-bold mb-6">{% trans "International Transfers" %}</h2>
+      <p class="text-lg text-navy-deep/80">{% trans "RWM EL primarily processes data within the EU/EEA. If data is transferred outside this zone, we ensure Standard Contractual Clauses (SCCs) are in place to maintain GDPR levels of protection." %}</p>
     </section>
 
     <section class="policy-section" id="rights">
       <span class="section-number">11.</span>
-      <h2 class="text-3xl font-bold mb-12">Your GDPR Rights</h2>
+      <h2 class="text-3xl font-bold mb-12">{% trans "Your GDPR Rights" %}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="right-card flex items-start gap-4">
           <span class="material-symbols-outlined text-primary">visibility</span>
           <div>
-            <h4 class="font-bold mb-1">Right to Access</h4>
-            <p class="text-sm text-navy-deep/60">Request a full extract of all personal data we hold about you.</p>
+            <h4 class="font-bold mb-1">{% trans "Right to Access" %}</h4>
+            <p class="text-sm text-navy-deep/60">{% trans "Request a full extract of all personal data we hold about you." %}</p>
           </div>
         </div>
         <div class="right-card flex items-start gap-4">
           <span class="material-symbols-outlined text-primary">edit_note</span>
           <div>
-            <h4 class="font-bold mb-1">Right to Rectification</h4>
-            <p class="text-sm text-navy-deep/60">Demand the correction of inaccurate or incomplete information.</p>
+            <h4 class="font-bold mb-1">{% trans "Right to Rectification" %}</h4>
+            <p class="text-sm text-navy-deep/60">{% trans "Demand the correction of inaccurate or incomplete information." %}</p>
           </div>
         </div>
         <div class="right-card flex items-start gap-4">
           <span class="material-symbols-outlined text-primary">delete_forever</span>
           <div>
-            <h4 class="font-bold mb-1">Right to Erasure</h4>
-            <p class="text-sm text-navy-deep/60">Request deletion where data is no longer necessary for legal reasons.</p>
+            <h4 class="font-bold mb-1">{% trans "Right to Erasure" %}</h4>
+            <p class="text-sm text-navy-deep/60">{% trans "Request deletion where data is no longer necessary for legal reasons." %}</p>
           </div>
         </div>
         <div class="right-card flex items-start gap-4">
           <span class="material-symbols-outlined text-primary">move_up</span>
           <div>
-            <h4 class="font-bold mb-1">Data Portability</h4>
-            <p class="text-sm text-navy-deep/60">Receive your data in a structured, machine-readable format.</p>
+            <h4 class="font-bold mb-1">{% trans "Data Portability" %}</h4>
+            <p class="text-sm text-navy-deep/60">{% trans "Receive your data in a structured, machine-readable format." %}</p>
           </div>
         </div>
         <div class="right-card flex items-start gap-4">
           <span class="material-symbols-outlined text-primary">block</span>
           <div>
-            <h4 class="font-bold mb-1">Right to Object</h4>
-            <p class="text-sm text-navy-deep/60">Object to data processing based on our legitimate interests.</p>
+            <h4 class="font-bold mb-1">{% trans "Right to Object" %}</h4>
+            <p class="text-sm text-navy-deep/60">{% trans "Object to data processing based on our legitimate interests." %}</p>
           </div>
         </div>
         <div class="right-card flex items-start gap-4">
           <span class="material-symbols-outlined text-primary">lock_clock</span>
           <div>
-            <h4 class="font-bold mb-1">Restriction</h4>
-            <p class="text-sm text-navy-deep/60">Request the limitation of how we process your personal data.</p>
+            <h4 class="font-bold mb-1">{% trans "Restriction" %}</h4>
+            <p class="text-sm text-navy-deep/60">{% trans "Request the limitation of how we process your personal data." %}</p>
           </div>
         </div>
       </div>
@@ -315,46 +315,47 @@
 
     <section class="policy-section" id="cookies">
       <span class="section-number">12.</span>
-      <h2 class="text-3xl font-bold mb-6">Cookies and Tracking</h2>
-      <p class="text-lg text-navy-deep/80">We use technical and analytical cookies to optimize website performance. For detailed information, please refer to our dedicated <a class="text-primary font-bold hover:underline" href="{% url 'electricity:cookies' %}">Cookie Policy</a>.</p>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Cookies and Tracking" %}</h2>
+      {% url 'electricity:cookies' as cookies_url %}
+      <p class="text-lg text-navy-deep/80">{% blocktrans with url=cookies_url %}We use technical and analytical cookies to optimize website performance. For detailed information, please refer to our dedicated <a class="text-primary font-bold hover:underline" href="{{ url }}">Cookie Policy</a>.{% endblocktrans %}</p>
     </section>
 
     <section class="policy-section" id="onsite">
       <span class="section-number">13.</span>
-      <h2 class="text-3xl font-bold mb-6">On-Site Service Protocols</h2>
-      <p class="text-lg text-navy-deep/80">During physical site visits, our electricians may document technical installations with photographs. These are used solely for technical documentation, safety audits, and quality assurance.</p>
+      <h2 class="text-3xl font-bold mb-6">{% trans "On-Site Service Protocols" %}</h2>
+      <p class="text-lg text-navy-deep/80">{% trans "During physical site visits, our electricians may document technical installations with photographs. These are used solely for technical documentation, safety audits, and quality assurance." %}</p>
     </section>
 
     <section class="policy-section" id="marketing">
       <span class="section-number">14.</span>
-      <h2 class="text-3xl font-bold mb-6">Marketing Communications</h2>
-      <p class="text-lg text-navy-deep/80">You will only receive marketing emails if you have explicitly opted in. You can unsubscribe at any time via the link provided in every communication.</p>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Marketing Communications" %}</h2>
+      <p class="text-lg text-navy-deep/80">{% trans "You will only receive marketing emails if you have explicitly opted in. You can unsubscribe at any time via the link provided in every communication." %}</p>
     </section>
 
     <section class="policy-section" id="automated">
       <span class="section-number">15.</span>
-      <h2 class="text-3xl font-bold mb-6">Automated Decision Making</h2>
-      <p class="text-lg text-navy-deep/80">RWM EL does not use automated decision-making or profiling systems that produce legal effects concerning you.</p>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Automated Decision Making" %}</h2>
+      <p class="text-lg text-navy-deep/80">{% trans "RWM EL does not use automated decision-making or profiling systems that produce legal effects concerning you." %}</p>
     </section>
 
     <section class="policy-section" id="children">
       <span class="section-number">16.</span>
-      <h2 class="text-3xl font-bold mb-6">Children's Privacy</h2>
-      <p class="text-lg text-navy-deep/80">Our services are designed for property owners and businesses. We do not knowingly collect or process data from individuals under the age of 18.</p>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Children's Privacy" %}</h2>
+      <p class="text-lg text-navy-deep/80">{% trans "Our services are designed for property owners and businesses. We do not knowingly collect or process data from individuals under the age of 18." %}</p>
     </section>
 
     <section class="policy-section" id="updates">
       <span class="section-number">17.</span>
-      <h2 class="text-3xl font-bold mb-6">Policy Updates</h2>
-      <p class="text-lg text-navy-deep/80">We periodically update this policy to reflect changes in our technical practices or legal requirements. Updates are effective immediately upon posting.</p>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Policy Updates" %}</h2>
+      <p class="text-lg text-navy-deep/80">{% trans "We periodically update this policy to reflect changes in our technical practices or legal requirements. Updates are effective immediately upon posting." %}</p>
     </section>
 
     <section class="policy-section" id="complaints">
       <span class="section-number">18.</span>
-      <h2 class="text-3xl font-bold mb-6">Complaints</h2>
-      <p class="text-lg text-navy-deep/80 mb-6">If you believe we have mishandled your data, you have the right to lodge a complaint with the Swedish Authority for Privacy Protection (Integritetsskyddsmyndigheten - IMY).</p>
+      <h2 class="text-3xl font-bold mb-6">{% trans "Complaints" %}</h2>
+      <p class="text-lg text-navy-deep/80 mb-6">{% trans "If you believe we have mishandled your data, you have the right to lodge a complaint with the Swedish Authority for Privacy Protection (Integritetsskyddsmyndigheten - IMY)." %}</p>
       <div class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest bg-navy-deep text-white px-6 py-3 rounded">
-        Visit IMY.se
+        {% trans "Visit IMY.se" %}
         <span class="material-symbols-outlined text-sm">open_in_new</span>
       </div>
     </section>

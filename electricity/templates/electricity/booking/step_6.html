@@ -1,15 +1,16 @@
-{% extends "electricity/booking/base_booking.html" %}
+﻿{% extends "electricity/booking/base_booking.html" %}
+{% load i18n %}
 
 {% block subtitle %}
-<p class="booking-subtitle">We'll use these details to confirm your consultation slot.</p>
+<p class="booking-subtitle">{% trans "We'll use these details to confirm your consultation slot." %}</p>
 {% endblock %}
 
 {% block content %}
 {% if consultation_free %}
-  <div class="success-banner">Your first consultation is free.</div>
+  <div class="success-banner">{% trans "Your first consultation is free." %}</div>
 {% endif %}
 <div class="form-row">
-    <label class="form-label">Are you a private individual or a business?</label>
+    <label class="form-label">{% trans "Are you a private individual or a business?" %}</label>
     <div class="toggle-group">
         {% for choice in form.contact_type %}
             <label class="toggle-option">
@@ -21,41 +22,41 @@
 </div>
 
 <div class="form-row contact-private" data-private>
-    <label class="form-label">Personal ID number</label>
+    <label class="form-label">{% trans "Personal ID number" %}</label>
     {{ form.personal_id }}
 </div>
 
 <div class="form-row contact-business" data-business>
-    <label class="form-label">Company name</label>
+    <label class="form-label">{% trans "Company name" %}</label>
     {{ form.company_name }}
 </div>
 <div class="form-row contact-business" data-business>
-    <label class="form-label">Organization number</label>
+    <label class="form-label">{% trans "Organization number" %}</label>
     {{ form.organization_number }}
 </div>
 <div class="form-row contact-business" data-business>
-    <label class="form-label">Company address</label>
+    <label class="form-label">{% trans "Company address" %}</label>
     {{ form.company_address }}
 </div>
 
 <div class="form-row">
-    <label class="form-label">Full Name</label>
+    <label class="form-label">{% trans "Full Name" %}</label>
     {{ form.full_name }}
 </div>
 
 <div class="form-row split-row">
     <div>
-        <label class="form-label">Email</label>
+        <label class="form-label">{% trans "Email" %}</label>
         {{ form.email }}
     </div>
     <div>
-        <label class="form-label">Phone Number</label>
+        <label class="form-label">{% trans "Phone Number" %}</label>
         {{ form.phone }}
     </div>
 </div>
 
 <div class="form-row">
-    <label class="form-label">When are you available for a call?</label>
+    <label class="form-label">{% trans "When are you available for a call?" %}</label>
     <div class="day-grid">
         {% for choice in form.availability_days %}
             <label class="day-pill">
@@ -67,7 +68,7 @@
 </div>
 
 <div class="form-row">
-    <label class="form-label">Preferred time window</label>
+    <label class="form-label">{% trans "Preferred time window" %}</label>
     <div class="time-grid">
         {% for choice in form.time_window %}
             <label class="time-card">
@@ -80,6 +81,6 @@
 {% endblock %}
 
 {% block actions %}
-<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_5' %}">Back</a>
-<button type="submit" class="btn btn-primary booking-btn">Next Step</button>
+<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_5' %}">{% trans "Back" %}</a>
+<button type="submit" class="btn btn-primary booking-btn">{% trans "Next Step" %}</button>
 {% endblock %}

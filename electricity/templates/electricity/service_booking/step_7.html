@@ -1,53 +1,85 @@
-{% extends "electricity/service_booking/base.html" %}
+﻿{% extends "electricity/service_booking/base.html" %}
+{% load i18n %}
 {% block booking_content %}
 <form method="post" class="booking-form">
   {% csrf_token %}
+
   <div class="booking-section">
+
     <div class="section-header">
       <span class="section-index">8</span>
-      Pricing &amp; Savings
+      {% trans "Pricing & Savings" %}
     </div>
-    <p class="booking-description left">Transparent breakdown of your estimated costs.</p>
+
+    <p class="booking-description left">
+      {% trans "Transparent breakdown of your estimated costs." %}
+    </p>
+
     <div class="price-box">
+
       {% if pricing_type == "hourly" %}
+
         <div class="price-row">
           <div>
-            <strong>Hourly Rate</strong>
-            <div class="price-note">Admin-defined electrician rate</div>
+            <strong>{% trans "Hourly Rate" %}</strong>
+            <div class="price-note">
+              {% trans "Admin-defined electrician rate" %}
+            </div>
           </div>
-          <span>{{ hourly_rate_electrician }} {{ currency }} / hr</span>
+          <span>{{ hourly_rate_electrician }} {{ currency }} / {% trans "hr" %}</span>
         </div>
+
         <div class="price-row">
           <div>
-            <strong>Estimated Hours</strong>
-            <div class="price-note">Based on your selection</div>
+            <strong>{% trans "Estimated Hours" %}</strong>
+            <div class="price-note">
+              {% trans "Based on your selection" %}
+            </div>
           </div>
-          <span>{{ hourly_hours }} hr</span>
+          <span>{{ hourly_hours }} {% trans "hr" %}</span>
         </div>
+
       {% else %}
+
         <div class="price-row">
           <div>
-            <strong>Fixed Service Total</strong>
-            <div class="price-note">Selected services total</div>
+            <strong>{% trans "Fixed Service Total" %}</strong>
+            <div class="price-note">
+              {% trans "Selected services total" %}
+            </div>
           </div>
           <span>{{ fixed_services_total }} {{ currency }}</span>
         </div>
+
       {% endif %}
+
       <div class="price-total">
-        <span>Estimated Total</span>
+        <span>{% trans "Estimated Total" %}</span>
         <strong>{{ cost_total }} {{ currency }}</strong>
-        <div class="price-note">Final price calculated on booking</div>
+        <div class="price-note">
+          {% trans "Final price calculated on booking" %}
+        </div>
       </div>
+
     </div>
+
     <label class="toggle">
       <input type="checkbox" name="pricing_accept" {% if data.pricing_accept %}checked{% endif %}>
-      <span>I confirm the scheduling windows and accept the pricing breakdown including ROT requirements.</span>
+      <span>
+        {% trans "I confirm the scheduling windows and accept the pricing breakdown including ROT requirements." %}
+      </span>
     </label>
+
   </div>
 
   <div class="booking-actions">
-    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 6 %}">Back</a>
-    <button class="btn btn-primary" type="submit">Continue</button>
+    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 6 %}">
+      {% trans "Back" %}
+    </a>
+    <button class="btn btn-primary" type="submit">
+      {% trans "Continue" %}
+    </button>
   </div>
+
 </form>
 {% endblock %}

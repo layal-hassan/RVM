@@ -1,34 +1,62 @@
-{% extends "electricity/service_booking/base.html" %}
+﻿{% extends "electricity/service_booking/base.html" %}
+{% load i18n %}
 {% block booking_content %}
 <form method="post" class="booking-form">
   {% csrf_token %}
+
   <div class="booking-section">
     <div class="section-header">
       <span class="section-index">11</span>
-      Apartment &amp; BRF Details
+      {% trans "Apartment & BRF Details" %}
     </div>
+
     <div class="highlight-toggle">
       <label class="toggle-row">
         <div>
-          <div class="toggle-title">Is this a BRF (Housing Association) property?</div>
-          <div class="toggle-subtitle">Providing association details helps us coordinate with building management if needed for common electrical lines.</div>
+          <div class="toggle-title">
+            {% trans "Is this a BRF (Housing Association) property?" %}
+          </div>
+          <div class="toggle-subtitle">
+            {% trans "Providing association details helps us coordinate with building management if needed for common electrical lines." %}
+          </div>
         </div>
-        <input type="checkbox" name="brf_property" {% if data.brf_property %}checked{% endif %}>
+
+        <input type="checkbox" name="brf_property"
+               {% if data.brf_property %}checked{% endif %}>
       </label>
     </div>
+
     <div class="form-grid">
-      <label class="form-label">BRF Name / Association
-        <input class="form-control" type="text" name="brf_name" placeholder="e.g. BRF Solsidan" value="{{ data.brf_name|default:'' }}">
+
+      <label class="form-label">
+        {% trans "BRF Name / Association" %}
+        <input class="form-control"
+               type="text"
+               name="brf_name"
+               placeholder="{% trans 'e.g. BRF Solsidan' %}"
+               value="{{ data.brf_name|default:'' }}">
       </label>
-      <label class="form-label">Apartment Number
-        <input class="form-control" type="text" name="apartment_number" placeholder="e.g. 1102 (4 digits)" value="{{ data.apartment_number|default:'' }}">
+
+      <label class="form-label">
+        {% trans "Apartment Number" %}
+        <input class="form-control"
+               type="text"
+               name="apartment_number"
+               placeholder="{% trans 'e.g. 1102 (4 digits)' %}"
+               value="{{ data.apartment_number|default:'' }}">
       </label>
+
     </div>
   </div>
 
   <div class="booking-actions">
-    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 8 %}">Back</a>
-    <button class="btn btn-primary" type="submit">Continue</button>
+    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 8 %}">
+      {% trans "Back" %}
+    </a>
+    <button class="btn btn-primary" type="submit">
+      {% trans "Continue" %}
+    </button>
   </div>
+
 </form>
 {% endblock %}

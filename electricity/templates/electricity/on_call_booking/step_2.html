@@ -1,82 +1,106 @@
 {% extends "electricity/on_call_booking/base.html" %}
-{% load static %}
+{% load static i18n %}
 {% block booking_content %}
 <form method="post" class="on-call-form">
   {% csrf_token %}
+
   <div class="oncall-header">
-    <div class="section-label">Registration Progress</div>
-    <div class="section-title">Who is applying?</div>
+    <div class="section-label">{% trans "Registration Progress" %}</div>
+    <div class="section-title">{% trans "Who is applying?" %}</div>
     <p>
-      Select the entity type for your registration. <strong>Note:</strong> Our smart on-call
-      service is available for professional entities only. Private individuals are not eligible.
+      {% trans "Select the entity type for your registration." %}
+      <strong>{% trans "Note:" %}</strong>
+      {% trans "Our smart on-call service is available for professional entities only. Private individuals are not eligible." %}
     </p>
   </div>
 
   <div class="entity-grid">
+
     <label class="entity-card">
       <input type="radio" name="entity_type" value="business" {% if data.entity_type == "business" %}checked{% endif %}>
-      <img src="{% static 'electricity/img/hero-services.jpg' %}" alt="Business / Organization">
+      <img src="{% static 'electricity/img/hero-services.jpg' %}" alt="{% trans 'Business / Organization' %}">
       <div class="entity-body">
-        <h4>Business / Organization</h4>
-        <p>For corporate entities and startups.</p>
+        <h4>{% trans "Business / Organization" %}</h4>
+        <p>{% trans "For corporate entities and startups." %}</p>
       </div>
     </label>
+
     <label class="entity-card">
       <input type="radio" name="entity_type" value="housing" {% if data.entity_type == "housing" %}checked{% endif %}>
-      <img src="{% static 'electricity/img/landing-hero.jpg' %}" alt="Housing Association">
+      <img src="{% static 'electricity/img/landing-hero.jpg' %}" alt="{% trans 'Housing Association' %}">
       <div class="entity-body">
-        <h4>Housing Association</h4>
-        <p>For property owners and co-ops.</p>
+        <h4>{% trans "Housing Association" %}</h4>
+        <p>{% trans "For property owners and co-ops." %}</p>
       </div>
     </label>
+
   </div>
 
   <div class="form-card">
-    <div class="form-card-title">Organization Information</div>
+    <div class="form-card-title">{% trans "Organization Information" %}</div>
+
     <div class="form-grid">
+
       <div>
-        <label>Organization Name</label>
-        <input class="form-control" name="organization_name" placeholder="e.g. Acme Corp" value="{{ data.organization_name|default:'' }}">
+        <label>{% trans "Organization Name" %}</label>
+        <input class="form-control" name="organization_name" placeholder="{% trans 'e.g. Acme Corp' %}" value="{{ data.organization_name|default:'' }}">
       </div>
+
       <div>
-        <label>Org Number</label>
-        <input class="form-control" name="organization_number" placeholder="556XXX-XXXX" value="{{ data.organization_number|default:'' }}">
+        <label>{% trans "Org Number" %}</label>
+        <input class="form-control" name="organization_number" placeholder="{% trans '556XXX-XXXX' %}" value="{{ data.organization_number|default:'' }}">
       </div>
+
       <div>
-        <label>Contact Person</label>
-        <input class="form-control" name="contact_person" placeholder="Full Name" value="{{ data.contact_person|default:'' }}">
+        <label>{% trans "Contact Person" %}</label>
+        <input class="form-control" name="contact_person" placeholder="{% trans 'Full Name' %}" value="{{ data.contact_person|default:'' }}">
       </div>
+
       <div>
-        <label>Phone Number</label>
-        <input class="form-control" name="phone" placeholder="+46 00 000 00 00" value="{{ data.phone|default:'' }}">
+        <label>{% trans "Phone Number" %}</label>
+        <input class="form-control" name="phone" placeholder="{% trans '+46 00 000 00 00' %}" value="{{ data.phone|default:'' }}">
       </div>
+
       <div class="full">
-        <label>Email Address</label>
-        <input class="form-control" name="email" placeholder="contact@organization.com" value="{{ data.email|default:'' }}">
+        <label>{% trans "Email Address" %}</label>
+        <input class="form-control" name="email" placeholder="{% trans 'contact@organization.com' %}" value="{{ data.email|default:'' }}">
       </div>
+
     </div>
 
     <div class="form-card-divider"></div>
-    <div class="form-card-subtitle">Address Details</div>
+
+    <div class="form-card-subtitle">{% trans "Address Details" %}</div>
+
     <div class="form-grid">
+
       <div class="full">
-        <label>Company Address</label>
-        <input class="form-control" name="company_address" placeholder="Street Name 123" value="{{ data.company_address|default:'' }}">
+        <label>{% trans "Company Address" %}</label>
+        <input class="form-control" name="company_address" placeholder="{% trans 'Street Name 123' %}" value="{{ data.company_address|default:'' }}">
       </div>
+
       <div>
-        <label>ZIP Code</label>
-        <input class="form-control" name="zip_code" placeholder="123 45" value="{{ data.zip_code|default:'' }}">
+        <label>{% trans "ZIP Code" %}</label>
+        <input class="form-control" name="zip_code" placeholder="{% trans '123 45' %}" value="{{ data.zip_code|default:'' }}">
       </div>
+
       <div>
-        <label>City</label>
-        <input class="form-control" name="city" placeholder="Stockholm" value="{{ data.city|default:'' }}">
+        <label>{% trans "City" %}</label>
+        <input class="form-control" name="city" placeholder="{% trans 'Stockholm' %}" value="{{ data.city|default:'' }}">
       </div>
+
     </div>
   </div>
 
   <div class="booking-actions">
-    <a class="btn btn-light" href="{% url 'electricity:on_call_booking_step' 1 %}">Back</a>
-    <button class="btn btn-primary" type="submit">Continue to Next Step →</button>
+    <a class="btn btn-light" href="{% url 'electricity:on_call_booking_step' 1 %}">
+      {% trans "Back" %}
+    </a>
+
+    <button class="btn btn-primary" type="submit">
+      {% trans "Continue to Next Step" %} →
+    </button>
   </div>
+
 </form>
 {% endblock %}

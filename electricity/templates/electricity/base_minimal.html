@@ -1,14 +1,18 @@
-﻿{% load static %}
+﻿{% load static i18n %}
 <!DOCTYPE html>
-<html lang="en">
+{% get_current_language as CURRENT_LANGUAGE %}
+<html lang="{{ CURRENT_LANGUAGE }}" dir="{% if CURRENT_LANGUAGE == 'ar' %}rtl{% else %}ltr{% endif %}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Electrical & Smart Home{% endblock %}</title>
+  <title>{% block title %}{% trans "Electrical & Smart Home" %}{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;500;600;700&display=swap" rel="stylesheet">
+  {% if CURRENT_LANGUAGE == "ar" %}
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  {% endif %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css">
   <link rel="stylesheet" href="{% static 'electricity/css/electricity.css' %}">
   <link rel="stylesheet" href="{% static 'electricity/css/global_header.css' %}">

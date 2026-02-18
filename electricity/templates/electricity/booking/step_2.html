@@ -1,7 +1,10 @@
-{% extends "electricity/booking/base_booking.html" %}
+﻿{% extends "electricity/booking/base_booking.html" %}
+{% load i18n %}
 
 {% block subtitle %}
-<p class="booking-subtitle">Provide the basic details so we can tailor your consultation.</p>
+<p class="booking-subtitle">
+    {% trans "Provide the basic details so we can tailor your consultation." %}
+</p>
 {% endblock %}
 
 {% block content %}
@@ -39,23 +42,29 @@
 </div>
 
 <div class="form-row other-field" data-other-field>
-    <label class="form-label">Other property type</label>
+    <label class="form-label">{% trans "Other property type" %}</label>
     {{ form.property_type_other }}
 </div>
 
 <div class="form-row">
-    <label class="form-label">What is the approximate size?</label>
+    <label class="form-label">{% trans "What is the approximate size?" %}</label>
     {{ form.property_size }}
 </div>
 
 <div class="form-row">
-    <label class="form-label">Year built or last renovated?</label>
+    <label class="form-label">{% trans "Year built or last renovated?" %}</label>
     {{ form.year_built }}
-    <div class="form-note">If you're not sure, provide an approximate year.</div>
+    <div class="form-note">
+        {% trans "If you're not sure, provide an approximate year." %}
+    </div>
 </div>
 {% endblock %}
 
 {% block actions %}
-<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_1' %}">Back</a>
-<button type="submit" class="btn btn-primary booking-btn">Continue</button>
+<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_1' %}">
+    {% trans "Back" %}
+</a>
+<button type="submit" class="btn btn-primary booking-btn">
+    {% trans "Continue" %}
+</button>
 {% endblock %}

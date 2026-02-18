@@ -1,40 +1,40 @@
-{% extends "electricity/base.html" %}
-{% load static %}
+﻿{% extends "electricity/base.html" %}
+{% load static i18n %}
 
-{% block title %}Outside Coverage | Hembla experten{% endblock %}
+{% block title %}{% trans "Outside Coverage | Hembla experten" %}{% endblock %}
 
 {% block content %}
 <section class="zip-check">
   <div class="container zip-shell">
     <div class="zip-card">
-      <div class="zip-badge">Outside coverage</div>
-      <h1>We're not in your area yet</h1>
-      <p>Thanks for checking. We're expanding quickly and may reach your ZIP soon. If you share your details, we'll follow up when we can help.</p>
+      <div class="zip-badge">{% trans "Outside coverage" %}</div>
+      <h1>{% trans "We're not in your area yet" %}</h1>
+      <p>{% trans "Thanks for checking. We're expanding quickly and may reach your ZIP soon. If you share your details, we'll follow up when we can help." %}</p>
 
       {% if submitted %}
-        <div class="zip-success">Thank you. We've received your request and will reach out if service becomes available.</div>
+        <div class="zip-success">{% trans "Thank you. We've received your request and will reach out if service becomes available." %}</div>
       {% else %}
         <form method="post" class="zip-form">
           {% csrf_token %}
           <div class="zip-grid">
-            <label>Full Name
+            <label>{% trans "Full Name" %}
               <input type="text" name="full_name" required>
             </label>
-            <label>Email
+            <label>{% trans "Email" %}
               <input type="email" name="email" required>
             </label>
-            <label>Phone
+            <label>{% trans "Phone" %}
               <input type="text" name="phone" placeholder="+46 ...">
             </label>
-            <label>ZIP Code
+            <label>{% trans "ZIP Code" %}
               <input type="text" value="{{ zip_code }}" disabled>
             </label>
           </div>
-          <label>What do you need help with?
-            <textarea name="details" rows="4" placeholder="Tell us about your project or request..." required></textarea>
+          <label>{% trans "What do you need help with?" %}
+            <textarea name="details" rows="4" placeholder="{% trans 'Tell us about your project or request...' %}" required></textarea>
           </label>
           <div class="zip-actions">
-            <button type="submit" class="btn btn-primary">Send request</button>
+            <button type="submit" class="btn btn-primary">{% trans "Send request" %}</button>
           </div>
         </form>
       {% endif %}

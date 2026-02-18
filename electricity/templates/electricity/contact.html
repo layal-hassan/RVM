@@ -1,7 +1,7 @@
 {% extends "electricity/base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Contact RWM EL{% endblock %}
+{% block title %}{% trans "Contact RWM EL" %}{% endblock %}
 {% block body_class %}contact-page{% endblock %}
 
 {% block content %}
@@ -9,11 +9,11 @@
   <div class="contact-hero-media" aria-hidden="true"></div>
   <div class="container contact-hero-center">
     <div class="contact-hero-content">
-      <h1>Contact RWM EL</h1>
-      <p class="contact-hero-quote">"Clear communication is where safe electrical work begins."</p>
+      <h1>{% trans "Contact RWM EL" %}</h1>
+      <p class="contact-hero-quote">{% blocktrans %}Clear communication is where safe electrical work begins.{% endblocktrans %}</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">Book an Electrician</a>
-        <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">Book Consultation</a>
+        <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an Electrician" %}</a>
+        <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Book Consultation" %}</a>
       </div>
     </div>
   </div>
@@ -22,41 +22,41 @@
 <section class="contact-section contact-inquiry">
   <div class="container">
     <div class="contact-section-header">
-      <div class="contact-eyebrow">Inquiry Types</div>
-      <h2>How Can We Help You?</h2>
+      <div class="contact-eyebrow">{% trans "Inquiry Types" %}</div>
+      <h2>{% trans "How Can We Help You?" %}</h2>
     </div>
     <div class="contact-chips">
       <label class="contact-chip">
         <input type="radio" name="inquiry_type" value="new_booking" form="contact-form" required>
-        <span>New service bookings</span>
+        <span>{% trans "New service bookings" %}</span>
       </label>
       <label class="contact-chip">
         <input type="radio" name="inquiry_type" value="consultation" form="contact-form">
-        <span>Professional consultations</span>
+        <span>{% trans "Professional consultations" %}</span>
       </label>
       <label class="contact-chip">
         <input type="radio" name="inquiry_type" value="tech_support" form="contact-form">
-        <span>Technical questions &amp; support</span>
+        <span>{% trans "Technical questions &amp; support" %}</span>
       </label>
     </div>
     <div class="contact-card-grid">
       <article class="contact-card">
-        <div class="contact-card-icon">☎</div>
-        <h3>Phone</h3>
-        <p>Speak with our expert dispatch team for immediate assistance.</p>
+        <div class="contact-card-icon">☎️</div>
+        <h3>{% trans "Phone" %}</h3>
+        <p>{% trans "Speak with our expert dispatch team for immediate assistance." %}</p>
         <span class="contact-card-link">+46 123 456 78</span>
       </article>
       <article class="contact-card">
-        <div class="contact-card-icon">✉</div>
-        <h3>Email</h3>
-        <p>Send us project plans or detailed inquiries for a formal quote.</p>
+        <div class="contact-card-icon">✉️</div>
+        <h3>{% trans "Email" %}</h3>
+        <p>{% trans "Send us project plans or detailed inquiries for a formal quote." %}</p>
         <span class="contact-card-link">support@rwmel.se</span>
       </article>
       <article class="contact-card">
         <div class="contact-card-icon">📝</div>
-        <h3>Contact Form</h3>
-        <p>Quickly submit your details and we will respond within 24 hours.</p>
-        <span class="contact-card-link">Submit Inquiry</span>
+        <h3>{% trans "Contact Form" %}</h3>
+        <p>{% trans "Quickly submit your details and we will respond within 24 hours." %}</p>
+        <span class="contact-card-link">{% trans "Submit Inquiry" %}</span>
       </article>
     </div>
   </div>
@@ -65,59 +65,59 @@
 <section class="contact-section contact-form-section contact-form-light">
   <div class="container contact-form-grid">
     <div class="contact-form-copy">
-      <h2>Start Your Project Journey</h2>
-      <p>Our certified engineers are ready to assist with residential, commercial, and industrial electrical needs across Sweden.</p>
+      <h2>{% trans "Start Your Project Journey" %}</h2>
+      <p>{% trans "Our certified engineers are ready to assist with residential, commercial, and industrial electrical needs across Sweden." %}</p>
       <div class="contact-meta">
         <div>
-          <h4>Operating Hours</h4>
-          <p>Mon - Fri · 07:00 - 17:00</p>
+          <h4>{% trans "Operating Hours" %}</h4>
+          <p>{% trans "Mon - Fri آ· 07:00 - 17:00" %}</p>
         </div>
         <div>
-          <h4>Headquarters</h4>
-          <p>Stockholm Business Park, Sweden</p>
+          <h4>{% trans "Headquarters" %}</h4>
+          <p>{% trans "Stockholm Business Park, Sweden" %}</p>
         </div>
       </div>
     </div>
     <form id="contact-form" class="contact-form-card" method="post" action="{% url 'electricity:contact' %}">
       {% csrf_token %}
       <div class="contact-form-row">
-        <label>Full Name
-          <input type="text" name="full_name" placeholder="John Doe" required>
+        <label>{% trans "Full Name" %}
+          <input type="text" name="full_name" placeholder="{% trans "John Doe" %}" required>
         </label>
-        <label>Email Address
-          <input type="email" name="email" placeholder="john@example.com" required>
+        <label>{% trans "Email Address" %}
+          <input type="email" name="email" placeholder="{% trans "john@example.com" %}" required>
         </label>
       </div>
       <div class="contact-form-row">
-        <label>Phone Number
+        <label>{% trans "Phone Number" %}
           <input type="tel" name="phone" placeholder="+46 00 000 00 00">
         </label>
-        <label>Project Address
-          <input type="text" name="address" placeholder="Street name, City">
+        <label>{% trans "Project Address" %}
+          <input type="text" name="address" placeholder="{% trans "Street name, City" %}">
         </label>
       </div>
-      <label>Type of Request
+      <label>{% trans "Type of Request" %}
         <select name="request_type">
-          <option>Residential Electrical Service</option>
-          <option>Commercial Installation</option>
-          <option>Emergency Support</option>
-          <option>Smart Home Consultation</option>
+          <option>{% trans "Residential Electrical Service" %}</option>
+          <option>{% trans "Commercial Installation" %}</option>
+          <option>{% trans "Emergency Support" %}</option>
+          <option>{% trans "Smart Home Consultation" %}</option>
         </select>
       </label>
-      <label>Your Message
-        <textarea rows="4" name="message" placeholder="Tell us more about your needs..." required></textarea>
+      <label>{% trans "Your Message" %}
+        <textarea rows="4" name="message" placeholder="{% trans "Tell us more about your needs..." %}" required></textarea>
       </label>
       <label class="contact-consent">
         <input type="checkbox" name="consent" required>
-        I consent to the processing of my personal data for the purpose of this inquiry in accordance with GDPR regulations.
+        {% trans "I consent to the processing of my personal data for the purpose of this inquiry in accordance with GDPR regulations." %}
       </label>
-      <button class="btn btn-primary" type="submit">Send Message</button>
+      <button class="btn btn-primary" type="submit">{% trans "Send Message" %}</button>
       {% if contact_status == "sent" %}
-        <div class="contact-status contact-status-success">Thank you! We have received your request.</div>
+        <div class="contact-status contact-status-success">{% trans "Thank you! We have received your request." %}</div>
       {% elif contact_status == "error" %}
-        <div class="contact-status contact-status-error">We could not send your message right now. Please try again.</div>
+        <div class="contact-status contact-status-error">{% trans "We could not send your message right now. Please try again." %}</div>
       {% endif %}
-      <div class="contact-secure">Encrypted and secure communication</div>
+      <div class="contact-secure">{% trans "Encrypted and secure communication" %}</div>
     </form>
   </div>
 </section>
@@ -125,23 +125,23 @@
 <section class="contact-section contact-steps contact-steps-light">
   <div class="container">
     <div class="contact-section-header">
-      <h2>What Happens After You Contact Us?</h2>
+      <h2>{% trans "What Happens After You Contact Us?" %}</h2>
     </div>
     <div class="contact-step-grid">
       <div class="contact-step">
         <span>01</span>
-        <h3>Review</h3>
-        <p>Our technical lead reviews your request to assign the most suitable specialist.</p>
+        <h3>{% trans "Review" %}</h3>
+        <p>{% trans "Our technical lead reviews your request to assign the most suitable specialist." %}</p>
       </div>
       <div class="contact-step">
         <span>02</span>
-        <h3>Discovery Call</h3>
-        <p>We reach out to clarify details, discuss your timeline, and provide initial insights.</p>
+        <h3>{% trans "Discovery Call" %}</h3>
+        <p>{% trans "We reach out to clarify details, discuss your timeline, and provide initial insights." %}</p>
       </div>
       <div class="contact-step">
         <span>03</span>
-        <h3>Proposal</h3>
-        <p>You receive a clear, transparent project proposal and a direct booking link.</p>
+        <h3>{% trans "Proposal" %}</h3>
+        <p>{% trans "You receive a clear, transparent project proposal and a direct booking link." %}</p>
       </div>
     </div>
   </div>
@@ -149,9 +149,9 @@
 
 <section class="contact-section contact-final">
   <div class="container contact-final-inner">
-    <h2>Not sure where to start?</h2>
-    <p>We're here to guide you.</p>
-    <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">Book Consultation</a>
+    <h2>{% trans "Not sure where to start?" %}</h2>
+    <p>{% trans "We're here to guide you." %}</p>
+    <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Book Consultation" %}</a>
   </div>
 </section>
 {% endblock %}

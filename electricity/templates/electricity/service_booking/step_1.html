@@ -1,58 +1,102 @@
-{% extends "electricity/service_booking/base.html" %}
+﻿{% extends "electricity/service_booking/base.html" %}
+{% load i18n %}
 {% block booking_content %}
 <form method="post" class="booking-form">
   {% csrf_token %}
+
   <div class="booking-section">
     <div class="section-header">
       <span class="section-index">1</span>
-      Who is the booking for?
+      {% trans "Who is the booking for?" %}
     </div>
+
     <div class="option-grid">
+
       <label class="option-card">
-        <input type="radio" name="account_type" value="private" {% if data.account_type == "private" %}checked{% endif %} required>
+        <input type="radio" name="account_type" value="private"
+               {% if data.account_type == "private" %}checked{% endif %} required>
         <span class="option-check"></span>
-        <div class="option-icon">🏠</div>
+        <div class="option-icon">👤</div>
         <div>
-          <div class="option-title">Private Customer</div>
-          <div class="option-subtitle">Individual home services, repairs, and electrical installations for your residence.</div>
-          <div class="option-tag">Eligible for ROT tax deduction</div>
+          <div class="option-title">{% trans "Private Customer" %}</div>
+          <div class="option-subtitle">
+            {% trans "Individual home services, repairs, and electrical installations for your residence." %}
+          </div>
+          <div class="option-tag">
+            {% trans "Eligible for ROT tax deduction" %}
+          </div>
         </div>
       </label>
+
       <label class="option-card">
-        <input type="radio" name="account_type" value="business" {% if data.account_type == "business" %}checked{% endif %}>
+        <input type="radio" name="account_type" value="business"
+               {% if data.account_type == "business" %}checked{% endif %}>
         <span class="option-check"></span>
         <div class="option-icon">🏢</div>
         <div>
-          <div class="option-title">Business / BRF</div>
-          <div class="option-subtitle">Commercial properties, offices, housing associations (BRF), and organizations.</div>
-          <div class="option-tag">VAT invoice included</div>
+          <div class="option-title">{% trans "Business / BRF" %}</div>
+          <div class="option-subtitle">
+            {% trans "Commercial properties, offices, housing associations (BRF), and organizations." %}
+          </div>
+          <div class="option-tag">
+            {% trans "VAT invoice included" %}
+          </div>
         </div>
       </label>
+
     </div>
   </div>
 
   <div class="booking-section">
     <div class="section-header">
       <span class="section-index">2</span>
-      Your contact details
+      {% trans "Your contact details" %}
     </div>
+
     <div class="form-grid">
-      <label class="form-label">Full Name
-        <input class="form-control" type="text" name="full_name" value="{{ data.full_name|default:'' }}" placeholder="e.g. Erik Andersson" required>
+
+      <label class="form-label">
+        {% trans "Full Name" %}
+        <input class="form-control" type="text"
+               name="full_name"
+               value="{{ data.full_name|default:'' }}"
+               placeholder="{% trans 'e.g. Erik Andersson' %}"
+               required>
       </label>
-      <label class="form-label">Phone Number
-        <input class="form-control" type="tel" name="phone" value="{{ data.phone|default:'' }}" placeholder="+46 70 000 00 00">
+
+      <label class="form-label">
+        {% trans "Phone Number" %}
+        <input class="form-control" type="tel"
+               name="phone"
+               value="{{ data.phone|default:'' }}"
+               placeholder="+46 70 000 00 00">
       </label>
-      <label class="form-label full">Email Address
-        <input class="form-control" type="email" name="email" value="{{ data.email|default:'' }}" placeholder="name@company.se" required>
+
+      <label class="form-label full">
+        {% trans "Email Address" %}
+        <input class="form-control" type="email"
+               name="email"
+               value="{{ data.email|default:'' }}"
+               placeholder="name@company.se"
+               required>
       </label>
+
     </div>
-    <div class="booking-privacy">We'll send your booking confirmation and estimate to this address.</div>
+
+    <div class="booking-privacy">
+      {% trans "We'll send your booking confirmation and estimate to this address." %}
+    </div>
+
   </div>
 
   <div class="booking-actions">
-    <a class="btn btn-light" href="{% url 'electricity:services' %}">Back</a>
-    <button class="btn btn-primary" type="submit">Continue</button>
+    <a class="btn btn-light" href="{% url 'electricity:services' %}">
+      {% trans "Back" %}
+    </a>
+    <button class="btn btn-primary" type="submit">
+      {% trans "Continue" %}
+    </button>
   </div>
+
 </form>
 {% endblock %}

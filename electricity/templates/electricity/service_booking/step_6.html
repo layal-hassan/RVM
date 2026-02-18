@@ -1,153 +1,111 @@
-{% extends "electricity/service_booking/base.html" %}
-{% block booking_content %}
-<form method="post" class="booking-form">
-  {% csrf_token %}
-  <div class="booking-section">
-    <div class="section-header">
-      <span class="section-index">7</span>
-      When would you like us to come?
-    </div>
-    {% if data.pricing_type == "hourly" %}
-      <div class="schedule-block">
-        <div class="schedule-title"><span class="schedule-icon">⏱</span> Estimated Duration</div>
-        <div class="form-grid">
-          <label class="form-label">Estimated hours
-            <select class="form-select" name="hourly_hours" id="hourly-hours">
-              <option value="1" {% if data.hourly_hours|stringformat:"s" == "1" %}selected{% endif %}>1 hour</option>
-              <option value="2" {% if data.hourly_hours|stringformat:"s" == "2" %}selected{% endif %}>2 hours</option>
-              <option value="3" {% if data.hourly_hours|stringformat:"s" == "3" %}selected{% endif %}>3 hours</option>
-              <option value="4" {% if data.hourly_hours|stringformat:"s" == "4" %}selected{% endif %}>4 hours</option>
-              <option value="5" {% if data.hourly_hours|stringformat:"s" == "5" %}selected{% endif %}>5 hours</option>
-              <option value="6" {% if data.hourly_hours|stringformat:"s" == "6" %}selected{% endif %}>6 hours</option>
-              <option value="7" {% if data.hourly_hours|stringformat:"s" == "7" %}selected{% endif %}>7 hours</option>
-              <option value="8" {% if data.hourly_hours|stringformat:"s" == "8" %}selected{% endif %}>8 hours</option>
-            </select>
-          </label>
-          <div class="form-label">
-            <span class="input-note">Estimated price</span>
-            <div class="price-preview"><strong id="hourly-price">{{ cost_total }} {{ currency }}</strong></div>
-          </div>
-        </div>
-      </div>
-    {% endif %}
-    <div class="schedule-block">
-      <div class="schedule-title"><span class="schedule-icon">★</span> Primary Choice</div>
-      <div class="form-grid">
-        <label class="form-label">Select Date
-          <input class="form-control" type="date" name="preferred_date" value="{{ data.preferred_date|default:'' }}">
-        </label>
-        <label class="form-label">Select Time Slot
-          <select class="form-select" name="preferred_time_slot">
-            <option value="">Select time slot</option>
-            {% for slot in available_slots %}
-              <option value="{{ slot.start }}" {% if data.preferred_time_slot == slot.start %}selected{% endif %}>
-                {{ slot.label }}
-              </option>
-            {% endfor %}
-          </select>
-        </label>
-      </div>
-    </div>
-    <div class="schedule-block">
-      <div class="schedule-title"><span class="schedule-icon">↻</span> Alternative Choice (Optional)</div>
-      <div class="schedule-note">Adding an alternative window helps us confirm your booking faster.</div>
-      <div class="form-grid">
-        <label class="form-label">Select Date
-          <input class="form-control" type="date" name="alt_date" value="{{ data.alt_date|default:'' }}">
-        </label>
-        <label class="form-label">Select Time Slot
-          <select class="form-select" name="alt_time_slot">
-            <option value="">Select time slot</option>
-            {% for slot in alt_available_slots %}
-              <option value="{{ slot.start }}" {% if data.alt_time_slot == slot.start %}selected{% endif %}>
-                {{ slot.label }}
-              </option>
-            {% endfor %}
-          </select>
-        </label>
-      </div>
-    </div>
-  </div>
-
-  <div class="booking-actions">
-    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 5 %}">Back</a>
-    <button class="btn btn-primary" type="submit">Continue</button>
-  </div>
+{% extends "electricity/service_booking/base.html" %}
+{% load i18n %}
+{% block booking_content %}
+<form method="post" class="booking-form">
+  {% csrf_token %}
+  <div class="booking-section">
+
+    <div class="section-header">
+      <span class="section-index">7</span>
+      {% trans "When would you like us to come?" %}
+    </div>
+
+    {% if data.pricing_type == "hourly" %}
+      <div class="schedule-block">
+        <div class="schedule-title">
+          <span class="schedule-icon">🕒</span>
+          {% trans "Estimated Duration" %}
+        </div>
+
+        <div class="form-grid">
+          <label class="form-label">
+            {% trans "Estimated hours" %}
+            <select class="form-select" name="hourly_hours" id="hourly-hours">
+              <option value="1" {% if data.hourly_hours|stringformat:"s" == "1" %}selected{% endif %}>{% trans "1 hour" %}</option>
+              <option value="2" {% if data.hourly_hours|stringformat:"s" == "2" %}selected{% endif %}>{% trans "2 hours" %}</option>
+              <option value="3" {% if data.hourly_hours|stringformat:"s" == "3" %}selected{% endif %}>{% trans "3 hours" %}</option>
+              <option value="4" {% if data.hourly_hours|stringformat:"s" == "4" %}selected{% endif %}>{% trans "4 hours" %}</option>
+              <option value="5" {% if data.hourly_hours|stringformat:"s" == "5" %}selected{% endif %}>{% trans "5 hours" %}</option>
+              <option value="6" {% if data.hourly_hours|stringformat:"s" == "6" %}selected{% endif %}>{% trans "6 hours" %}</option>
+              <option value="7" {% if data.hourly_hours|stringformat:"s" == "7" %}selected{% endif %}>{% trans "7 hours" %}</option>
+              <option value="8" {% if data.hourly_hours|stringformat:"s" == "8" %}selected{% endif %}>{% trans "8 hours" %}</option>
+            </select>
+          </label>
+
+          <div class="form-label">
+            <span class="input-note">{% trans "Estimated price" %}</span>
+            <div class="price-preview">
+              <strong id="hourly-price">{{ cost_total }} {{ currency }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="schedule-block">
+      <div class="schedule-title">
+        <span class="schedule-icon">📅</span>
+        {% trans "Primary Choice" %}
+      </div>
+
+      <div class="form-grid">
+        <label class="form-label">
+          {% trans "Select Date" %}
+          <input class="form-control" type="date" name="preferred_date" value="{{ data.preferred_date|default:'' }}">
+        </label>
+
+        <label class="form-label">
+          {% trans "Select Time Slot" %}
+          <select class="form-select" name="preferred_time_slot">
+            <option value="">{% trans "Select time slot" %}</option>
+            {% for slot in available_slots %}
+              <option value="{{ slot.start }}" {% if data.preferred_time_slot == slot.start %}selected{% endif %}>
+                {{ slot.label }}
+              </option>
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="schedule-block">
+      <div class="schedule-title">
+        <span class="schedule-icon">🔁</span>
+        {% trans "Alternative Choice (Optional)" %}
+      </div>
+
+      <div class="schedule-note">
+        {% trans "Adding an alternative window helps us confirm your booking faster." %}
+      </div>
+
+      <div class="form-grid">
+        <label class="form-label">
+          {% trans "Select Date" %}
+          <input class="form-control" type="date" name="alt_date" value="{{ data.alt_date|default:'' }}">
+        </label>
+
+        <label class="form-label">
+          {% trans "Select Time Slot" %}
+          <select class="form-select" name="alt_time_slot">
+            <option value="">{% trans "Select time slot" %}</option>
+            {% for slot in alt_available_slots %}
+              <option value="{{ slot.start }}" {% if data.alt_time_slot == slot.start %}selected{% endif %}>
+                {{ slot.label }}
+              </option>
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="booking-actions">
+    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 5 %}">
+      {% trans "Back" %}
+    </a>
+    <button class="btn btn-primary" type="submit">
+      {% trans "Continue" %}
+    </button>
+  </div>
 </form>
-
-<script>
-  const slotEndpoint = "{% url 'electricity:service_booking_slots' %}";
-  const preferredDate = document.querySelector('input[name="preferred_date"]');
-  const preferredSlots = document.querySelector('select[name="preferred_time_slot"]');
-  const altDate = document.querySelector('input[name="alt_date"]');
-  const altSlots = document.querySelector('select[name="alt_time_slot"]');
-  const hourlyHours = document.getElementById('hourly-hours');
-  const hourlyPrice = document.getElementById('hourly-price');
-  const hourlyRate = {{ hourly_rate_electrician|default:0 }};
-
-  const renderSlots = (selectEl, slots) => {
-    const current = selectEl.value;
-    if (selectEl.tomselect) {
-      const tom = selectEl.tomselect;
-      tom.clearOptions();
-      tom.addOption({ value: "", text: "Select time slot" });
-      slots.forEach((slot) => {
-        tom.addOption({ value: slot.start, text: slot.label });
-      });
-      tom.refreshOptions(false);
-      tom.setValue(current || "", true);
-      return;
-    }
-    selectEl.innerHTML = '<option value="">Select time slot</option>';
-    slots.forEach((slot) => {
-      const opt = document.createElement('option');
-      opt.value = slot.start;
-      opt.textContent = slot.label;
-      if (slot.start === current) {
-        opt.selected = true;
-      }
-      selectEl.appendChild(opt);
-    });
-  };
-
-  const fetchSlots = (dateValue, selectEl) => {
-    const hoursValue = hourlyHours ? hourlyHours.value : "";
-    if (!dateValue) {
-      renderSlots(selectEl, []);
-      return;
-    }
-    fetch(`${slotEndpoint}?date=${dateValue}&hours=${hoursValue}`)
-      .then((res) => res.json())
-      .then((data) => renderSlots(selectEl, data.slots || []))
-      .catch(() => renderSlots(selectEl, []));
-  };
-
-  preferredDate.addEventListener('change', (e) => fetchSlots(e.target.value, preferredSlots));
-  altDate.addEventListener('change', (e) => fetchSlots(e.target.value, altSlots));
-
-  if (preferredDate.value) {
-    fetchSlots(preferredDate.value, preferredSlots);
-  }
-  if (altDate.value) {
-    fetchSlots(altDate.value, altSlots);
-  }
-
-  if (hourlyHours) {
-    const updatePrice = () => {
-      const hours = parseInt(hourlyHours.value || "0", 10);
-      if (hourlyPrice) {
-        hourlyPrice.textContent = `${(hours * hourlyRate).toFixed(0)} {{ currency }}`;
-      }
-    };
-    hourlyHours.addEventListener('change', () => {
-      if (preferredDate.value) fetchSlots(preferredDate.value, preferredSlots);
-      if (altDate.value) fetchSlots(altDate.value, altSlots);
-      updatePrice();
-    });
-    if (preferredSlots) {
-      preferredSlots.addEventListener('change', updatePrice);
-    }
-    updatePrice();
-  }
-</script>
 {% endblock %}

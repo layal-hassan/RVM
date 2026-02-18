@@ -1,123 +1,152 @@
 {% extends "electricity/on_call_booking/base.html" %}
+{% load i18n %}
 {% block booking_content %}
 <form method="post" class="on-call-form">
   {% csrf_token %}
+
   <div class="oncall-hero">
-    <div class="hero-badge">Enterprise Grade</div>
-    <h1>On-Call Electrical Service <span>(Jour)</span></h1>
+    <div class="hero-badge">{% trans "Enterprise Grade" %}</div>
+    <h1>
+      {% trans "On-Call Electrical Service" %}
+      <span>({% trans "Jour" %})</span>
+    </h1>
     <p>
-      Priority access to a licensed electrician for urgent electrical issues.
-      Available through a service agreement for businesses, property owners,
-      and housing associations.
+      {% trans "Priority access to a licensed electrician for urgent electrical issues. Available through a service agreement for businesses, property owners, and housing associations." %}
     </p>
   </div>
 
   <div class="oncall-grid">
     <div class="oncall-main">
+
       <div class="form-block">
-        <h3 class="block-title">When do you need on-call coverage?</h3>
+        <h3 class="block-title">{% trans "When do you need on-call coverage?" %}</h3>
         <div class="choice-grid">
+
           <label class="choice-card">
             <input type="checkbox" name="coverage_times" value="business_hours" {% if "business_hours" in data.coverage_times %}checked{% endif %}>
             <span class="choice-content">
-              <span class="choice-title">Business hours</span>
-              <span class="choice-note">Standard operations 08:00 - 17:00</span>
+              <span class="choice-title">{% trans "Business hours" %}</span>
+              <span class="choice-note">{% trans "Standard operations 08:00 - 17:00" %}</span>
             </span>
             <span class="choice-check"></span>
           </label>
+
           <label class="choice-card">
             <input type="checkbox" name="coverage_times" value="evenings" {% if "evenings" in data.coverage_times %}checked{% endif %}>
             <span class="choice-content">
-              <span class="choice-title">Evenings</span>
-              <span class="choice-note">Extended coverage 17:00 - 22:00</span>
+              <span class="choice-title">{% trans "Evenings" %}</span>
+              <span class="choice-note">{% trans "Extended coverage 17:00 - 22:00" %}</span>
             </span>
             <span class="choice-check"></span>
           </label>
+
           <label class="choice-card">
             <input type="checkbox" name="coverage_times" value="nights" {% if "nights" in data.coverage_times %}checked{% endif %}>
             <span class="choice-content">
-              <span class="choice-title">Nights</span>
-              <span class="choice-note">Late shift 22:00 - 08:00</span>
+              <span class="choice-title">{% trans "Nights" %}</span>
+              <span class="choice-note">{% trans "Late shift 22:00 - 08:00" %}</span>
             </span>
             <span class="choice-check"></span>
           </label>
+
           <label class="choice-card">
             <input type="checkbox" name="coverage_times" value="weekends" {% if "weekends" in data.coverage_times %}checked{% endif %}>
             <span class="choice-content">
-              <span class="choice-title">Weekends &amp; holidays</span>
-              <span class="choice-note">24/7 during non-business days</span>
+              <span class="choice-title">{% trans "Weekends & holidays" %}</span>
+              <span class="choice-note">{% trans "24/7 during non-business days" %}</span>
             </span>
             <span class="choice-check"></span>
           </label>
+
         </div>
       </div>
 
       <div class="form-block">
-        <h3 class="block-title">How quickly do you need a response?</h3>
+        <h3 class="block-title">{% trans "How quickly do you need a response?" %}</h3>
         <div class="choice-grid two-col">
+
           <label class="choice-card">
             <input type="radio" name="response_speed" value="standard" {% if data.response_speed == "standard" %}checked{% endif %}>
             <span class="choice-content">
-              <span class="choice-title">Standard response</span>
-              <span class="choice-note">Service response within 4-8 hours of the reported incident.</span>
+              <span class="choice-title">{% trans "Standard response" %}</span>
+              <span class="choice-note">{% trans "Service response within 4-8 hours of the reported incident." %}</span>
             </span>
             <span class="choice-check"></span>
           </label>
+
           <label class="choice-card highlight">
             <input type="radio" name="response_speed" value="priority" {% if data.response_speed == "priority" %}checked{% endif %}>
             <span class="choice-content">
-              <span class="choice-pill">Premium</span>
-              <span class="choice-title">Priority response</span>
-              <span class="choice-note">Guaranteed technician on-site within 1-2 hours 24/7.</span>
+              <span class="choice-pill">{% trans "Premium" %}</span>
+              <span class="choice-title">{% trans "Priority response" %}</span>
+              <span class="choice-note">{% trans "Guaranteed technician on-site within 1-2 hours 24/7." %}</span>
             </span>
             <span class="choice-check"></span>
           </label>
+
         </div>
       </div>
 
       <div class="form-block">
-        <h3 class="block-title">What should the on-call service cover?</h3>
+        <h3 class="block-title">{% trans "What should the on-call service cover?" %}</h3>
         <div class="pill-grid">
+
           <label class="pill">
             <input type="checkbox" name="coverage_scope" value="power_outages" {% if "power_outages" in data.coverage_scope %}checked{% endif %}>
-            <span>Power outages</span>
+            <span>{% trans "Power outages" %}</span>
           </label>
+
           <label class="pill">
             <input type="checkbox" name="coverage_scope" value="fuse_boards" {% if "fuse_boards" in data.coverage_scope %}checked{% endif %}>
-            <span>Fuse boards</span>
+            <span>{% trans "Fuse boards" %}</span>
           </label>
+
           <label class="pill">
             <input type="checkbox" name="coverage_scope" value="common_areas" {% if "common_areas" in data.coverage_scope %}checked{% endif %}>
-            <span>Common areas</span>
+            <span>{% trans "Common areas" %}</span>
           </label>
+
           <label class="pill">
             <input type="checkbox" name="coverage_scope" value="critical_systems" {% if "critical_systems" in data.coverage_scope %}checked{% endif %}>
-            <span>Critical systems</span>
+            <span>{% trans "Critical systems" %}</span>
           </label>
+
           <label class="pill">
             <input type="checkbox" name="coverage_scope" value="general_faults" {% if "general_faults" in data.coverage_scope %}checked{% endif %}>
-            <span>General faults</span>
+            <span>{% trans "General faults" %}</span>
           </label>
+
         </div>
       </div>
+
     </div>
 
     <aside class="summary-card">
-      <div class="summary-title">Service Summary</div>
+      <div class="summary-title">{% trans "Service Summary" %}</div>
+
       <div class="summary-row">
-        <span>Coverage Type</span>
-        <strong>B2B Service Agreement</strong>
+        <span>{% trans "Coverage Type" %}</span>
+        <strong>{% trans "B2B Service Agreement" %}</strong>
       </div>
+
       <div class="summary-row">
-        <span>Location</span>
-        <strong>Greater Stockholm</strong>
+        <span>{% trans "Location" %}</span>
+        <strong>{% trans "Greater Stockholm" %}</strong>
       </div>
+
       <div class="summary-note">
-        Final pricing and conditions are subject to technical audit and individual facility complexity.
+        {% trans "Final pricing and conditions are subject to technical audit and individual facility complexity." %}
       </div>
-      <button class="btn btn-primary w-100" type="submit">Apply for On-Call Service →</button>
-      <div class="summary-availability">Technicians available now</div>
+
+      <button class="btn btn-primary w-100" type="submit">
+        {% trans "Apply for On-Call Service" %} →
+      </button>
+
+      <div class="summary-availability">
+        {% trans "Technicians available now" %}
+      </div>
     </aside>
+
   </div>
 </form>
 {% endblock %}

@@ -1,14 +1,15 @@
-{% extends "electricity/base.html" %}
+﻿{% extends "electricity/base.html" %}
+{% load i18n %}
 
-{% block title %}FAQ | RWM EL{% endblock %}
+{% block title %}{% trans "FAQ | RWM EL" %}{% endblock %}
 {% block body_class %}faq-page{% endblock %}
 
 {% block content %}
 <section class="faq-hero">
   <div class="container">
-    <div class="faq-kicker">FAQ</div>
-    <h1>Frequently Asked Questions</h1>
-    <p>Clear answers to the most common questions about bookings, pricing, and services.</p>
+    <div class="faq-kicker">{% trans "FAQ" %}</div>
+    <h1>{% trans "Frequently Asked Questions" %}</h1>
+    <p>{% trans "Clear answers to the most common questions about bookings, pricing, and services." %}</p>
   </div>
 </section>
 
@@ -26,7 +27,7 @@
           </div>
         </details>
       {% empty %}
-        <div class="faq-empty">No FAQ entries yet. Please check back soon.</div>
+        <div class="faq-empty">{% trans "No FAQ entries yet. Please check back soon." %}</div>
       {% endfor %}
     </div>
   </div>

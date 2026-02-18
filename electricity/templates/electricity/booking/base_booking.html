@@ -1,12 +1,16 @@
-{% load static electricity_extras %}
+﻿{% load static electricity_extras i18n %}
 <!DOCTYPE html>
-<html lang="en">
+{% get_current_language as CURRENT_LANGUAGE %}
+<html lang="{{ CURRENT_LANGUAGE }}" dir="{% if CURRENT_LANGUAGE == 'ar' %}rtl{% else %}ltr{% endif %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Consultation Booking{% endblock %}</title>
+    <title>{% block title %}{% trans "Consultation Booking" %}{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% if CURRENT_LANGUAGE == "ar" %}
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% endif %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css">
     <link href="{% static 'electricity/css/electricity.css' %}" rel="stylesheet">
     <link href="{% static 'electricity/css/booking.css' %}" rel="stylesheet">
@@ -19,11 +23,15 @@
 <main class="booking-page">
     <div class="container booking-shell">
         <div class="booking-header">
-            <div class="booking-step">Step {{ step }} of 7</div>
+            <div class="booking-step">
+                {% blocktrans with step=step total=total %}Step {{ step }} of {{ total }}{% endblocktrans %}
+            </div>
             <div class="booking-progress">
                 <div class="booking-progress-bar" style="width: {{ progress_percent }}%;"></div>
             </div>
-            <div class="booking-percent">{{ progress_percent }}% Complete</div>
+            <div class="booking-percent">
+                {% blocktrans with percent=progress_percent %}{{ percent }}%% Complete{% endblocktrans %}
+            </div>
         </div>
 
         <div class="booking-card">
@@ -46,41 +54,44 @@
       <div class="brand-mark-ref footer-logo">
         <img src="{% static 'electricity/img/electricity_logo.jpg' %}" alt="RWM EL">
       </div>
-      <h4>Electrical &amp; Infrastructure Solutions</h4>
+      <h4>{% trans "Electrical &amp; Infrastructure Solutions" %}</h4>
       <p class="footer-copy">
-        Licensed electrical work, upgrades, and system installations?built right and built to last.
-        Delivering the gold standard in smart home technology and enterprise power systems.
+        {% trans "Licensed electrical work, upgrades, and system installations — built right and built to last." %}
+        {% trans "Delivering the gold standard in smart home technology and enterprise power systems." %}
       </p>
       <div class="footer-cert">
         <img class="cert-logo" src="{% static 'electricity/img/Certified_logo.png' %}" alt="Certified Electrical Work">
       </div>
     </div>
     <div class="footer-col">
-      <h4>Company</h4>
+      <h4>{% trans "Company" %}</h4>
       <ul>
-        <li><a href="{% url 'electricity:about' %}">About us</a></li>
-        <li><a href="{% url 'electricity:terms' %}">Terms &amp; Conditions</a></li>
-        <li><a href="{% url 'electricity:privacy' %}">Privacy Policy</a></li>
-        <li><a href="{% url 'electricity:cookies' %}">Cookies</a></li>
+        <li><a href="{% url 'electricity:about' %}">{% trans "About us" %}</a></li>
+        <li><a href="{% url 'electricity:terms' %}">{% trans "Terms &amp; Conditions" %}</a></li>
+        <li><a href="{% url 'electricity:privacy' %}">{% trans "Privacy Policy" %}</a></li>
+        <li><a href="{% url 'electricity:cookies' %}">{% trans "Cookies" %}</a></li>
+        <li><a href="{% url 'electricity:support' %}">{% trans "Customer Support" %}</a></li>
+        <li><a href="{% url 'electricity:contact' %}">{% trans "Contact us" %}</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Contact</h4>
+      <h4>{% trans "Contact" %}</h4>
       <ul class="footer-contact">
-        <li><span>Address</span> R?dmansgatan 12, 114 44 Stockholm, Sweden</li>
-        <li><span>Phone</span> +46 8 123 456 00</li>
-        <li><span>Email</span> support@rwmel.com</li>
+        <li><span>{% trans "Address" %}</span> {% trans "Rådmansgatan 12, 114 44 Stockholm, Sweden" %}</li>
+        <li><span>{% trans "Phone" %}</span> +46 8 123 456 00</li>
+        <li><span>{% trans "Email" %}</span> support@rwmel.com</li>
       </ul>
     </div>
   </div>
   <div class="container footer-bottom footer-bottom-v2">
-    <div class="footer-rights">? 2026 RWM EL. All rights reserved.</div>
+    <div class="footer-rights">{% trans "© 2026 RWM EL. All rights reserved." %}</div>
     <div class="footer-links">
-      <a href="{% url 'electricity:privacy' %}">Privacy</a>
-      <a href="{% url 'electricity:cookies' %}">Cookies</a>
-      <a href="{% url 'electricity:terms' %}">Terms</a>
+      <a href="{% url 'electricity:privacy' %}">{% trans "Privacy" %}</a>
+      <a href="{% url 'electricity:cookies' %}">{% trans "Cookies" %}</a>
+      <a href="{% url 'electricity:faq' %}">{% trans "FAQ" %}</a>
+      <a href="{% url 'electricity:terms' %}">{% trans "Terms" %}</a>
     </div>
-    <div class="footer-lang">Sweden (EN)</div>
+    <div class="footer-lang">{% trans "Sweden (EN)" %}</div>
   </div>
 </footer>
 

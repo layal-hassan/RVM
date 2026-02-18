@@ -1,7 +1,7 @@
-{% extends "electricity/base.html" %}
-{% load static electricity_extras %}
+﻿{% extends "electricity/base.html" %}
+{% load static electricity_extras i18n %}
 
-{% block title %}Electrical Services | Hembla experten{% endblock %}
+{% block title %}{% trans "Electrical Services | Hembla experten" %}{% endblock %}
 {% block body_class %}services-page{% endblock %}
 
 {% block content %}
@@ -10,23 +10,21 @@
   <div class="container hero-content">
     <div class="hero-kicker">
       <span class="line"></span>
-      <span>Integrated Infrastructure Group</span>
+      <span>{% trans "Integrated Infrastructure Group" %}</span>
     </div>
     <h1 class="hero-title">
-      Warmth Meets<br>
-      <span class="hero-italic">Intelligence</span><br>
-      Designed for<br>
-      Modern Living
+      {% trans "Warmth Meets" %}<br>
+      <span class="hero-italic">{% trans "Intelligence" %}</span><br>
+      {% trans "Designed for" %}<br>
+      {% trans "Modern Living" %}
     </h1>
     <p class="hero-subtitle">
-      Redefining smart home infrastructure with advanced comfort,
-      security, and energy efficiency. We elevate your experience -
-      today.
+      {% trans "Redefining smart home infrastructure with advanced comfort, security, and energy efficiency. We elevate your experience - today." %}
     </p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">Schedule a Consultation</a>
-      <a class="btn btn-secondary" href="{% url 'electricity:electrician_booking_step' 1 %}">Book an Electrician</a>
-      <a class="btn btn-secondary" href="{% url 'electricity:on_call' %}">On-Call &amp; Emergency</a>
+      <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a Consultation" %}</a>
+      <a class="btn btn-secondary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an Electrician" %}</a>
+      <a class="btn btn-secondary" href="{% url 'electricity:on_call' %}">{% trans "On-Call & Emergency" %}</a>
     </div>
   </div>
 </section>
@@ -40,8 +38,8 @@
         </svg>
       </div>
       <div>
-        <h3>Tailored Comfort</h3>
-        <p>Advanced systems crafted to adapt to your lifestyle and property.</p>
+        <h3>{% trans "Tailored Comfort" %}</h3>
+        <p>{% trans "Advanced systems crafted to adapt to your lifestyle and property." %}</p>
       </div>
     </div>
     <div class="feature-card">
@@ -51,8 +49,8 @@
         </svg>
       </div>
       <div>
-        <h3>Resilient Security</h3>
-        <p>Proactive monitoring and smart defense for peace of mind.</p>
+        <h3>{% trans "Resilient Security" %}</h3>
+        <p>{% trans "Proactive monitoring and smart defense for peace of mind." %}</p>
       </div>
     </div>
     <div class="feature-card">
@@ -62,8 +60,8 @@
         </svg>
       </div>
       <div>
-        <h3>Peak Efficiency</h3>
-        <p>Integrated energy management to maximize performance and savings.</p>
+        <h3>{% trans "Peak Efficiency" %}</h3>
+        <p>{% trans "Integrated energy management to maximize performance and savings." %}</p>
       </div>
     </div>
   </div>
@@ -77,12 +75,11 @@
           <path d="M12.9 2.8l.7 2.3 2.4.5-1.7 1.7.4 2.4-2.1-1.1-2.1 1.1.4-2.4L9 5.6l2.4-.5.5-2.3zM4 18.5l3-3 2.5 2.5-3 3H4v-2.5zm10.7-9.2l2-2 2.5 2.5-2 2-.7-.7-4.1 4.1-.9-.9 4.1-4.1-.9-.9z"/>
         </svg>
       </div>
-      <h3>TECHNICAL CATALOG INTEGRATION</h3>
+      <h3>{% trans "TECHNICAL CATALOG INTEGRATION" %}</h3>
       <p>
-        We are currently finalizing our digital blueprints and proprietary material packages.
-        Our web expansion will soon include complete technical specifications for all hardware tiers.
+        {% trans "We are currently finalizing our digital blueprints and proprietary material packages. Our web expansion will soon include complete technical specifications for all hardware tiers." %}
       </p>
-      <p class="catalog-emphasis">Until then, our field engineering teams remain fully active.</p>
+      <p class="catalog-emphasis">{% trans "Until then, our field engineering teams remain fully active." %}</p>
     </div>
   </div>
 </section>
@@ -90,16 +87,15 @@
 <section class="callout-band">
   <div class="container callout-grid">
     <div class="callout-copy">
-      <div class="eyebrow">Priority Infrastructure Support</div>
-      <h2>On-Call & Emergency Service</h2>
+      <div class="eyebrow">{% trans "Priority Infrastructure Support" %}</div>
+      <h2>{% trans "On-Call & Emergency Service" %}</h2>
       <p>
-        Priority electrical support for businesses, housing associations (BRF), and property managers.
-        Activate immediate access with an on-call agreement tailored to your site.
+        {% trans "Priority electrical support for businesses, housing associations (BRF), and property managers. Activate immediate access with an on-call agreement tailored to your site." %}
       </p>
     </div>
     <div class="callout-actions">
-      <a class="btn btn-primary" href="{% url 'electricity:on_call_booking_step' 1 %}">Apply for On-Call Service</a>
-      <span class="callout-note">Response windows confirmed in writing.</span>
+      <a class="btn btn-primary" href="{% url 'electricity:on_call_booking_step' 1 %}">{% trans "Apply for On-Call Service" %}</a>
+      <span class="callout-note">{% trans "Response windows confirmed in writing." %}</span>
     </div>
   </div>
 </section>
@@ -108,9 +104,9 @@
   <div class="container">
     <div class="section-header ecosystem-header">
       <div>
-        <h2>The Service Ecosystem</h2>
+        <h2>{% trans "The Service Ecosystem" %}</h2>
       </div>
-      <p class="section-copy">While our detailed technical library is in development, our boutique engineering team is fully operational and ready to serve you today.</p>
+      <p class="section-copy">{% trans "While our detailed technical library is in development, our boutique engineering team is fully operational and ready to serve you today." %}</p>
     </div>
 
     <div class="service-grid">
@@ -125,7 +121,7 @@
           </div>
           <div class="service-body">
             <h3>{{ service.title }}</h3>
-            <span class="service-tag">Smart Infrastructure</span>
+            <span class="service-tag">{% trans "Smart Infrastructure" %}</span>
             {% if service.bullet_points %}
               <ul class="service-bullets">
                 {% for line in service.bullet_points|split_lines %}
@@ -136,15 +132,15 @@
               <p class="service-description">{{ service.short_description }}</p>
             {% endif %}
             <div class="service-actions">
-              <a class="mini-cta" href="{% url 'electricity:booking_step_1' %}">Schedule a consultation</a>
-              <a class="mini-cta mini-cta-secondary" href="{% url 'electricity:service_booking_step' 1 %}">Book a service</a>
+              <a class="mini-cta" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a consultation" %}</a>
+              <a class="mini-cta mini-cta-secondary" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Book a service" %}</a>
             </div>
           </div>
         </article>
       {% empty %}
         <div class="empty-state">
-          <h3>No services available yet</h3>
-          <p>New electrical solutions are being curated. Please check back soon.</p>
+          <h3>{% trans "No services available yet" %}</h3>
+          <p>{% trans "New electrical solutions are being curated. Please check back soon." %}</p>
         </div>
       {% endfor %}
     </div>
@@ -154,27 +150,26 @@
 <section class="section engineering-section">
   <div class="container engineering-grid">
     <div class="engineering-media">
-      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80" alt="Engineering integrity">
+      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80" alt="{% trans 'Engineering integrity' %}">
     </div>
     <div class="engineering-content">
-      <div class="eyebrow">Exceptional Foundations</div>
-      <h2>Engineering<br><span class="hero-italic">Integrity</span></h2>
+      <div class="eyebrow">{% trans "Exceptional Foundations" %}</div>
+      <h2>{% trans "Engineering" %}<br><span class="hero-italic">{% trans "Integrity" %}</span></h2>
       <p class="engineering-lead">
-        Our electrical division manages the complex infrastructure required for high-end modern smart homes and
-        precision commercial spaces.
+        {% trans "Our electrical division manages the complex infrastructure required for high-end modern smart homes and precision commercial spaces." %}
       </p>
       <div class="engineering-columns">
         <ul class="engineering-list">
-          <li>Troubleshooting and Diagnostics</li>
-          <li>Panel Upgrades</li>
-          <li>Energy Optimization</li>
+          <li>{% trans "Troubleshooting and Diagnostics" %}</li>
+          <li>{% trans "Panel Upgrades" %}</li>
+          <li>{% trans "Energy Optimization" %}</li>
         </ul>
         <div class="engineering-side">
-          Our teams ensure seamless installation, precise integration, and long-term system reliability across every project.
+          {% trans "Our teams ensure seamless installation, precise integration, and long-term system reliability across every project." %}
         </div>
       </div>
       <div class="hero-actions">
-        <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">Book an Electrical Consultation</a>
+        <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Book an Electrical Consultation" %}</a>
       </div>
     </div>
   </div>
@@ -183,16 +178,16 @@
 <section class="insight-strip">
   <div class="container insight-grid">
     <div class="insight-card">
-      <h3>Precision Scheduling</h3>
-      <p>We coordinate site visits in 30-minute windows to reduce downtime and keep teams synchronized.</p>
+      <h3>{% trans "Precision Scheduling" %}</h3>
+      <p>{% trans "We coordinate site visits in 30-minute windows to reduce downtime and keep teams synchronized." %}</p>
     </div>
     <div class="insight-card">
-      <h3>Compliance-Ready Documentation</h3>
-      <p>Every installation includes a structured handover packet with schematics, test logs, and warranties.</p>
+      <h3>{% trans "Compliance-Ready Documentation" %}</h3>
+      <p>{% trans "Every installation includes a structured handover packet with schematics, test logs, and warranties." %}</p>
     </div>
     <div class="insight-card">
-      <h3>Dedicated Points of Contact</h3>
-      <p>Project leads stay available before, during, and after commissioning for rapid escalation.</p>
+      <h3>{% trans "Dedicated Points of Contact" %}</h3>
+      <p>{% trans "Project leads stay available before, during, and after commissioning for rapid escalation." %}</p>
     </div>
   </div>
 </section>
@@ -201,12 +196,12 @@
   <div class="container">
     <div class="cta-panel muted-panel">
       <div>
-        <div class="eyebrow">More Smart Home Details</div>
-        <h2>Coming Soon</h2>
-        <p>We are currently collecting our advanced catalog and proprietary solutions to help you get the most out of your infrastructure.</p>
+        <div class="eyebrow">{% trans "More Smart Home Details" %}</div>
+        <h2>{% trans "Coming Soon" %}</h2>
+        <p>{% trans "We are currently collecting our advanced catalog and proprietary solutions to help you get the most out of your infrastructure." %}</p>
       </div>
       <div class="cta-actions">
-        <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">Schedule a Smart Home Consultation</a>
+        <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a Smart Home Consultation" %}</a>
       </div>
     </div>
   </div>
@@ -215,14 +210,14 @@
 <section class="section mini-cta-section">
   <div class="container mini-cta-grid">
     <div class="mini-cta-card">
-      <h3>Schedule a Smart Home Consultation</h3>
-      <p>Let us recommend the right smart systems for your property.</p>
-      <a class="card-link" href="{% url 'electricity:booking_step_1' %}">Schedule Now</a>
+      <h3>{% trans "Schedule a Smart Home Consultation" %}</h3>
+      <p>{% trans "Let us recommend the right smart systems for your property." %}</p>
+      <a class="card-link" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule Now" %}</a>
     </div>
     <div class="mini-cta-card">
-      <h3>Book an Licensed Electrician</h3>
-      <p>Premium electrical installation and maintenance services.</p>
-      <a class="card-link" href="{% url 'electricity:service_booking_step' 1 %}">Book Service</a>
+      <h3>{% trans "Book a Licensed Electrician" %}</h3>
+      <p>{% trans "Premium electrical installation and maintenance services." %}</p>
+      <a class="card-link" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Book Service" %}</a>
     </div>
   </div>
 </section>
@@ -231,83 +226,83 @@
   <div class="container">
     <div class="pricing-header">
       <div>
-        <div class="pricing-kicker">Pricing for Booking Electrical</div>
-        <h2>PRICING FOR BOOKING ELECTRICAL</h2>
+        <div class="pricing-kicker">{% trans "Pricing for Booking Electrical" %}</div>
+        <h2>{% trans "PRICING FOR BOOKING ELECTRICAL" %}</h2>
       </div>
-      <p>Transparent fee structures for on-site engineering and maintenance services.</p>
+      <p>{% trans "Transparent fee structures for on-site engineering and maintenance services." %}</p>
     </div>
     <div class="pricing-grid pricing-grid-4">
       <article class="pricing-card pricing-card-table">
         <div class="pricing-card-top">
-          <span class="pricing-meta">Base Deployment</span>
-          <h3>First Hour Breakdown</h3>
+          <span class="pricing-meta">{% trans "Base Deployment" %}</span>
+          <h3>{% trans "First Hour Breakdown" %}</h3>
         </div>
         <div class="pricing-table">
           <div class="pricing-row">
-            <span>Labour Rate</span>
+            <span>{% trans "Labour Rate" %}</span>
             <strong>688 SEK</strong>
           </div>
           <div class="pricing-row">
-            <span>Transport Fee</span>
+            <span>{% trans "Transport Fee" %}</span>
             <strong>500 SEK</strong>
           </div>
           <div class="pricing-row pricing-total">
-            <span>Total</span>
+            <span>{% trans "Total" %}</span>
             <strong>1,188 SEK</strong>
           </div>
         </div>
-        <div class="pricing-foot">Includes VAT</div>
+        <div class="pricing-foot">{% trans "Includes VAT" %}</div>
       </article>
       <article class="pricing-card pricing-card-table">
         <div class="pricing-card-top">
-          <span class="pricing-meta">Tax Optimization</span>
-          <span class="pricing-pill">Minimum charge with ROT</span>
-          <h3>ROT Deduction Applied</h3>
+          <span class="pricing-meta">{% trans "Tax Optimization" %}</span>
+          <span class="pricing-pill">{% trans "Minimum charge with ROT" %}</span>
+          <h3>{% trans "ROT Deduction Applied" %}</h3>
         </div>
         <div class="pricing-table">
           <div class="pricing-row">
-            <span>Gross Total</span>
+            <span>{% trans "Gross Total" %}</span>
             <strong>1,188 SEK</strong>
           </div>
           <div class="pricing-row pricing-deduction">
-            <span>ROT (30% Labour)</span>
+            <span>{% trans "ROT (30% Labour)" %}</span>
             <strong>-344 SEK</strong>
           </div>
           <div class="pricing-row pricing-total pricing-rot-total">
-            <span>Adjusted Total</span>
+            <span>{% trans "Adjusted Total" %}</span>
             <strong>844 SEK</strong>
           </div>
         </div>
-        <div class="pricing-foot">Final charge per first hour</div>
+        <div class="pricing-foot">{% trans "Final charge per first hour" %}</div>
       </article>
       <article class="pricing-card pricing-card-table">
         <div class="pricing-card-top">
-          <span class="pricing-meta">Ongoing Rate</span>
-          <h3>Additional Service Time</h3>
+          <span class="pricing-meta">{% trans "Ongoing Rate" %}</span>
+          <h3>{% trans "Additional Service Time" %}</h3>
         </div>
         <div class="pricing-table">
           <div class="pricing-row">
-            <span class="pricing-subhead">Standard Hourly</span>
+            <span class="pricing-subhead">{% trans "Standard Hourly" %}</span>
             <strong>688 SEK/hr</strong>
           </div>
           <div class="pricing-row pricing-rot">
-            <span class="pricing-subhead">With ROT Deduction</span>
+            <span class="pricing-subhead">{% trans "With ROT Deduction" %}</span>
             <strong>344 SEK/hr</strong>
           </div>
         </div>
-        <div class="pricing-foot">Billed in 30min increments</div>
+        <div class="pricing-foot">{% trans "Billed in 30min increments" %}</div>
       </article>
       <article class="pricing-card pricing-card-terms">
         <div class="pricing-card-top">
-          <span class="pricing-meta">Documentation</span>
-          <h3>Terms &amp; Conditions</h3>
+          <span class="pricing-meta">{% trans "Documentation" %}</span>
+          <h3>{% trans "Terms &amp; Conditions" %}</h3>
         </div>
         <ul class="pricing-terms">
-          <li>Minimum charge of 1 hour applies to all site deployments.</li>
-          <li>Material costs and specialized equipment are excluded from the rates above.</li>
-          <li>ROT deduction requires valid Swedish tax eligibility (Personal ID).</li>
+          <li>{% trans "Minimum charge of 1 hour applies to all site deployments." %}</li>
+          <li>{% trans "Material costs and specialized equipment are excluded from the rates above." %}</li>
+          <li>{% trans "ROT deduction requires valid Swedish tax eligibility (Personal ID)." %}</li>
         </ul>
-        <div class="pricing-foot">Licensed by Elsäkerhetsverket</div>
+        <div class="pricing-foot">Licensed by Elsأ¤kerhetsverket</div>
       </article>
     </div>
   </div>
@@ -315,11 +310,11 @@
 
 <section class="section bottom-cta">
   <div class="container bottom-cta-inner">
-    <h2>Ready to upgrade<br><span>Your Home?</span></h2>
-    <p>Our boutique engineering teams are fully operational and ready for deployment.</p>
+    <h2>{% trans "Ready to upgrade" %}<br><span>{% trans "Your Home?" %}</span></h2>
+    <p>{% trans "Our boutique engineering teams are fully operational and ready for deployment." %}</p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">Schedule a Consultation</a>
-      <a class="btn btn-secondary" href="{% url 'electricity:service_booking_step' 1 %}">Request Electrical</a>
+      <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a Consultation" %}</a>
+      <a class="btn btn-secondary" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Request Electrical" %}</a>
     </div>
   </div>
 </section>

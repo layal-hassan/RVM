@@ -1,46 +1,82 @@
-{% extends "electricity/booking/base_booking.html" %}
+﻿{% extends "electricity/booking/base_booking.html" %}
+{% load i18n %}
 
 {% block subtitle %}
-<p class="booking-subtitle">Confirm your details before submitting your request.</p>
+<p class="booking-subtitle">{% trans "Confirm your details before submitting your request." %}</p>
 {% endblock %}
 
 {% block content %}
 {% if consultation_free %}
-  <div class="success-banner">Your first consultation is free.</div>
+  <div class="success-banner">{% trans "Your first consultation is free." %}</div>
 {% endif %}
 <div class="review-grid">
     <div class="review-card">
-        <div class="review-title">Contact Information</div>
-        <div class="review-row"><span>Full Name</span><span>{{ data.full_name }}</span></div>
-        <div class="review-row"><span>Email Address</span><span>{{ data.email|default:"-" }}</span></div>
-        <div class="review-row"><span>Phone Number</span><span>{{ data.phone|default:"-" }}</span></div>
+        <div class="review-title">{% trans "Contact Information" %}</div>
+        <div class="review-row"><span>{% trans "Full Name" %}</span><span>{{ data.full_name }}</span></div>
+        <div class="review-row"><span>{% trans "Email Address" %}</span><span>{{ data.email|default:"-" }}</span></div>
+        <div class="review-row"><span>{% trans "Phone Number" %}</span><span>{{ data.phone|default:"-" }}</span></div>
     </div>
     <div class="review-card">
-        <div class="review-title">Consultation Topics</div>
-        <div class="review-row"><span>Type</span><span>{{ data.consultation_type|default:"-" }}</span></div>
-        <div class="review-row"><span>Services</span><span>{{ data.services|join:", " }}</span></div>
-        <div class="review-row"><span>Urgent</span><span>{{ data.urgent }}</span></div>
-    </div>
-    <div class="review-card">
-        <div class="review-title">Preferred Schedule</div>
+        <div class="review-title">{% trans "Consultation Topics" %}</div>
         <div class="review-row">
-            <span>Preferred Date</span>
+            <span>{% trans "Type" %}</span>
+            <span>
+                {% if data.consultation_type == "onsite" %}{% trans "On-site Visit" %}
+                {% elif data.consultation_type == "video" %}{% trans "Video Call" %}
+                {% elif data.consultation_type == "phone" %}{% trans "Phone Call" %}
+                {% else %}{{ data.consultation_type|default:"-" }}{% endif %}
+            </span>
+        </div>
+        <div class="review-row">
+            <span>{% trans "Services" %}</span>
+            <span>
+                {% if data.services %}
+                    {% for item in data.services %}
+                        {% if item == "upgrades" %}{% trans "Electrical Upgrades" %}
+                        {% elif item == "lighting" %}{% trans "Lighting Solutions" %}
+                        {% elif item == "ev" %}{% trans "EV Charging" %}
+                        {% elif item == "automation" %}{% trans "Home Automation" %}
+                        {% elif item == "troubleshooting" %}{% trans "Troubleshooting" %}
+                        {% elif item == "maintenance" %}{% trans "General Maintenance" %}
+                        {% else %}{{ item }}{% endif %}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}-{% endif %}
+            </span>
+        </div>
+        <div class="review-row">
+            <span>{% trans "Urgent" %}</span>
+            <span>
+                {% if data.urgent %}
+                    {% trans "Yes" %}
+                {% else %}
+                    {% trans "No" %}
+                {% endif %}
+            </span>
+        </div>
+    </div>
+    <div class="review-card">
+        <div class="review-title">{% trans "Preferred Schedule" %}</div>
+        <div class="review-row">
+            <span>{% trans "Preferred Date" %}</span>
             <span>{{ form.preferred_date }}</span>
         </div>
         <div class="review-row">
-            <span>Time Slot</span>
+            <span>{% trans "Time Slot" %}</span>
             <span>{{ form.preferred_time_slot }}</span>
         </div>
     </div>
     <div class="review-card">
-        <div class="review-title">Consultation Pricing</div>
-        <div class="review-row"><span>Status</span><span>{% if consultation_free %}Free (first time){% else %}Paid{% endif %}</span></div>
-        <div class="review-row"><span>Price</span><span>{% if consultation_free %}0{% else %}{{ consultation_price }}{% endif %} {{ currency }}</span></div>
+        <div class="review-title">{% trans "Consultation Pricing" %}</div>
+        <div class="review-row">
+            <span>{% trans "Status" %}</span>
+            <span>{% if consultation_free %}{% trans "Free (first time)" %}{% else %}{% trans "Paid" %}{% endif %}</span>
+        </div>
+        <div class="review-row"><span>{% trans "Price" %}</span><span>{% if consultation_free %}0{% else %}{{ consultation_price }}{% endif %} {{ currency }}</span></div>
     </div>
 </div>
 {% endblock %}
 
 {% block actions %}
-<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_6' %}">Back</a>
-<button type="submit" class="btn btn-primary booking-btn">Request Consultation</button>
+<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_6' %}">{% trans "Back" %}</a>
+<button type="submit" class="btn btn-primary booking-btn">{% trans "Request Consultation" %}</button>
 {% endblock %}

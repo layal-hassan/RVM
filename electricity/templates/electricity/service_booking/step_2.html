@@ -1,53 +1,112 @@
-{% extends "electricity/service_booking/base.html" %}
-{% load static %}
+﻿{% extends "electricity/service_booking/base.html" %}
+{% load static i18n %}
 {% block booking_content %}
 <form method="post" class="booking-form">
   {% csrf_token %}
+
   <div class="booking-grid">
+
     <div class="booking-section">
       <div class="section-header">
         <span class="section-index">3</span>
-        Where will the work be done?
+        {% trans "Where will the work be done?" %}
       </div>
-      <p class="booking-description left">We need your exact location for compliance and technician dispatching.</p>
+
+      <p class="booking-description left">
+        {% trans "We need your exact location for compliance and technician dispatching." %}
+      </p>
+
       <div class="form-grid">
-        <label class="form-label full">Street Address
-          <input class="form-control" type="text" name="street_address" value="{{ data.street_address|default:'' }}" placeholder="Enter your street address" required>
+
+        <label class="form-label full">
+          {% trans "Street Address" %}
+          <input class="form-control"
+                 type="text"
+                 name="street_address"
+                 value="{{ data.street_address|default:'' }}"
+                 placeholder="{% trans 'Enter your street address' %}"
+                 required>
         </label>
-        <label class="form-label">City
-          <input class="form-control" type="text" name="city" value="{{ data.city|default:'' }}" placeholder="e.g. Malmö" required>
+
+        <label class="form-label">
+          {% trans "City" %}
+          <input class="form-control"
+                 type="text"
+                 name="city"
+                 value="{{ data.city|default:'' }}"
+                 placeholder="{% trans 'e.g. Malmö' %}"
+                 required>
         </label>
-        <label class="form-label">Region
+
+        <label class="form-label">
+          {% trans "Region" %}
           <select class="form-select" name="region">
-            <option value="">Select region</option>
-            <option value="Skåne" {% if data.region == "Skåne" %}selected{% endif %}>Skåne</option>
-            <option value="Stockholm" {% if data.region == "Stockholm" %}selected{% endif %}>Stockholm</option>
-            <option value="Västra Götaland" {% if data.region == "Västra Götaland" %}selected{% endif %}>Västra Götaland</option>
+            <option value="">{% trans "Select region" %}</option>
+
+            <option value="Skåne" {% if data.region == "Skåne" %}selected{% endif %}>
+              {% trans "Skåne" %}
+            </option>
+
+            <option value="Stockholm" {% if data.region == "Stockholm" %}selected{% endif %}>
+              {% trans "Stockholm" %}
+            </option>
+
+            <option value="Västra Götaland" {% if data.region == "Västra Götaland" %}selected{% endif %}>
+              {% trans "Västra Götaland" %}
+            </option>
+
           </select>
         </label>
-        <label class="form-label full">Country
-          <input class="form-control" type="text" name="country" value="{{ data.country|default:'Sweden' }}">
+
+        <label class="form-label full">
+          {% trans "Country" %}
+          <input class="form-control"
+                 type="text"
+                 name="country"
+                 value="{{ data.country|default:'Sweden' }}">
         </label>
+
       </div>
     </div>
+
     <aside class="info-card">
-      <div class="info-title">Why this matters?</div>
-      <ul class="info-list">
-        <li>Older properties (pre-1980) often require specific grounding assessments before new installs.</li>
-        <li>Regional pricing in Skåne is currently active based on local technician availability.</li>
-        <li>Verified locations ensure valid insurance coverage for the electrical work performed.</li>
-      </ul>
-      <div class="info-map">
-        <img src="{% static 'electricity/img/service-area-map.png' %}" alt="Service area map">
-        <div class="map-label">Service Area: Skåne</div>
+
+      <div class="info-title">
+        {% trans "Why this matters?" %}
       </div>
-      <div class="info-caption">Nessafe is currently operating across southern Sweden with 24/7 support.</div>
+
+      <ul class="info-list">
+        <li>{% trans "Older properties (pre-1980) often require specific grounding assessments before new installs." %}</li>
+        <li>{% trans "Regional pricing in Skåne is currently active based on local technician availability." %}</li>
+        <li>{% trans "Verified locations ensure valid insurance coverage for the electrical work performed." %}</li>
+      </ul>
+
+      <div class="info-map">
+        <img src="{% static 'electricity/img/service-area-map.png' %}"
+             alt="{% trans 'Service area map' %}">
+        <div class="map-label">
+          {% trans "Service Area: Skåne" %}
+        </div>
+      </div>
+
+      <div class="info-caption">
+        {% trans "Nessafe is currently operating across southern Sweden with 24/7 support." %}
+      </div>
+
     </aside>
+
   </div>
 
   <div class="booking-actions">
-    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 1 %}">Back</a>
-    <button class="btn btn-primary" type="submit">Continue</button>
+    <a class="btn btn-light"
+       href="{% url 'electricity:service_booking_step' 1 %}">
+       {% trans "Back" %}
+    </a>
+
+    <button class="btn btn-primary" type="submit">
+      {% trans "Continue" %}
+    </button>
   </div>
+
 </form>
 {% endblock %}

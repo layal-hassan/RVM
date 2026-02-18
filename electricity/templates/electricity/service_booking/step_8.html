@@ -1,19 +1,29 @@
-{% extends "electricity/service_booking/base.html" %}
+﻿{% extends "electricity/service_booking/base.html" %}
+{% load i18n %}
 {% block booking_content %}
 <form method="post" class="booking-form">
   {% csrf_token %}
+
   <div class="booking-section">
     <div class="billing-header">
       <div>
         <div class="section-header">
           <span class="section-index">9</span>
-          Billing &amp; Documentation
+          {% trans "Billing & Documentation" %}
         </div>
-        <p class="booking-description left">Please provide your billing identity, property details, and any helpful files to finalize your request.</p>
+
+        <p class="booking-description left">
+          {% trans "Please provide your billing identity, property details, and any helpful files to finalize your request." %}
+        </p>
       </div>
+
       <div class="billing-actions">
-        <button class="btn btn-light" type="button">Save Draft</button>
-        <button class="btn btn-primary" type="submit">Next Step</button>
+        <button class="btn btn-light" type="button">
+          {% trans "Save Draft" %}
+        </button>
+        <button class="btn btn-primary" type="submit">
+          {% trans "Next Step" %}
+        </button>
       </div>
     </div>
   </div>
@@ -21,70 +31,78 @@
   <div class="booking-section">
     <div class="section-header">
       <span class="section-index">10</span>
-      Billing Identity
-      <span class="gdpr-pill">GDPR Compliant</span>
+      {% trans "Billing Identity" %}
+      <span class="gdpr-pill">{% trans "GDPR Compliant" %}</span>
     </div>
+
     <div class="billing-tabs">
       <label class="billing-tab">
         <input type="radio" name="billing_type" value="private" {% if data.billing_type == "private" %}checked{% endif %} required>
-        <span>Private (Personal ID)</span>
+        <span>{% trans "Private (Personal ID)" %}</span>
       </label>
+
       <label class="billing-tab">
         <input type="radio" name="billing_type" value="business" {% if data.billing_type == "business" %}checked{% endif %}>
-        <span>Business (Org Number)</span>
+        <span>{% trans "Business (Org Number)" %}</span>
       </label>
     </div>
 
     <div class="form-grid">
+
       <div class="billing-private" data-billing="private">
-        <label class="form-label">Personal Identity Number (SSN)
-          <input class="form-control" type="text" name="personal_id" placeholder="YYYYMMDD-XXXX" value="{{ data.personal_id|default:'' }}" data-billing-field="private">
-          <span class="input-note">Standard Swedish format for tax and insurance purposes.</span>
+        <label class="form-label">
+          {% trans "Personal Identity Number (SSN)" %}
+          <input class="form-control" type="text" name="personal_id"
+                 placeholder="{% trans 'YYYYMMDD-XXXX' %}"
+                 value="{{ data.personal_id|default:'' }}"
+                 data-billing-field="private">
+          <span class="input-note">
+            {% trans "Standard Swedish format for tax and insurance purposes." %}
+          </span>
         </label>
       </div>
+
       <div class="billing-private" data-billing="private">
-        <label class="form-label">Full Legal Name
-          <input class="form-control" type="text" name="company_name" placeholder="As it appears on ID" value="{{ data.company_name|default:'' }}" data-billing-field="private">
+        <label class="form-label">
+          {% trans "Full Legal Name" %}
+          <input class="form-control" type="text" name="company_name"
+                 placeholder="{% trans 'As it appears on ID' %}"
+                 value="{{ data.company_name|default:'' }}"
+                 data-billing-field="private">
         </label>
       </div>
+
       <div class="billing-business" data-billing="business">
-        <label class="form-label">Company Name
-          <input class="form-control" type="text" name="company_name" placeholder="Registered company name" value="{{ data.company_name|default:'' }}" data-billing-field="business">
+        <label class="form-label">
+          {% trans "Company Name" %}
+          <input class="form-control" type="text" name="company_name"
+                 placeholder="{% trans 'Registered company name' %}"
+                 value="{{ data.company_name|default:'' }}"
+                 data-billing-field="business">
         </label>
       </div>
+
       <div class="billing-business" data-billing="business">
-        <label class="form-label">Organization Number
-          <input class="form-control" type="text" name="organization_number" placeholder="556XXX-XXXX" value="{{ data.organization_number|default:'' }}" data-billing-field="business">
+        <label class="form-label">
+          {% trans "Organization Number" %}
+          <input class="form-control" type="text" name="organization_number"
+                 placeholder="556XXX-XXXX"
+                 value="{{ data.organization_number|default:'' }}"
+                 data-billing-field="business">
         </label>
       </div>
+
     </div>
   </div>
 
   <div class="booking-actions">
-    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 7 %}">Back</a>
-    <button class="btn btn-primary" type="submit">Next Step</button>
+    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 7 %}">
+      {% trans "Back" %}
+    </a>
+    <button class="btn btn-primary" type="submit">
+      {% trans "Next Step" %}
+    </button>
   </div>
+
 </form>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const billingInputs = document.querySelectorAll("input[name='billing_type']");
-    const privateFields = document.querySelectorAll("[data-billing='private']");
-    const businessFields = document.querySelectorAll("[data-billing='business']");
-    const billingFieldInputs = document.querySelectorAll("[data-billing-field]");
-    const update = () => {
-      let type = "private";
-      billingInputs.forEach((input) => {
-        if (input.checked) type = input.value;
-      });
-      privateFields.forEach((el) => el.classList.toggle("is-visible", type === "private"));
-      businessFields.forEach((el) => el.classList.toggle("is-visible", type === "business"));
-      billingFieldInputs.forEach((field) => {
-        const target = field.getAttribute("data-billing-field");
-        field.disabled = target !== type;
-      });
-    };
-    billingInputs.forEach((input) => input.addEventListener("change", update));
-    update();
-  });
-</script>
 {% endblock %}

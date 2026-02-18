@@ -1,7 +1,10 @@
-{% extends "electricity/booking/base_booking.html" %}
+﻿{% extends "electricity/booking/base_booking.html" %}
+{% load i18n %}
 
 {% block subtitle %}
-<p class="booking-subtitle">Select all that apply so we can match you with the right specialist.</p>
+<p class="booking-subtitle">
+    {% trans "Select all that apply so we can match you with the right specialist." %}
+</p>
 {% endblock %}
 
 {% block content %}
@@ -39,17 +42,17 @@
             <div class="service-text">
                 <div class="service-title">{{ choice.choice_label }}</div>
                 {% if forloop.counter == 1 %}
-                    <div class="service-note">Panel upgrades, rewiring, outlets</div>
+                    <div class="service-note">{% trans "Panel upgrades, rewiring, outlets" %}</div>
                 {% elif forloop.counter == 2 %}
-                    <div class="service-note">Indoor/outdoor, recessed, landscape</div>
+                    <div class="service-note">{% trans "Indoor/outdoor, recessed, landscape" %}</div>
                 {% elif forloop.counter == 3 %}
-                    <div class="service-note">Home station installation</div>
+                    <div class="service-note">{% trans "Home station installation" %}</div>
                 {% elif forloop.counter == 4 %}
-                    <div class="service-note">Smart locks, cameras, thermostat</div>
+                    <div class="service-note">{% trans "Smart locks, cameras, thermostat" %}</div>
                 {% elif forloop.counter == 5 %}
-                    <div class="service-note">Repairing sparks, shorts, or failures</div>
+                    <div class="service-note">{% trans "Repairing sparks, shorts, or failures" %}</div>
                 {% else %}
-                    <div class="service-note">Routine inspections and testing</div>
+                    <div class="service-note">{% trans "Routine inspections and testing" %}</div>
                 {% endif %}
             </div>
             <span class="service-check"></span>
@@ -61,8 +64,10 @@
     <div class="urgent-left">
         <div class="urgent-icon">!</div>
         <div>
-            <div class="urgent-title">Is this urgent?</div>
-            <div class="urgent-subtitle">Select "Yes" if you have an active electrical hazard or no power.</div>
+            <div class="urgent-title">{% trans "Is this urgent?" %}</div>
+            <div class="urgent-subtitle">
+                {% trans "Select \"Yes\" if you have an active electrical hazard or no power." %}
+            </div>
         </div>
     </div>
     <div class="urgent-actions">
@@ -77,6 +82,10 @@
 {% endblock %}
 
 {% block actions %}
-<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_2' %}">Back</a>
-<button type="submit" class="btn btn-primary booking-btn">Continue</button>
+<a class="btn btn-light booking-btn" href="{% url 'electricity:booking_step_2' %}">
+    {% trans "Back" %}
+</a>
+<button type="submit" class="btn btn-primary booking-btn">
+    {% trans "Continue" %}
+</button>
 {% endblock %}

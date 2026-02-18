@@ -1,7 +1,10 @@
-{% extends "electricity/booking/base_booking.html" %}
+﻿{% extends "electricity/booking/base_booking.html" %}
+{% load i18n %}
 
 {% block subtitle %}
-<p class="booking-subtitle">Select the format that best fits your project needs. On-site visits allow for the most accurate engineering assessments and safety audits.</p>
+<p class="booking-subtitle">
+    {% trans "Select the format that best fits your project needs. On-site visits allow for the most accurate engineering assessments and safety audits." %}
+</p>
 {% endblock %}
 
 {% block content %}
@@ -10,25 +13,31 @@
         <label class="option-card option-card-large">
             {{ choice.tag }}
             {% if forloop.counter == 1 %}
-                <div class="option-pill">Recommended</div>
+                <div class="option-pill">{% trans "Recommended" %}</div>
             {% endif %}
             <div class="option-icon">
                 {% if forloop.counter == 1 %}
-                    <span>ON</span>
+                    <span>{% trans "ON" %}</span>
                 {% elif forloop.counter == 2 %}
-                    <span>VIDEO</span>
+                    <span>{% trans "VIDEO" %}</span>
                 {% else %}
-                    <span>CALL</span>
+                    <span>{% trans "CALL" %}</span>
                 {% endif %}
             </div>
             <div class="option-body">
                 <div class="option-title">{{ choice.choice_label }}</div>
                 {% if forloop.counter == 1 %}
-                    <div class="option-text">Comprehensive physical inspection of your facility or project site.</div>
+                    <div class="option-text">
+                        {% trans "Comprehensive physical inspection of your facility or project site." %}
+                    </div>
                 {% elif forloop.counter == 2 %}
-                    <div class="option-text">Remote visual assessment via real-time screen sharing and mobile video.</div>
+                    <div class="option-text">
+                        {% trans "Remote visual assessment via real-time screen sharing and mobile video." %}
+                    </div>
                 {% else %}
-                    <div class="option-text">Initial verbal briefing and high-level scope discussion.</div>
+                    <div class="option-text">
+                        {% trans "Initial verbal briefing and high-level scope discussion." %}
+                    </div>
                 {% endif %}
             </div>
             <span class="option-check"></span>
@@ -38,6 +47,10 @@
 {% endblock %}
 
 {% block actions %}
-<a class="btn btn-light booking-btn" href="{% url 'electricity:home' %}">Back to Home</a>
-<button type="submit" class="btn btn-primary booking-btn">Continue</button>
+<a class="btn btn-light booking-btn" href="{% url 'electricity:home' %}">
+    {% trans "Back to Home" %}
+</a>
+<button type="submit" class="btn btn-primary booking-btn">
+    {% trans "Continue" %}
+</button>
 {% endblock %}

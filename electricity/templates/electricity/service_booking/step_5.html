@@ -1,22 +1,49 @@
-{% extends "electricity/service_booking/base.html" %}
+﻿{% extends "electricity/service_booking/base.html" %}
+{% load i18n %}
+
 {% block booking_content %}
 <form method="post" class="booking-form">
   {% csrf_token %}
+
   <div class="booking-section">
+
     <div class="section-header">
       <span class="section-index">6</span>
-      Describe the work
+      {% trans "Describe the work" %}
     </div>
-    <p class="booking-description left">Please provide as much detail as possible to help us give an accurate quote.</p>
+
+    <p class="booking-description left">
+      {% trans "Please provide as much detail as possible to help us give an accurate quote." %}
+    </p>
+
     <label class="form-label full">
-      <textarea class="form-control" name="work_description" rows="6" maxlength="500" placeholder="e.g., The GFCI outlet near the kitchen sink is tripping. I also need a new pendant light installed over the island. There is existing wiring, but the mounting bracket might need replacement.">{{ data.work_description|default:'' }}</textarea>
-      <span class="char-count">Required • 0 / 500</span>
+
+      <textarea class="form-control"
+                name="work_description"
+                rows="6"
+                maxlength="500"
+                placeholder="{% trans 'e.g., The GFCI outlet near the kitchen sink is tripping. I also need a new pendant light installed over the island. There is existing wiring, but the mounting bracket might need replacement.' %}">
+        {{ data.work_description|default:'' }}
+      </textarea>
+
+      <span class="char-count">
+        {% trans "Required" %} • 0 / 500
+      </span>
+
     </label>
+
   </div>
 
   <div class="booking-actions">
-    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 4 %}">Back</a>
-    <button class="btn btn-primary" type="submit">Continue</button>
+    <a class="btn btn-light"
+       href="{% url 'electricity:service_booking_step' 4 %}">
+       {% trans "Back" %}
+    </a>
+
+    <button class="btn btn-primary" type="submit">
+      {% trans "Continue" %}
+    </button>
   </div>
+
 </form>
 {% endblock %}

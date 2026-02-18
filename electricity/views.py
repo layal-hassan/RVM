@@ -13,6 +13,7 @@ from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.db.models import Q
 from .forms import (
     BookingStatusUpdateForm,
@@ -57,6 +58,7 @@ from .models import (
     ConsultationRequest,
     ElectricalService,
     ContactInquiry,
+    CustomerProfile,
     ProviderProfile,
     ProviderShift,
     ServiceBooking,
@@ -610,7 +612,7 @@ def booking_step_1(request):
             "form": form,
             "step": 1,
             "progress_percent": 14,
-            "title": "How would you like to start?",
+            "title": _("How would you like to start?"),
         },
     )
 
@@ -634,7 +636,7 @@ def booking_step_2(request):
             "form": form,
             "step": 2,
             "progress_percent": 28,
-            "title": "Tell us about the property",
+            "title": _("Tell us about the property"),
         },
     )
 
@@ -662,7 +664,7 @@ def booking_step_3(request):
             "form": form,
             "step": 3,
             "progress_percent": 42,
-            "title": "What do you want help with?",
+            "title": _("What do you want help with?"),
         },
     )
 
@@ -690,7 +692,7 @@ def booking_step_4(request):
             "form": form,
             "step": 4,
             "progress_percent": 57,
-            "title": "Describe your project or issue",
+            "title": _("Describe your project or issue"),
         },
     )
 
@@ -723,7 +725,7 @@ def booking_step_5(request):
             "form": form,
             "step": 5,
             "progress_percent": 71,
-            "title": "Add photos or documents (optional)",
+            "title": _("Add photos or documents (optional)"),
         },
     )
 
@@ -743,14 +745,14 @@ def booking_step_6(request):
     if request.method == "POST" and form.is_valid():
         contact_type = form.cleaned_data.get("contact_type")
         if contact_type == "private" and not form.cleaned_data.get("personal_id"):
-            form.add_error("personal_id", "Personal ID is required for private bookings.")
+            form.add_error("personal_id", _("Personal ID is required for private bookings."))
         if contact_type == "business":
             if not form.cleaned_data.get("company_name"):
-                form.add_error("company_name", "Company name is required.")
+                form.add_error("company_name", _("Company name is required."))
             if not form.cleaned_data.get("organization_number"):
-                form.add_error("organization_number", "Organization number is required.")
+                form.add_error("organization_number", _("Organization number is required."))
             if not form.cleaned_data.get("company_address"):
-                form.add_error("company_address", "Company address is required.")
+                form.add_error("company_address", _("Company address is required."))
         if form.errors:
             is_free = _is_first_consultation(form.cleaned_data.get("email"), form.cleaned_data.get("phone"))
             return render(
@@ -760,7 +762,7 @@ def booking_step_6(request):
                     "form": form,
                     "step": 6,
                     "progress_percent": 85,
-                    "title": "Your contact details",
+                    "title": _("Your contact details"),
                     "consultation_free": is_free,
                 },
             )
@@ -775,7 +777,7 @@ def booking_step_6(request):
             "form": form,
             "step": 6,
             "progress_percent": 85,
-            "title": "Your contact details",
+            "title": _("Your contact details"),
             "consultation_free": is_free,
         },
     )
@@ -870,7 +872,7 @@ def booking_step_7(request):
             "form": form,
             "step": 7,
             "progress_percent": 100,
-            "title": "Review your request",
+            "title": _("Review your request"),
             "data": data,
             "consultation_free": is_free,
             "consultation_price": consultation_price,
@@ -1179,46 +1181,48 @@ def service_booking_step(request, step):
 
     data = _get_service_booking_data(request)
     titles = {
-        1: "Start Your Booking",
-        2: "Where will the work be done?",
-        3: "Tell us about the property",
-        4: "What do you need help with?",
-        5: "Describe the work",
-        6: "Finalize Schedule & Cost",
-        7: "Schedule & Pricing",
-        8: "Billing & Documentation",
-        9: "Apartment & BRF Details",
-        10: "Visual Documentation",
-        11: "Final Review",
-        12: "Booking Received",
+        1: _("Start Your Booking"),
+        2: _("Where will the work be done?"),
+        3: _("Tell us about the property"),
+        4: _("What do you need help with?"),
+        5: _("Describe the work"),
+        6: _("Finalize Schedule & Cost"),
+        7: _("Schedule & Pricing"),
+        8: _("Billing & Documentation"),
+        9: _("Apartment & BRF Details"),
+        10: _("Visual Documentation"),
+        11: _("Final Review"),
+        12: _("Booking Received"),
     }
     subtitles = {
-        1: "Account & Contact",
-        2: "Location Details",
-        3: "Property Details",
-        4: "Service Selection",
-        5: "Work Summary",
-        6: "Schedule & Pricing",
-        7: "Pricing & Savings",
-        8: "Identity & Billing",
-        9: "Association Details",
-        10: "Files & Media",
-        11: "Confirm & Submit",
-        12: "Confirmation",
+        1: _("Account & Contact"),
+        2: _("Location Details"),
+        3: _("Property Details"),
+        4: _("Service Selection"),
+        5: _("Work Summary"),
+        6: _("Schedule & Pricing"),
+        7: _("Pricing & Savings"),
+        8: _("Identity & Billing"),
+        9: _("Association Details"),
+        10: _("Files & Media"),
+        11: _("Confirm & Submit"),
+        12: _("Confirmation"),
     }
     descriptions = {
-        1: "First, we need to know who we are working with to provide the correct pricing and tax options.",
-        2: "We need your exact location for compliance and technician dispatching.",
-        3: "Engineering details help us prepare the right equipment.",
-        4: "Select all services that apply to your request.",
-        5: "The more detail you share, the better we can prepare.",
-        6: "Choose your primary and alternative time windows.",
-        7: "Confirm your pricing options and savings.",
-        8: "Provide billing identity and documentation details.",
-        9: "Add association details for multi-unit properties.",
-        10: "Upload photos of the area or existing electrical cabinet.",
-        11: "Please confirm your appointment details and secure your booking.",
-        12: "Your booking is confirmed.",
+        1: _(
+            "First, we need to know who we are working with to provide the correct pricing and tax options."
+        ),
+        2: _("We need your exact location for compliance and technician dispatching."),
+        3: _("Engineering details help us prepare the right equipment."),
+        4: _("Select all services that apply to your request."),
+        5: _("The more detail you share, the better we can prepare."),
+        6: _("Choose your primary and alternative time windows."),
+        7: _("Confirm your pricing options and savings."),
+        8: _("Provide billing identity and documentation details."),
+        9: _("Add association details for multi-unit properties."),
+        10: _("Upload photos of the area or existing electrical cabinet."),
+        11: _("Please confirm your appointment details and secure your booking."),
+        12: _("Your booking is confirmed."),
     }
 
     errors = []
@@ -1289,9 +1293,10 @@ def service_booking_step(request, step):
                     hours_val = 0
                 if hours_val <= 0:
                     errors.append("Please select the estimated number of hours.")
-            if not data["preferred_date"] or not data["preferred_time_slot"]:
+            has_primary_choice = bool(data["preferred_date"] or data["preferred_time_slot"])
+            if has_primary_choice and (not data["preferred_date"] or not data["preferred_time_slot"]):
                 errors.append("Please select a primary date and time slot.")
-            if not errors:
+            if not errors and has_primary_choice:
                 try:
                     duration_minutes = _service_booking_duration_minutes(data)
                 except ValidationError as exc:
@@ -1502,8 +1507,8 @@ def service_booking_step(request, step):
             if step == 12:
                 context["booking_id"] = request.session.get("service_booking_id", "SB-000000")
             if step == 1:
-                context["kicker"] = "ONBOARDING"
-                context["note"] = "Great choice! Let's start with your details."
+                context["kicker"] = _("ONBOARDING")
+                context["note"] = _("Great choice! Let's start with your details.")
             return render(request, f"electricity/service_booking/step_{step}.html", context)
         return redirect("electricity:service_booking_step", step=step + 1)
 
@@ -1520,8 +1525,8 @@ def service_booking_step(request, step):
         **cost_context,
     }
     if step == 1:
-        context["kicker"] = "ONBOARDING"
-        context["note"] = "Great choice! Let's start with your details."
+        context["kicker"] = _("ONBOARDING")
+        context["note"] = _("Great choice! Let's start with your details.")
     if step == 4:
         context["services"] = _eligible_services().order_by("order", "title")
     if step == 6:
@@ -1566,16 +1571,16 @@ def on_call_booking_step(request, step):
     data = _get_on_call_booking_data(request)
     errors = []
     titles = {
-        1: "On-Call Electrical Service",
-        2: "Who is applying?",
-        3: "Property & Risk Profile",
-        4: "Finalize Your Registration",
+        1: _("On-Call Electrical Service"),
+        2: _("Who is applying?"),
+        3: _("Property & Risk Profile"),
+        4: _("Finalize Your Registration"),
     }
     subtitles = {
-        1: "Coverage & Response",
-        2: "Entity Selection & Organization Info",
-        3: "Property Details",
-        4: "Review & Submit",
+        1: _("Coverage & Response"),
+        2: _("Entity Selection & Organization Info"),
+        3: _("Property Details"),
+        4: _("Review & Submit"),
     }
 
     if request.method == "POST":

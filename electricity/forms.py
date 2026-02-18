@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -26,9 +27,9 @@ from .models import (
 class Step1Form(forms.Form):
     consultation_type = forms.ChoiceField(
         choices=[
-            ("onsite", "On-site Visit"),
-            ("video", "Video Call"),
-            ("phone", "Phone Call"),
+            ("onsite", _("On-site Visit")),
+            ("video", _("Video Call")),
+            ("phone", _("Phone Call")),
         ],
         widget=forms.RadioSelect,
     )
@@ -37,19 +38,19 @@ class Step1Form(forms.Form):
 class Step2Form(forms.Form):
     property_type = forms.ChoiceField(
         choices=[
-            ("apartment", "Apartment"),
-            ("house", "House"),
-            ("office", "Office"),
-            ("other", "Other"),
+            ("apartment", _("Apartment")),
+            ("house", _("House")),
+            ("office", _("Office")),
+            ("other", _("Other")),
         ],
         widget=forms.RadioSelect,
     )
     property_size = forms.ChoiceField(
         choices=[
-            ("small", "Under 100 m2"),
-            ("medium", "100-200 m2"),
-            ("large", "200-400 m2"),
-            ("xlarge", "400+ m2"),
+            ("small", _("Under 100 m2")),
+            ("medium", _("100-200 m2")),
+            ("large", _("200-400 m2")),
+            ("xlarge", _("400+ m2")),
         ],
         widget=forms.Select(attrs={"class": "form-select booking-input"}),
     )
@@ -59,7 +60,7 @@ class Step2Form(forms.Form):
     property_type_other = forms.CharField(
         required=False,
         max_length=120,
-        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": "Specify property type"}),
+        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": _("Specify property type")}),
     )
 
 
@@ -67,17 +68,17 @@ class Step3Form(forms.Form):
     services = forms.MultipleChoiceField(
         required=False,
         choices=[
-            ("upgrades", "Electrical Upgrades"),
-            ("lighting", "Lighting Solutions"),
-            ("ev", "EV Charging"),
-            ("automation", "Home Automation"),
-            ("troubleshooting", "Troubleshooting"),
-            ("maintenance", "General Maintenance"),
+            ("upgrades", _("Electrical Upgrades")),
+            ("lighting", _("Lighting Solutions")),
+            ("ev", _("EV Charging")),
+            ("automation", _("Home Automation")),
+            ("troubleshooting", _("Troubleshooting")),
+            ("maintenance", _("General Maintenance")),
         ],
         widget=forms.CheckboxSelectMultiple,
     )
     urgent = forms.ChoiceField(
-        choices=[("no", "No"), ("yes", "Yes")],
+        choices=[("no", _("No")), ("yes", _("Yes"))],
         widget=forms.RadioSelect,
     )
 
@@ -97,7 +98,7 @@ class Step5Form(forms.Form):
 
 class Step6Form(forms.Form):
     contact_type = forms.ChoiceField(
-        choices=[("private", "Private"), ("business", "Business")],
+        choices=[("private", _("Private")), ("business", _("Business"))],
         widget=forms.RadioSelect,
     )
     full_name = forms.CharField(max_length=160, widget=forms.TextInput(attrs={"class": "form-control booking-input"}))
@@ -106,42 +107,42 @@ class Step6Form(forms.Form):
     personal_id = forms.CharField(
         required=False,
         max_length=40,
-        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": "Personal ID number"}),
+        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": _("Personal ID number")}),
     )
     company_name = forms.CharField(
         required=False,
         max_length=160,
-        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": "Company name"}),
+        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": _("Company name")}),
     )
     organization_number = forms.CharField(
         required=False,
         max_length=40,
-        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": "Organization number"}),
+        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": _("Organization number")}),
     )
     company_address = forms.CharField(
         required=False,
         max_length=220,
-        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": "Company address"}),
+        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": _("Company address")}),
     )
     availability_days = forms.MultipleChoiceField(
         required=False,
         choices=[
-            ("mon", "Mon"),
-            ("tue", "Tue"),
-            ("wed", "Wed"),
-            ("thu", "Thu"),
-            ("fri", "Fri"),
-            ("sat", "Sat"),
-            ("sun", "Sun"),
+            ("mon", _("Mon")),
+            ("tue", _("Tue")),
+            ("wed", _("Wed")),
+            ("thu", _("Thu")),
+            ("fri", _("Fri")),
+            ("sat", _("Sat")),
+            ("sun", _("Sun")),
         ],
         widget=forms.CheckboxSelectMultiple,
     )
     time_window = forms.ChoiceField(
         choices=[
-            ("morning", "Morning"),
-            ("midday", "Midday"),
-            ("afternoon", "Afternoon"),
-            ("evening", "Evening"),
+            ("morning", _("Morning")),
+            ("midday", _("Midday")),
+            ("afternoon", _("Afternoon")),
+            ("evening", _("Evening")),
         ],
         widget=forms.RadioSelect,
     )
@@ -164,7 +165,7 @@ class ZipCheckForm(forms.Form):
         value = self.cleaned_data["zip_code"].strip()
         value = value.replace(" ", "")
         if not value.isdigit() or len(value) != 5:
-            raise ValidationError("Please enter a valid Swedish ZIP code (e.g. 114 44).")
+            raise ValidationError(_("Please enter a valid Swedish ZIP code (e.g. 114 44)."))
         return value
 
 

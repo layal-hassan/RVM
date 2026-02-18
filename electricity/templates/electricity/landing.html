@@ -1,14 +1,18 @@
-﻿{% load static %}
+﻿{% load static i18n %}
 <!DOCTYPE html>
-<html lang="en">
+{% get_current_language as CURRENT_LANGUAGE %}
+<html lang="{{ CURRENT_LANGUAGE }}" dir="{% if CURRENT_LANGUAGE == 'ar' %}rtl{% else %}ltr{% endif %}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The Gold Standard</title>
+  <title>{% trans "The Gold Standard" %}</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  {% if CURRENT_LANGUAGE == "ar" %}
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  {% endif %}
 
   <link rel="stylesheet" href="{% static 'electricity/css/landing.css' %}">
 </head>
@@ -21,31 +25,28 @@
     <div class="landing-content">
       <div class="landing-kicker">
         <span class="kicker-line"></span>
-        <span>Integrated Infrastructure Group</span>
+        <span>{% trans "Integrated Infrastructure Group" %}</span>
       </div>
 
       <h1 class="landing-title">
-        THE <span class="title-accent">GOLD</span><br>
-        STANDARD.
+        {% blocktrans trimmed %}THE <span class="title-accent">GOLD</span><br>STANDARD.{% endblocktrans %}
       </h1>
 
       <p class="landing-subtitle">
-        Delivering mission-critical electrical, smart home, and
-        energy solutions for modern homes, properties, and
-        businesses.
+        {% trans "Delivering mission-critical electrical, smart home, and energy solutions for modern homes, properties, and businesses." %}
       </p>
 
       <div class="landing-actions">
         <a class="landing-cta primary" href="{% url 'electricity:electrician_booking_step' 1 %}">
-          Book an Electrician
+          {% trans "Book an Electrician" %}
         </a>
         <a class="landing-cta secondary" href="{% url 'electricity:booking_step_1' %}">
-          Schedule a Consultation
+          {% trans "Schedule a Consultation" %}
         </a>
       </div>
 
       <div class="landing-note">
-        Fully operational today. Our website is expanding -- our standards are not.
+        {% trans "Fully operational today. Our website is expanding -- our standards are not." %}
       </div>
     </div>
   </div>
