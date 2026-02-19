@@ -1,4 +1,5 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 from .admin_site import electricity_admin_site
 from .models import (
     AcceptedZipCode,
@@ -14,7 +15,7 @@ from .models import (
 )
 
 
-class ElectricalServiceAdmin(admin.ModelAdmin):
+class ElectricalServiceAdmin(TranslationAdmin):
     list_display = ("title", "price", "duration_minutes", "is_active", "order")
     list_editable = ("is_active", "order")
     search_fields = ("title",)
@@ -59,7 +60,7 @@ class OnCallBookingAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
 
 
-class ServicePricingAdmin(admin.ModelAdmin):
+class ServicePricingAdmin(TranslationAdmin):
     list_display = (
         "name",
         "labor_rate",

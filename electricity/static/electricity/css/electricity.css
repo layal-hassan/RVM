@@ -208,24 +208,27 @@ a {
   text-transform: uppercase;
 }
 
-[dir="rtl"] .hero-content {
+[dir="rtl"] .hero-minimal .minimal-content {
+  margin-left: auto;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 8vw;
+}
+
+[dir="rtl"] .hero-minimal .hero-content {
   text-align: right;
 }
 
-[dir="rtl"] .hero-kicker {
+[dir="rtl"] .hero-minimal .hero-kicker {
   flex-direction: row-reverse;
   justify-content: flex-start;
 }
 
-[dir="rtl"] .hero-actions,
-[dir="rtl"] .minimal-actions {
+[dir="rtl"] .hero-minimal .hero-actions,
+[dir="rtl"] .hero-minimal .minimal-actions {
   justify-content: flex-end;
 }
 
-[dir="rtl"] .hero-minimal .minimal-content {
-  margin-left: auto;
-  margin-right: 0;
-}
 
 .hero-title .accent {
   color: var(--gold);
@@ -2390,6 +2393,17 @@ img {
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
+[dir="rtl"] .contact-form-card select,
+[dir="rtl"] .contact-form-light .contact-form-card select {
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 12px) 52%,
+    0 0;
+  padding-left: 16px;
+  padding-right: 44px;
+  text-align: right;
+}
+
 .contact-form-card select:hover,
 .contact-form-light .contact-form-card select:hover {
   transform: translateY(-1px);
@@ -2994,6 +3008,18 @@ select.form-control {
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
+[dir="rtl"] select,
+[dir="rtl"] select.form-select,
+[dir="rtl"] select.form-control {
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 12px) 52%,
+    0 0;
+  padding-left: 16px;
+  padding-right: 44px;
+  text-align: right;
+}
+
 select:hover,
 select.form-select:hover,
 select.form-control:hover {
@@ -3052,6 +3078,17 @@ input[type="date"] {
   background-position: calc(100% - 16px) 50%;
   background-size: 20px 20px;
   position: relative;
+}
+
+[dir="rtl"] input[type="date"].form-control,
+[dir="rtl"] input[type="date"].booking-input,
+[dir="rtl"] input[type="date"].booking-input.form-control,
+[dir="rtl"] input[type="date"].form-select,
+[dir="rtl"] input[type="date"] {
+  padding-left: 14px;
+  padding-right: 48px;
+  background-position: calc(100% - 16px) 50%;
+  text-align: right;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {

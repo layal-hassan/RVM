@@ -441,6 +441,16 @@ body.electricity-body.service-booking-page {
     transition: box-shadow 0.2s ease, transform 0.2s ease;
   }
 
+[dir="rtl"] .service-booking-page select.form-select {
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 12px) 52%,
+    0 0;
+  padding-left: 16px;
+  padding-right: 44px;
+  text-align: right;
+}
+
   .service-booking-page select.form-select:hover {
     transform: translateY(-1px);
   }

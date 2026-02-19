@@ -2,61 +2,61 @@
 {% get_current_language as CURRENT_LANGUAGE %}
 <header class="rwm-electricity-global-header rwm-egh-root" data-rwmh>
   <div class="rwm-electricity-global-header__inner">
-    <a class="rwm-egh-logo" href="{% url 'electricity:home' %}" aria-label="{% trans 'RWM EL Home' %}">
-      <img src="{% static 'electricity/img/electricity_logo.jpg' %}" alt="RWM EL">
-    </a>
     <button class="rwm-egh-toggle" type="button" aria-label="{% trans 'Toggle menu' %}" aria-expanded="false" data-rwmh-toggle>
       <span></span>
       <span></span>
       <span></span>
     </button>
     <div class="rwm-egh-navwrap" data-rwmh-menu>
-      <nav class="rwm-egh-nav" aria-label="{% trans 'Main navigation' %}">
-        <a class="rwm-egh-link" href="{% url 'electricity:home' %}">{% trans "Home" %}</a>
-        <a class="rwm-egh-link" href="{% url 'electricity:about' %}">{% trans "About" %}</a>
-        <a class="rwm-egh-link" href="{% url 'electricity:services' %}">{% trans "Services" %}</a>
-        <a class="rwm-egh-link" href="{% url 'electricity:services' %}#pricing">{% trans "Pricing" %}</a>
-        <a class="rwm-egh-link" href="{% url 'electricity:contact' %}">{% trans "Contact" %}</a>
-      </nav>
-      <div class="rwm-egh-actions">
-        <div class="rwm-egh-right">
-          <div class="rwm-egh-lang">
-            <button class="rwm-egh-lang-trigger" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{% trans 'Change language' %}">
-              <span class="rwm-egh-lang-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                  <path d="M3 12h18M12 3c3.5 3.5 3.5 14 0 18M12 3c-3.5 3.5-3.5 14 0 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </span>
-              <span class="rwm-egh-lang-caret">&#9662;</span>
-            </button>
-            <form class="rwm-egh-lang-menu" action="{% url 'set_language' %}" method="post">
-              {% csrf_token %}
-              <input type="hidden" name="next" value="{{ request.get_full_path }}">
-              <button class="rwm-egh-lang-option{% if CURRENT_LANGUAGE == 'en' %} is-active{% endif %}" type="submit" name="language" value="en">{% trans "English" %}</button>
-              <button class="rwm-egh-lang-option{% if CURRENT_LANGUAGE == 'sv' %} is-active{% endif %}" type="submit" name="language" value="sv">{% trans "Swedish" %}</button>
-              <button class="rwm-egh-lang-option{% if CURRENT_LANGUAGE == 'ar' %} is-active{% endif %}" type="submit" name="language" value="ar">{% trans "Arabic" %}</button>
-            </form>
-          </div>
-          <a class="rwm-egh-btn rwm-egh-btn-primary" href="http://hembla-experten.se/" target="_blank" rel="noopener">
-            {% trans "Back to Hembla Experten" %}
-          </a>
-          {% if request.user.is_authenticated %}
-            {% if request.user.provider_profile %}
-              <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:provider_dashboard' %}">{% trans "My Profile" %}</a>
-              <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:logout' %}">{% trans "Sign out" %}</a>
-            {% else %}
-              {% is_electricity_admin as show_dashboard %}
-              {% if show_dashboard %}
-                <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:dashboard' %}">{% trans "Dashboard" %}</a>
-              {% endif %}
-              <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:logout' %}">{% trans "Sign out" %}</a>
-            {% endif %}
-          {% else %}
-            <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:login' %}">{% trans "Sign in" %}</a>
-            <a class="rwm-egh-btn rwm-egh-btn-primary" href="{% url 'electricity:signup' %}">{% trans "Sign up" %}</a>
-          {% endif %}
+      <div class="rwm-egh-left">
+        <a class="rwm-egh-logo" href="{% url 'electricity:home' %}" aria-label="{% trans 'RWM EL Home' %}">
+          <img src="{% static 'electricity/img/electricity_logo.jpg' %}" alt="RWM EL">
+        </a>
+        <nav class="rwm-egh-nav" aria-label="{% trans 'Main navigation' %}">
+          <a class="rwm-egh-link" href="{% url 'electricity:home' %}">{% trans "Home" %}</a>
+          <a class="rwm-egh-link" href="{% url 'electricity:about' %}">{% trans "About" %}</a>
+          <a class="rwm-egh-link" href="{% url 'electricity:services' %}">{% trans "Services" %}</a>
+          <a class="rwm-egh-link" href="{% url 'electricity:services' %}#pricing">{% trans "Pricing" %}</a>
+          <a class="rwm-egh-link" href="{% url 'electricity:contact' %}">{% trans "Contact" %}</a>
+        </nav>
+      </div>
+      <div class="rwm-egh-right">
+        <div class="rwm-egh-lang">
+          <button class="rwm-egh-lang-trigger" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{% trans 'Change language' %}">
+            <span class="rwm-egh-lang-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                <path d="M3 12h18M12 3c3.5 3.5 3.5 14 0 18M12 3c-3.5 3.5-3.5 14 0 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="rwm-egh-lang-caret">&#9662;</span>
+          </button>
+          <form class="rwm-egh-lang-menu" action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <button class="rwm-egh-lang-option{% if CURRENT_LANGUAGE == 'en' %} is-active{% endif %}" type="submit" name="language" value="en">{% trans "English" %}</button>
+            <button class="rwm-egh-lang-option{% if CURRENT_LANGUAGE == 'sv' %} is-active{% endif %}" type="submit" name="language" value="sv">{% trans "Swedish" %}</button>
+            <button class="rwm-egh-lang-option{% if CURRENT_LANGUAGE == 'ar' %} is-active{% endif %}" type="submit" name="language" value="ar">{% trans "Arabic" %}</button>
+          </form>
         </div>
+        <a class="rwm-egh-btn rwm-egh-btn-primary rwm-egh-btn-compact" href="http://hembla-experten.se/" target="_blank" rel="noopener">
+          {% trans "Back to Hembla Experten" %}
+        </a>
+        {% if request.user.is_authenticated %}
+          {% if request.user.provider_profile %}
+            <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:provider_dashboard' %}">{% trans "My Profile" %}</a>
+            <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:logout' %}">{% trans "Sign out" %}</a>
+          {% else %}
+            {% is_electricity_admin as show_dashboard %}
+            {% if show_dashboard %}
+              <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:dashboard' %}">{% trans "Dashboard" %}</a>
+            {% endif %}
+            <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:logout' %}">{% trans "Sign out" %}</a>
+          {% endif %}
+        {% else %}
+          <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:login' %}">{% trans "Sign in" %}</a>
+          <a class="rwm-egh-btn rwm-egh-btn-primary" href="{% url 'electricity:signup' %}">{% trans "Sign up" %}</a>
+        {% endif %}
       </div>
     </div>
   </div>

@@ -4,3 +4,7 @@
 class ElectricityConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'electricity'
+
+    def ready(self):
+        # Register modeltranslation options
+        from . import translation  # noqa: F401

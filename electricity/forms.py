@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -22,6 +23,18 @@ from .models import (
     ServicePricing,
     SupportTicket,
 )
+from . import translation  # noqa: F401
+
+
+def _translated_fields(*base_fields):
+    languages = getattr(settings, "MODELTRANSLATION_LANGUAGES", None)
+    if not languages:
+        languages = [code for code, _ in settings.LANGUAGES]
+    fields = []
+    for base in base_fields:
+        for lang in languages:
+            fields.append(f"{base}_{lang}")
+    return fields
 
 
 class Step1Form(forms.Form):
@@ -190,16 +203,22 @@ class ServiceRequestOutsideAreaAdminForm(forms.ModelForm):
 class ServicePricingForm(forms.ModelForm):
     class Meta:
         model = ServicePricing
-        exclude = ("created_at",)
+        fields = _translated_fields("name") + [
+            "labor_rate",
+            "transport_fee",
+            "hourly_rate_electrician",
+            "hourly_rate_emergency",
+            "consultation_price",
+            "rot_percent",
+            "currency",
+            "is_active",
+        ]
 
 
 class ElectricalServiceForm(forms.ModelForm):
     class Meta:
         model = ElectricalService
-        fields = (
-            "title",
-            "short_description",
-            "bullet_points",
+        fields = _translated_fields("title", "short_description", "bullet_points") + [
             "icon",
             "price",
             "duration_minutes",
@@ -212,7 +231,7 @@ class ElectricalServiceForm(forms.ModelForm):
             "currency",
             "is_active",
             "order",
-        )
+        ]
         widgets = {
             "price": forms.NumberInput(attrs={"step": "0.01", "min": "0"}),
             "duration_minutes": forms.NumberInput(attrs={"min": "1"}),
@@ -335,7 +354,7 @@ class ElectricianBookingAssignForm(forms.ModelForm):
 class FAQEntryForm(forms.ModelForm):
     class Meta:
         model = FAQEntry
-        fields = ("question", "answer", "is_active", "order")
+        fields = _translated_fields("question", "answer") + ["is_active", "order"]
 
 
 class BookingStatusUpdateForm(forms.ModelForm):

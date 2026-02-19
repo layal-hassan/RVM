@@ -504,6 +504,18 @@ body.electricity-body.on-call-booking-page {
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
+[dir="rtl"] .on-call-booking-page select,
+[dir="rtl"] .on-call-booking-page select.form-select,
+[dir="rtl"] .on-call-booking-page select.form-control {
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 12px) 52%,
+    0 0;
+  padding-left: 16px;
+  padding-right: 44px;
+  text-align: right;
+}
+
 .on-call-booking-page select:hover,
 .on-call-booking-page select.form-select:hover,
 .on-call-booking-page select.form-control:hover {

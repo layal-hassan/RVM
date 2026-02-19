@@ -78,10 +78,10 @@ html[dir="rtl"] .booking-input {
 }
 
 html[dir="rtl"] select.booking-input {
-    padding: 12px 16px 12px 44px;
+    padding: 12px 44px 12px 16px;
     background-position:
-        18px 52%,
-        12px 52%,
+        calc(100% - 18px) 52%,
+        calc(100% - 12px) 52%,
         0 0;
 }
 
