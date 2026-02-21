@@ -2820,6 +2820,14 @@ msgstr "Utanför täckningsområde"
 msgid "We're not in your area yet"
 msgstr "Vi är ännu inte verksamma i ditt område"
 
+#: .\electricity\templates\electricity\partials\site_banner.html:3
+msgid "Notice"
+msgstr "Meddelande"
+
+#: .\electricity\templates\electricity\partials\site_banner.html:5
+msgid "This website is in active development. Some features may be updated or refined."
+msgstr "Den här webbplatsen är under aktiv utveckling. Vissa funktioner kan uppdateras eller förfinas."
+
 #: .\electricity\templates\electricity\outside_area.html:12
 msgid ""
 "Thanks for checking. We're expanding quickly and may reach your ZIP soon. If "

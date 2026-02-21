@@ -1,0 +1,25 @@
+XBBBBBBB BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+BBBB BBBB
+
+BBBBB BBBBBBBB
+XX XXXXXXXXXXXXXXXXXXXXXXXXX gettext(u'The more detail you share, the better we can prepare.') XXXX
+BBBBBBBB
+
+BBBBB BBBBBBB
+XXXX XXXXXXXXXXXXXXXXX
+    
+XXXXXX
+XXXX XXXXXXXXXXXXXXXX
+    XXXX XXXXXXXXXXXXXXXXXX gettext(u'Helpful tips:') XXXXXX
+    XXX XXXXXXXXXXXXXXXXX
+        XXXX gettext(u'Mention any specific brands or technologies you prefer.') XXXXX
+        XXXX gettext(u'Describe the size or layout of the area involved.') XXXXX
+        XXXX gettext(u'Highlight any urgent deadlines or concerns.') XXXXX
+    XXXXX
+XXXXXX
+BBBBBBBB
+
+BBBBB BBBBBBB
+XX XXXXXXXXXX XXXXXXXXX XXXXXXXXXXXX XXXXXXBBB BBBBBBBBBBBBBBBBBBBBBBBBBBBBXX gettext(u'Back') XXXX
+XXXXXXX XXXXXXXXXXXXX XXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXXXX gettext(u'Continue') XXXXXXXXX
+BBBBBBBB

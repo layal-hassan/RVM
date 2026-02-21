@@ -48,26 +48,71 @@
       background: #fdfdfd;
       color: #0a192f;
       font-family: "Manrope", sans-serif;
+      padding-top: 0;
+    }
+
+    body.electricity-body.about-page .site-announcement {
+      padding-top: var(--rwmh-height);
+    }
+
+    .about-hero {
+      min-height: 80vh;
+    }
+
+    .about-hero-title {
+      font-size: clamp(38px, 7vw, 76px);
+      line-height: 1.05;
+    }
+
+    .about-hero-subtitle {
+      font-size: 18px;
+    }
+
+    .about-hero-actions {
+      justify-content: center;
+    }
+
+    @media (max-width: 600px) {
+      .about-hero {
+        min-height: calc(100svh - var(--rwmh-height));
+        padding: 56px 0 48px;
+      }
+
+      .about-hero-title {
+        font-size: clamp(32px, 10vw, 48px);
+      }
+
+      .about-hero-subtitle {
+        font-size: 15px;
+      }
+
+      .about-hero-actions {
+        width: 100%;
+      }
+
+      .about-hero-actions .btn {
+        width: 100%;
+      }
     }
   </style>
 {% endblock %}
 
 {% block content %}
-<div class="relative h-[80vh] w-full flex items-center justify-center overflow-hidden">
+<div class="relative about-hero w-full flex items-center justify-center overflow-hidden">
   <div class="absolute inset-0 z-0">
     <div class="absolute inset-0 bg-navy/40 z-10"></div>
     <div class="w-full h-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDU9zuAaRWDEx-ZxOOUKThUVV90oghaqF_QXBHrXzXC_Lat7pyzM_WHLfKkDrUmO-7UgAl8GvJ5DRIbJMmk2HGv5y6lIGIJiUqo9WPlcA4BdIadipJaJzm9_r6y3bcGviPt3Jg2M6vrtNLuuN29FQ3I9Z-zG66XDp230IYkg1ssMRL5sbi4YqLjezL-2QFX4AzoyLvanxT6Vy5HPY-x_xvP2rd1aL6dFUkv6o5boZ_XmbVz5P3eRs1S8mSEZpSd8bmIjZ_7kv6gKYA");'></div>
   </div>
-  <div class="relative z-20 text-center px-4 max-w-5xl mx-auto">
-    <h1 class="text-white text-6xl md:text-8xl font-serif font-bold mb-8 tracking-tight">{% trans "About RWM EL" %}</h1>
-    <p class="text-white text-xl md:text-2xl font-light mb-12 max-w-3xl mx-auto leading-relaxed italic">
+  <div class="relative z-20 text-center px-4 max-w-5xl mx-auto about-hero-content">
+    <h1 class="text-white font-serif font-bold mb-6 tracking-tight about-hero-title">{% trans "About RWM EL" %}</h1>
+    <p class="text-white font-light mb-10 max-w-3xl mx-auto leading-relaxed italic about-hero-subtitle">
       {% trans "Because electrical work is a responsibility â€” not a shortcut." %}
     </p>
-    <div class="flex flex-wrap gap-6 justify-center">
-      <a class="bg-primary text-navy px-10 py-4 font-bold text-sm tracking-widest uppercase transition-all hover:bg-white" href="{% url 'electricity:electrician_booking_step' 1 %}">
+    <div class="hero-actions about-hero-actions">
+      <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">
         {% trans "Book an Electrician" %}
       </a>
-      <a class="border border-white text-white hover:bg-white hover:text-navy px-10 py-4 font-bold text-sm tracking-widest uppercase transition-all" href="{% url 'electricity:booking_step_1' %}">
+      <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">
         {% trans "Book Consultation" %}
       </a>
     </div>
@@ -190,9 +235,9 @@
     <h2 class="text-navy dark:text-white text-4xl md:text-6xl font-serif font-bold mb-12 leading-tight">
       {% trans "Electrical work should be done right â€” not corrected later." %}
     </h2>
-    <button class="bg-navy dark:bg-primary text-white dark:text-navy px-16 py-5 font-bold text-sm tracking-widest uppercase transition-all hover:bg-primary hover:text-navy shadow-2xl">
+    <a class="bg-navy dark:bg-primary text-white dark:text-navy px-16 py-5 font-bold text-sm tracking-widest uppercase transition-all hover:bg-primary hover:text-navy shadow-2xl inline-flex items-center justify-center" href="{% url 'electricity:contact' %}">
       {% trans "Contact RWM EL" %}
-    </button>
+    </a>
   </div>
 </section>
 {% endblock %}

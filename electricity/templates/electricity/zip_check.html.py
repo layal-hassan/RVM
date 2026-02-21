@@ -1,0 +1,28 @@
+XBBBBBBB BBBBBBBBBBBBBBBBBBBBBBB
+BBBB BBBBBB BBBB
+
+BBBBB BBBBB gettext(u'Coverage Check | Hembla experten') BBBBBBBB
+
+BBBBB BBBBBBB
+XXXXXXXX XXXXXXXXXXXXXXXXXX
+  XXXX XXXXXXXXXXXXXXXX XXXXXXXXXXX
+    XXXX XXXXXXXXXXXXXXXXX
+      XXXX XXXXXXXXXXXXXXXXXX gettext(u'Coverage check') XXXXXX
+      XXXX gettext(u"Let's confirm your ZIP code") XXXXX
+      XXX gettext(u'We currently serve selected areas in Sweden. Enter your ZIP code to continue with your booking.') XXXX
+      XXXXX XXXXXXXXXXXXX XXXXXXXXXXXXXXXXX
+        BBBBBBBBBB
+        XXXXXX XXXXXXXXXXXXXXXXXX gettext(u'Swedish ZIP Code') XXXXXXXX
+        XXXX XXXXXXXXXXXXXXXXXXXXXX
+          XXXXXX XXXXXXXXXXX XXXXXXXXXXXXXXX XXXXXXXXXXXXX gettext(u'114 44') X XXXXXXXFFFFFFFFFFX XXXXXXXXX
+          XXXXXXX XXXXXXXXXXXXX XXXXXXXXXX XXXXXXXXXXXXX gettext(u'Check') XXXXXXXXX
+        XXXXXX
+        BB BBBBBBBBBBB
+          XXXX XXXXXXXXXXXXXXXXXX gettext(u'Please enter a valid ZIP code (e.g. 114 44).') XXXXXX
+        BBBBB
+      XXXXXXX
+      XXXX XXXXXXXXXXXXXXXXX gettext(u'We never share your information. This step only checks coverage.') XXXXXX
+    XXXXXX
+  XXXXXX
+XXXXXXXXXX
+BBBBBBBB

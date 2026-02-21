@@ -756,6 +756,51 @@ body {
         padding: 28px;
     }
 }
+
+@media (max-width: 600px) {
+    .dash-sidebar {
+        padding: 20px;
+        gap: 16px;
+    }
+
+    .dash-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dash-actions,
+    .provider-tabs,
+    .form-actions,
+    .dash-edit-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .dash-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .panel-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .row-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .dash-main {
+        padding: 22px;
+    }
+}
 .panel-actions {
     display: flex;
     align-items: center;

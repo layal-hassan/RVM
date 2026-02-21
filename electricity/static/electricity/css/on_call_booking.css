@@ -18,6 +18,20 @@
 .on-call-booking-page {
   background: var(--oc-bg);
   color: var(--oc-ink);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.on-call-booking-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(163, 117, 34, 0.14), transparent 45%),
+    radial-gradient(circle at 90% 20%, rgba(10, 25, 47, 0.12), transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(199, 154, 67, 0.12), transparent 55%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .on-call-booking-page .booking-progress-card,
@@ -90,14 +104,16 @@ body.electricity-body.on-call-booking-page {
 
 .on-call-booking-shell {
   padding: 70px 0 100px;
+  position: relative;
+  z-index: 1;
 }
 
 .booking-progress-card {
-  background: #fff;
+  background: linear-gradient(180deg, #ffffff 0%, #fbf8f2 100%);
   border-radius: 18px;
   padding: 18px 22px;
-  border: 1px solid var(--oc-border);
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(233, 226, 214, 0.9);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
   margin-bottom: 28px;
 }
 
@@ -146,11 +162,11 @@ body.electricity-body.on-call-booking-page {
 .oncall-hero {
   text-align: center;
   margin-bottom: 32px;
-  background: #ffffff;
-  border: 1px solid var(--oc-border);
+  background: linear-gradient(180deg, #ffffff 0%, #fbf8f2 100%);
+  border: 1px solid rgba(233, 226, 214, 0.9);
   border-radius: 24px;
   padding: 32px 28px;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
 }
 
 .oncall-hero h1 {
@@ -194,11 +210,11 @@ body.electricity-body.on-call-booking-page {
 }
 
 .form-block {
-  background: var(--oc-card);
-  border: 1px solid var(--oc-border);
+  background: linear-gradient(180deg, #ffffff 0%, #fbf8f2 100%);
+  border: 1px solid rgba(233, 226, 214, 0.9);
   border-radius: 18px;
   padding: 24px;
-  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
 }
 
 .block-title {
@@ -218,8 +234,8 @@ body.electricity-body.on-call-booking-page {
 
 .choice-card {
   position: relative;
-  background: #ffffff;
-  border: 1px solid #e2d8c6;
+  background: linear-gradient(180deg, #ffffff 0%, #fbf8f2 100%);
+  border: 1px solid rgba(226, 216, 198, 0.9);
   border-radius: 14px;
   padding: 18px;
   display: block;
@@ -261,16 +277,43 @@ body.electricity-body.on-call-booking-page {
   transform: translateY(-50%);
   width: 20px;
   height: 20px;
-  border-radius: 50%;
+  border-radius: 999px;
   border: 2px solid #c9c1b5;
   background: #fff;
   box-shadow: inset 0 0 0 4px #fff;
+  display: grid;
+  place-items: center;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.choice-check::after {
+  content: "";
+  width: 6px;
+  height: 12px;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  transform: rotate(45deg) scale(0.8);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.choice-card input[type="checkbox"] ~ .choice-check {
+  border-radius: 6px;
+}
+
+.choice-card input[type="radio"] ~ .choice-check {
+  border-radius: 999px;
 }
 
 .choice-card input:checked ~ .choice-check {
-  border-color: #d3b26a;
-  background: #d3b26a;
-  box-shadow: inset 0 0 0 4px #fff;
+  border-color: var(--oc-gold);
+  background: var(--oc-gold);
+  box-shadow: 0 0 0 3px rgba(163, 117, 34, 0.2);
+}
+
+.choice-card input:checked ~ .choice-check::after {
+  opacity: 1;
+  transform: rotate(45deg) scale(1);
 }
 
 .choice-card input:checked ~ .choice-content {
@@ -311,12 +354,13 @@ body.electricity-body.on-call-booking-page {
 
 .pill {
   position: relative;
-  background: #fff;
+  background: #ffffff;
   border: 1px solid var(--oc-border);
   border-radius: 999px;
   padding: 8px 16px;
   cursor: pointer;
   font-weight: 600;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .pill input {
@@ -324,26 +368,46 @@ body.electricity-body.on-call-booking-page {
   opacity: 0;
 }
 
-.pill input:checked + span {
-  color: #1b3f73;
+.pill span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.pill input:checked + span::after {
+.pill span::before {
   content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background: var(--oc-warning);
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  margin-left: 8px;
+  border: 2px solid rgba(163, 117, 34, 0.5);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.pill input:checked + span {
+  color: var(--oc-gold-deep);
+}
+
+.pill input:checked + span::before {
+  opacity: 1;
+  transform: scale(1);
+  background: var(--oc-gold);
+  border-color: var(--oc-gold);
+  box-shadow: 0 0 0 3px rgba(163, 117, 34, 0.18);
+}
+
+.pill:has(input:checked) {
+  background: #fff6df;
+  border-color: rgba(211, 178, 106, 0.8);
 }
 
 .summary-card {
-  background: var(--oc-card);
-  border: 1px solid var(--oc-border);
+  background: linear-gradient(180deg, #ffffff 0%, #fbf8f2 100%);
+  border: 1px solid rgba(233, 226, 214, 0.9);
   border-radius: 18px;
   padding: 24px;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 22px 44px rgba(15, 23, 42, 0.08);
   height: fit-content;
 }
 
@@ -400,18 +464,51 @@ body.electricity-body.on-call-booking-page {
 }
 
 .entity-card {
-  border: 1px solid var(--oc-border);
+  position: relative;
+  border: 1px solid rgba(233, 226, 214, 0.9);
   border-radius: 16px;
   overflow: hidden;
-  background: #fff;
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+  background: linear-gradient(180deg, #ffffff 0%, #fbf8f2 100%);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.06);
   cursor: pointer;
+}
+
+.entity-card::before {
+  content: "✓";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--oc-gold);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 2;
+}
+
+.entity-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  box-shadow: 0 0 0 0 rgba(163, 117, 34, 0.24);
+  pointer-events: none;
+  transition: box-shadow 0.2s ease;
 }
 
 .entity-card img {
   width: 100%;
   height: 160px;
   object-fit: cover;
+  filter: saturate(1.1) contrast(1.05);
+  transition: transform 0.25s ease, filter 0.25s ease;
 }
 
 .entity-card input {
@@ -428,16 +525,30 @@ body.electricity-body.on-call-booking-page {
 }
 
 .entity-card:has(input:checked) {
-  border-color: var(--oc-accent);
-  box-shadow: 0 0 0 2px rgba(31, 111, 235, 0.2);
+  border-color: rgba(163, 117, 34, 0.75);
+  box-shadow: 0 0 0 2px rgba(163, 117, 34, 0.2);
+}
+
+.entity-card:has(input:checked)::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.entity-card:has(input:checked)::after {
+  box-shadow: 0 0 0 3px rgba(163, 117, 34, 0.3);
+}
+
+.entity-card:hover img {
+  transform: scale(1.02);
+  filter: saturate(1.2) contrast(1.1);
 }
 
 .form-card {
-  background: #fff;
-  border: 1px solid var(--oc-border);
+  background: linear-gradient(180deg, #ffffff 0%, #fbf8f2 100%);
+  border: 1px solid rgba(233, 226, 214, 0.9);
   border-radius: 18px;
   padding: 24px;
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.06);
   margin-bottom: 24px;
 }
 
@@ -474,45 +585,40 @@ body.electricity-body.on-call-booking-page {
   font-size: 15px;
 }
 
+.form-control[type="date"],
+.form-control[type="number"] {
+  min-height: 46px;
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 120px;
+}
+
 
 .on-call-booking-page select,
 .on-call-booking-page select.form-select,
 .on-call-booking-page select.form-control {
-  -webkit-appearance: none;
-  appearance: none;
+  -webkit-appearance: auto;
+  appearance: auto;
   width: 100%;
   border-radius: 14px;
-  border: 1px solid transparent;
+  border: 1px solid var(--oc-border);
   color: var(--nm-ink, var(--oc-ink));
-  padding: 12px 44px 12px 16px;
+  padding: 12px 14px;
   font-family: inherit;
   font-size: 15px;
   line-height: 1.2;
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--nm-arrow, #7a5a12) 50%),
-    linear-gradient(135deg, var(--nm-arrow, #7a5a12) 50%, transparent 50%),
-    linear-gradient(180deg, var(--nm-surface, #f3ede3), var(--nm-surface, #f3ede3));
-  background-position:
-    calc(100% - 18px) 52%,
-    calc(100% - 12px) 52%,
-    0 0;
-  background-size: 7px 7px, 7px 7px, 100% 100%;
-  background-repeat: no-repeat;
-  box-shadow:
-    -6px -6px 14px var(--nm-highlight, rgba(255, 255, 255, 0.9)),
-    6px 6px 14px var(--nm-shadow, rgba(153, 130, 95, 0.35));
+  background-image: none;
+  box-shadow: none;
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 [dir="rtl"] .on-call-booking-page select,
 [dir="rtl"] .on-call-booking-page select.form-select,
 [dir="rtl"] .on-call-booking-page select.form-control {
-  background-position:
-    calc(100% - 18px) 52%,
-    calc(100% - 12px) 52%,
-    0 0;
   padding-left: 16px;
-  padding-right: 44px;
+  padding-right: 16px;
   text-align: right;
 }
 
@@ -693,6 +799,219 @@ body.electricity-body.on-call-booking-page {
   .review-actions {
     flex-direction: column;
     align-items: stretch;
+  }
+}
+
+@media (max-width: 600px) {
+  .on-call-booking-page .container {
+    width: min(100%, 94%);
+  }
+
+  .oncall-hero,
+  .oncall-card,
+  .review-card {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .review-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .booking-actions .btn,
+  .review-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 820px) {
+  .oncall-hero {
+    padding: 28px 22px;
+  }
+
+  .oncall-hero h1 {
+    font-size: clamp(28px, 4.8vw, 34px);
+  }
+
+  .oncall-hero p {
+    font-size: 14px;
+  }
+
+  .oncall-grid {
+    gap: 22px;
+  }
+
+  .form-block,
+  .summary-card,
+  .form-card {
+    padding: 20px;
+  }
+
+  .oncall-header {
+    margin: 18px auto 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .oncall-header {
+    text-align: left;
+    margin: 12px 0 20px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+
+  .section-title {
+    font-size: 22px;
+  }
+
+  .oncall-header p {
+    font-size: 14px;
+    color: var(--oc-muted);
+  }
+
+  .oncall-hero {
+    border-radius: 20px;
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+  }
+
+  .hero-badge {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  .block-title {
+    font-size: 16px;
+  }
+
+  .choice-grid {
+    gap: 12px;
+  }
+
+  .choice-card {
+    padding: 16px;
+  }
+
+  .choice-note {
+    font-size: 13px;
+  }
+
+  .pill-grid {
+    gap: 10px;
+  }
+
+  .pill {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  .summary-row {
+    font-size: 13px;
+    gap: 12px;
+  }
+
+  .summary-note {
+    font-size: 12px;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+
+  .entity-card img {
+    height: 140px;
+  }
+
+  .form-card {
+    border-radius: 20px;
+  }
+
+  .form-grid {
+    gap: 14px;
+  }
+
+  .toggle-row {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px 16px;
+  }
+
+  .toggle-row strong {
+    font-size: 14px;
+  }
+
+  .toggle-row p {
+    font-size: 13px;
+  }
+
+  .form-card-title {
+    font-size: 16px;
+  }
+
+  .form-card label {
+    font-size: 13px;
+  }
+
+  textarea.form-control {
+    min-height: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .oncall-hero {
+    padding: 24px 18px;
+  }
+
+  .oncall-hero h1 {
+    font-size: clamp(24px, 8vw, 30px);
+  }
+
+  .oncall-hero p {
+    font-size: 13px;
+  }
+
+  .choice-content {
+    padding-right: 24px;
+  }
+
+  .choice-check {
+    right: 12px;
+  }
+
+  .form-control,
+  .on-call-booking-page select,
+  .on-call-booking-page select.form-select,
+  .on-call-booking-page select.form-control {
+    font-size: 14px;
+    padding: 11px 40px 11px 14px;
+  }
+
+  .toggle-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .booking-actions {
+    gap: 10px;
+  }
+
+  .review-card .notice {
+    font-size: 12px;
+  }
+
+  .review-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .review-actions .btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 

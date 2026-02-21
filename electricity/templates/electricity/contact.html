@@ -107,11 +107,11 @@
       <label>{% trans "Your Message" %}
         <textarea rows="4" name="message" placeholder="{% trans "Tell us more about your needs..." %}" required></textarea>
       </label>
+      <button class="btn btn-primary" type="submit">{% trans "Send Message" %}</button>
       <label class="contact-consent">
         <input type="checkbox" name="consent" required>
         {% trans "I consent to the processing of my personal data for the purpose of this inquiry in accordance with GDPR regulations." %}
       </label>
-      <button class="btn btn-primary" type="submit">{% trans "Send Message" %}</button>
       {% if contact_status == "sent" %}
         <div class="contact-status contact-status-success">{% trans "Thank you! We have received your request." %}</div>
       {% elif contact_status == "error" %}

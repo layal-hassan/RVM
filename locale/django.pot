@@ -1,0 +1,4739 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-21 00:52+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\electricity\forms.py:43
+#: .\electricity\templates\electricity\booking\step_7.html:24
+msgid "On-site Visit"
+msgstr ""
+
+#: .\electricity\forms.py:44
+#: .\electricity\templates\electricity\booking\step_7.html:25
+msgid "Video Call"
+msgstr ""
+
+#: .\electricity\forms.py:45
+#: .\electricity\templates\electricity\booking\step_7.html:26
+msgid "Phone Call"
+msgstr ""
+
+#: .\electricity\forms.py:54
+#: .\electricity\templates\electricity\service_booking\step_3.html:26
+msgid "Apartment"
+msgstr ""
+
+#: .\electricity\forms.py:55
+msgid "House"
+msgstr ""
+
+#: .\electricity\forms.py:56
+msgid "Office"
+msgstr ""
+
+#: .\electricity\forms.py:57
+msgid "Other"
+msgstr ""
+
+#: .\electricity\forms.py:63
+msgid "Under 100 m2"
+msgstr ""
+
+#: .\electricity\forms.py:64
+msgid "100-200 m2"
+msgstr ""
+
+#: .\electricity\forms.py:65
+msgid "200-400 m2"
+msgstr ""
+
+#: .\electricity\forms.py:66
+msgid "400+ m2"
+msgstr ""
+
+#: .\electricity\forms.py:76
+msgid "Specify property type"
+msgstr ""
+
+#: .\electricity\forms.py:84
+#: .\electricity\templates\electricity\booking\step_7.html:35
+msgid "Electrical Upgrades"
+msgstr ""
+
+#: .\electricity\forms.py:85
+#: .\electricity\templates\electricity\booking\step_7.html:36
+msgid "Lighting Solutions"
+msgstr ""
+
+#: .\electricity\forms.py:86
+#: .\electricity\templates\electricity\booking\step_7.html:37
+msgid "EV Charging"
+msgstr ""
+
+#: .\electricity\forms.py:87
+#: .\electricity\templates\electricity\booking\step_7.html:38
+msgid "Home Automation"
+msgstr ""
+
+#: .\electricity\forms.py:88
+#: .\electricity\templates\electricity\booking\step_7.html:39
+msgid "Troubleshooting"
+msgstr ""
+
+#: .\electricity\forms.py:89
+#: .\electricity\templates\electricity\booking\step_7.html:40
+msgid "General Maintenance"
+msgstr ""
+
+#: .\electricity\forms.py:94
+#: .\electricity\templates\electricity\booking\step_7.html:52
+msgid "No"
+msgstr ""
+
+#: .\electricity\forms.py:94
+#: .\electricity\templates\electricity\booking\step_7.html:50
+msgid "Yes"
+msgstr ""
+
+#: .\electricity\forms.py:114
+msgid "Private"
+msgstr ""
+
+#: .\electricity\forms.py:114
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:72
+msgid "Business"
+msgstr ""
+
+#: .\electricity\forms.py:123
+#: .\electricity\templates\electricity\booking\step_6.html:25
+msgid "Personal ID number"
+msgstr ""
+
+#: .\electricity\forms.py:128
+#: .\electricity\templates\electricity\booking\step_6.html:30
+msgid "Company name"
+msgstr ""
+
+#: .\electricity\forms.py:133
+#: .\electricity\templates\electricity\booking\step_6.html:34
+msgid "Organization number"
+msgstr ""
+
+#: .\electricity\forms.py:138
+#: .\electricity\templates\electricity\booking\step_6.html:38
+msgid "Company address"
+msgstr ""
+
+#: .\electricity\forms.py:143
+msgid "Mon"
+msgstr ""
+
+#: .\electricity\forms.py:144
+msgid "Tue"
+msgstr ""
+
+#: .\electricity\forms.py:145
+msgid "Wed"
+msgstr ""
+
+#: .\electricity\forms.py:146
+msgid "Thu"
+msgstr ""
+
+#: .\electricity\forms.py:147
+msgid "Fri"
+msgstr ""
+
+#: .\electricity\forms.py:148
+msgid "Sat"
+msgstr ""
+
+#: .\electricity\forms.py:149
+msgid "Sun"
+msgstr ""
+
+#: .\electricity\forms.py:155
+#: .\electricity\templates\electricity\electrician_booking\step_6.html:35
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:47
+msgid "Morning"
+msgstr ""
+
+#: .\electricity\forms.py:156
+msgid "Midday"
+msgstr ""
+
+#: .\electricity\forms.py:157
+#: .\electricity\templates\electricity\electrician_booking\step_6.html:47
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:59
+msgid "Afternoon"
+msgstr ""
+
+#: .\electricity\forms.py:158
+msgid "Evening"
+msgstr ""
+
+#: .\electricity\forms.py:181
+msgid "Please enter a valid Swedish ZIP code (e.g. 114 44)."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:4
+msgid "About RWM EL - Deep Storytelling Version"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:62
+msgid "About RWM EL"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:64
+msgid "Because electrical work is a responsibility â€” not a shortcut."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:68
+#: .\electricity\templates\electricity\booking\thank_you.html:25
+#: .\electricity\templates\electricity\contact.html:15
+#: .\electricity\templates\electricity\electrician_booking\base.html:4
+#: .\electricity\templates\electricity\home.html:21
+#: .\electricity\templates\electricity\landing.html:45
+#: .\electricity\templates\electricity\services.html:26
+msgid "Book an Electrician"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:71
+#: .\electricity\templates\electricity\contact.html:16
+#: .\electricity\templates\electricity\contact.html:154
+msgid "Book Consultation"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:79
+msgid "The Origin"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:81
+msgid ""
+"We started with a simple question: In a world of fast fixes, who is looking "
+"out for the next twenty years?"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:85
+msgid ""
+"RWM EL was founded on the belief that technical skill is only half of the "
+"job. The other half is the integrity to do things right when no one is "
+"watching. In the Swedish electrical landscape, precision isn't an "
+"optionâ€”it's the foundation of every safe home."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:95
+msgid "What RWM EL Stands For"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:97
+msgid ""
+"We stand for the quiet confidence that comes from knowing your "
+"infrastructure is handled by professionals who respect the craft. Our "
+"approach is methodical, Scandinavian in its simplicity, and uncompromising "
+"in its execution."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:98
+msgid ""
+"Every wire we pull and every panel we install is a testament to our "
+"commitment to Swedish engineering excellence and local safety regulations."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:103
+msgid ""
+"Electrical work is regulated in Sweden because incorrect installations are "
+"dangerous. We don't just follow the law; we champion the safety it provides."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:115
+msgid "Why We Do This"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:119
+msgid ""
+"We do this because a home should be a sanctuary, not a source of technical "
+"anxiety. We do this because we believe in the longevity of quality. When we "
+"leave a site, we leave behind more than just working lightsâ€”we leave "
+"behind the peace of mind that your family or business is protected by a "
+"system designed to endure."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:129
+msgid "More Than Just Todayâ€™s Installation"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:131
+msgid ""
+"The modern home is changing. Energy consumption, smart integration, and high-"
+"demand appliances require a forward-thinking electrical foundation."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:136
+msgid "Future-proofing for modern appliance loads"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:140
+msgid "Smart home ecosystem planning and integration"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:144
+msgid "Energy usage optimization and monitoring"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:148
+msgid "Safe-load management for EV charging stations"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:157
+msgid "The RWM EL Standard"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:161
+msgid "Compliance"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:162
+msgid "Rigorous adherence to every Swedish electrical safety standard."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:166
+msgid "Long-term safety"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:167
+msgid "Solutions designed to remain secure for decades, not just years."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:171
+msgid "Clarity"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:172
+msgid "Transparent documentation and straightforward communication."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:176
+msgid "Modern planning"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:177
+msgid "Anticipating your future energy needs before they arise."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:181
+msgid "No fixes needed"
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:182
+msgid "Done right the first time, ensuring no corrections are ever required."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:191
+msgid "Electrical work should be done right â€” not corrected later."
+msgstr ""
+
+#: .\electricity\templates\electricity\about.html:194
+#: .\electricity\templates\electricity\contact.html:4
+#: .\electricity\templates\electricity\contact.html:12
+msgid "Contact RWM EL"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:8
+#: .\electricity\templates\electricity\base_minimal.html:8
+msgid "Electrical & Smart Home"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:32
+#: .\electricity\templates\electricity\booking\base_booking.html:58
+msgid "Electrical &amp; Infrastructure Solutions"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:34
+msgid ""
+"Licensed electrical work, upgrades, and system installations - built right "
+"and built to last."
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:35
+#: .\electricity\templates\electricity\booking\base_booking.html:61
+msgid ""
+"Delivering the gold standard in smart home technology and enterprise power "
+"systems."
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:42
+#: .\electricity\templates\electricity\booking\base_booking.html:68
+msgid "Company"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:44
+#: .\electricity\templates\electricity\booking\base_booking.html:70
+msgid "About us"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:45
+#: .\electricity\templates\electricity\booking\base_booking.html:71
+#: .\electricity\templates\electricity\services.html:298
+msgid "Terms &amp; Conditions"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:46
+#: .\electricity\templates\electricity\booking\base_booking.html:72
+#: .\electricity\templates\electricity\privacy.html:74
+msgid "Privacy Policy"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:47
+#: .\electricity\templates\electricity\base.html:65
+#: .\electricity\templates\electricity\booking\base_booking.html:73
+#: .\electricity\templates\electricity\booking\base_booking.html:91
+msgid "Cookies"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:48
+#: .\electricity\templates\electricity\booking\base_booking.html:74
+#: .\electricity\templates\electricity\support.html:15
+msgid "Customer Support"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:49
+#: .\electricity\templates\electricity\booking\base_booking.html:75
+msgid "Contact us"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:53
+#: .\electricity\templates\electricity\booking\base_booking.html:79
+#: .\electricity\templates\electricity\partials\global_header.html:20
+msgid "Contact"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:55
+#: .\electricity\templates\electricity\booking\base_booking.html:81
+msgid "Address"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:55
+#: .\electricity\templates\electricity\booking\base_booking.html:81
+msgid "Rådmansgatan 12, 114 44 Stockholm, Sweden"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:56
+#: .\electricity\templates\electricity\booking\base_booking.html:82
+#: .\electricity\templates\electricity\contact.html:45
+#: .\electricity\templates\electricity\outside_area.html:26
+msgid "Phone"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:57
+#: .\electricity\templates\electricity\booking\base_booking.html:83
+#: .\electricity\templates\electricity\booking\step_6.html:49
+#: .\electricity\templates\electricity\contact.html:51
+#: .\electricity\templates\electricity\outside_area.html:23
+msgid "Email"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:62
+msgid "(c) 2026 RWM EL. All rights reserved."
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:64
+#: .\electricity\templates\electricity\booking\base_booking.html:90
+msgid "Privacy"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:66
+#: .\electricity\templates\electricity\booking\base_booking.html:92
+#: .\electricity\templates\electricity\faq.html:10
+msgid "FAQ"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:67
+#: .\electricity\templates\electricity\booking\base_booking.html:93
+msgid "Terms"
+msgstr ""
+
+#: .\electricity\templates\electricity\base.html:69
+#: .\electricity\templates\electricity\booking\base_booking.html:95
+msgid "Sweden (EN)"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\base_booking.html:8
+msgid "Consultation Booking"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\base_booking.html:28
+#, python-format
+msgid "Step %(step)s of %(total)s"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\base_booking.html:34
+#, python-format
+msgid "%(percent)s%%%% Complete"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\base_booking.html:60
+msgid ""
+"Licensed electrical work, upgrades, and system installations — built right "
+"and built to last."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\base_booking.html:88
+msgid "© 2026 RWM EL. All rights reserved."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_1.html:6
+msgid ""
+"Select the format that best fits your project needs. On-site visits allow "
+"for the most accurate engineering assessments and safety audits."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_1.html:16
+msgid "Recommended"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_1.html:20
+msgid "ON"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_1.html:22
+msgid "VIDEO"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_1.html:24
+msgid "CALL"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_1.html:31
+msgid "Comprehensive physical inspection of your facility or project site."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_1.html:35
+msgid "Remote visual assessment via real-time screen sharing and mobile video."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_1.html:39
+msgid "Initial verbal briefing and high-level scope discussion."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_1.html:51
+#: .\electricity\templates\electricity\booking\thank_you.html:24
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:133
+msgid "Back to Home"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_1.html:54
+#: .\electricity\templates\electricity\booking\step_2.html:68
+#: .\electricity\templates\electricity\booking\step_3.html:89
+#: .\electricity\templates\electricity\booking\step_4.html:24
+#: .\electricity\templates\electricity\service_booking\step_1.html:97
+#: .\electricity\templates\electricity\service_booking\step_10.html:54
+#: .\electricity\templates\electricity\service_booking\step_2.html:107
+#: .\electricity\templates\electricity\service_booking\step_3.html:87
+#: .\electricity\templates\electricity\service_booking\step_4.html:121
+#: .\electricity\templates\electricity\service_booking\step_5.html:44
+#: .\electricity\templates\electricity\service_booking\step_6.html:213
+#: .\electricity\templates\electricity\service_booking\step_7.html:80
+#: .\electricity\templates\electricity\service_booking\step_9.html:57
+msgid "Continue"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_2.html:6
+msgid "Provide the basic details so we can tailor your consultation."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_2.html:45
+msgid "Other property type"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_2.html:50
+msgid "What is the approximate size?"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_2.html:55
+msgid "Year built or last renovated?"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_2.html:58
+msgid "If you're not sure, provide an approximate year."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_2.html:65
+#: .\electricity\templates\electricity\booking\step_3.html:86
+#: .\electricity\templates\electricity\booking\step_4.html:23
+#: .\electricity\templates\electricity\booking\step_5.html:45
+#: .\electricity\templates\electricity\booking\step_6.html:84
+#: .\electricity\templates\electricity\booking\step_7.html:80
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:94
+#: .\electricity\templates\electricity\electrician_booking\step_2.html:52
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:121
+#: .\electricity\templates\electricity\electrician_booking\step_4.html:37
+#: .\electricity\templates\electricity\electrician_booking\step_5.html:29
+#: .\electricity\templates\electricity\electrician_booking\step_6.html:59
+#: .\electricity\templates\electricity\electrician_booking\step_7.html:52
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:174
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:97
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:68
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:96
+#: .\electricity\templates\electricity\service_booking\step_1.html:94
+#: .\electricity\templates\electricity\service_booking\step_10.html:51
+#: .\electricity\templates\electricity\service_booking\step_2.html:103
+#: .\electricity\templates\electricity\service_booking\step_3.html:83
+#: .\electricity\templates\electricity\service_booking\step_4.html:117
+#: .\electricity\templates\electricity\service_booking\step_5.html:40
+#: .\electricity\templates\electricity\service_booking\step_6.html:207
+#: .\electricity\templates\electricity\service_booking\step_7.html:77
+#: .\electricity\templates\electricity\service_booking\step_8.html:100
+#: .\electricity\templates\electricity\service_booking\step_9.html:54
+msgid "Back"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_3.html:6
+msgid "Select all that apply so we can match you with the right specialist."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_3.html:45
+msgid "Panel upgrades, rewiring, outlets"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_3.html:47
+msgid "Indoor/outdoor, recessed, landscape"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_3.html:49
+msgid "Home station installation"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_3.html:51
+msgid "Smart locks, cameras, thermostat"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_3.html:53
+msgid "Repairing sparks, shorts, or failures"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_3.html:55
+msgid "Routine inspections and testing"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_3.html:67
+msgid "Is this urgent?"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_3.html:69
+msgid "Select \\"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_4.html:5
+#: .\electricity\views.py:1218
+msgid "The more detail you share, the better we can prepare."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_4.html:13
+msgid "Helpful tips:"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_4.html:15
+msgid "Mention any specific brands or technologies you prefer."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_4.html:16
+msgid "Describe the size or layout of the area involved."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_4.html:17
+msgid "Highlight any urgent deadlines or concerns."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_5.html:5
+msgid ""
+"Photos or videos help us assess faster. Your data is encrypted and secure."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_5.html:16
+msgid "Browse Files"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_5.html:17
+msgid "JPG, PNG up to 10MB"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_5.html:26
+msgid "Select Video"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_5.html:27
+msgid "MP4, MOV up to 50MB"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_5.html:36
+msgid "Select Docs"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_5.html:37
+msgid "PDF, DOCX up to 20MB"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_5.html:41
+msgid "No files selected yet. You can skip this step and add them later."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_5.html:46
+#: .\electricity\templates\electricity\booking\step_6.html:85
+#: .\electricity\templates\electricity\service_booking\step_8.html:25
+#: .\electricity\templates\electricity\service_booking\step_8.html:103
+msgid "Next Step"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_6.html:5
+msgid "We'll use these details to confirm your consultation slot."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_6.html:10
+#: .\electricity\templates\electricity\booking\step_7.html:10
+msgid "Your first consultation is free."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_6.html:13
+msgid "Are you a private individual or a business?"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_6.html:43
+#: .\electricity\templates\electricity\booking\step_7.html:15
+#: .\electricity\templates\electricity\contact.html:84
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:90
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:56
+#: .\electricity\templates\electricity\outside_area.html:20
+#: .\electricity\templates\electricity\service_booking\step_1.html:59
+#: .\electricity\templates\electricity\support.html:99
+msgid "Full Name"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_6.html:53
+#: .\electricity\templates\electricity\booking\step_7.html:17
+#: .\electricity\templates\electricity\contact.html:92
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:98
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:60
+#: .\electricity\templates\electricity\service_booking\step_1.html:68
+#: .\electricity\templates\electricity\support.html:107
+msgid "Phone Number"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_6.html:59
+msgid "When are you available for a call?"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_6.html:71
+msgid "Preferred time window"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:5
+msgid "Confirm your details before submitting your request."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:14
+msgid "Contact Information"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:16
+#: .\electricity\templates\electricity\contact.html:87
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:106
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:65
+#: .\electricity\templates\electricity\service_booking\step_1.html:76
+#: .\electricity\templates\electricity\support.html:103
+msgid "Email Address"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:20
+msgid "Consultation Topics"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:22
+msgid "Type"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:31
+#: .\electricity\templates\electricity\partials\global_header.html:18
+msgid "Services"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:47
+#: .\electricity\templates\electricity\service_booking\step_11.html:40
+msgid "Urgent"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:58
+msgid "Preferred Schedule"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:60
+msgid "Preferred Date"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:64
+msgid "Time Slot"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:69
+msgid "Consultation Pricing"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:71
+msgid "Status"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:72
+msgid "Free (first time)"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:72
+msgid "Paid"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:74
+msgid "Price"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\step_7.html:81
+msgid "Request Consultation"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\thank_you.html:8
+msgid "Request Received"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\thank_you.html:21
+msgid "Thanks - we've received your request"
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\thank_you.html:22
+msgid ""
+"Our team will review your information and contact you shortly to confirm the "
+"consultation and next steps."
+msgstr ""
+
+#: .\electricity\templates\electricity\booking\thank_you.html:28
+msgid ""
+"Urgent requirement? If your issue becomes urgent, you can book a licensed "
+"electrician directly."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:13
+msgid "Clear communication is where safe electrical work begins."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:25
+msgid "Inquiry Types"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:26
+msgid "How Can We Help You?"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:31
+msgid "New service bookings"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:35
+msgid "Professional consultations"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:39
+msgid "Technical questions &amp; support"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:46
+msgid "Speak with our expert dispatch team for immediate assistance."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:52
+msgid "Send us project plans or detailed inquiries for a formal quote."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:57
+msgid "Contact Form"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:58
+msgid "Quickly submit your details and we will respond within 24 hours."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:59
+msgid "Submit Inquiry"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:68
+msgid "Start Your Project Journey"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:69
+msgid ""
+"Our certified engineers are ready to assist with residential, commercial, "
+"and industrial electrical needs across Sweden."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:72
+msgid "Operating Hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:73
+msgid "Mon - Fri آ· 07:00 - 17:00"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:76
+msgid "Headquarters"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:77
+msgid "Stockholm Business Park, Sweden"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:85
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:93
+msgid "John Doe"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:88
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:109
+msgid "john@example.com"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:95
+#: .\electricity\templates\electricity\support.html:130
+msgid "Project Address"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:96
+msgid "Street name, City"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:99
+#: .\electricity\templates\electricity\support.html:111
+msgid "Type of Request"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:101
+msgid "Residential Electrical Service"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:102
+msgid "Commercial Installation"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:103
+msgid "Emergency Support"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:104
+msgid "Smart Home Consultation"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:107
+msgid "Your Message"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:108
+msgid "Tell us more about your needs..."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:110
+msgid "Send Message"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:113
+msgid ""
+"I consent to the processing of my personal data for the purpose of this "
+"inquiry in accordance with GDPR regulations."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:116
+msgid "Thank you! We have received your request."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:118
+msgid "We could not send your message right now. Please try again."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:120
+msgid "Encrypted and secure communication"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:128
+msgid "What Happens After You Contact Us?"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:133
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:105
+msgid "Review"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:134
+msgid ""
+"Our technical lead reviews your request to assign the most suitable "
+"specialist."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:138
+msgid "Discovery Call"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:139
+msgid ""
+"We reach out to clarify details, discuss your timeline, and provide initial "
+"insights."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:143
+msgid "Proposal"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:144
+msgid ""
+"You receive a clear, transparent project proposal and a direct booking link."
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:152
+msgid "Not sure where to start?"
+msgstr ""
+
+#: .\electricity\templates\electricity\contact.html:153
+msgid "We're here to guide you."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:4
+msgid "Cookie Policy | RWM EL Pro Edition"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:10
+msgid "Compliance Center"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:11
+msgid "Cookie Policy"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:13
+#: .\electricity\templates\electricity\terms.html:13
+msgid "Last updated: 30 January 2026"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:15
+#: .\electricity\templates\electricity\terms.html:15
+msgid "Org.-/personnummer: 559545-1351"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:18
+msgid ""
+"This policy explains how RWM EL uses cookies and similar technologies to "
+"provide, customize, and improve our electrical services and digital "
+"experiences in accordance with Swedish law and EU GDPR regulations."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:26
+msgid "Cookie Sections"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:28
+msgid "01. What Are Cookies"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:29
+msgid "02. Why We Use Cookies"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:30
+msgid "03. Types of Cookies"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:31
+msgid "04. Managing Preferences"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:32
+msgid "05. Cookie Inventory"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:33
+msgid "06. Browser Controls"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:40
+msgid "What Are Cookies?"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:42
+msgid ""
+"Cookies are small text files placed on your device by websites you visit. "
+"They help websites function, remember your preferences, and provide usage "
+"insights so services can be improved."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:48
+msgid "Why RWM EL Uses Cookies"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:50
+msgid ""
+"We use cookies to ensure our digital platforms operate reliably, protect "
+"customer data, and deliver a tailored experience during service requests and "
+"quote configurations."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:54
+msgid "Core Functionality"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:55
+msgid ""
+"Secure login, request tracking, and session management during service "
+"workflows."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:58
+msgid "Security Monitoring"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:59
+msgid ""
+"Protecting user data and preventing unauthorized access to client "
+"information."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:66
+msgid "Types of Cookies We Use"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:69
+#: .\electricity\templates\electricity\cookies.html:115
+#: .\electricity\templates\electricity\cookies.html:121
+msgid "Necessary"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:70
+msgid ""
+"Essential site functionality, including authentication and security features."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:73
+msgid "Functional"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:74
+msgid ""
+"Preferences such as language selection and localized electrical standards."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:77
+#: .\electricity\templates\electricity\cookies.html:127
+msgid "Analytics"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:78
+msgid "Understanding site traffic to improve performance and usability."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:81
+#: .\electricity\templates\electricity\cookies.html:133
+msgid "Marketing"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:82
+msgid "Showing relevant advertising on other sites based on your interests."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:89
+msgid "Managing Your Preferences"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:91
+msgid "Your Cookie Choices"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:92
+msgid ""
+"Non-essential cookies remain disabled until you provide explicit consent."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:94
+msgid "Control Center"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:95
+msgid ""
+"You can update your cookie settings at any time through your browser or the "
+"preferences banner when available."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:102
+msgid "Cookie Inventory"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:107
+msgid "Category"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:108
+msgid "Provider / Purpose"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:109
+msgid "Legal Basis"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:110
+msgid "Duration"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:116
+msgid "__XSRF-TOKEN (Security)"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:117
+#: .\electricity\templates\electricity\cookies.html:123
+msgid "Art. 6(1)(b)"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:118
+msgid "Session"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:122
+msgid "RWM_SESSION (Authentication)"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:124
+msgid "24 Hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:128
+msgid "_ga (Google Analytics tracking)"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:129
+#: .\electricity\templates\electricity\cookies.html:135
+msgid "Art. 6(1)(a)"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:130
+msgid "2 Years"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:134
+msgid "_fbp (Meta/FB ad targeting)"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:136
+msgid "3 Months"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:145
+msgid "Browser Controls &amp; Third-Party Information"
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:147
+msgid ""
+"Most web browsers allow some control of most cookies through browser "
+"settings. To learn more about cookies, including how to see what cookies "
+"have been set, visit <a href=\"https://www.aboutcookies.org\" "
+"rel=\"noopener\" target=\"_blank\">www.aboutcookies.org</a>."
+msgstr ""
+
+#: .\electricity\templates\electricity\cookies.html:150
+msgid ""
+"For information on cookie regulations in Sweden, visit the "
+"Integritetsskyddsmyndigheten (IMY) website or reference the EU ePrivacy "
+"Directive (2002/58/EC)."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\base.html:20
+msgid "Progress"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\base.html:22
+#, python-format
+msgid "Step %(step)s of 8"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\base.html:31
+#: .\electricity\templates\electricity\on_call.html:12
+msgid "Service"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\base.html:35
+#: .\electricity\templates\electricity\service_booking\step_11.html:59
+msgid "Date & Time"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\base.html:39
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:125
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:49
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:133
+#: .\electricity\templates\electricity\service_booking\step_4.html:81
+msgid "Location"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\base.html:43
+msgid "Details"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\base.html:50
+msgid "Please review the following:"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:11
+msgid "How many hours do you want to book?"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:12
+msgid "Select an initial duration for your professional service."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:20
+msgid "Hour"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:26
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:32
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:38
+msgid "Hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:43
+msgid "Proactive Notice:"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:44
+msgid ""
+"Booked hours are an estimate. Final cost is adjusted based on actual time "
+"spent on site to ensure you only pay for what you need."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:52
+#: .\electricity\templates\electricity\service_booking\step_5.html:12
+#: .\electricity\views.py:1188
+msgid "Describe the work"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:53
+msgid "Provide as much detail as possible to help us prepare."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:57
+msgid "Project scope"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:61
+msgid ""
+"Tell us what needs to be done (e.g., install ceiling fans, fix circuit "
+"breaker...)"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:64
+msgid "Incomplete information may affect time and price."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:69
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:44
+msgid "Property type"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:73
+msgid "Residential Property"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:78
+msgid "Commercial Space"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:84
+msgid "Logistics"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:87
+msgid ""
+"I confirm that the service professional will have full access to the work "
+"area at the scheduled time."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_1.html:96
+msgid "Continue to Step 2 ->"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_2.html:12
+msgid "Select the service type"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_2.html:13
+msgid "Choose the category that best matches your booking."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_2.html:21
+msgid "Residential Electrical Repair"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_2.html:23
+msgid "Troubleshooting, outlets, lighting, and home upgrades."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_2.html:31
+msgid "New Installations"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_2.html:33
+msgid "Panels, circuits, EV chargers, and appliance hookups."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_2.html:41
+msgid "Commercial Maintenance"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_2.html:43
+msgid "Offices, retail, and property maintenance support."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_2.html:55
+msgid "Continue to Step 3 ->"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:12
+msgid "Where is the work located?"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:13
+msgid "Provide the job site address so we can plan the visit."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:19
+#: .\electricity\templates\electricity\service_booking\step_2.html:22
+msgid "Street Address"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:22
+msgid "e.g. 123 Artisan Street"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:27
+msgid "Postal Code"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:30
+msgid "XXXXX"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:35
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:88
+#: .\electricity\templates\electricity\service_booking\step_2.html:32
+msgid "City"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:38
+msgid "City Name"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:44
+msgid "Please note:"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:45
+msgid ""
+"Ensure the address is accurate to avoid scheduling delays. Incorrect "
+"addresses or locations outside our service area may incur additional travel "
+"fees."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:53
+msgid "Customer type"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:54
+msgid "Select who is booking this service."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:63
+msgid "Private individual"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:64
+msgid "Personal home services and residential repairs."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:73
+msgid "Commercial or organization bookings."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:83
+#: .\electricity\templates\electricity\service_booking\step_1.html:53
+#: .\electricity\views.py:765 .\electricity\views.py:780
+msgid "Your contact details"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:84
+msgid "We will send updates to this information."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:101
+msgid "+1 (555) 000-0000"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:116
+msgid ""
+"I confirm these contact details are correct. I understand that communication "
+"regarding this booking will be sent to the email provided."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_3.html:122
+msgid "Continue to Step 4 ->"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_4.html:12
+msgid "Access & preparation"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_4.html:13
+msgid "Help us prepare for a smooth appointment."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_4.html:19
+msgid "Access notes"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_4.html:22
+msgid "Gate code, concierge, or access instructions"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_4.html:27
+msgid "Parking details"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_4.html:30
+msgid "Parking availability or restrictions"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_4.html:38
+msgid "Continue to Step 5 ->"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_5.html:12
+msgid "Additional notes"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_5.html:13
+msgid "Optional details that may help the electrician prepare."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_5.html:17
+msgid "Notes"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_5.html:22
+msgid "Any extra details, preferences, or constraints..."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_5.html:33
+msgid "Continue to Step 6 ->"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_6.html:12
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:23
+msgid "Preferred Date & Time"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_6.html:13
+msgid "Select the best time for your visit."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_6.html:19
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:30
+#: .\electricity\templates\electricity\service_booking\step_6.html:105
+#: .\electricity\templates\electricity\service_booking\step_6.html:165
+msgid "Select Date"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_6.html:25
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:37
+msgid "Arrival Window"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_6.html:36
+msgid "08:00 AM - 12:00 PM"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_6.html:48
+msgid "12:00 PM - 05:00 PM"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_6.html:63
+msgid "Continue to Step 7 ->"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_7.html:12
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:72
+msgid "Pricing Transparency"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_7.html:13
+msgid "Review the estimated cost calculation."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_7.html:19
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:79
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:72
+msgid "Minimum Callout Fee (1st hr)"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_7.html:25
+#, python-format
+msgid ""
+"\n"
+"          Estimated Additional Time (%(hours)s hrs x %(currency)s %(rate)s/"
+"hr)\n"
+"          "
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_7.html:33
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:93
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:86
+msgid "Total Estimated Booking"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_7.html:44
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:104
+msgid ""
+"I understand this is an estimate. Final pricing is based on actual time "
+"spent on site and any material costs incurred."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_7.html:56
+msgid "Continue to Step 8 ->"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:10
+msgid "Complete Your Booking"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:11
+msgid "Finalize your schedule and confirm the details below."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:13
+msgid "Step 6-8 of 8"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:24
+msgid "Select date and arrival window."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:73
+msgid "Estimated cost calculation."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:85
+#, python-format
+msgid ""
+"\n"
+"              Estimated Additional Time (%(hours)s hrs x %(currency)s "
+"%(rate)s/hr)\n"
+"              "
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:114
+msgid "Review & Confirm"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:120
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:34
+msgid "Service type"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:130
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:54
+#: .\electricity\templates\electricity\service_booking\step_4.html:73
+msgid "Appointment"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:139
+msgid "I confirm all the provided information above is correct."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:145
+msgid "I accept the"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:146
+msgid "Terms of Service"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:147
+msgid "and"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:148
+#: .\electricity\templates\electricity\terms.html:135
+msgid "Cancellation Policy"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:153
+msgid "Confirm Booking ->"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:157
+msgid "No immediate charge will be made to your card."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:164
+msgid "Need help with your booking?"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\step_8.html:165
+msgid "Call"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:9
+msgid "Booking received"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:11
+msgid ""
+"Thank you for choosing RWM EL luxury services. Your booking request has been "
+"successfully submitted and is now being processed."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:15
+msgid "Booking Reference"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:20
+msgid "Print Receipt"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:23
+msgid "Save as PDF"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:31
+msgid "Booking Details"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:39
+msgid "Hours booked"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:40
+msgid "hour(s)"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:62
+msgid "Work description"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:69
+#: .\electricity\templates\electricity\service_booking\step_11.html:100
+msgid "Estimated Cost"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:78
+#, python-format
+msgid ""
+"\n"
+"          Additional Time (%(hours)s hrs x %(currency)s %(rate)s/hr)\n"
+"          "
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:91
+msgid "Final pricing may vary based on actual time and materials."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:99
+msgid "What happens next"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:107
+msgid ""
+"Our concierge team reviews your booking details and confirms vehicle "
+"availability for your requested time."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:113
+#: .\electricity\views.py:1209
+msgid "Confirmation"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:115
+msgid ""
+"A formal confirmation email and digital itinerary will be sent to your "
+"registered email address within 2 hours."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:121
+msgid "Follow-up"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:123
+msgid ""
+"Your designated chauffeur will contact you via SMS exactly 15 minutes before "
+"the scheduled arrival."
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:137
+msgid "Need assistance?"
+msgstr ""
+
+#: .\electricity\templates\electricity\electrician_booking\thank_you.html:139
+msgid "Contact Support"
+msgstr ""
+
+#: .\electricity\templates\electricity\faq.html:4
+msgid "FAQ | RWM EL"
+msgstr ""
+
+#: .\electricity\templates\electricity\faq.html:11
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: .\electricity\templates\electricity\faq.html:12
+msgid ""
+"Clear answers to the most common questions about bookings, pricing, and "
+"services."
+msgstr ""
+
+#: .\electricity\templates\electricity\faq.html:30
+msgid "No FAQ entries yet. Please check back soon."
+msgstr ""
+
+#: .\electricity\templates\electricity\home.html:4
+msgid "Electrical & Smart Home | The Gold Standard"
+msgstr ""
+
+#: .\electricity\templates\electricity\home.html:12
+#: .\electricity\templates\electricity\landing.html:32
+#: .\electricity\templates\electricity\services.html:13
+msgid "Integrated Infrastructure Group"
+msgstr ""
+
+#: .\electricity\templates\electricity\home.html:15
+msgid "THE <span class=\"accent\">GOLD</span><br>STANDARD."
+msgstr ""
+
+#: .\electricity\templates\electricity\home.html:18
+#: .\electricity\templates\electricity\landing.html:40
+msgid ""
+"Delivering mission-critical electrical, smart home, and energy solutions for "
+"modern homes, properties, and businesses."
+msgstr ""
+
+#: .\electricity\templates\electricity\home.html:22
+#: .\electricity\templates\electricity\landing.html:48
+#: .\electricity\templates\electricity\services.html:25
+#: .\electricity\templates\electricity\services.html:316
+msgid "Schedule a Consultation"
+msgstr ""
+
+#: .\electricity\templates\electricity\home.html:24
+msgid ""
+"Fully operational today. Our website is expanding — our standards are not."
+msgstr ""
+
+#: .\electricity\templates\electricity\landing.html:8
+msgid "The Gold Standard"
+msgstr ""
+
+#: .\electricity\templates\electricity\landing.html:36
+msgid "THE <span class=\"title-accent\">GOLD</span><br>STANDARD."
+msgstr ""
+
+#: .\electricity\templates\electricity\landing.html:53
+msgid ""
+"Fully operational today. Our website is expanding -- our standards are not."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:4
+#: .\electricity\templates\electricity\services.html:91
+msgid "On-Call & Emergency Service"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:11
+msgid "On-Call Availability"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:12
+msgid "Emergency"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:12
+msgid "On-Call"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:14
+msgid ""
+"Immediate access for businesses, property owners, and housing associations. "
+"We ensure critical operations stay powered through every incident."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:17
+#: .\electricity\templates\electricity\on_call.html:122
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:142
+#: .\electricity\templates\electricity\services.html:97
+msgid "Apply for On-Call Service"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:18
+msgid "View Pricing"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:22
+msgid "Service Reliability"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:23
+#: .\electricity\templates\electricity\on_call.html:49
+msgid "Priority Dispatch & Direct Contact"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:25
+msgid ""
+"Our emergency service provides direct access to certified electricians. With "
+"no intermediaries, you talk directly to the dispatched partners on duty."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:29
+msgid "60 Min"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:30
+msgid "Average response time"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:33
+msgid "Certified"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:34
+msgid "Master electricians only"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:37
+msgid "24/7"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:38
+msgid "On-call coverage"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:48
+msgid "Priority Dispatch"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:51
+msgid ""
+"We prioritize core equipment partners to ensure minimal downtime and maximum "
+"safety. With a dedicated on-call agreement, you receive immediate dispatch "
+"status updates and certified documentation for every visit."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:54
+msgid "Request a Call Back"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:63
+msgid "Enterprise Partnerships"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:64
+msgid "Who this is for"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:68
+msgid "Businesses"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:69
+msgid ""
+"Protect critical systems and keep operations running with priority dispatch."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:72
+msgid "Property Owners"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:73
+msgid "Rapid resolution for technical incidents across managed properties."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:76
+msgid "Housing Assocs (BRF)"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:77
+msgid "Maintain resident safety with structured emergency escalation."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:80
+msgid "Managed Properties"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:81
+msgid "Guaranteed response windows for multi-site operations and facilities."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:90
+msgid "When to Call Us"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:91
+msgid "Typical Situations We Resolve"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:92
+msgid "Certified response for all commercial and industrial failures."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:96
+msgid "Power Outages"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:97
+msgid "Total loss of power in commercial units or apartment blocks."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:100
+msgid "Circuit Tripping"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:101
+msgid "Repeated breaker trips causing critical system shutdowns."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:104
+msgid "Safety Faults"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:105
+msgid "Exposed wiring, burning smells, or water-damaged electricals."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:108
+msgid "Common Areas"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:109
+msgid "Failure in hallway lighting, elevators, or garage security gates."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:118
+msgid ""
+"Want access to on-call service? Register your property for an agreement."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:120
+msgid ""
+"Joining the RWM EL On-Call Network ensures your property is already in our "
+"system for the fastest possible dispatch when an emergency strikes."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:124
+msgid "No setup fee"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:125
+msgid "Priority queue"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call.html:126
+msgid "Fixed night rates"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\base.html:4
+msgid "On-Call Booking | Hembla experten"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\base.html:19
+#, python-format
+msgid "Step %(step)s of 4: %(subtitle)s"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\base.html:23
+#: .\electricity\templates\electricity\service_booking\base.html:26
+#, python-format
+msgid "%(progress)s%% Complete"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\base.html:33
+msgid "We need a few details:"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:8
+msgid "Enterprise Grade"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:10
+#: .\electricity\views.py:1574
+msgid "On-Call Electrical Service"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:11
+msgid "Jour"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:14
+msgid ""
+"Priority access to a licensed electrician for urgent electrical issues. "
+"Available through a service agreement for businesses, property owners, and "
+"housing associations."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:22
+msgid "When do you need on-call coverage?"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:28
+msgid "Business hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:29
+msgid "Standard operations 08:00 - 17:00"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:37
+msgid "Evenings"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:38
+msgid "Extended coverage 17:00 - 22:00"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:46
+msgid "Nights"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:47
+msgid "Late shift 22:00 - 08:00"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:55
+msgid "Weekends & holidays"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:56
+msgid "24/7 during non-business days"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:65
+msgid "How quickly do you need a response?"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:71
+msgid "Standard response"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:72
+msgid "Service response within 4-8 hours of the reported incident."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:80
+msgid "Premium"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:81
+msgid "Priority response"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:82
+msgid "Guaranteed technician on-site within 1-2 hours 24/7."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:91
+msgid "What should the on-call service cover?"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:96
+msgid "Power outages"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:101
+msgid "Fuse boards"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:106
+msgid "Common areas"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:111
+msgid "Critical systems"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:116
+msgid "General faults"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:125
+msgid "Service Summary"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:128
+msgid "Coverage Type"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:129
+msgid "B2B Service Agreement"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:134
+msgid "Greater Stockholm"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:138
+msgid ""
+"Final pricing and conditions are subject to technical audit and individual "
+"facility complexity."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_1.html:146
+msgid "Technicians available now"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:8
+msgid "Registration Progress"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:9
+#: .\electricity\views.py:1575
+msgid "Who is applying?"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:11
+msgid "Select the entity type for your registration."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:12
+msgid "Note:"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:13
+msgid ""
+"Our smart on-call service is available for professional entities only. "
+"Private individuals are not eligible."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:21
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:23
+msgid "Business / Organization"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:24
+msgid "For corporate entities and startups."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:30
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:32
+#: .\electricity\templates\electricity\support.html:126
+msgid "Housing Association"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:33
+msgid "For property owners and co-ops."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:40
+msgid "Organization Information"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:45
+msgid "Organization Name"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:46
+msgid "e.g. Acme Corp"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:50
+msgid "Org Number"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:51
+msgid "556XXX-XXXX"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:55
+#: .\electricity\templates\electricity\service_booking\step_11.html:75
+msgid "Contact Person"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:61
+msgid "+46 00 000 00 00"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:66
+msgid "contact@organization.com"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:73
+msgid "Address Details"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:78
+msgid "Company Address"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:79
+msgid "Street Name 123"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:83
+#: .\electricity\templates\electricity\outside_area.html:29
+msgid "ZIP Code"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:84
+msgid "123 45"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:89
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:83
+#: .\electricity\templates\electricity\service_booking\step_2.html:51
+msgid "Stockholm"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_2.html:101
+msgid "Continue to Next Step"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:8
+msgid "Registration Flow"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:9
+#: .\electricity\views.py:1576
+msgid "Property & Risk Profile"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:10
+msgid "Tell us about the physical infrastructure we’ll be supporting."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:17
+#: .\electricity\templates\electricity\service_booking\step_3.html:21
+msgid "Property Type"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:19
+msgid "Select property type"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:21
+#: .\electricity\templates\electricity\service_booking\step_3.html:34
+msgid "Commercial"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:24
+msgid "Industrial"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:27
+msgid "Mixed Use"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:30
+msgid "Residential"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:36
+msgid "Number of Assets/Properties"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:39
+msgid "e.g. 12"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:44
+msgid "Primary City / Region"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:47
+msgid "Search region..."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:55
+msgid "Shared Critical Systems"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:56
+msgid "Are HVAC, plumbing, or electrical systems shared?"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_3.html:72
+msgid "Review & Finalize"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:9
+msgid "Application received."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:10
+msgid "Your on-call registration has been submitted. Reference ID:"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:15
+msgid "Finalize Registration"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:16
+#: .\electricity\views.py:1577
+msgid "Finalize Your Registration"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:17
+msgid ""
+"Review and complete the last few steps to activate your on-call electrical "
+"service."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:21
+msgid "Current electrical situation"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:23
+msgid "When was your last electrical issue?"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:28
+msgid "Are you currently with another provider?"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:29
+msgid "Active contract elsewhere"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:37
+msgid "Briefly describe any recurring electrical issues"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:41
+msgid "e.g., Occasional flickering in the main hall..."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:47
+msgid "Additional notes (Optional)"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:51
+msgid "Enter any additional details here..."
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:57
+msgid "Emergency pricing estimate"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:59
+msgid "Estimated emergency hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:67
+msgid "Estimated total:"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:69
+#: .\electricity\templates\electricity\service_booking\step_11.html:111
+#: .\electricity\templates\electricity\service_booking\step_7.html:29
+#: .\electricity\templates\electricity\service_booking\step_7.html:39
+msgid "hr"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:74
+#: .\electricity\views.py:1583
+msgid "Review & Submit"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:76
+msgid "On-Call Pro (Monthly)"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:78
+msgid "Service Plan"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:82
+msgid "123 Industrial Way"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:85
+msgid "Site Address"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:90
+msgid "Notice of Activation: By clicking \\"
+msgstr ""
+
+#: .\electricity\templates\electricity\on_call_booking\step_4.html:100
+msgid "Submit Application"
+msgstr ""
+
+#: .\electricity\templates\electricity\outside_area.html:4
+msgid "Outside Coverage | Hembla experten"
+msgstr ""
+
+#: .\electricity\templates\electricity\outside_area.html:10
+msgid "Outside coverage"
+msgstr ""
+
+#: .\electricity\templates\electricity\outside_area.html:11
+msgid "We're not in your area yet"
+msgstr ""
+
+#: .\electricity\templates\electricity\outside_area.html:12
+msgid ""
+"Thanks for checking. We're expanding quickly and may reach your ZIP soon. If "
+"you share your details, we'll follow up when we can help."
+msgstr ""
+
+#: .\electricity\templates\electricity\outside_area.html:15
+msgid ""
+"Thank you. We've received your request and will reach out if service becomes "
+"available."
+msgstr ""
+
+#: .\electricity\templates\electricity\outside_area.html:33
+#: .\electricity\templates\electricity\service_booking\step_4.html:13
+#: .\electricity\views.py:1187
+msgid "What do you need help with?"
+msgstr ""
+
+#: .\electricity\templates\electricity\outside_area.html:34
+msgid "Tell us about your project or request..."
+msgstr ""
+
+#: .\electricity\templates\electricity\outside_area.html:37
+msgid "Send request"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:5
+msgid "RWM EL Home"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:8
+msgid "Toggle menu"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:15
+msgid "Main navigation"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:16
+msgid "Home"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:17
+msgid "About"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:19
+msgid "Pricing"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:25
+msgid "Change language"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:37
+msgid "English"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:38
+msgid "Swedish"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:39
+msgid "Arabic"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:43
+msgid "Back to Hembla Experten"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:47
+msgid "My Profile"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:48
+#: .\electricity\templates\electricity\partials\global_header.html:54
+msgid "Sign out"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:52
+msgid "Dashboard"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:57
+msgid "Sign in"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\global_header.html:58
+msgid "Sign up"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\site_banner.html:4
+msgid "Notice"
+msgstr ""
+
+#: .\electricity\templates\electricity\partials\site_banner.html:6
+msgid ""
+"This website is in active development. Some features may be updated or "
+"refined."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:4
+msgid "Privacy Policy | RWM EL Pro Edition"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:73
+msgid "Transparency & Security"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:75
+msgid "Effective Date: 30 January 2026"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:78
+msgid ""
+"At RWM EL, we believe data protection is a fundamental pillar of "
+"professional service. This policy details our commitment to your privacy "
+"under Swedish and EU regulations."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:87
+msgid "Contents"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:89
+msgid "01. Data Controller"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:90
+msgid "02. Scope of Policy"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:91
+msgid "03. Data Sources"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:92
+msgid "04. Data Collection"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:93
+msgid "05. Purpose"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:94
+msgid "06. Legal Basis"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:95
+msgid "07. Data Retention"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:96
+msgid "08. Data Security"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:97
+msgid "09. Data Sharing"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:98
+msgid "10. Int. Transfers"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:99
+msgid "11. Your GDPR Rights"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:100
+msgid "12. Cookies"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:101
+msgid "13. On-Site Protocol"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:102
+msgid "14. Marketing"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:103
+msgid "15. Automation"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:104
+msgid "16. Children's Privacy"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:105
+msgid "17. Policy Updates"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:106
+msgid "18. Complaints"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:113
+msgid "Data Controller"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:115
+msgid ""
+"RWM EL is the designated data controller for all processing activities "
+"described herein. We are a registered Swedish electrical service provider "
+"operating with full technical compliance."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:118
+msgid "Email Enquiries"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:122
+msgid "Direct Line"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:131
+msgid "Scope of Policy"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:132
+msgid ""
+"This policy applies to all customers, website visitors, and partners of RWM "
+"EL. It covers data collected via our website, on-site electrical service "
+"visits, telephone inquiries, and digital communications."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:137
+msgid "Sources of Personal Data"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:144
+msgid "Direct Interaction"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:145
+msgid "Information provided when you request a quote or book a service."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:153
+msgid "Automated Systems"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:154
+msgid "Data collected through cookies and website analytics."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:162
+msgid "Public Registries"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:163
+msgid "Verified data from SPAR for Swedish tax (ROT) eligibility."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:171
+msgid "Personal Data We Collect"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:175
+msgid "Identity & Swedish PIN (for ROT)"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:179
+msgid "Contact & Property Address"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:183
+msgid "Technical Installation Specs"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:187
+msgid "Billing & Payment History"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:194
+msgid "Purpose of Processing"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:201
+msgid "ROT & Legal Disclosures"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:205
+msgid ""
+"For Swedish residential customers, we are legally required to collect your "
+"Personal Identity Number (personnummer) to facilitate the ROT tax deduction. "
+"This data is transmitted securely to the Swedish Tax Agency (Skatteverket)."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:210
+msgid "Required Action"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:212
+msgid ""
+"Failure to provide this information may result in the full invoice amount "
+"being charged without the tax benefit."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:215
+msgid ""
+"Beyond tax compliance, data is used for service execution, scheduling, "
+"safety certification, and mandatory bookkeeping under the Swedish "
+"Bookkeeping Act."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:220
+msgid "Legal Basis for Processing"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:223
+msgid "Contract"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:224
+msgid "Fulfilling our service agreement with you."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:227
+msgid "Legal Obligation"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:228
+msgid "Adhering to tax laws and safety regulations."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:231
+msgid "Interest"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:232
+msgid "Improving site performance and security."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:239
+msgid "Data Retention"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:240
+msgid ""
+"We store your data only as long as necessary. Service records are kept for "
+"<span class=\"font-bold text-navy-deep\">10 years</span> to comply with "
+"technical warranty periods and Swedish bookkeeping laws."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:245
+msgid "Data Security"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:246
+msgid ""
+"We implement high-tier technical and organizational measures, including "
+"AES-256 encrypted servers and strict limited-access protocols, to protect "
+"your data against unauthorized access or loss."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:251
+msgid "Sharing with Third Parties"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:252
+msgid "We never sell your data. We only share with:"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:255
+msgid "Specialist Subcontractors"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:256
+msgid "Billing Platforms"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:257
+msgid "IT Infrastructure"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:263
+msgid "International Transfers"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:264
+msgid ""
+"RWM EL primarily processes data within the EU/EEA. If data is transferred "
+"outside this zone, we ensure Standard Contractual Clauses (SCCs) are in "
+"place to maintain GDPR levels of protection."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:269
+msgid "Your GDPR Rights"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:274
+msgid "Right to Access"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:275
+msgid "Request a full extract of all personal data we hold about you."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:281
+msgid "Right to Rectification"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:282
+msgid "Demand the correction of inaccurate or incomplete information."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:288
+msgid "Right to Erasure"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:289
+msgid "Request deletion where data is no longer necessary for legal reasons."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:295
+msgid "Data Portability"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:296
+msgid "Receive your data in a structured, machine-readable format."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:302
+msgid "Right to Object"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:303
+msgid "Object to data processing based on our legitimate interests."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:309
+msgid "Restriction"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:310
+msgid "Request the limitation of how we process your personal data."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:318
+msgid "Cookies and Tracking"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:320
+#, python-format
+msgid ""
+"We use technical and analytical cookies to optimize website performance. For "
+"detailed information, please refer to our dedicated <a class=\"text-primary "
+"font-bold hover:underline\" href=\"%(url)s\">Cookie Policy</a>."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:325
+msgid "On-Site Service Protocols"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:326
+msgid ""
+"During physical site visits, our electricians may document technical "
+"installations with photographs. These are used solely for technical "
+"documentation, safety audits, and quality assurance."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:331
+msgid "Marketing Communications"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:332
+msgid ""
+"You will only receive marketing emails if you have explicitly opted in. You "
+"can unsubscribe at any time via the link provided in every communication."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:337
+msgid "Automated Decision Making"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:338
+msgid ""
+"RWM EL does not use automated decision-making or profiling systems that "
+"produce legal effects concerning you."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:343
+msgid "Children's Privacy"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:344
+msgid ""
+"Our services are designed for property owners and businesses. We do not "
+"knowingly collect or process data from individuals under the age of 18."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:349
+msgid "Policy Updates"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:350
+msgid ""
+"We periodically update this policy to reflect changes in our technical "
+"practices or legal requirements. Updates are effective immediately upon "
+"posting."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:355
+msgid "Complaints"
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:356
+msgid ""
+"If you believe we have mishandled your data, you have the right to lodge a "
+"complaint with the Swedish Authority for Privacy Protection "
+"(Integritetsskyddsmyndigheten - IMY)."
+msgstr ""
+
+#: .\electricity\templates\electricity\privacy.html:358
+msgid "Visit IMY.se"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\base.html:4
+msgid "Service Booking"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\base.html:21
+#, python-format
+msgid "Step %(step)s of 12: %(subtitle)s"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\base.html:36
+msgid "Please fix the following:"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_1.html:10
+msgid "Who is the booking for?"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_1.html:21
+msgid "Private Customer"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_1.html:23
+msgid ""
+"Individual home services, repairs, and electrical installations for your "
+"residence."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_1.html:26
+msgid "Eligible for ROT tax deduction"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_1.html:37
+msgid "Business / BRF"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_1.html:39
+msgid ""
+"Commercial properties, offices, housing associations (BRF), and "
+"organizations."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_1.html:42
+msgid "VAT invoice included"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_1.html:63
+msgid "e.g. Erik Andersson"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_1.html:87
+msgid "We'll send your booking confirmation and estimate to this address."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_10.html:10
+#: .\electricity\views.py:1193
+msgid "Visual Documentation"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_10.html:14
+msgid "Please upload photos of the area or existing electrical cabinet."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_10.html:15
+msgid ""
+"This allows our experts to bring the correct parts and reduces site time."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_10.html:16
+msgid "Supports JPG, PNG, PDF, and MP4 (Max 20MB)."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_10.html:23
+msgid "Drag and drop files here"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_10.html:27
+msgid "or click to browse from your computer"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_10.html:31
+msgid "Choose Files"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:14
+msgid "Service Details"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:16
+#: .\electricity\templates\electricity\service_booking\step_11.html:54
+msgid "Edit"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:21
+msgid "Service Type"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:22
+msgid "Licensed Master Electrician"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:26
+msgid "Tasks"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:29
+msgid "Hourly electrician booking"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:37
+msgid "Priority"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:42
+msgid "Standard (Next Available)"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:52
+msgid "Arrival Information"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:67
+msgid "Service Address"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:82
+msgid ""
+"\n"
+"        By clicking \"BOOK ELECTRICIAN\", you agree to our Terms of Service "
+"and Privacy Policy.\n"
+"        "
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:87
+#, python-format
+msgid ""
+"\n"
+"          The price below is calculated based on %(hours)s hour(s) at "
+"%(rate)s %(currency)s/hr.\n"
+"          "
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:91
+msgid "The price below reflects the fixed services you selected."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:104
+msgid "Hourly booking"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:106
+#: .\electricity\templates\electricity\service_booking\step_4.html:90
+#: .\electricity\templates\electricity\service_booking\step_7.html:24
+msgid "Hourly Rate"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:110
+#: .\electricity\templates\electricity\service_booking\step_7.html:34
+msgid "Estimated Hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:114
+msgid "Fixed service price"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:116
+#: .\electricity\templates\electricity\service_booking\step_4.html:93
+msgid "Fixed Services Total"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:122
+msgid "Book Electrician →"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:126
+msgid "Secure encrypted checkout"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:132
+msgid "Guaranteed Safety"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_11.html:133
+msgid "Background checked & certified"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_12.html:9
+msgid "Booking Received!"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_12.html:13
+#: .\electricity\templates\electricity\service_booking\step_12.html:18
+#, python-format
+msgid ""
+"\n"
+"      Your Nessafe electrician is scheduled for %(date)s.\n"
+"      A confirmation has been sent to your email.\n"
+"      "
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_12.html:28
+msgid "Confirmation ID"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_12.html:33
+msgid "Time Assigned"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_12.html:49
+msgid "Add to Calendar"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_12.html:54
+msgid "Go To Home"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:12
+#: .\electricity\views.py:1185
+msgid "Where will the work be done?"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:16
+#: .\electricity\views.py:1215
+msgid "We need your exact location for compliance and technician dispatching."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:27
+msgid "Enter your street address"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:37
+msgid "e.g. Malmö"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:42
+msgid "Region"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:44
+msgid "Select region"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:47
+msgid "Skåne"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:55
+msgid "Västra Götaland"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:62
+msgid "Country"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:75
+msgid "Why this matters?"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:79
+msgid ""
+"Older properties (pre-1980) often require specific grounding assessments "
+"before new installs."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:80
+msgid ""
+"Regional pricing in Skåne is currently active based on local technician "
+"availability."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:81
+msgid ""
+"Verified locations ensure valid insurance coverage for the electrical work "
+"performed."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:86
+msgid "Service area map"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:88
+msgid "Service Area: Skåne"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_2.html:93
+msgid ""
+"Nessafe is currently operating across southern Sweden with 24/7 support."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_3.html:11
+#: .\electricity\views.py:639 .\electricity\views.py:1186
+msgid "Tell us about the property"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_3.html:15
+msgid ""
+"Engineering details help us prepare the right equipment for your system."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_3.html:23
+msgid "Select type"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_3.html:30
+msgid "Villa"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_3.html:40
+msgid "Year of Construction"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_3.html:42
+msgid "Select range"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_3.html:45
+msgid "Before 1980"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_3.html:49
+msgid "1980 - 2000"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_3.html:53
+msgid "After 2000"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_3.html:63
+msgid "Has the electrical system been upgraded?"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_3.html:66
+msgid "Major renewals of fuse box, wiring, or grounding."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_4.html:21
+msgid "Hourly Electrician"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_4.html:23
+msgid "Book a licensed electrician by the hour."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_4.html:30
+msgid "Fixed Service Price"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_4.html:32
+msgid "Choose a service with a fixed price."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_4.html:60
+msgid "No services available."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_4.html:70
+msgid "Request Summary"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_4.html:91
+msgid "hour"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_4.html:100
+msgid "Map"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_4.html:104
+msgid "Guaranteed Pro"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_4.html:106
+msgid ""
+"All RWM EL pros are licensed, bonded, and insured for your peace of mind."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_5.html:16
+msgid ""
+"Please provide as much detail as possible to help us give an accurate quote."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_5.html:25
+msgid ""
+"e.g., The GFCI outlet near the kitchen sink is tripping. I also need a new "
+"pendant light installed over the island. There is existing wiring, but the "
+"mounting bracket might need replacement."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_5.html:30
+msgid "Required"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:19
+msgid "When would you like us to come?"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:33
+msgid "Estimated Duration"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:43
+msgid "Estimated hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:47
+msgid "1 hour"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:49
+msgid "2 hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:51
+msgid "3 hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:53
+msgid "4 hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:55
+msgid "5 hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:57
+msgid "6 hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:59
+msgid "7 hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:61
+msgid "8 hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:71
+msgid "Estimated price"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:95
+msgid "Primary Choice"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:115
+#: .\electricity\templates\electricity\service_booking\step_6.html:175
+msgid "Select Time Slot"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:119
+#: .\electricity\templates\electricity\service_booking\step_6.html:179
+msgid "Select time slot"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:147
+msgid "Alternative Choice (Optional)"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_6.html:155
+msgid "Adding an alternative window helps us confirm your booking faster."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_7.html:11
+#: .\electricity\views.py:1204
+msgid "Pricing & Savings"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_7.html:15
+msgid "Transparent breakdown of your estimated costs."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_7.html:26
+msgid "Admin-defined electrician rate"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_7.html:36
+msgid "Based on your selection"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_7.html:46
+msgid "Fixed Service Total"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_7.html:48
+msgid "Selected services total"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_7.html:57
+msgid "Estimated Total"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_7.html:60
+msgid "Final price calculated on booking"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_7.html:69
+msgid ""
+"I confirm the scheduling windows and accept the pricing breakdown including "
+"ROT requirements."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:12
+#: .\electricity\views.py:1191
+msgid "Billing & Documentation"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:16
+msgid ""
+"Please provide your billing identity, property details, and any helpful "
+"files to finalize your request."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:22
+msgid "Save Draft"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:34
+msgid "Billing Identity"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:35
+msgid "GDPR Compliant"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:41
+msgid "Private (Personal ID)"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:46
+msgid "Business (Org Number)"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:54
+msgid "Personal Identity Number (SSN)"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:56
+msgid "YYYYMMDD-XXXX"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:60
+msgid "Standard Swedish format for tax and insurance purposes."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:67
+msgid "Full Legal Name"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:69
+msgid "As it appears on ID"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:77
+msgid "Company Name"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:79
+msgid "Registered company name"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_8.html:87
+msgid "Organization Number"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_9.html:10
+#: .\electricity\views.py:1192
+msgid "Apartment & BRF Details"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_9.html:17
+msgid "Is this a BRF (Housing Association) property?"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_9.html:20
+msgid ""
+"Providing association details helps us coordinate with building management "
+"if needed for common electrical lines."
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_9.html:32
+msgid "BRF Name / Association"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_9.html:36
+msgid "e.g. BRF Solsidan"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_9.html:41
+msgid "Apartment Number"
+msgstr ""
+
+#: .\electricity\templates\electricity\service_booking\step_9.html:45
+msgid "e.g. 1102 (4 digits)"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:4
+msgid "Electrical Services | Hembla experten"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:16
+msgid "Warmth Meets"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:17
+msgid "Intelligence"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:18
+msgid "Designed for"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:19
+msgid "Modern Living"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:22
+msgid ""
+"Redefining smart home infrastructure with advanced comfort, security, and "
+"energy efficiency. We elevate your experience - today."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:27
+msgid "On-Call & Emergency"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:41
+msgid "Tailored Comfort"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:42
+msgid "Advanced systems crafted to adapt to your lifestyle and property."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:52
+msgid "Resilient Security"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:53
+msgid "Proactive monitoring and smart defense for peace of mind."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:63
+msgid "Peak Efficiency"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:64
+msgid "Integrated energy management to maximize performance and savings."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:78
+msgid "TECHNICAL CATALOG INTEGRATION"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:80
+msgid ""
+"We are currently finalizing our digital blueprints and proprietary material "
+"packages. Our web expansion will soon include complete technical "
+"specifications for all hardware tiers."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:82
+msgid "Until then, our field engineering teams remain fully active."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:90
+msgid "Priority Infrastructure Support"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:93
+msgid ""
+"Priority electrical support for businesses, housing associations (BRF), and "
+"property managers. Activate immediate access with an on-call agreement "
+"tailored to your site."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:98
+msgid "Response windows confirmed in writing."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:107
+msgid "The Service Ecosystem"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:109
+msgid ""
+"While our detailed technical library is in development, our boutique "
+"engineering team is fully operational and ready to serve you today."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:124
+msgid "Smart Infrastructure"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:135
+msgid "Schedule a consultation"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:136
+msgid "Book a service"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:142
+msgid "No services available yet"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:143
+msgid "New electrical solutions are being curated. Please check back soon."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:153
+msgid "Engineering integrity"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:156
+msgid "Exceptional Foundations"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:157
+msgid "Engineering"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:157
+msgid "Integrity"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:159
+msgid ""
+"Our electrical division manages the complex infrastructure required for high-"
+"end modern smart homes and precision commercial spaces."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:163
+msgid "Troubleshooting and Diagnostics"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:164
+msgid "Panel Upgrades"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:165
+msgid "Energy Optimization"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:168
+msgid ""
+"Our teams ensure seamless installation, precise integration, and long-term "
+"system reliability across every project."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:172
+msgid "Book an Electrical Consultation"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:181
+msgid "Precision Scheduling"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:182
+msgid ""
+"We coordinate site visits in 30-minute windows to reduce downtime and keep "
+"teams synchronized."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:185
+msgid "Compliance-Ready Documentation"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:186
+msgid ""
+"Every installation includes a structured handover packet with schematics, "
+"test logs, and warranties."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:189
+msgid "Dedicated Points of Contact"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:190
+msgid ""
+"Project leads stay available before, during, and after commissioning for "
+"rapid escalation."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:199
+msgid "More Smart Home Details"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:200
+msgid "Coming Soon"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:201
+msgid ""
+"We are currently collecting our advanced catalog and proprietary solutions "
+"to help you get the most out of your infrastructure."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:204
+#: .\electricity\templates\electricity\services.html:213
+msgid "Schedule a Smart Home Consultation"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:214
+msgid "Let us recommend the right smart systems for your property."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:215
+msgid "Schedule Now"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:218
+msgid "Book a Licensed Electrician"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:219
+msgid "Premium electrical installation and maintenance services."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:220
+msgid "Book Service"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:229
+msgid "Pricing for Booking Electrical"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:230
+msgid "PRICING FOR BOOKING ELECTRICAL"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:232
+msgid ""
+"Transparent fee structures for on-site engineering and maintenance services."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:237
+msgid "Base Deployment"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:238
+msgid "First Hour Breakdown"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:242
+msgid "Labour Rate"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:246
+msgid "Transport Fee"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:250
+msgid "Total"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:254
+msgid "Includes VAT"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:258
+msgid "Tax Optimization"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:259
+msgid "Minimum charge with ROT"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:260
+msgid "ROT Deduction Applied"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:264
+msgid "Gross Total"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:268
+#, python-format
+msgid "ROT (30%% Labour)"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:272
+msgid "Adjusted Total"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:276
+msgid "Final charge per first hour"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:280
+msgid "Ongoing Rate"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:281
+msgid "Additional Service Time"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:285
+msgid "Standard Hourly"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:289
+msgid "With ROT Deduction"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:293
+msgid "Billed in 30min increments"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:297
+#: .\electricity\templates\electricity\support.html:41
+#: .\electricity\templates\electricity\support.html:117
+msgid "Documentation"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:301
+msgid "Minimum charge of 1 hour applies to all site deployments."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:302
+msgid ""
+"Material costs and specialized equipment are excluded from the rates above."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:303
+msgid "ROT deduction requires valid Swedish tax eligibility (Personal ID)."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:313
+msgid "Ready to upgrade"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:313
+msgid "Your Home?"
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:314
+msgid ""
+"Our boutique engineering teams are fully operational and ready for "
+"deployment."
+msgstr ""
+
+#: .\electricity\templates\electricity\services.html:317
+msgid "Request Electrical"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:4
+msgid "Customer Support | Hembla experten"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:16
+msgid "Clear answers. Responsible support."
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:18
+msgid "View FAQs"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:19
+msgid "Submit Ticket"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:27
+msgid "What We Can Help You With"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:31
+msgid "Ongoing Work"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:32
+msgid ""
+"Real-time updates on your current electrical installation. Monitor progress "
+"and scheduled inspections in real-time."
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:36
+msgid "Follow-ups"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:37
+msgid ""
+"Quality checks and premium maintenance support after project completion. We "
+"ensure long-term system integrity."
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:42
+msgid ""
+"Direct access to your safety certificates, warranties, and technical "
+"drawings in our secure client portal."
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:50
+msgid "Premium Contact Channels"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:54
+msgid "Priority Line"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:56
+msgid "Mon - Fri 08:00 - 17:00"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:60
+msgid "Concierge Email"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:62
+msgid "24-hour response guarantee"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:66
+msgid "Digital Portal"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:67
+msgid "Open Support Ticket"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:68
+msgid "Trackable request system"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:76
+msgid "Direct Support Form"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:77
+msgid ""
+"Submit your detailed request and our technical team will review it within 2 "
+"business hours."
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:81
+msgid "Ticket received. Your reference ID is"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:113
+#: .\electricity\templates\electricity\support.html:123
+msgid "Select"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:114
+msgid "Technical Issue"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:115
+msgid "Billing"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:116
+msgid "Maintenance"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:121
+msgid "Customer Type"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:124
+msgid "Residential Client"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:125
+msgid "Business Client"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:134
+msgid "Message"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:139
+msgid "Submit Request"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:147
+msgid "What Happens Next"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:151
+msgid "Request Logged"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:152
+msgid ""
+"Our system instantly assigns a ticket number and notifies our technical lead."
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:156
+msgid "Expert Review"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:157
+msgid ""
+"A certified electrician reviews your request to prepare the best solution."
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:161
+msgid "Active Support"
+msgstr ""
+
+#: .\electricity\templates\electricity\support.html:162
+msgid ""
+"You receive a direct response or site visit confirmation within the promised "
+"timeframe."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:4
+msgid "Terms & Conditions | RWM EL Pro Edition"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:10
+msgid "Contractual Agreement"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:11
+msgid "Terms & Conditions"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:18
+msgid ""
+"These General Terms and Conditions govern the professional relationship "
+"between RWM EL and our clients, ensuring transparency, safety, and "
+"excellence in every electrical installation."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:26
+msgid "Legal Sections"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:28
+msgid "01. General Provisions"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:29
+msgid "02. Scope of Service"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:30
+msgid "03. Pricing & Rates"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:31
+msgid "04. Dispatch Definitions"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:32
+msgid "05. Labor & Materials"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:33
+msgid "06. ROT Deduction"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:34
+msgid "07. Site Access"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:35
+msgid "08. Safety Compliance"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:36
+msgid "09. Cancellation Policy"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:37
+msgid "10. Delays & Force Majeure"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:38
+msgid "11. Defects & Complaints"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:39
+msgid "12. Cap on Liability"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:40
+msgid "13. Insurance Coverage"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:41
+msgid "14. Payment Terms"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:42
+msgid "15. Intellectual Property"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:43
+msgid "16. Data Privacy"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:44
+msgid "17. Termination"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:45
+msgid "18. Dispute Resolution"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:46
+msgid "19. Governing Law"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:53
+msgid "General Provisions"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:54
+msgid ""
+"These terms apply to all quotes, orders, and agreements for services "
+"provided by RWM EL. By commissioning our services, the client acknowledges "
+"and accepts these terms in full. Any deviations must be agreed upon in "
+"writing."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:59
+msgid "Scope of Service"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:60
+msgid ""
+"RWM EL provides authorized electrical installations, repairs, and "
+"consulting. The specific scope for each project is defined in the written "
+"quote provided to the client."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:62
+msgid "Technical Documentation"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:63
+msgid ""
+"All work includes standard self-inspection documentation as required by the "
+"Swedish National Electrical Safety Board (Elsäkerhetsverket)."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:69
+msgid "Pricing & Rates"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:70
+msgid ""
+"Services are billed either at a fixed project price or an hourly rate of"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:70
+msgid "SEK 850 (excl. VAT)"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:70
+msgid "unless otherwise specified."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:73
+msgid "Standard Hours"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:74
+msgid "Mon-Fri, 07:00 - 16:00"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:77
+msgid "Emergency Rate"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:78
+msgid "1.5x - 2x Base Hourly Rate"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:85
+msgid "Dispatch Definitions"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:86
+msgid "A \\"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:88
+msgid ""
+"Dispatch fees are non-refundable once the technician has departed for the "
+"site, regardless of whether work can be performed due to site-specific "
+"restrictions."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:94
+msgid "Labor & Materials"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:95
+msgid ""
+"RWM EL provides high-grade electrical components. Clients providing their "
+"own materials must ensure they meet EU safety standards (CE-marked). RWM EL "
+"reserves the right to refuse the installation of client-provided materials "
+"if they are deemed unsafe or unfit for purpose."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:98
+msgid "Labor Warranty"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:99
+msgid "10-year warranty on the quality of installation work."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:102
+msgid "Material Warranty"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:103
+msgid "Governed by the manufacturer's specific warranty terms."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:110
+msgid "ROT Deduction"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:112
+msgid "ROT Tax Benefit"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:113
+msgid ""
+"The client is responsible for ensuring they have sufficient ROT space "
+"remaining for the fiscal year. RWM EL will apply the deduction on the "
+"invoice based on the information provided by the client."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:115
+msgid "Liability Notice"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:116
+msgid ""
+"If Skatteverket denies the ROT request for any reason, the client is legally "
+"obligated to pay the remaining balance to RWM EL within 10 days of "
+"notification."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:123
+msgid "Site Access"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:124
+msgid ""
+"The client must ensure that the work area is accessible and cleared of "
+"obstructions. If a technician is unable to access the site at the agreed "
+"time, waiting time or a \\"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:129
+msgid "Safety Compliance"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:130
+msgid ""
+"Safety is our primary concern. Our electricians are authorized to stop work "
+"immediately if they encounter conditions that pose a risk to life, property, "
+"or health. Work will only resume once the hazard has been mitigated at the "
+"client's expense."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:137
+msgid "Cancellation Compensation"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:139
+msgid "> 48 hours notice"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:139
+msgid "No Charge"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:140
+msgid "24 - 48 hours notice"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:140
+#, python-format
+msgid "50%% of Dispatch Fee"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:141
+msgid "< 24 hours notice"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:141
+#, python-format
+msgid "100%% of Dispatch + 1hr Labor"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:143
+msgid "Calculated based on planned project start time."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:149
+msgid "Delays & Force Majeure"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:150
+msgid ""
+"RWM EL is not liable for delays caused by circumstances beyond our control, "
+"including but not limited to extreme weather, supply chain disruptions, or "
+"government restrictions."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:155
+msgid "Defects & Complaints"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:156
+msgid "Complaints regarding performed work must be submitted in writing within"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:156
+msgid "7 days"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:156
+msgid ""
+"of project completion. RWM EL reserves the right to rectify any verified "
+"defects before third-party intervention."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:161
+msgid "Cap on Liability"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:163
+msgid ""
+"To the maximum extent permitted by Swedish law, RWM EL's total liability for "
+"any claim arising under this agreement is limited to the"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:163
+msgid "total amount paid by the client for the specific service"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:163
+msgid ""
+"that gave rise to the claim. We are not liable for indirect or consequential "
+"damages, such as loss of profit or production."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:169
+msgid "Insurance Coverage"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:170
+msgid ""
+"RWM EL maintains comprehensive liability insurance (Ansvarsförsäkring) for "
+"all operations, covering property damage and personal injury resulting from "
+"our professional activities."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:175
+msgid "Payment Terms"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:176
+msgid "Standard payment term is"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:176
+msgid "10 days (net)"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:176
+#, python-format
+msgid ""
+"from the date of invoice. Late payments are subject to a reminder fee and "
+"interest at the current reference rate + 8%%."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:181
+msgid "Intellectual Property"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:182
+msgid ""
+"All blueprints, technical drawings, and documentation produced by RWM EL "
+"remain our intellectual property until full payment has been received, at "
+"which point the client is granted a perpetual license for use at the "
+"specific site."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:187
+msgid "Data Privacy"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:188
+msgid ""
+"We process personal data in accordance with our Privacy Policy and GDPR. "
+"This includes identity data for ROT deductions and technical data for "
+"service history."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:193
+msgid "Termination"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:194
+msgid ""
+"Either party may terminate the agreement if the other party significantly "
+"breaches their obligations and fails to rectify the breach within 14 days of "
+"written notice."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:199
+msgid "Dispute Resolution"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:200
+msgid ""
+"In the event of a dispute, we strive for an amicable resolution. Consumers "
+"have the right to refer disputes to the National Board for Consumer Disputes "
+"(Allmänna reklamationsnämnden - ARN)."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:205
+msgid "Governing Law"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:206
+msgid ""
+"This agreement is governed by Swedish law. Any disputes that cannot be "
+"settled amicably shall be settled by a Swedish general court, with Stockholm "
+"District Court as the first instance."
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:208
+msgid "Download PDF Version"
+msgstr ""
+
+#: .\electricity\templates\electricity\terms.html:209
+msgid "download"
+msgstr ""
+
+#: .\electricity\templates\electricity\zip_check.html:4
+msgid "Coverage Check | Hembla experten"
+msgstr ""
+
+#: .\electricity\templates\electricity\zip_check.html:10
+msgid "Coverage check"
+msgstr ""
+
+#: .\electricity\templates\electricity\zip_check.html:11
+msgid "Let's confirm your ZIP code"
+msgstr ""
+
+#: .\electricity\templates\electricity\zip_check.html:12
+msgid ""
+"We currently serve selected areas in Sweden. Enter your ZIP code to continue "
+"with your booking."
+msgstr ""
+
+#: .\electricity\templates\electricity\zip_check.html:15
+msgid "Swedish ZIP Code"
+msgstr ""
+
+#: .\electricity\templates\electricity\zip_check.html:17
+msgid "114 44"
+msgstr ""
+
+#: .\electricity\templates\electricity\zip_check.html:18
+msgid "Check"
+msgstr ""
+
+#: .\electricity\templates\electricity\zip_check.html:21
+msgid "Please enter a valid ZIP code (e.g. 114 44)."
+msgstr ""
+
+#: .\electricity\templates\electricity\zip_check.html:24
+msgid "We never share your information. This step only checks coverage."
+msgstr ""
+
+#: .\electricity\views.py:615
+msgid "How would you like to start?"
+msgstr ""
+
+#: .\electricity\views.py:667
+msgid "What do you want help with?"
+msgstr ""
+
+#: .\electricity\views.py:695
+msgid "Describe your project or issue"
+msgstr ""
+
+#: .\electricity\views.py:728
+msgid "Add photos or documents (optional)"
+msgstr ""
+
+#: .\electricity\views.py:748
+msgid "Personal ID is required for private bookings."
+msgstr ""
+
+#: .\electricity\views.py:751
+msgid "Company name is required."
+msgstr ""
+
+#: .\electricity\views.py:753
+msgid "Organization number is required."
+msgstr ""
+
+#: .\electricity\views.py:755
+msgid "Company address is required."
+msgstr ""
+
+#: .\electricity\views.py:875
+msgid "Review your request"
+msgstr ""
+
+#: .\electricity\views.py:1184
+msgid "Start Your Booking"
+msgstr ""
+
+#: .\electricity\views.py:1189
+msgid "Finalize Schedule & Cost"
+msgstr ""
+
+#: .\electricity\views.py:1190 .\electricity\views.py:1203
+msgid "Schedule & Pricing"
+msgstr ""
+
+#: .\electricity\views.py:1194
+msgid "Final Review"
+msgstr ""
+
+#: .\electricity\views.py:1195
+msgid "Booking Received"
+msgstr ""
+
+#: .\electricity\views.py:1198
+msgid "Account & Contact"
+msgstr ""
+
+#: .\electricity\views.py:1199
+msgid "Location Details"
+msgstr ""
+
+#: .\electricity\views.py:1200 .\electricity\views.py:1582
+msgid "Property Details"
+msgstr ""
+
+#: .\electricity\views.py:1201
+msgid "Service Selection"
+msgstr ""
+
+#: .\electricity\views.py:1202
+msgid "Work Summary"
+msgstr ""
+
+#: .\electricity\views.py:1205
+msgid "Identity & Billing"
+msgstr ""
+
+#: .\electricity\views.py:1206
+msgid "Association Details"
+msgstr ""
+
+#: .\electricity\views.py:1207
+msgid "Files & Media"
+msgstr ""
+
+#: .\electricity\views.py:1208
+msgid "Confirm & Submit"
+msgstr ""
+
+#: .\electricity\views.py:1213
+msgid ""
+"First, we need to know who we are working with to provide the correct "
+"pricing and tax options."
+msgstr ""
+
+#: .\electricity\views.py:1216
+msgid "Engineering details help us prepare the right equipment."
+msgstr ""
+
+#: .\electricity\views.py:1217
+msgid "Select all services that apply to your request."
+msgstr ""
+
+#: .\electricity\views.py:1219
+msgid "Choose your primary and alternative time windows."
+msgstr ""
+
+#: .\electricity\views.py:1220
+msgid "Confirm your pricing options and savings."
+msgstr ""
+
+#: .\electricity\views.py:1221
+msgid "Provide billing identity and documentation details."
+msgstr ""
+
+#: .\electricity\views.py:1222
+msgid "Add association details for multi-unit properties."
+msgstr ""
+
+#: .\electricity\views.py:1223
+msgid "Upload photos of the area or existing electrical cabinet."
+msgstr ""
+
+#: .\electricity\views.py:1224
+msgid "Please confirm your appointment details and secure your booking."
+msgstr ""
+
+#: .\electricity\views.py:1225
+msgid "Your booking is confirmed."
+msgstr ""
+
+#: .\electricity\views.py:1510 .\electricity\views.py:1528
+msgid "ONBOARDING"
+msgstr ""
+
+#: .\electricity\views.py:1511 .\electricity\views.py:1529
+msgid "Great choice! Let's start with your details."
+msgstr ""
+
+#: .\electricity\views.py:1580
+msgid "Coverage & Response"
+msgstr ""
+
+#: .\electricity\views.py:1581
+msgid "Entity Selection & Organization Info"
+msgstr ""

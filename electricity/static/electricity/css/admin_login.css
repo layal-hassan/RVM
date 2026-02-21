@@ -500,3 +500,23 @@ body[dir="rtl"] .ts-dropdown {
     padding: 28px;
   }
 }
+
+@media (max-width: 600px) {
+  .admin-login-shell {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .admin-login-card {
+    padding: 26px;
+  }
+
+  .admin-login-brand {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .side-card {
+    padding: 24px;
+  }
+}

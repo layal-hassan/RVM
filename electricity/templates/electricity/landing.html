@@ -9,14 +9,18 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   {% if CURRENT_LANGUAGE == "ar" %}
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
   {% endif %}
 
+  <link rel="stylesheet" href="{% static 'electricity/css/global_header.css' %}">
   <link rel="stylesheet" href="{% static 'electricity/css/landing.css' %}">
 </head>
-<body class="landing-body">
+<body class="landing-body electricity-body">
+
+{% include "electricity/partials/global_header.html" %}
+{% include "electricity/partials/site_banner.html" %}
 
 <main class="landing">
   <div class="landing-media">
@@ -52,6 +56,6 @@
   </div>
 </main>
 
-
+<script defer src="{% static 'electricity/js/global_header.js' %}"></script>
 </body>
 </html>

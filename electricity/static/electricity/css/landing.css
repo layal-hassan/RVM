@@ -23,9 +23,11 @@ body.landing-body {
 /* ===== FULLSCREEN WRAPPER ===== */
 .landing {
   position: relative;
-  width: 100vw;
-  min-height: max(100vh, calc(100vw * 9 / 16));
+  width: 100%;
+  min-height: 100vh;
   background: #0b0c0f;
+  display: flex;
+  align-items: stretch;
 }
 
 /* ===== BACKGROUND IMAGE ===== */
@@ -35,8 +37,8 @@ body.landing-body {
 
   background-image: url("../img/landing-hero.jpg");
   background-repeat: no-repeat;
-  background-size: 100% auto;
-  background-position: center -6%;
+  background-size: cover;
+  background-position: center;
 
   z-index: 0;
 }
@@ -56,9 +58,12 @@ body.landing-body {
 
 /* ===== CONTENT ===== */
 .landing-content {
-  position: absolute;
-  left: clamp(18px, 5vw, 88px);
-  top: 350px;
+  position: relative;
+  width: min(620px, 90vw);
+  margin-left: clamp(18px, 6vw, 96px);
+  margin-right: clamp(18px, 6vw, 96px);
+  padding-top: clamp(140px, 20vh, 260px);
+  padding-bottom: clamp(48px, 10vh, 140px);
 
   display: flex;
   flex-direction: column;
@@ -88,9 +93,9 @@ body.landing-body {
 
 /* ===== TITLE ===== */
 .landing-title {
-  font-size: clamp(40px, 5.6vw, 86px);
+  font-size: clamp(36px, 6vw, 88px);
   font-weight: 800;
-  line-height: 0.9;
+  line-height: 0.92;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -101,8 +106,8 @@ body.landing-body {
 
 /* ===== SUBTITLE ===== */
 .landing-subtitle {
-  max-width: min(520px, 70vw);
-  font-size: clamp(12px, 1.4vw, 15px);
+  max-width: min(520px, 90vw);
+  font-size: clamp(12px, 1.6vw, 16px);
   line-height: 1.6;
   color: rgba(245, 245, 245, 0.85);
 } 
@@ -153,4 +158,55 @@ body.landing-body {
   font-size: 11px;
   letter-spacing: 0.04em;
   color: rgba(200, 200, 200, 0.6);
+}
+
+@media (max-width: 900px) {
+  .landing-content {
+    margin-left: clamp(16px, 5vw, 36px);
+    margin-right: clamp(16px, 5vw, 36px);
+    padding-top: clamp(120px, 22vh, 220px);
+    gap: 14px;
+  }
+
+  .landing-title {
+    letter-spacing: 0.02em;
+  }
+
+  .landing-kicker {
+    letter-spacing: 0.2em;
+  }
+}
+
+@media (max-width: 600px) {
+  .landing {
+    min-height: 100svh;
+  }
+
+  .landing-content {
+    width: min(520px, 92vw);
+    padding-top: clamp(110px, 18vh, 180px);
+  }
+
+  .landing-title {
+    font-size: clamp(30px, 9vw, 48px);
+  }
+
+  .landing-subtitle {
+    font-size: 13px;
+  }
+
+  .landing-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .landing-cta {
+    width: 100%;
+    text-align: center;
+  }
+
+  .landing-note {
+    font-size: 10px;
+  }
 }

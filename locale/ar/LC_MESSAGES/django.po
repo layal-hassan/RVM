@@ -2532,6 +2532,14 @@ msgstr "تغطية الاستدعاء"
 msgid "We're not in your area yet"
 msgstr "لسنا في منطقتك بعد"
 
+#: .\electricity\templates\electricity\partials\site_banner.html:3
+msgid "Notice"
+msgstr "ملاحظة"
+
+#: .\electricity\templates\electricity\partials\site_banner.html:5
+msgid "This website is in active development. Some features may be updated or refined."
+msgstr "هذا الموقع قيد التطوير حاليًا. قد يتم تحديث بعض الميزات أو تحسينها."
+
 #: .\electricity\templates\electricity\outside_area.html:12
 msgid ""
 "Thanks for checking. We're expanding quickly and may reach your ZIP soon. If "

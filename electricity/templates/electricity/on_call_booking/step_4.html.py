@@ -1,0 +1,106 @@
+BBBBBBB BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+BBBB BBBB
+BBBBB BBBBBBBBBBBBBBB
+XXXXX XXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXX
+  BBBBBBBBBB
+
+  BB BBBBBBBBB
+    XXXX XXXXXXXXXXXXXXXXXXXXXXX
+      XXXXXXXX gettext(u'Application received.') XXXXXXXXX
+       gettext(u'Your on-call registration has been submitted. Reference ID:')  X
+    XXXXXX
+  BBBBB
+
+  XXXX XXXXXXXXXXXXXXXXXXXXXX
+    XXXX XXXXXXXXXXXXXXXXXXXXXX gettext(u'Finalize Registration') XXXXXX
+    XXXX XXXXXXXXXXXXXXXXXXXXXX gettext(u'Finalize Your Registration') XXXXXX
+    XXX gettext(u'Review and complete the last few steps to activate your on-call electrical service.') XXXX
+  XXXXXX
+
+  XXXX XXXXXXXXXXXXXXXXXX
+    XXXX XXXXXXXXXXXXXXXXXXXXXXXX gettext(u'Current electrical situation') XXXXXX
+
+    XXXXXXX gettext(u'When was your last electrical issue?') XXXXXXXX
+    XXXXXX XXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX XXXXXXXFFFFFFFFFFXX
+
+    XXXX XXXXXXXXXXXXXXXXX XXXXXXXXX
+      XXXXX
+        XXXXXXXX gettext(u'Are you currently with another provider?') XXXXXXXXX
+        XXX gettext(u'Active contract elsewhere') XXXX
+      XXXXXX
+      XXXXXX XXXXXXXXXXXXXXX
+        XXXXXX XXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX BB BBBBBBBBBBBBBBBBBBBBXXXXXXXBBBBBX
+        XXXXX XXXXXXXXXXXXXXXXXXXXXX
+      XXXXXXXX
+    XXXXXX
+
+    XXXXXXX gettext(u'Briefly describe any recurring electrical issues') XXXXXXXX
+    XXXXXXXXX XXXXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXXXXXXX
+              XXXXXXXX
+              XXXXXXXXXXXXX gettext(u'e.g., Occasional flickering in the main hall...') XX
+      FFFFFFFFFF
+    XXXXXXXXXXX
+  XXXXXX
+
+  XXXX XXXXXXXXXXXXXXXXXX
+    XXXX XXXXXXXXXXXXXXXXXXXXXXXX gettext(u'Additional notes (Optional)') XXXXXX
+    XXXXXXXXX XXXXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXXXXXXX
+              XXXXXXXX
+              XXXXXXXXXXXXX gettext(u'Enter any additional details here...') XX
+      FFFFFFFFFF
+    XXXXXXXXXXX
+  XXXXXX
+
+  XXXX XXXXXXXXXXXXXXXXXX
+    XXXX XXXXXXXXXXXXXXXXXXXXXXXX gettext(u'Emergency pricing estimate') XXXXXX
+
+    XXXXXXX gettext(u'Estimated emergency hours') XXXXXXXX
+    XXXXXX XXXXXXXXXXXXXXXXXXXX
+           XXXXXXXXXXXXX
+           XXXXXXX
+           XXXXXXXXXXXXXXXXXXXXXX
+           XXXXXXXFFFFFFFFFFFXX
+
+    XXXX XXXXXXXXXXXXXXXXXXXXX
+       gettext(u'Estimated total:') 
+      XXXXXXXXFFFFFFFFFFF FFFFFFFFFFFFFXXXXXXXXX
+      XFFFFFFFFFFF FFFFFFFFFFFFFX gettext(u'hr') X
+    XXXXXX
+  XXXXXX
+
+  XXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXX
+    XXXX XXXXXXXXXXXXXXXXXXXXXXXX gettext(u'Review & Submit') XXXXXX
+
+     gettext(u'On-Call Pro (Monthly)') 
+    XXXX XXXXXXXXXXXXXXXXXXX
+      XXXXXX gettext(u'Service Plan') XXXXXXX
+      XXXXXXXXFFFFFFFFFFFFFFFFFFFFFFFFFFFFXXXXXXXXX
+    XXXXXX
+
+     gettext(u'123 Industrial Way') 
+     gettext(u'Stockholm') 
+    XXXX XXXXXXXXXXXXXXXXXXX
+      XXXXXX gettext(u'Site Address') XXXXXXX
+      XXXXXXXXFFFFFFFFFFFFFFFFFFFFFFFX FFFFFFFFFFFFFFFFFFFFXXXXXXXXX
+    XXXXXX
+
+    XXXX XXXXXXXXXXXXXXX
+       gettext(u'Notice of Activation: By clicking \\') 
+    XXXXXX
+
+    XXXX XXXXXXXXXXXXXXXXXXXXXXX
+      XX XXXXXXXXXX XXXXXXXXXX
+         XXXXXXBBB BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB BXX
+          gettext(u'Back') 
+      XXXX
+
+      XXXXXXX XXXXXXXXXX XXXXXXXXXXXX XXXXXXXXXXXXXX
+         gettext(u'Submit Application') 
+      XXXXXXXXX
+    XXXXXX
+  XXXXXX
+
+XXXXXXX
+BBBBBBBB

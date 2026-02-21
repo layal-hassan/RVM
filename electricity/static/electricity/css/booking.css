@@ -606,3 +606,72 @@ select.booking-input:hover {
         flex-direction: column;
     }
 }
+
+@media (max-width: 980px) {
+    .booking-page {
+        padding: 32px 0 48px;
+    }
+
+    .option-grid,
+    .service-grid,
+    .time-grid,
+    .urgent-option,
+    .toggle-option,
+    .split-row {
+        grid-template-columns: 1fr;
+    }
+
+    .urgent-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .booking-actions {
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 600px) {
+    .booking-card {
+        padding: 22px;
+        border-radius: 20px;
+    }
+
+    .booking-title {
+        font-size: 1.6rem;
+    }
+
+    .booking-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .option-card,
+    .service-card,
+    .time-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .review-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .thankyou-card {
+        padding: 30px;
+        border-radius: 20px;
+    }
+
+    .thankyou-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 1.6rem;
+    }
+
+    .thankyou-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
