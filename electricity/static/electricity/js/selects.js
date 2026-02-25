@@ -29,13 +29,16 @@
       }
 
       select.dataset.tomselectInitialized = "true";
+      const dropdownParent =
+        select.closest(".form-label") || select.parentElement || "body";
+
       const tom = new TomSelect(select, {
         plugins,
         create: false,
         allowEmptyOption: true,
         placeholder: getPlaceholder(select),
         closeAfterSelect: !select.multiple,
-        dropdownParent: "body",
+        dropdownParent,
       });
 
     });

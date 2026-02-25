@@ -1,4 +1,4 @@
-﻿{% extends "electricity/base.html" %}
+{% extends "electricity/base.html" %}
 {% load static electricity_extras i18n %}
 
 {% block title %}{% trans "Electrical Services | Hembla experten" %}{% endblock %}
@@ -10,20 +10,19 @@
   <div class="container hero-content">
     <div class="hero-kicker">
       <span class="line"></span>
-      <span>{% trans "Integrated Infrastructure Group" %}</span>
+      <span>{% trans "HOME AUTOMATION &amp; CONTROL" %}</span>
     </div>
     <h1 class="hero-title">
-      {% trans "Warmth Meets" %}<br>
-      <span class="hero-italic">{% trans "Intelligence" %}</span><br>
-      {% trans "Designed for" %}<br>
-      {% trans "Modern Living" %}
+      {% trans "DESIGNED FOR" %}<br>
+      <span class="hero-italic">{% trans "MODERN LIVING" %}</span>
     </h1>
     <p class="hero-subtitle">
-      {% trans "Redefining smart home infrastructure with advanced comfort, security, and energy efficiency. We elevate your experience - today." %}
+      {% trans "Control your home without thinking about it." %}<br>
+      {% trans "We design and install intelligent home systems that quietly handle comfort, security, and energy efficiency—working perfectly in the background, every day." %}
     </p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a Consultation" %}</a>
-      <a class="btn btn-secondary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an Electrician" %}</a>
+      <a class="btn btn-secondary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN" %}</a>
       <a class="btn btn-secondary" href="{% url 'electricity:on_call' %}">{% trans "On-Call & Emergency" %}</a>
     </div>
   </div>
@@ -38,8 +37,8 @@
         </svg>
       </div>
       <div>
-        <h3>{% trans "Tailored Comfort" %}</h3>
-        <p>{% trans "Advanced systems crafted to adapt to your lifestyle and property." %}</p>
+        <h3>{% trans "SAFETY &amp; COMPLIANCE" %}</h3>
+        <p>{% trans "Electrical work done right, to code, and built to last. We follow all Swedish electrical regulations and industry standards, ensuring your home or business is safe, compliant, and future-proof." %}</p>
       </div>
     </div>
     <div class="feature-card">
@@ -49,8 +48,8 @@
         </svg>
       </div>
       <div>
-        <h3>{% trans "Resilient Security" %}</h3>
-        <p>{% trans "Proactive monitoring and smart defense for peace of mind." %}</p>
+        <h3>{% trans "COMFORT &amp; RELIABILITY" %}</h3>
+        <p>{% trans "Power that works exactly when and how it should. From lighting and heating to appliances and smart controls, we create electrical systems that run smoothly every day—without interruptions, flickering, or guesswork." %}</p>
       </div>
     </div>
     <div class="feature-card">
@@ -60,8 +59,8 @@
         </svg>
       </div>
       <div>
-        <h3>{% trans "Peak Efficiency" %}</h3>
-        <p>{% trans "Integrated energy management to maximize performance and savings." %}</p>
+        <h3>{% trans "EFFICIENCY &amp; FUTURE READINESS" %}</h3>
+        <p>{% trans "Smarter energy use, lower costs, and systems ready for tomorrow. We design and install energy-efficient solutions, EV charging, and modern electrical systems that reduce waste, lower bills, and adapt as your needs grow." %}</p>
       </div>
     </div>
   </div>
@@ -109,7 +108,7 @@
       <p class="section-copy">{% trans "While our detailed technical library is in development, our boutique engineering team is fully operational and ready to serve you today." %}</p>
     </div>
 
-    <div class="service-grid">
+    <div class="service-grid{% if services|length == 1 %} service-grid-single{% endif %}">
       {% for service in services %}
         <article class="service-card service-card-dynamic">
           <div class="service-media">
@@ -150,26 +149,51 @@
 <section class="section engineering-section">
   <div class="container engineering-grid">
     <div class="engineering-media">
-      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80" alt="{% trans 'Engineering integrity' %}">
+      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80" alt="{% trans 'Electrical foundation' %}">
     </div>
     <div class="engineering-content">
-      <div class="eyebrow">{% trans "Exceptional Foundations" %}</div>
-      <h2>{% trans "Engineering" %}<br><span class="hero-italic">{% trans "Integrity" %}</span></h2>
+      <div class="eyebrow">{% trans "ELECTRICAL FOUNDATION" %}</div>
+      <h2>{% trans "ENGINEERED" %}<br><span class="hero-italic">{% trans "FOR RELIABILITY" %}</span></h2>
       <p class="engineering-lead">
-        {% trans "Our electrical division manages the complex infrastructure required for high-end modern smart homes and precision commercial spaces." %}
+        {% trans "Our electrical work forms the backbone of safe, high-performing homes and properties. We design, install, and upgrade electrical infrastructure that supports modern living—handling both everyday systems and high-load requirements with precision and care." %}
       </p>
       <div class="engineering-columns">
-        <ul class="engineering-list">
-          <li>{% trans "Troubleshooting and Diagnostics" %}</li>
-          <li>{% trans "Panel Upgrades" %}</li>
-          <li>{% trans "Energy Optimization" %}</li>
-        </ul>
+        <div>
+          <div class="eyebrow">{% trans "WHAT WE HANDLE" %}</div>
+          <ul class="engineering-list">
+            <li>{% trans "Fault tracing, troubleshooting &amp; diagnostics" %}</li>
+            <li>{% trans "Electrical panels, distribution boards &amp; capacity upgrades" %}</li>
+            <li>{% trans "Power supply for modern homes, EV charging &amp; automation" %}</li>
+            <li>{% trans "Safety improvements, upgrades &amp; corrective work" %}</li>
+            <li>{% trans "All related electrical installations and service—even if not explicitly listed" %}</li>
+          </ul>
+        </div>
         <div class="engineering-side">
-          {% trans "Our teams ensure seamless installation, precise integration, and long-term system reliability across every project." %}
+          <div class="eyebrow">{% trans "READY WHEN YOU NEED US" %}</div>
+          {% trans "Our licensed electricians are available for both residential and commercial work, delivering fast response, clear communication, and work done right the first time." %}
         </div>
       </div>
       <div class="hero-actions">
-        <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Book an Electrical Consultation" %}</a>
+        <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN" %}</a>
+      </div>
+      <p class="engineering-lead">
+        {% trans "And if it’s electrical, we handle it. If a service isn’t listed here, it doesn’t mean we don’t do it—contact us and we’ll assess your needs." %}
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-light">
+  <div class="container">
+    <div class="cta-panel muted-panel">
+      <div>
+        <h2>{% trans "NEED SOMETHING NOT LISTED?" %}</h2>
+        <p>{% trans "Not every electrical or home system project fits neatly into a category." %}</p>
+        <p>{% trans "If it involves electricity, control, or system integration, our team can assess it and guide you to the right solution." %}</p>
+        <p>{% trans "Licensed electricians. Clear advice. No obligation." %}</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "BOOK A CONSULTATION" %}</a>
       </div>
     </div>
   </div>
@@ -210,14 +234,19 @@
 <section class="section mini-cta-section">
   <div class="container mini-cta-grid">
     <div class="mini-cta-card">
-      <h3>{% trans "Schedule a Smart Home Consultation" %}</h3>
-      <p>{% trans "Let us recommend the right smart systems for your property." %}</p>
-      <a class="card-link" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule Now" %}</a>
+      <h3>{% trans "PLAN YOUR HOME SYSTEMS" %}</h3>
+      <p>{% trans "Work with our team to plan, design, or upgrade electrical and home systems—tailored to your property, needs, and future use." %}</p>
+      <a class="card-link" href="{% url 'electricity:booking_step_1' %}">{% trans "REQUEST A CONSULTATION →" %}</a>
     </div>
     <div class="mini-cta-card">
-      <h3>{% trans "Book a Licensed Electrician" %}</h3>
-      <p>{% trans "Premium electrical installation and maintenance services." %}</p>
-      <a class="card-link" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Book Service" %}</a>
+      <h3>{% trans "BOOK A LICENSED ELECTRICIAN" %}</h3>
+      <p>{% trans "Fast, professional help for installations, repairs, troubleshooting, and essential electrical work—done safely and to code." %}</p>
+      <a class="card-link" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN" %}</a>
+    </div>
+    <div class="mini-cta-card">
+      <h3>{% trans "START PLANNING" %}</h3>
+      <p>{% trans "For projects that need discussion before work begins. Use this option if you’re planning upgrades, new installations, or want professional advice before deciding on next steps." %}</p>
+      <a class="card-link" href="{% url 'electricity:booking_step_1' %}">{% trans "START PLANNING →" %}</a>
     </div>
   </div>
 </section>
@@ -302,7 +331,7 @@
           <li>{% trans "Material costs and specialized equipment are excluded from the rates above." %}</li>
           <li>{% trans "ROT deduction requires valid Swedish tax eligibility (Personal ID)." %}</li>
         </ul>
-        <div class="pricing-foot">Licensed by Elsأ¤kerhetsverket</div>
+        <div class="pricing-foot">{% trans "Licensed by Elsäkerhetsverket" %}</div>
       </article>
     </div>
   </div>
@@ -310,11 +339,11 @@
 
 <section class="section bottom-cta">
   <div class="container bottom-cta-inner">
-    <h2>{% trans "Ready to upgrade" %}<br><span>{% trans "Your Home?" %}</span></h2>
-    <p>{% trans "Our boutique engineering teams are fully operational and ready for deployment." %}</p>
+    <h2>{% trans "READY TO UPGRADE YOUR HOME?" %}</h2>
+    <p>{% trans "From electrical upgrades to modern home systems, our licensed electricians are ready to help—whether you’re planning ahead or need support now." %}</p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a Consultation" %}</a>
-      <a class="btn btn-secondary" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Request Electrical" %}</a>
+      <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "REQUEST A CONSULTATION" %}</a>
+      <a class="btn btn-secondary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN" %}</a>
     </div>
   </div>
 </section>

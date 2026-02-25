@@ -1,4 +1,4 @@
-{% extends "electricity/base.html" %}
+﻿{% extends "electricity/base.html" %}
 {% load static i18n %}
 
 {% block title %}{% trans "Contact RWM EL" %}{% endblock %}
@@ -12,7 +12,7 @@
       <h1>{% trans "Contact RWM EL" %}</h1>
       <p class="contact-hero-quote">{% blocktrans %}Clear communication is where safe electrical work begins.{% endblocktrans %}</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an Electrician" %}</a>
+        <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN" %}</a>
         <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Book Consultation" %}</a>
       </div>
     </div>
@@ -41,19 +41,35 @@
     </div>
     <div class="contact-card-grid">
       <article class="contact-card">
-        <div class="contact-card-icon">☎️</div>
+        <div class="contact-card-icon" aria-hidden="true">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 3a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c1 .3 2 .6 3 .7a2 2 0 0 1 1.7 1.9Z"/>
+  </svg>
+</div>
         <h3>{% trans "Phone" %}</h3>
         <p>{% trans "Speak with our expert dispatch team for immediate assistance." %}</p>
-        <span class="contact-card-link">+46 123 456 78</span>
+        <span class="contact-card-link">0046760355633</span>
       </article>
       <article class="contact-card">
-        <div class="contact-card-icon">✉️</div>
+        <div class="contact-card-icon" aria-hidden="true">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <rect x="3" y="5" width="18" height="14" rx="2"/>
+    <path d="m3 7 9 6 9-6"/>
+  </svg>
+</div>
         <h3>{% trans "Email" %}</h3>
         <p>{% trans "Send us project plans or detailed inquiries for a formal quote." %}</p>
-        <span class="contact-card-link">support@rwmel.se</span>
+        <span class="contact-card-link">Support@rwmel.se</span>
       </article>
       <article class="contact-card">
-        <div class="contact-card-icon">📝</div>
+        <div class="contact-card-icon" aria-hidden="true">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <path d="M14 2v6h6"/>
+    <path d="M8 13h8"/>
+    <path d="M8 17h6"/>
+  </svg>
+</div>
         <h3>{% trans "Contact Form" %}</h3>
         <p>{% trans "Quickly submit your details and we will respond within 24 hours." %}</p>
         <span class="contact-card-link">{% trans "Submit Inquiry" %}</span>
@@ -70,7 +86,7 @@
       <div class="contact-meta">
         <div>
           <h4>{% trans "Operating Hours" %}</h4>
-          <p>{% trans "Mon - Fri آ· 07:00 - 17:00" %}</p>
+          <p>{% trans "Mon - Fri 07:00 - 17:00" %}</p>
         </div>
         <div>
           <h4>{% trans "Headquarters" %}</h4>
@@ -107,11 +123,11 @@
       <label>{% trans "Your Message" %}
         <textarea rows="4" name="message" placeholder="{% trans "Tell us more about your needs..." %}" required></textarea>
       </label>
-      <button class="btn btn-primary" type="submit">{% trans "Send Message" %}</button>
       <label class="contact-consent">
         <input type="checkbox" name="consent" required>
         {% trans "I consent to the processing of my personal data for the purpose of this inquiry in accordance with GDPR regulations." %}
       </label>
+      <button class="btn btn-primary" type="submit">{% trans "Send Message" %}</button>
       {% if contact_status == "sent" %}
         <div class="contact-status contact-status-success">{% trans "Thank you! We have received your request." %}</div>
       {% elif contact_status == "error" %}
@@ -155,3 +171,4 @@
   </div>
 </section>
 {% endblock %}
+

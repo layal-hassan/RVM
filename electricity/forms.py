@@ -220,8 +220,6 @@ class ElectricalServiceForm(forms.ModelForm):
         model = ElectricalService
         fields = _translated_fields("title", "short_description", "bullet_points") + [
             "icon",
-            "price",
-            "duration_minutes",
             "service_fee",
             "base_fee",
             "hourly_rate",
@@ -232,20 +230,6 @@ class ElectricalServiceForm(forms.ModelForm):
             "is_active",
             "order",
         ]
-        widgets = {
-            "price": forms.NumberInput(attrs={"step": "0.01", "min": "0"}),
-            "duration_minutes": forms.NumberInput(attrs={"min": "1"}),
-        }
-
-    def clean(self):
-        cleaned = super().clean()
-        price = cleaned.get("price")
-        duration = cleaned.get("duration_minutes")
-        if price is None or price <= 0:
-            self.add_error("price", "Price must be greater than 0.")
-        if not duration or duration <= 0:
-            self.add_error("duration_minutes", "Duration must be greater than 0.")
-        return cleaned
 
 
 class ConsultationRequestForm(forms.ModelForm):

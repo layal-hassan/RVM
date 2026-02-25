@@ -18,6 +18,8 @@
   color: #f5f1e8;
   border-bottom: 1px solid rgba(199, 164, 91, 0.35);
   font-family: "Vesper Libre", serif;
+  margin-top: -26;
+  padding-top: 0;
 }
 
 .site-announcement__inner {
@@ -395,6 +397,14 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
 }
 
 [dir="rtl"] .rwm-electricity-global-header .rwm-egh-lang-option {
+  text-align: right;
+}
+
+[dir="rtl"] .rwm-electricity-global-header .rwm-egh-navwrap,
+[dir="rtl"] .rwm-electricity-global-header .rwm-egh-nav,
+[dir="rtl"] .rwm-electricity-global-header .rwm-egh-left,
+[dir="rtl"] .rwm-electricity-global-header .rwm-egh-right {
+  align-items: flex-end;
   text-align: right;
 }
 

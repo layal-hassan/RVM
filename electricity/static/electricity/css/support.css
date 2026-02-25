@@ -1,35 +1,47 @@
 body.support-page {
   background: #ffffff;
+  padding-top: var(--rwmh-height);
 }
 
 .support-page {
   color: #1f2937;
 }
 
+.support-page .site-announcement {
+  margin-top: calc(-1 * var(--rwmh-height));
+}
+
 .support-hero {
-  padding: 80px 0 60px;
-  background: linear-gradient(180deg, rgba(11, 12, 14, 0.45), rgba(11, 12, 14, 0.2)),
-    url("../img/support-lamp.png") center/cover no-repeat;
+  padding: 110px 0 90px;
+  background: linear-gradient(180deg, rgba(7, 9, 13, 0.78), rgba(7, 9, 13, 0.35)),
+    url("../img/support-lamp.png") right center/cover no-repeat;
   background-color: #0b0c0e;
   text-align: center;
   border-radius: 0;
   margin: 0;
   max-width: none;
   color: #f5f7fb;
-  min-height:80vh;
+  min-height: 70vh;
 }
 
 .support-hero h1 {
   font-size: clamp(36px, 5vw, 56px);
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   color: #f5f7fb;
+}
+
+.support-hero-content {
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 .support-badge {
   display: inline-block;
   padding: 8px 18px;
   border-radius: 999px;
-  background: rgba(12, 14, 18, 0.55);
+  background: rgba(11, 12, 14, 0.55);
+  border: 1px solid rgba(211, 178, 106, 0.35);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
   color: #d3b26a;
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -44,30 +56,48 @@ body.support-page {
   flex-wrap: wrap;
 }
 
+.support-hero .btn {
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .support-actions .btn-secondary {
-  color: #0a192f;
-  border-color: #d3b26a;
+  color: #f5f7fb;
+  border: 1px solid rgba(245, 247, 251, 0.35);
+  background: rgba(245, 247, 251, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.support-actions .btn-primary {
+  background: #d3b26a;
+  color: #1a1408;
+  border: 1px solid #d3b26a;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.3);
 }
 
 .support-section {
   padding: 60px 0;
-  background: #ffffff;
+  background: #0b1220;
+  color: #e5e9f2;
 }
 
 .support-section.light {
-  background: #faf7f1;
+  background: #0b1220;
 }
 
 .support-title {
   text-align: center;
   font-size: 26px;
   margin-bottom: 30px;
-  color: #0a192f;
+  color: #f5f7fb;
 }
 
 .support-subtitle {
   text-align: center;
-  color: #6b7280;
+  color: rgba(229, 233, 242, 0.7);
   margin-bottom: 28px;
 }
 
@@ -82,18 +112,37 @@ body.support-page {
 .support-card,
 .support-channel,
 .support-step {
-  background: #ffffff;
-  border: 1px solid #e9e2d6;
+  background: #121a2b;
+  border: 1px solid #1f2a3d;
   border-radius: 18px;
   padding: 22px;
-  box-shadow: 0 12px 24px rgba(12, 18, 33, 0.08);
+  box-shadow: 0 16px 30px rgba(6, 10, 18, 0.4);
   text-align: center;
-  color: #1f2937;
+  color: #e5e9f2;
 }
 
 .support-icon {
-  font-size: 22px;
-  margin-bottom: 10px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  margin: 0 auto 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(211, 178, 106, 0.1);
+  border: 1px solid rgba(211, 178, 106, 0.4);
+  color: #d3b26a;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+.support-card h3,
+.support-channel h3 {
+  color: #f5f7fb;
+}
+
+.support-card p,
+.support-channel p,
+.support-channel span {
+  color: rgba(229, 233, 242, 0.75);
 }
 
 .support-form {

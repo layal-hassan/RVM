@@ -443,11 +443,17 @@ body.electricity-body.service-booking-page {
 
 [dir="rtl"] .service-booking-page select.form-select {
   background-position:
-    calc(100% - 18px) 52%,
-    calc(100% - 12px) 52%,
+    18px 52%,
+    12px 52%,
     0 0;
-  padding-left: 16px;
-  padding-right: 44px;
+  padding-left: 44px;
+  padding-right: 16px;
+  text-align: right;
+  direction: rtl;
+}
+
+[dir="rtl"] .service-booking-page select.form-select option {
+  direction: rtl;
   text-align: right;
 }
 
@@ -474,6 +480,10 @@ body.electricity-body.service-booking-page {
 
 .booking-section .form-label {
   width: 100%;
+}
+
+.booking-section .form-label {
+  position: relative;
 }
 
 .booking-section textarea.form-control {

@@ -7,21 +7,28 @@
 <section class="hero hero-minimal">
   <div class="hero-media" style="background-image: linear-gradient(180deg, rgba(8, 9, 12, 0.9), rgba(8, 9, 12, 0.55)), url('{% static 'electricity/img/hero.png' %}');"></div>
   <div class="hero-content minimal-content">
+    <div class="hero-note minimal-note">{% trans "Content for this" %}</div>
     <div class="hero-kicker minimal-kicker">
       <span class="line"></span>
-      <span>{% trans "Integrated Infrastructure Group" %}</span>
+      <span>{% trans "Integrated Electrical &amp; Infrastructure Solutions" %}</span>
     </div>
     <h1 class="hero-title minimal-title">
-      {% blocktrans trimmed %}THE <span class="accent">GOLD</span><br>STANDARD.{% endblocktrans %}
+      {% blocktrans trimmed %}BUILT RIGHT.<br>BUILT TO LAST{% endblocktrans %}
     </h1>
     <p class="hero-subtitle minimal-subtitle">
-      {% trans "Delivering mission-critical electrical, smart home, and energy solutions for modern homes, properties, and businesses." %}
+      {% trans "Delivering professional electrical installations, smart home systems, and energy-efficient solutions for modern homes, properties, and businesses—where performance, safety, and reliability are non-negotiable." %}
     </p>
     <div class="hero-actions minimal-actions">
-      <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an Electrician" %}</a>
-      <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a Consultation" %}</a>
+      <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN" %}</a>
+      <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "SCHEDULE A CONSULTATION" %}</a>
     </div>
-    <div class="hero-note minimal-note">{% trans "Fully operational today. Our website is expanding — our standards are not." %}</div>
+    <div class="hero-note minimal-note">{% trans "Fully operational today. Our standards are not negotiable." %}</div>
+    <a class="hero-scroll" href="{% url 'electricity:services' %}" aria-label="{% trans 'Access the website' %}">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M7 17l10-10"/>
+        <path d="M9 7h8v8"/>
+      </svg>
+    </a>
   </div>
 </section>
 {% endblock %}
