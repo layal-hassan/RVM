@@ -21,14 +21,14 @@
     <div class="hero-actions minimal-actions">
       <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN" %}</a>
       <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "SCHEDULE A CONSULTATION" %}</a>
+      <a class="hero-scroll hero-scroll-inline" href="{% url 'electricity:services' %}" aria-label="{% trans 'Access the website' %}">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 5v14"/>
+          <path d="M7 14l5 5 5-5"/>
+        </svg>
+      </a>
     </div>
     <div class="hero-note minimal-note">{% trans "Fully operational today. Our standards are not negotiable." %}</div>
-    <a class="hero-scroll" href="{% url 'electricity:services' %}" aria-label="{% trans 'Access the website' %}">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M7 17l10-10"/>
-        <path d="M9 7h8v8"/>
-      </svg>
-    </a>
   </div>
 </section>
 {% endblock %}

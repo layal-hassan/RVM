@@ -122,13 +122,23 @@
             <h3>{{ service.title }}</h3>
             <span class="service-tag">{% trans "Smart Infrastructure" %}</span>
             {% if service.bullet_points %}
-              <ul class="service-bullets">
-                {% for line in service.bullet_points|split_lines %}
-                  <li>{{ line }}</li>
-                {% endfor %}
-              </ul>
+              <details class="service-specs">
+                <summary>{% trans "Specifications" %}</summary>
+                <ul class="service-bullets">
+                  {% for line in service.bullet_points|split_lines %}
+                    <li>{{ line }}</li>
+                  {% endfor %}
+                </ul>
+              </details>
             {% elif service.short_description %}
-              <p class="service-description">{{ service.short_description }}</p>
+              <details class="service-specs">
+                <summary>{% trans "Specifications" %}</summary>
+                <ul class="service-bullets">
+                  {% for line in service.short_description|split_lines %}
+                    <li>{{ line }}</li>
+                  {% endfor %}
+                </ul>
+              </details>
             {% endif %}
             <div class="service-actions">
               <a class="mini-cta" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a consultation" %}</a>

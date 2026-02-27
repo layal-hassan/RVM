@@ -10,8 +10,8 @@ class ElectricalService(models.Model):
     short_description = models.TextField()
     bullet_points = models.TextField(blank=True, default="")
     icon = models.ImageField(upload_to='electricity/services/', blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    duration_minutes = models.PositiveIntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True, null=True)
+    duration_minutes = models.PositiveIntegerField(default=0, blank=True, null=True)
     service_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     base_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     hourly_rate = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -25,18 +25,9 @@ class ElectricalService(models.Model):
     class Meta:
         ordering = ["order", "title"]
 
-    def clean(self):
-        errors = {}
-        if self.price is None or self.price <= 0:
-            errors["price"] = "Price must be greater than 0."
-        if not self.duration_minutes or self.duration_minutes <= 0:
-            errors["duration_minutes"] = "Duration must be greater than 0."
-        if errors:
-            raise ValidationError(errors)
-
     @property
     def is_bookable(self):
-        return self.is_active and self.price > 0 and self.duration_minutes > 0
+        return self.is_active and (self.price or 0) > 0 and (self.duration_minutes or 0) > 0
 
     def save(self, *args, **kwargs):
         self.full_clean()

@@ -183,6 +183,11 @@ body.landing-body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.landing-scroll-inline {
+  margin-top: 0;
+  flex: 0 0 auto;
+}
+
 .landing-scroll:hover {
   transform: translateY(-2px);
   box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4);

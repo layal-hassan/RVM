@@ -78,7 +78,7 @@ def home(request):
 
 
 def services(request):
-    services_qs = _eligible_services().order_by("order", "title")
+    services_qs = ElectricalService.objects.filter(is_active=True).order_by("order", "title")
     pricing = ServicePricing.objects.filter(is_active=True).order_by("-created_at").first()
     pricing_context = {}
     if pricing:

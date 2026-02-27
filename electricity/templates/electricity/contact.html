@@ -72,7 +72,7 @@
 </div>
         <h3>{% trans "Contact Form" %}</h3>
         <p>{% trans "Quickly submit your details and we will respond within 24 hours." %}</p>
-        <span class="contact-card-link">{% trans "Submit Inquiry" %}</span>
+        <a class="contact-card-link" href="#contact-form">{% trans "Submit Inquiry" %}</a>
       </article>
     </div>
   </div>
@@ -85,11 +85,27 @@
       <p>{% trans "Our certified engineers are ready to assist with residential, commercial, and industrial electrical needs across Sweden." %}</p>
       <div class="contact-meta">
         <div>
-          <h4>{% trans "Operating Hours" %}</h4>
+          <h4 class="contact-meta-title">
+            <span class="contact-meta-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 7v5l3 2"/>
+              </svg>
+            </span>
+            {% trans "Operating Hours" %}
+          </h4>
           <p>{% trans "Mon - Fri 07:00 - 17:00" %}</p>
         </div>
         <div>
-          <h4>{% trans "Headquarters" %}</h4>
+          <h4 class="contact-meta-title">
+            <span class="contact-meta-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 22s7-6 7-12a7 7 0 0 0-14 0c0 6 7 12 7 12Z"/>
+                <circle cx="12" cy="10" r="2.5"/>
+              </svg>
+            </span>
+            {% trans "Headquarters" %}
+          </h4>
           <p>{% trans "Stockholm Business Park, Sweden" %}</p>
         </div>
       </div>
