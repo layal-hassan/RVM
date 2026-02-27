@@ -156,6 +156,24 @@
   </div>
 </section>
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const specsList = document.querySelectorAll(".service-specs");
+    specsList.forEach((specs) => {
+      specs.addEventListener("toggle", () => {
+        if (!specs.open) {
+          return;
+        }
+        specsList.forEach((other) => {
+          if (other !== specs) {
+            other.open = false;
+          }
+        });
+      });
+    });
+  });
+</script>
+
 <section class="section engineering-section">
   <div class="container engineering-grid">
     <div class="engineering-media">
