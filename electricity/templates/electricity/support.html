@@ -5,6 +5,9 @@
 {% block body_class %}support-page{% endblock %}
 
 {% block extra_head %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'electricity/css/support.css' %}">
 {% endblock %}
 
@@ -15,7 +18,7 @@
       <h1>{% trans "Customer Support" %}</h1>
       <div class="support-badge">{% trans "Clear answers. Responsible support." %}</div>
       <div class="support-actions">
-        <a class="btn btn-secondary btn-pill" href="#faqs">{% trans "View FAQs" %}</a>
+        <a class="btn btn-secondary btn-pill" href="{% url 'electricity:faq' %}">{% trans "View FAQs" %}</a>
         <a class="btn btn-primary btn-pill" href="#support-form">{% trans "Submit Ticket" %}</a>
       </div>
     </div>

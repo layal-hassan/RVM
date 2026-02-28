@@ -5,6 +5,7 @@ body.support-page {
 
 .support-page {
   color: #1f2937;
+  font-family: "Sora", "Vesper Libre", serif;
 }
 
 .support-page .site-announcement {
@@ -12,11 +13,13 @@ body.support-page {
 }
 
 .support-hero {
-  padding: 110px 0 90px;
-  background: linear-gradient(180deg, rgba(7, 9, 13, 0.78), rgba(7, 9, 13, 0.35)),
+  padding: 120px 0 110px;
+  background:
+    radial-gradient(1200px 600px at 20% 20%, rgba(211, 178, 106, 0.18), transparent 55%),
+    linear-gradient(180deg, rgba(6, 10, 18, 0.88), rgba(6, 10, 18, 0.35)),
     url("../img/support-lamp.png") right center/cover no-repeat;
   background-color: #0b0c0e;
-  text-align: center;
+  text-align: left;
   border-radius: 0;
   margin: 0;
   max-width: none;
@@ -25,14 +28,22 @@ body.support-page {
 }
 
 .support-hero h1 {
-  font-size: clamp(36px, 5vw, 56px);
-  margin-bottom: 12px;
+  font-size: clamp(38px, 4.6vw, 60px);
+  margin-bottom: 14px;
   color: #f5f7fb;
+  font-family: "Vesper Libre", serif;
+  font-weight: 700;
 }
 
 .support-hero-content {
-  max-width: 720px;
-  margin: 0 auto;
+  max-width: 640px;
+  margin: 0;
+  padding: 26px 26px 30px;
+  background: rgba(10, 14, 22, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
 }
 
 .support-badge {
@@ -46,40 +57,44 @@ body.support-page {
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 11px;
-  margin-bottom: 20px;
+  font-family: "Sora", sans-serif;
+  font-weight: 600;
+  margin-bottom: 18px;
 }
 
 .support-actions {
   display: flex;
-  gap: 12px;
-  justify-content: center;
+  gap: 10px;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 
 .support-hero .btn {
   border-radius: 999px;
-  padding: 10px 20px;
+  padding: 12px 22px;
   font-size: 12px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  font-family: "Sora", sans-serif;
+  font-weight: 600;
 }
 
 .support-actions .btn-secondary {
-  color: #f5f7fb;
-  border: 1px solid rgba(245, 247, 251, 0.35);
-  background: rgba(245, 247, 251, 0.12);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  color: #e6edf7;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .support-actions .btn-primary {
-  background: #d3b26a;
+  background: linear-gradient(135deg, #d7b874, #c19945);
   color: #1a1408;
-  border: 1px solid #d3b26a;
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.35);
 }
 
 .support-section {
-  padding: 60px 0;
+  padding: 70px 0;
   background: #0b1220;
   color: #e5e9f2;
 }
@@ -90,15 +105,18 @@ body.support-page {
 
 .support-title {
   text-align: center;
-  font-size: 26px;
-  margin-bottom: 30px;
+  font-size: 28px;
+  margin-bottom: 26px;
   color: #f5f7fb;
+  font-family: "Vesper Libre", serif;
+  font-weight: 700;
 }
 
 .support-subtitle {
   text-align: center;
   color: rgba(229, 233, 242, 0.7);
-  margin-bottom: 28px;
+  margin-bottom: 24px;
+  font-size: 15px;
 }
 
 .support-card-grid,
@@ -115,7 +133,7 @@ body.support-page {
   background: #121a2b;
   border: 1px solid #1f2a3d;
   border-radius: 18px;
-  padding: 22px;
+  padding: 24px;
   box-shadow: 0 16px 30px rgba(6, 10, 18, 0.4);
   text-align: center;
   color: #e5e9f2;
@@ -137,19 +155,22 @@ body.support-page {
 .support-card h3,
 .support-channel h3 {
   color: #f5f7fb;
+  font-family: "Vesper Libre", serif;
+  font-weight: 700;
 }
 
 .support-card p,
 .support-channel p,
 .support-channel span {
   color: rgba(229, 233, 242, 0.75);
+  font-size: 14px;
 }
 
 .support-form {
   background: #ffffff;
   border: 1px solid #e9e2d6;
   border-radius: 20px;
-  padding: 32px;
+  padding: 36px;
   box-shadow: 0 18px 32px rgba(12, 18, 33, 0.08);
   color: #1f2937;
   max-width: 920px;
@@ -173,6 +194,7 @@ body.support-page {
   padding: 12px 14px;
   background: #fdfbf7;
   color: #1f2937;
+  font-size: 14px;
 }
 
 .support-form label {
@@ -180,9 +202,10 @@ body.support-page {
   font-weight: 600;
   color: #0a192f;
   margin-bottom: 6px;
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0.03em;
   text-transform: uppercase;
+  font-family: "Sora", sans-serif;
 }
 
 .support-form textarea.form-control {
@@ -224,9 +247,49 @@ body.support-page {
   place-items: center;
   margin: 0 auto 10px;
   font-weight: 700;
+  font-family: "Sora", sans-serif;
+}
+
+.support-step h4 {
+  font-family: "Vesper Libre", serif;
+  font-weight: 700;
+}
+
+html[lang="ar"] .support-page {
+  font-family: "Cairo", "Tajawal", sans-serif;
+}
+
+html[lang="ar"] .support-hero h1,
+html[lang="ar"] .support-title,
+html[lang="ar"] .support-card h3,
+html[lang="ar"] .support-channel h3,
+html[lang="ar"] .support-step h4 {
+  font-family: "Cairo", "Tajawal", sans-serif;
+  letter-spacing: 0;
+}
+
+html[lang="ar"] .support-badge,
+html[lang="ar"] .support-hero .btn,
+html[lang="ar"] .support-form label,
+html[lang="ar"] .support-steps .step-circle {
+  font-family: "Cairo", "Tajawal", sans-serif;
+  letter-spacing: 0;
 }
 
 @media (max-width: 900px) {
+  .support-hero {
+    text-align: center;
+    padding: 110px 0 90px;
+  }
+
+  .support-hero-content {
+    margin: 0 auto;
+  }
+
+  .support-actions {
+    justify-content: center;
+  }
+
   .support-card-grid,
   .support-channel-grid,
   .support-steps,
