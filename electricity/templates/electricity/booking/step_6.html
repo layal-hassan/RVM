@@ -21,12 +21,12 @@
     </div>
 </div>
 
-<div class="form-row contact-private" data-private>
+<div class="form-row contact-private{% if form.contact_type.value != "business" %} is-visible{% endif %}" data-private>
     <label class="form-label">{% trans "Personal ID number" %}</label>
     {{ form.personal_id }}
 </div>
 
-<div class="form-row split-row contact-business" data-business>
+<div class="form-row split-row contact-business{% if form.contact_type.value == "business" %} is-visible{% endif %}" data-business>
     <div>
         <label class="form-label">{% trans "Company name" %}</label>
         {{ form.company_name }}

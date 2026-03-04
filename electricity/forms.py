@@ -1,3 +1,4 @@
+import re
 from django import forms
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
@@ -124,22 +125,46 @@ class Step6Form(forms.Form):
     personal_id = forms.CharField(
         required=False,
         max_length=40,
-        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": _("Personal ID number")}),
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control booking-input",
+                "placeholder": _("Personal ID number"),
+                "data-contact-field": "private",
+            }
+        ),
     )
     company_name = forms.CharField(
         required=False,
         max_length=160,
-        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": _("Company name")}),
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control booking-input",
+                "placeholder": _("Company name"),
+                "data-contact-field": "business",
+            }
+        ),
     )
     organization_number = forms.CharField(
         required=False,
         max_length=40,
-        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": _("Organization number")}),
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control booking-input",
+                "placeholder": _("Organization number"),
+                "data-contact-field": "business",
+            }
+        ),
     )
     company_address = forms.CharField(
         required=False,
         max_length=220,
-        widget=forms.TextInput(attrs={"class": "form-control booking-input", "placeholder": _("Company address")}),
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control booking-input",
+                "placeholder": _("Company address"),
+                "data-contact-field": "business",
+            }
+        ),
     )
     availability_days = forms.MultipleChoiceField(
         required=False,
@@ -195,7 +220,7 @@ class ZipCheckForm(forms.Form):
 
     def clean_zip_code(self):
         value = self.cleaned_data["zip_code"].strip()
-        value = value.replace(" ", "")
+        value = re.sub(r"\s+", "", value)
         if not value.isdigit() or len(value) != 5:
             raise ValidationError(_("Please enter a valid Swedish ZIP code (e.g. 114 44)."))
         return value

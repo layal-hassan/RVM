@@ -366,6 +366,36 @@ body {
     flex: 0 0 auto;
 }
 
+.provider-table {
+    margin-top: 24px;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #f2f2f2;
+    color: #4b5563;
+    white-space: nowrap;
+}
+
+.status-pill.is-ok {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-pill.is-bad {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.reason-text {
+    color: #6b7280;
+}
+
 .dash-form {
     display: grid;
     gap: 16px;
@@ -385,6 +415,29 @@ body {
     border: 1px solid #e6dccb;
     padding: 10px 12px;
     background: #fffaf0;
+}
+
+.dash-form input[type="time"] {
+    appearance: auto;
+    -webkit-appearance: auto;
+    background-image: none !important;
+    padding-right: 12px;
+}
+
+.dash-form input[type="time"]::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    display: inline-block;
+}
+
+.dash-form input[type="time"]::-webkit-clear-button,
+.dash-form input[type="time"]::-webkit-inner-spin-button,
+.dash-form input[type="time"]::-webkit-outer-spin-button {
+    display: none;
+    -webkit-appearance: none;
+}
+
+.dash-form input[type="time"]::-moz-focus-inner {
+    border: 0;
 }
 
 

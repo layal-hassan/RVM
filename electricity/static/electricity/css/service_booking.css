@@ -179,6 +179,17 @@ body.electricity-body.service-booking-page {
   margin-bottom: 10px;
 }
 
+.time-slot-note {
+  font-size: 12px;
+  color: var(--sb-muted);
+  margin-top: 6px;
+}
+
+.time-slot-note.is-empty {
+  color: #b45309;
+  font-weight: 600;
+}
+
 .price-box {
   border: 1px solid var(--sb-line);
   border-radius: 16px;

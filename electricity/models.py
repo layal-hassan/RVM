@@ -1,4 +1,5 @@
 ﻿import datetime
+import re
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
@@ -397,7 +398,7 @@ class AcceptedZipCode(models.Model):
         return self.code
 
     def save(self, *args, **kwargs):
-        self.code = self.code.replace(" ", "")
+        self.code = re.sub(r"\s+", "", self.code)
         super().save(*args, **kwargs)
 
 
@@ -559,6 +560,11 @@ class ProviderProfile(models.Model):
     phone = models.CharField(max_length=40, blank=True)
     zip_code = models.CharField(max_length=10, blank=True)
     is_active = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        if self.zip_code:
+            self.zip_code = re.sub(r"\s+", "", self.zip_code)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.display_name

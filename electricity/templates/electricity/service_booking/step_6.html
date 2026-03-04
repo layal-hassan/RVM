@@ -1,111 +1,229 @@
-{% extends "electricity/service_booking/base.html" %}
-{% load i18n %}
-{% block booking_content %}
-<form method="post" class="booking-form">
-  {% csrf_token %}
-  <div class="booking-section">
-
-    <div class="section-header">
-      <span class="section-index">7</span>
-      {% trans "When would you like us to come?" %}
-    </div>
-
-    {% if data.pricing_type == "hourly" %}
-      <div class="schedule-block">
-        <div class="schedule-title">
-          <span class="schedule-icon">🕒</span>
-          {% trans "Estimated Duration" %}
-        </div>
-
-        <div class="form-grid">
-          <label class="form-label">
-            {% trans "Estimated hours" %}
+{% extends "electricity/service_booking/base.html" %}
+
+{% load i18n %}
+
+{% block booking_content %}
+
+<form method="post" class="booking-form" data-slots-url="{% url 'electricity:service_booking_slots' %}">
+  {% csrf_token %}
+
+  <div class="booking-section">
+
+
+
+    <div class="section-header">
+
+      <span class="section-index">7</span>
+
+      {% trans "When would you like us to come?" %}
+
+    </div>
+
+
+
+    {% if data.pricing_type == "hourly" %}
+
+      <div class="schedule-block">
+
+        <div class="schedule-title">
+
+          <span class="schedule-icon">🕒</span>
+
+          {% trans "Estimated Duration" %}
+
+        </div>
+
+
+
+        <div class="form-grid">
+
+          <label class="form-label">
+
+            {% trans "Estimated hours" %}
+
             <select name="hourly_hours" id="hourly-hours">
-              <option value="1" {% if data.hourly_hours|stringformat:"s" == "1" %}selected{% endif %}>{% trans "1 hour" %}</option>
-              <option value="2" {% if data.hourly_hours|stringformat:"s" == "2" %}selected{% endif %}>{% trans "2 hours" %}</option>
-              <option value="3" {% if data.hourly_hours|stringformat:"s" == "3" %}selected{% endif %}>{% trans "3 hours" %}</option>
-              <option value="4" {% if data.hourly_hours|stringformat:"s" == "4" %}selected{% endif %}>{% trans "4 hours" %}</option>
-              <option value="5" {% if data.hourly_hours|stringformat:"s" == "5" %}selected{% endif %}>{% trans "5 hours" %}</option>
-              <option value="6" {% if data.hourly_hours|stringformat:"s" == "6" %}selected{% endif %}>{% trans "6 hours" %}</option>
-              <option value="7" {% if data.hourly_hours|stringformat:"s" == "7" %}selected{% endif %}>{% trans "7 hours" %}</option>
-              <option value="8" {% if data.hourly_hours|stringformat:"s" == "8" %}selected{% endif %}>{% trans "8 hours" %}</option>
-            </select>
-          </label>
-
-          <div class="form-label">
-            <span class="input-note">{% trans "Estimated price" %}</span>
-            <div class="price-preview">
-              <strong id="hourly-price">{{ cost_total }} {{ currency }}</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    {% endif %}
-
-    <div class="schedule-block">
-      <div class="schedule-title">
-        <span class="schedule-icon">📅</span>
-        {% trans "Primary Choice" %}
-      </div>
-
-      <div class="form-grid">
-        <label class="form-label">
-          {% trans "Select Date" %}
-          <input class="form-control" type="date" name="preferred_date" value="{{ data.preferred_date|default:'' }}">
-        </label>
-
-        <label class="form-label">
-          {% trans "Select Time Slot" %}
+              <option value="1" {% if data.hourly_hours|stringformat:"s" == "1" %}selected{% endif %}>{% trans "1 hour" %}</option>
+
+              <option value="2" {% if data.hourly_hours|stringformat:"s" == "2" %}selected{% endif %}>{% trans "2 hours" %}</option>
+
+              <option value="3" {% if data.hourly_hours|stringformat:"s" == "3" %}selected{% endif %}>{% trans "3 hours" %}</option>
+
+              <option value="4" {% if data.hourly_hours|stringformat:"s" == "4" %}selected{% endif %}>{% trans "4 hours" %}</option>
+
+              <option value="5" {% if data.hourly_hours|stringformat:"s" == "5" %}selected{% endif %}>{% trans "5 hours" %}</option>
+
+              <option value="6" {% if data.hourly_hours|stringformat:"s" == "6" %}selected{% endif %}>{% trans "6 hours" %}</option>
+
+              <option value="7" {% if data.hourly_hours|stringformat:"s" == "7" %}selected{% endif %}>{% trans "7 hours" %}</option>
+
+              <option value="8" {% if data.hourly_hours|stringformat:"s" == "8" %}selected{% endif %}>{% trans "8 hours" %}</option>
+
+            </select>
+
+          </label>
+
+
+
+          <div class="form-label">
+
+            <span class="input-note">{% trans "Estimated price" %}</span>
+
+            <div class="price-preview">
+
+              <strong id="hourly-price">{{ cost_total }} {{ currency }}</strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    {% endif %}
+
+
+
+    <div class="schedule-block">
+
+      <div class="schedule-title">
+
+        <span class="schedule-icon">📅</span>
+
+        {% trans "Primary Choice" %}
+
+      </div>
+      {% if duration_assumed %}
+        <div class="schedule-note">
+          {% trans "Availability is shown for a 1-hour window. Select services or hours to refine the time slots." %}
+        </div>
+      {% endif %}
+
+      <div class="form-grid">
+
+        <label class="form-label">
+
+          {% trans "Select Date" %}
+
+          <input class="form-control" type="date" name="preferred_date" value="{{ data.preferred_date|default:'' }}">
+
+        </label>
+
+
+
+        <label class="form-label">
+
+          {% trans "Select Time Slot" %}
+
           <select class="time-slot-select" name="preferred_time_slot">
-            <option value="">{% trans "Select time slot" %}</option>
-            {% for slot in available_slots %}
-              <option value="{{ slot.start }}" {% if data.preferred_time_slot == slot.start %}selected{% endif %}>
-                {{ slot.label }}
-              </option>
-            {% endfor %}
-          </select>
-        </label>
-      </div>
-    </div>
-
-    <div class="schedule-block">
-      <div class="schedule-title">
-        <span class="schedule-icon">🔁</span>
-        {% trans "Alternative Choice (Optional)" %}
-      </div>
-
-      <div class="schedule-note">
-        {% trans "Adding an alternative window helps us confirm your booking faster." %}
-      </div>
-
-      <div class="form-grid">
-        <label class="form-label">
-          {% trans "Select Date" %}
-          <input class="form-control" type="date" name="alt_date" value="{{ data.alt_date|default:'' }}">
-        </label>
-
-        <label class="form-label">
-          {% trans "Select Time Slot" %}
-          <select name="alt_time_slot">
-            <option value="">{% trans "Select time slot" %}</option>
-            {% for slot in alt_available_slots %}
-              <option value="{{ slot.start }}" {% if data.alt_time_slot == slot.start %}selected{% endif %}>
-                {{ slot.label }}
-              </option>
-            {% endfor %}
-          </select>
-        </label>
-      </div>
-    </div>
-  </div>
-
-  <div class="booking-actions">
-    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 5 %}">
-      {% trans "Back" %}
-    </a>
-    <button class="btn btn-primary" type="submit">
-      {% trans "Continue" %}
-    </button>
-  </div>
+            <option value="">{% trans "Select time slot" %}</option>
+
+            {% for slot in available_slots %}
+
+              <option value="{{ slot.start }}" {% if data.preferred_time_slot == slot.start %}selected{% endif %}>
+
+                {{ slot.label }}
+
+              </option>
+
+            {% endfor %}
+
+          </select>
+          <div class="time-slot-note{% if data.preferred_date and not available_slots %} is-empty{% endif %}" data-slot-note="preferred">
+            {% if data.preferred_date and not available_slots %}
+              {% trans "No availability for the selected date." %}
+            {% endif %}
+          </div>
+
+        </label>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="schedule-block">
+
+      <div class="schedule-title">
+
+        <span class="schedule-icon">🔁</span>
+
+        {% trans "Alternative Choice (Optional)" %}
+
+      </div>
+
+
+
+      <div class="schedule-note">
+
+        {% trans "Adding an alternative window helps us confirm your booking faster." %}
+
+      </div>
+
+
+
+      <div class="form-grid">
+
+        <label class="form-label">
+
+          {% trans "Select Date" %}
+
+          <input class="form-control" type="date" name="alt_date" value="{{ data.alt_date|default:'' }}">
+
+        </label>
+
+
+
+        <label class="form-label">
+
+          {% trans "Select Time Slot" %}
+
+          <select class="time-slot-select" name="alt_time_slot">
+            <option value="">{% trans "Select time slot" %}</option>
+
+            {% for slot in alt_available_slots %}
+
+              <option value="{{ slot.start }}" {% if data.alt_time_slot == slot.start %}selected{% endif %}>
+
+                {{ slot.label }}
+
+              </option>
+
+            {% endfor %}
+
+          </select>
+          <div class="time-slot-note{% if data.alt_date and not alt_available_slots %} is-empty{% endif %}" data-slot-note="alt">
+            {% if data.alt_date and not alt_available_slots %}
+              {% trans "No availability for the selected date." %}
+            {% endif %}
+          </div>
+
+        </label>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="booking-actions">
+
+    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 5 %}">
+
+      {% trans "Back" %}
+
+    </a>
+
+    <button class="btn btn-primary" type="submit">
+
+      {% trans "Continue" %}
+
+    </button>
+
+  </div>
+
 </form>
 {% endblock %}

@@ -53,6 +53,36 @@
             <button type="submit" class="dash-btn primary">Save</button>
         </div>
     </form>
+    {% if provider_table %}
+    <div class="provider-table">
+        <div class="panel-header">
+            <div>
+                <h3>{{ provider_table.title }}</h3>
+                <div class="panel-meta">Availability is based on the booking details shown above.</div>
+            </div>
+        </div>
+        <div class="panel-table">
+            <div class="panel-row panel-row-head">
+                <span>Provider</span>
+                <span>ZIP</span>
+                <span>Status</span>
+                <span>Reason</span>
+            </div>
+            {% for row in provider_table.rows %}
+            <div class="panel-row">
+                <span>{{ row.name }}</span>
+                <span>{{ row.zip }}</span>
+                <span>
+                    <span class="status-pill {% if row.available %}is-ok{% else %}is-bad{% endif %}">
+                        {% if row.available %}Available{% else %}Unavailable{% endif %}
+                    </span>
+                </span>
+                <span class="reason-text">{{ row.reason }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 </section>
 {% endif %}
 {% endblock %}

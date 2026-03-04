@@ -1,4 +1,5 @@
 import os
+import re
 import uuid
 import datetime
 from django.apps import apps
@@ -353,6 +354,9 @@ def _provider_slots_for_date(provider, for_date, duration_minutes, start_from=No
 
 
 def _available_slots_for_zip(zip_code, for_date, duration_minutes):
+    zip_code = _normalize_zip(zip_code or "")
+    if not zip_code:
+        return []
     providers = ProviderProfile.objects.filter(is_active=True, zip_code=zip_code)
     slot_map = {}
     for provider in providers:
@@ -499,7 +503,22 @@ def _parse_date(value):
 
 
 def _normalize_zip(value):
-    return value.replace(" ", "")
+    return re.sub(r"\s+", "", value)
+
+
+def _provider_table_rows(providers, reasons_by_id):
+    rows = []
+    for provider in providers:
+        info = reasons_by_id.get(provider.id, {})
+        rows.append(
+            {
+                "name": provider.display_name,
+                "zip": provider.zip_code or "-",
+                "available": bool(info.get("available")),
+                "reason": info.get("reason", ""),
+            }
+        )
+    return rows
 
 
 def _zip_is_allowed(zip_code):
@@ -518,7 +537,7 @@ def zip_check(request, flow):
 
     form = ZipCheckForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
-        zip_code = form.cleaned_data["zip_code"]
+        zip_code = _normalize_zip(form.cleaned_data["zip_code"])
         if _zip_is_allowed(zip_code):
             checks = request.session.get(ZIP_CHECK_SESSION_KEY, {})
             checks[flow] = zip_code
@@ -1267,7 +1286,8 @@ def service_booking_slots(request):
     except ValidationError:
         return JsonResponse({"slots": []})
     if not duration_minutes:
-        return JsonResponse({"slots": []})
+        # Fallback preview window to show availability even if duration is not finalized yet.
+        duration_minutes = 60
     zip_code = request.session.get(ZIP_CHECK_SESSION_KEY, {}).get("service", "")
     slots = _format_slots(zip_code, for_date, duration_minutes)
     return JsonResponse({"slots": slots})
@@ -1594,16 +1614,29 @@ def service_booking_step(request, step):
                     duration_minutes = _service_booking_duration_minutes(data)
                 except ValidationError:
                     duration_minutes = None
+                duration_assumed = False
+                duration_for_slots = duration_minutes
+                if not duration_for_slots:
+                    duration_for_slots = 60
+                    duration_assumed = True
+                if not preferred_date and duration_minutes:
+                    earliest_provider, earliest = _earliest_availability_for_zip(
+                        zip_code, duration_minutes
+                    )
+                    if earliest:
+                        preferred_date = earliest.date()
+                        data["preferred_date"] = preferred_date.isoformat()
                 context["available_slots"] = (
-                    _format_slots(zip_code, preferred_date, duration_minutes)
-                    if preferred_date and duration_minutes
+                    _format_slots(zip_code, preferred_date, duration_for_slots)
+                    if preferred_date and duration_for_slots
                     else []
                 )
                 context["alt_available_slots"] = (
-                    _format_slots(zip_code, alt_date, duration_minutes)
-                    if alt_date and duration_minutes
+                    _format_slots(zip_code, alt_date, duration_for_slots)
+                    if alt_date and duration_for_slots
                     else []
                 )
+                context["duration_assumed"] = duration_assumed
             if step == 12:
                 context["booking_id"] = request.session.get("service_booking_id", "SB-000000")
             if step == 1:
@@ -1637,16 +1670,29 @@ def service_booking_step(request, step):
             duration_minutes = _service_booking_duration_minutes(data)
         except ValidationError:
             duration_minutes = None
+        duration_assumed = False
+        duration_for_slots = duration_minutes
+        if not duration_for_slots:
+            duration_for_slots = 60
+            duration_assumed = True
+        if not preferred_date and duration_minutes:
+            earliest_provider, earliest = _earliest_availability_for_zip(
+                zip_code, duration_minutes
+            )
+            if earliest:
+                preferred_date = earliest.date()
+                data["preferred_date"] = preferred_date.isoformat()
         context["available_slots"] = (
-            _format_slots(zip_code, preferred_date, duration_minutes)
-            if preferred_date and duration_minutes
+            _format_slots(zip_code, preferred_date, duration_for_slots)
+            if preferred_date and duration_for_slots
             else []
         )
         context["alt_available_slots"] = (
-            _format_slots(zip_code, alt_date, duration_minutes)
-            if alt_date and duration_minutes
+            _format_slots(zip_code, alt_date, duration_for_slots)
+            if alt_date and duration_for_slots
             else []
         )
+        context["duration_assumed"] = duration_assumed
     if step == 12:
         context["booking_id"] = request.session.get("service_booking_id", "SB-000000")
         booking_pk = request.session.get("service_booking_pk")
@@ -2419,6 +2465,50 @@ def dashboard_service_bookings_assign(request, pk):
         ]
         available_qs = available_qs.filter(id__in=available_ids)
     form.fields["assigned_provider"].queryset = available_qs
+    all_providers = ProviderProfile.objects.all().order_by("display_name")
+    reasons = {}
+    start_time = _parse_time(booking.preferred_time_slot)
+    if not booking.preferred_date or not start_time:
+        for provider in all_providers:
+            reasons[provider.id] = {
+                "available": False,
+                "reason": "Missing preferred date/time on booking.",
+            }
+    elif not duration_minutes:
+        for provider in all_providers:
+            reasons[provider.id] = {"available": False, "reason": "Missing duration/services."}
+    else:
+        weekday = booking.preferred_date.weekday()
+        shift_ids = set(
+            ProviderShift.objects.filter(
+                weekday=weekday,
+                start_time__lte=start_time,
+                end_time__gte=(datetime.datetime.combine(booking.preferred_date, start_time)
+                               + datetime.timedelta(minutes=duration_minutes)).time(),
+            ).values_list("provider_id", flat=True)
+        )
+        for provider in all_providers:
+            if not provider.is_active:
+                reasons[provider.id] = {"available": False, "reason": "Inactive provider."}
+                continue
+            if booking.zip_code and provider.zip_code != booking.zip_code:
+                reasons[provider.id] = {"available": False, "reason": "ZIP code mismatch."}
+                continue
+            if provider.id not in shift_ids:
+                reasons[provider.id] = {
+                    "available": False,
+                    "reason": "No shift coverage for the selected time.",
+                }
+                continue
+            if start_at and end_at and not _provider_is_available(
+                provider, start_at, end_at, exclude_booking_id=booking.id
+            ):
+                reasons[provider.id] = {
+                    "available": False,
+                    "reason": "Overlaps another service booking.",
+                }
+                continue
+            reasons[provider.id] = {"available": True, "reason": "Available for the selected time."}
     if request.method == "POST" and form.is_valid():
         updated = form.save(commit=False)
         if updated.assigned_provider and start_at and end_at:
@@ -2440,7 +2530,15 @@ def dashboard_service_bookings_assign(request, pk):
     return render(
         request,
         "electricity/dashboard/form.html",
-        {"title": "Assign Provider", "form": form, "back_url": "electricity:dashboard_service_bookings"},
+        {
+            "title": "Assign Provider",
+            "form": form,
+            "back_url": "electricity:dashboard_service_bookings",
+            "provider_table": {
+                "title": "Provider Availability",
+                "rows": _provider_table_rows(all_providers, reasons),
+            },
+        },
     )
 
 
@@ -2535,7 +2633,18 @@ def dashboard_on_call_bookings_assign(request, pk):
         return guard
     booking = OnCallBooking.objects.get(pk=pk)
     form = OnCallBookingAssignForm(request.POST or None, instance=booking)
-    form.fields["assigned_provider"].queryset = ProviderProfile.objects.filter(is_active=True)
+    available_qs = ProviderProfile.objects.filter(is_active=True)
+    form.fields["assigned_provider"].queryset = available_qs
+    all_providers = ProviderProfile.objects.all().order_by("display_name")
+    reasons = {}
+    for provider in all_providers:
+        if not provider.is_active:
+            reasons[provider.id] = {"available": False, "reason": "Inactive provider."}
+            continue
+        if booking.zip_code and provider.zip_code != booking.zip_code:
+            reasons[provider.id] = {"available": False, "reason": "ZIP code mismatch."}
+            continue
+        reasons[provider.id] = {"available": True, "reason": "Active provider."}
     if request.method == "POST" and form.is_valid():
         updated = form.save(commit=False)
         if updated.assigned_provider and updated.status in [
@@ -2548,7 +2657,15 @@ def dashboard_on_call_bookings_assign(request, pk):
     return render(
         request,
         "electricity/dashboard/form.html",
-        {"title": "Assign Provider", "form": form, "back_url": "electricity:dashboard_on_call_bookings"},
+        {
+            "title": "Assign Provider",
+            "form": form,
+            "back_url": "electricity:dashboard_on_call_bookings",
+            "provider_table": {
+                "title": "Provider Availability",
+                "rows": _provider_table_rows(all_providers, reasons),
+            },
+        },
     )
 
 
@@ -2672,6 +2789,16 @@ def dashboard_electrician_bookings_assign(request, pk):
     if booking.zip_code:
         available_qs = available_qs.filter(zip_code=booking.zip_code)
     form.fields["assigned_provider"].queryset = available_qs
+    all_providers = ProviderProfile.objects.all().order_by("display_name")
+    reasons = {}
+    for provider in all_providers:
+        if not provider.is_active:
+            reasons[provider.id] = {"available": False, "reason": "Inactive provider."}
+            continue
+        if booking.zip_code and provider.zip_code != booking.zip_code:
+            reasons[provider.id] = {"available": False, "reason": "ZIP code mismatch."}
+            continue
+        reasons[provider.id] = {"available": True, "reason": "Active provider."}
     if request.method == "POST" and form.is_valid():
         updated = form.save(commit=False)
         if updated.assigned_provider and updated.status == ElectricianBooking.Status.PENDING:
@@ -2681,7 +2808,15 @@ def dashboard_electrician_bookings_assign(request, pk):
     return render(
         request,
         "electricity/dashboard/form.html",
-        {"title": "Assign Provider", "form": form, "back_url": "electricity:dashboard_electrician_bookings"},
+        {
+            "title": "Assign Provider",
+            "form": form,
+            "back_url": "electricity:dashboard_electrician_bookings",
+            "provider_table": {
+                "title": "Provider Availability",
+                "rows": _provider_table_rows(all_providers, reasons),
+            },
+        },
     )
 
 
@@ -3032,9 +3167,45 @@ def dashboard_bookings_assign(request, pk):
         return guard
     booking = ConsultationBooking.objects.get(pk=pk)
     form = ProviderAssignForm(request.POST or None, instance=booking)
-    form.fields["assigned_provider"].queryset = available_providers(
+    available_qs = available_providers(
         booking.preferred_date, booking.preferred_time_slot, exclude_booking_id=booking.id
     )
+    form.fields["assigned_provider"].queryset = available_qs
+    all_providers = ProviderProfile.objects.all().order_by("display_name")
+    reasons = {}
+    if not booking.preferred_date or not booking.preferred_time_slot:
+        for provider in all_providers:
+            reasons[provider.id] = {
+                "available": False,
+                "reason": "Missing preferred date/time on booking.",
+            }
+    else:
+        conflict_ids = set(
+            ConsultationBooking.objects.filter(
+                preferred_date=booking.preferred_date,
+                preferred_time_slot=booking.preferred_time_slot,
+                status__in=[
+                    ConsultationBooking.BookingStatus.ASSIGNED,
+                    ConsultationBooking.BookingStatus.ON_THE_WAY,
+                    ConsultationBooking.BookingStatus.STARTED,
+                    ConsultationBooking.BookingStatus.PAUSED,
+                    ConsultationBooking.BookingStatus.RESUMED,
+                    ConsultationBooking.BookingStatus.NOT_AVAILABLE,
+                ],
+            )
+            .exclude(id=booking.id)
+            .values_list("assigned_provider_id", flat=True)
+        )
+        for provider in all_providers:
+            if not provider.is_active:
+                reasons[provider.id] = {"available": False, "reason": "Inactive provider."}
+            elif provider.id in conflict_ids:
+                reasons[provider.id] = {
+                    "available": False,
+                    "reason": "Conflicting consultation at the same time.",
+                }
+            else:
+                reasons[provider.id] = {"available": True, "reason": "Available for the selected time."}
     if request.method == "POST" and form.is_valid():
         updated = form.save(commit=False)
         if updated.assigned_provider and booking.status == ConsultationBooking.BookingStatus.PENDING:
@@ -3044,7 +3215,15 @@ def dashboard_bookings_assign(request, pk):
     return render(
         request,
         "electricity/dashboard/form.html",
-        {"title": "Assign Provider", "form": form, "back_url": "electricity:dashboard_bookings"},
+        {
+            "title": "Assign Provider",
+            "form": form,
+            "back_url": "electricity:dashboard_bookings",
+            "provider_table": {
+                "title": "Provider Availability",
+                "rows": _provider_table_rows(all_providers, reasons),
+            },
+        },
     )
 
 

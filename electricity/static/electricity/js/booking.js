@@ -69,6 +69,12 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             if (privateBlock) privateBlock.classList.toggle("is-visible", type === "private");
             if (businessBlock) businessBlock.classList.toggle("is-visible", type === "business");
+            if (privateBlock) privateBlock.style.display = type === "private" ? "" : "none";
+            if (businessBlock) businessBlock.style.display = type === "business" ? "" : "none";
+            document.querySelectorAll("[data-contact-field]").forEach((field) => {
+                const group = field.getAttribute("data-contact-field");
+                field.disabled = group !== type;
+            });
         };
         contactInputs.forEach((input) => input.addEventListener("change", updateContactVisibility));
         updateContactVisibility();

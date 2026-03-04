@@ -37,7 +37,7 @@
 
     <div class="billing-tabs">
       <label class="billing-tab">
-        <input type="radio" name="billing_type" value="private" {% if data.billing_type == "private" %}checked{% endif %} required>
+        <input type="radio" name="billing_type" value="private" {% if data.billing_type == "private" or not data.billing_type %}checked{% endif %} required>
         <span>{% trans "Private (Personal ID)" %}</span>
       </label>
 
@@ -49,7 +49,7 @@
 
     <div class="form-grid">
 
-      <div class="billing-private" data-billing="private">
+      <div class="billing-private{% if data.billing_type == "private" or not data.billing_type %} is-visible{% endif %}" data-billing="private">
         <label class="form-label">
           {% trans "Personal Identity Number (SSN)" %}
           <input class="form-control" type="text" name="personal_id"
@@ -62,7 +62,7 @@
         </label>
       </div>
 
-      <div class="billing-private" data-billing="private">
+      <div class="billing-private{% if data.billing_type == "private" or not data.billing_type %} is-visible{% endif %}" data-billing="private">
         <label class="form-label">
           {% trans "Full Legal Name" %}
           <input class="form-control" type="text" name="company_name"
@@ -72,7 +72,7 @@
         </label>
       </div>
 
-      <div class="billing-business" data-billing="business">
+      <div class="billing-business{% if data.billing_type == "business" %} is-visible{% endif %}" data-billing="business">
         <label class="form-label">
           {% trans "Company Name" %}
           <input class="form-control" type="text" name="company_name"
@@ -82,7 +82,7 @@
         </label>
       </div>
 
-      <div class="billing-business" data-billing="business">
+      <div class="billing-business{% if data.billing_type == "business" %} is-visible{% endif %}" data-billing="business">
         <label class="form-label">
           {% trans "Organization Number" %}
           <input class="form-control" type="text" name="organization_number"
