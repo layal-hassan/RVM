@@ -258,10 +258,13 @@ html[dir="rtl"] .booking-input {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
     color: var(--navy);
+}
+
+.option-icon .option-svg {
+    width: 28px;
+    height: 28px;
+    fill: currentColor;
 }
 
 .option-card-large .option-check {
@@ -644,6 +647,30 @@ html[dir="rtl"] .booking-input {
         flex-direction: column;
         align-items: flex-start;
         gap: 12px;
+    }
+
+    .option-card {
+        width: 100%;
+        touch-action: manipulation;
+    }
+
+    .option-card * {
+        pointer-events: none;
+    }
+
+    .option-card-large {
+        align-items: center;
+        text-align: center;
+        padding: 24px 18px;
+        min-height: 280px;
+    }
+
+    .option-card-large .option-body {
+        text-align: center;
+    }
+
+    .option-icon {
+        margin: 0 auto 4px;
     }
 
     .review-row {
