@@ -1034,6 +1034,15 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   .cta-panel.muted-panel .btn {
     width: 100%;
     justify-content: center;
+    padding: 10px 14px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  .bottom-cta .hero-actions .btn {
+    padding: 10px 14px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
   }
 
   .footer-grid.footer-grid-v2 {
