@@ -4,12 +4,6 @@
   --ink: #1f2937;
   --muted: #6b7280;
   --cream: #f8f6f1;
-  --nm-surface: #f3ede3;
-  --nm-highlight: rgba(255, 255, 255, 0.9);
-  --nm-shadow: rgba(153, 130, 95, 0.35);
-  --nm-ink: #1f2937;
-  --nm-arrow: #7a5a12;
-  --nm-ring: rgba(201, 162, 74, 0.28);
 }
 
 * {
@@ -21,6 +15,10 @@ body {
   font-family: "Sora", sans-serif;
   background: radial-gradient(circle at top, #ffffff 0%, #f6f2ea 55%, #f1ece3 100%);
   color: var(--ink);
+}
+
+.admin-login-body {
+  overflow-x: hidden;
 }
 
 .admin-login-shell {
@@ -121,49 +119,6 @@ body {
   box-shadow: 0 0 0 4px rgba(255, 184, 0, 0.2);
 }
 
-.admin-field select,
-.signup-form select {
-  -webkit-appearance: none;
-  appearance: none;
-  border: 1px solid transparent;
-  border-radius: 14px;
-  color: var(--ink);
-  padding: 12px 44px 12px 16px;
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--navy) 50%),
-    linear-gradient(135deg, var(--navy) 50%, transparent 50%),
-    linear-gradient(180deg, var(--nm-surface, #f3ede3), var(--nm-surface, #f3ede3));
-  background-position:
-    calc(100% - 18px) 52%,
-    calc(100% - 12px) 52%,
-    0 0;
-  background-size: 7px 7px, 7px 7px, 100% 100%;
-  background-repeat: no-repeat;
-  box-shadow:
-    -6px -6px 14px var(--nm-highlight, rgba(255, 255, 255, 0.9)),
-    6px 6px 14px var(--nm-shadow, rgba(153, 130, 95, 0.35));
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.admin-field select option,
-.signup-form select option {
-  background: #fffaf0;
-  color: var(--ink);
-}
-
-.admin-field select:hover,
-.signup-form select:hover {
-  transform: translateY(-1px);
-}
-
-.admin-field select:focus,
-.signup-form select:focus {
-  outline: none;
-  box-shadow:
-    inset 3px 3px 8px rgba(0, 0, 0, 0.12),
-    inset -3px -3px 8px var(--nm-highlight, rgba(255, 255, 255, 0.9)),
-    0 0 0 4px var(--nm-ring, rgba(201, 162, 74, 0.28));
-}
 
 .admin-btn {
   width: 100%;
@@ -289,119 +244,6 @@ body {
   cursor: pointer;
 }
 
-.ts-wrapper {
-  width: 100%;
-}
-
-.ts-wrapper.form-select,
-.ts-wrapper.form-control {
-  background: transparent;
-  background-image: none;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-}
-
-.ts-control {
-  border-radius: 14px;
-  border: 1px solid transparent;
-  padding: 10px 44px 10px 16px;
-  background: var(--nm-surface);
-  color: var(--nm-ink);
-  box-shadow:
-    -6px -6px 14px var(--nm-highlight),
-    6px 6px 14px var(--nm-shadow);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-  min-height: 44px;
-}
-
-.ts-control:hover {
-  transform: translateY(-1px);
-}
-
-.ts-wrapper.focus .ts-control {
-  box-shadow:
-    inset 3px 3px 8px rgba(0, 0, 0, 0.12),
-    inset -3px -3px 8px var(--nm-highlight),
-    0 0 0 4px var(--nm-ring);
-}
-
-.ts-control > input {
-  color: var(--nm-ink);
-  font-family: inherit;
-  font-size: 15px;
-}
-
-.ts-control .item,
-.ts-control .item[data-value] {
-  background: transparent;
-  color: var(--nm-ink);
-}
-
-.ts-wrapper.multi .ts-control .item {
-  background: #efe5d6;
-  color: var(--nm-ink);
-  border-radius: 999px;
-  padding: 2px 8px;
-}
-
-.ts-dropdown {
-  border: 1px solid rgba(215, 196, 163, 0.6);
-  border-radius: 16px;
-  background: #f7f2e9;
-  box-shadow: 0 18px 30px rgba(10, 25, 47, 0.12);
-  overflow: hidden;
-  margin-top: 8px;
-  z-index: 50;
-}
-
-.ts-dropdown .option {
-  padding: 10px 14px;
-  color: var(--nm-ink);
-}
-
-.ts-dropdown .option.active,
-.ts-dropdown .option:hover {
-  background: #e7dcc8;
-}
-
-.ts-dropdown .option.selected {
-  background: #d9c6a8;
-  color: #1f2937;
-}
-
-.ts-dropdown .ts-dropdown-content {
-  max-height: 260px;
-  overflow: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #d1c2a7 #f2ece1;
-}
-
-.ts-dropdown .ts-dropdown-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.ts-dropdown .ts-dropdown-content::-webkit-scrollbar-thumb {
-  background: #d1c2a7;
-  border-radius: 999px;
-}
-
-.ts-dropdown .ts-dropdown-content::-webkit-scrollbar-track {
-  background: #f2ece1;
-}
-
-html[dir="rtl"] .ts-control,
-body[dir="rtl"] .ts-control {
-  direction: rtl;
-  text-align: right;
-  padding: 10px 16px 10px 44px;
-}
-
-html[dir="rtl"] .ts-dropdown,
-body[dir="rtl"] .ts-dropdown {
-  direction: rtl;
-  text-align: right;
-}
 
 .pill-option input {
   margin: 0;

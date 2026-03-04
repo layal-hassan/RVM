@@ -62,7 +62,16 @@
         </div>
         <div class="review-row">
             <span>{% trans "Time Slot" %}</span>
-            <span>{{ form.preferred_time_slot }}</span>
+            <span>
+                <div class="form-row split-row">
+                    <div>
+                        {{ form.preferred_time }}
+                    </div>
+                    <div>
+                        {{ form.preferred_meridiem }}
+                    </div>
+                </div>
+            </span>
         </div>
     </div>
     <div class="review-card">

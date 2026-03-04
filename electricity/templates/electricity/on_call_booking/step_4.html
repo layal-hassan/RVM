@@ -9,6 +9,34 @@
       <strong>{% trans "Application received." %}</strong>
       {% trans "Your on-call registration has been submitted. Reference ID:" %} {{ booking_id }}.
     </div>
+
+    <div class="oc-modal-backdrop" id="oc-success-modal" role="dialog" aria-modal="true">
+      <div class="oc-modal">
+        <div class="hero-badge">{% trans "Application received." %}</div>
+        <div class="oc-modal-title">{% trans "Submission confirmed" %}</div>
+        <p class="oc-modal-note">
+          {% trans "Your on-call registration has been submitted successfully." %}
+        </p>
+        <div class="oc-modal-ref">
+          {% trans "Reference ID" %}: {{ booking_id }}
+        </div>
+        <div class="oc-modal-actions">
+          <button type="button" class="btn btn-primary oc-modal-close">{% trans "OK" %}</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("oc-success-modal");
+        const closeBtn = modal ? modal.querySelector(".oc-modal-close") : null;
+        if (!modal || !closeBtn) return;
+        document.body.classList.add("modal-open");
+        closeBtn.addEventListener("click", function () {
+          modal.remove();
+          document.body.classList.remove("modal-open");
+        });
+      });
+    </script>
   {% endif %}
 
   <div class="oncall-header">

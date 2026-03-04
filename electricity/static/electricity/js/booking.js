@@ -26,11 +26,18 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleActive(".urgent-option");
 
     document.querySelectorAll(".upload-card input").forEach((input) => {
-        input.addEventListener("change", () => {
-            const label = input.closest(".upload-card");
+        const label = input.closest(".upload-card");
+        const nameEl = label ? label.querySelector("[data-upload-name]") : null;
+        const update = () => {
             if (!label) return;
-            label.classList.toggle("is-active", input.files.length > 0);
-        });
+            const hasFile = input.files && input.files.length > 0;
+            label.classList.toggle("is-active", hasFile);
+            if (nameEl) {
+                nameEl.textContent = hasFile ? input.files[0].name : "";
+            }
+        };
+        input.addEventListener("change", update);
+        update();
     });
 
     const otherField = document.querySelector("[data-other-field]");
@@ -52,7 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const privateBlock = document.querySelector("[data-private]");
     const businessBlock = document.querySelector("[data-business]");
     if (privateBlock || businessBlock) {
-        const contactInputs = document.querySelectorAll("input[name='contact_type']");
+        const contactInputs = document.querySelectorAll(
+            "input[name='contact_type'], input[name='customer_type']"
+        );
         const updateContactVisibility = () => {
             let type = "private";
             contactInputs.forEach((input) => {

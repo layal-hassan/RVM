@@ -40,7 +40,7 @@
 
         <label class="form-label">
           {% trans "Region" %}
-          <select class="form-select" name="region">
+          <select name="region">
             <option value="">{% trans "Select region" %}</option>
 
             <option value="Skåne" {% if data.region == "Skåne" %}selected{% endif %}>

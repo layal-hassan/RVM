@@ -15,7 +15,7 @@
 
       <div class="full">
         <label>{% trans "Property Type" %}</label>
-        <select class="form-control" name="property_type">
+        <select name="property_type">
           <option value="">{% trans "Select property type" %}</option>
           <option value="commercial" {% if data.property_type == "commercial" %}selected{% endif %}>
             {% trans "Commercial" %}

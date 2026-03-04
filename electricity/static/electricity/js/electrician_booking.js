@@ -7,6 +7,24 @@
     return date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate());
   }
 
+  function updateSummary() {
+    var dateEl = document.querySelector("[data-summary-date]");
+    var timeEl = document.querySelector("[data-summary-time]");
+    if (!dateEl && !timeEl) return;
+    var dateInput = document.querySelector("input[name='preferred_date']");
+    var dateValue = dateInput ? dateInput.value : "";
+    var timeInput = document.querySelector("input[name='arrival_window']:checked");
+    var timeValue = timeInput ? timeInput.value : "";
+    if (dateEl) {
+      var fallbackDate = dateEl.getAttribute("data-default") || "";
+      dateEl.textContent = dateValue || fallbackDate;
+    }
+    if (timeEl) {
+      var fallbackTime = timeEl.getAttribute("data-default") || "";
+      timeEl.textContent = (timeValue ? " | " + timeValue : " | " + fallbackTime).trim();
+    }
+  }
+
   function buildCalendar(container) {
     var selectedValue = container.getAttribute("data-selected") || "";
     var selectedDate = selectedValue ? new Date(selectedValue) : new Date();
@@ -97,6 +115,7 @@
             if (hiddenInput) {
               hiddenInput.value = cellValue;
             }
+            updateSummary();
             render();
           });
           grid.appendChild(cell);
@@ -117,5 +136,29 @@
   document.querySelectorAll(".eb-calendar").forEach(function (container) {
     buildCalendar(container);
   });
+
+  document.querySelectorAll("input[name='arrival_window']").forEach(function (input) {
+    input.addEventListener("change", updateSummary);
+  });
+  updateSummary();
+
+  function toggleContactBlocks() {
+    var privateBlock = document.querySelector("[data-private]");
+    var businessBlock = document.querySelector("[data-business]");
+    if (!privateBlock && !businessBlock) return;
+    var inputs = document.querySelectorAll("input[name='customer_type']");
+    if (!inputs.length) return;
+    var type = "private";
+    inputs.forEach(function (input) {
+      if (input.checked) type = input.value;
+    });
+    if (privateBlock) privateBlock.classList.toggle("is-visible", type === "private");
+    if (businessBlock) businessBlock.classList.toggle("is-visible", type === "business");
+  }
+
+  document.querySelectorAll("input[name='customer_type']").forEach(function (input) {
+    input.addEventListener("change", toggleContactBlocks);
+  });
+  toggleContactBlocks();
 })();
 

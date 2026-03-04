@@ -85,7 +85,7 @@
       </div>
     </div>
 
-    <div class="eb-form-grid">
+    <div class="eb-form-grid contact-private contact-block" data-private>
       <div class="eb-full">
         <label class="eb-label">{% trans "Full Name" %}</label>
         <input class="form-control"
@@ -98,7 +98,7 @@
         <label class="eb-label">{% trans "Phone Number" %}</label>
         <input class="form-control"
                name="phone"
-               placeholder="{% trans '+1 (555) 000-0000' %}"
+               placeholder="{% trans '0046760355633' %}"
                value="{{ data.phone|default:'' }}">
       </div>
 
@@ -107,6 +107,32 @@
         <input class="form-control"
                name="email"
                placeholder="{% trans 'john@example.com' %}"
+               value="{{ data.email|default:'' }}">
+      </div>
+    </div>
+
+    <div class="eb-form-grid contact-business contact-block" data-business>
+      <div class="eb-full">
+        <label class="eb-label">{% trans "Company Name" %}</label>
+        <input class="form-control"
+               name="company_name"
+               placeholder="{% trans 'Company name' %}"
+               value="{{ data.company_name|default:'' }}">
+      </div>
+
+      <div>
+        <label class="eb-label">{% trans "Organisation number" %}</label>
+        <input class="form-control"
+               name="organization_number"
+               placeholder="{% trans '556XXX-XXXX' %}"
+               value="{{ data.organization_number|default:'' }}">
+      </div>
+
+      <div>
+        <label class="eb-label">{% trans "Email Address" %}</label>
+        <input class="form-control"
+               name="email"
+               placeholder="{% trans 'contact@company.com' %}"
                value="{{ data.email|default:'' }}">
       </div>
     </div>

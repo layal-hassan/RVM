@@ -204,8 +204,8 @@ def contact(request):
                     f"\nMessage:\n{message}\n"
                 )
                 try:
-                    to_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "support@rwmel.se"
-                    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "support@rwmel.se"
+                    to_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "Support@rwmel.se"
+                    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "Support@rwmel.se"
                     send_mail(
                         subject,
                         body,
@@ -478,6 +478,17 @@ def _set_electrician_booking_data(request, data):
     request.session.modified = True
 
 
+def _update_session_from_form_data(data, form):
+    if not form:
+        return data
+    for name, field in form.fields.items():
+        if getattr(field.widget, "allow_multiple_selected", False):
+            data[name] = form.data.getlist(name)
+        else:
+            data[name] = form.data.get(name, "").strip()
+    return data
+
+
 def _parse_date(value):
     if not value:
         return None
@@ -601,10 +612,13 @@ def booking_step_1(request):
         return redirect("electricity:zip_check", flow="consultation")
     data = _get_booking_data(request)
     form = Step1Form(request.POST or None, initial=data)
-    if request.method == "POST" and form.is_valid():
-        data.update(form.cleaned_data)
+    if request.method == "POST":
+        if form.is_valid():
+            data.update(form.cleaned_data)
+            _set_booking_data(request, data)
+            return redirect("electricity:booking_step_2")
+        data = _update_session_from_form_data(data, form)
         _set_booking_data(request, data)
-        return redirect("electricity:booking_step_2")
     return render(
         request,
         "electricity/booking/step_1.html",
@@ -625,10 +639,13 @@ def booking_step_2(request):
         return guard
     data = _get_booking_data(request)
     form = Step2Form(request.POST or None, initial=data)
-    if request.method == "POST" and form.is_valid():
-        data.update(form.cleaned_data)
+    if request.method == "POST":
+        if form.is_valid():
+            data.update(form.cleaned_data)
+            _set_booking_data(request, data)
+            return redirect("electricity:booking_step_3")
+        data = _update_session_from_form_data(data, form)
         _set_booking_data(request, data)
-        return redirect("electricity:booking_step_3")
     return render(
         request,
         "electricity/booking/step_2.html",
@@ -651,12 +668,15 @@ def booking_step_3(request):
         return guard
     data = _get_booking_data(request)
     form = Step3Form(request.POST or None, initial=data)
-    if request.method == "POST" and form.is_valid():
-        cleaned = form.cleaned_data
-        cleaned["urgent"] = cleaned.get("urgent") == "yes"
-        data.update(cleaned)
+    if request.method == "POST":
+        if form.is_valid():
+            cleaned = form.cleaned_data
+            cleaned["urgent"] = cleaned.get("urgent") == "yes"
+            data.update(cleaned)
+            _set_booking_data(request, data)
+            return redirect("electricity:booking_step_4")
+        data = _update_session_from_form_data(data, form)
         _set_booking_data(request, data)
-        return redirect("electricity:booking_step_4")
     return render(
         request,
         "electricity/booking/step_3.html",
@@ -681,10 +701,13 @@ def booking_step_4(request):
         return guard
     data = _get_booking_data(request)
     form = Step4Form(request.POST or None, initial=data)
-    if request.method == "POST" and form.is_valid():
-        data.update(form.cleaned_data)
+    if request.method == "POST":
+        if form.is_valid():
+            data.update(form.cleaned_data)
+            _set_booking_data(request, data)
+            return redirect("electricity:booking_step_5")
+        data = _update_session_from_form_data(data, form)
         _set_booking_data(request, data)
-        return redirect("electricity:booking_step_5")
     return render(
         request,
         "electricity/booking/step_4.html",
@@ -709,15 +732,18 @@ def booking_step_5(request):
         return guard
     data = _get_booking_data(request)
     form = Step5Form(request.POST or None, request.FILES or None)
-    if request.method == "POST" and form.is_valid():
-        temp_uploads = data.get("temp_uploads", {})
-        for field in ("photo", "video", "document"):
-            saved_path = _save_temp_upload(request, field)
-            if saved_path:
-                temp_uploads[field] = saved_path
-        data["temp_uploads"] = temp_uploads
+    if request.method == "POST":
+        if form.is_valid():
+            temp_uploads = data.get("temp_uploads", {})
+            for field in ("photo", "video", "document"):
+                saved_path = _save_temp_upload(request, field)
+                if saved_path:
+                    temp_uploads[field] = saved_path
+            data["temp_uploads"] = temp_uploads
+            _set_booking_data(request, data)
+            return redirect("electricity:booking_step_6")
+        data = _update_session_from_form_data(data, form)
         _set_booking_data(request, data)
-        return redirect("electricity:booking_step_6")
     return render(
         request,
         "electricity/booking/step_5.html",
@@ -742,33 +768,49 @@ def booking_step_6(request):
         return guard
     data = _get_booking_data(request)
     form = Step6Form(request.POST or None, initial=data)
-    if request.method == "POST" and form.is_valid():
-        contact_type = form.cleaned_data.get("contact_type")
-        if contact_type == "private" and not form.cleaned_data.get("personal_id"):
-            form.add_error("personal_id", _("Personal ID is required for private bookings."))
-        if contact_type == "business":
-            if not form.cleaned_data.get("company_name"):
-                form.add_error("company_name", _("Company name is required."))
-            if not form.cleaned_data.get("organization_number"):
-                form.add_error("organization_number", _("Organization number is required."))
-            if not form.cleaned_data.get("company_address"):
-                form.add_error("company_address", _("Company address is required."))
-        if form.errors:
-            is_free = _is_first_consultation(form.cleaned_data.get("email"), form.cleaned_data.get("phone"))
-            return render(
-                request,
-                "electricity/booking/step_6.html",
-                {
-                    "form": form,
-                    "step": 6,
-                    "progress_percent": 85,
-                    "title": _("Your contact details"),
-                    "consultation_free": is_free,
-                },
-            )
-        data.update(form.cleaned_data)
+    if request.method == "POST":
+        if form.is_valid():
+            contact_type = form.cleaned_data.get("contact_type")
+            if contact_type == "private":
+                if not form.cleaned_data.get("personal_id"):
+                    form.add_error("personal_id", _("Personal ID is required for private bookings."))
+                if not form.cleaned_data.get("full_name"):
+                    form.add_error("full_name", _("Full name is required."))
+                if not form.cleaned_data.get("email"):
+                    form.add_error("email", _("Email is required."))
+                if not form.cleaned_data.get("phone"):
+                    form.add_error("phone", _("Phone number is required."))
+                if not form.cleaned_data.get("availability_days"):
+                    form.add_error("availability_days", _("Please select at least one available day."))
+                if not form.cleaned_data.get("time_window"):
+                    form.add_error("time_window", _("Please select a preferred time window."))
+            if contact_type == "business":
+                if not form.cleaned_data.get("company_name"):
+                    form.add_error("company_name", _("Company name is required."))
+                if not form.cleaned_data.get("organization_number"):
+                    form.add_error("organization_number", _("Organization number is required."))
+                if not form.cleaned_data.get("full_name"):
+                    form.cleaned_data["full_name"] = form.cleaned_data.get("company_name", "")
+            if form.errors:
+                data = _update_session_from_form_data(data, form)
+                _set_booking_data(request, data)
+                is_free = _is_first_consultation(form.cleaned_data.get("email"), form.cleaned_data.get("phone"))
+                return render(
+                    request,
+                    "electricity/booking/step_6.html",
+                    {
+                        "form": form,
+                        "step": 6,
+                        "progress_percent": 85,
+                        "title": _("Your contact details"),
+                        "consultation_free": is_free,
+                    },
+                )
+            data.update(form.cleaned_data)
+            _set_booking_data(request, data)
+            return redirect("electricity:booking_step_7")
+        data = _update_session_from_form_data(data, form)
         _set_booking_data(request, data)
-        return redirect("electricity:booking_step_7")
     is_free = _is_first_consultation(data.get("email"), data.get("phone"))
     return render(
         request,
@@ -800,9 +842,50 @@ def booking_step_7(request):
     if guard:
         return guard
     data = _get_booking_data(request)
-    form = Step7Form(request.POST or None, initial=data)
+    initial = dict(data)
+    existing_slot = data.get("preferred_time_slot") or ""
+    if existing_slot and "preferred_time" not in initial and "preferred_meridiem" not in initial:
+        parts = existing_slot.strip().split()
+        if parts:
+            initial["preferred_time"] = parts[0]
+        if len(parts) > 1:
+            initial["preferred_meridiem"] = parts[1].upper()
+    form = Step7Form(request.POST or None, initial=initial)
+    if request.method == "POST":
+        if form.is_valid():
+            cleaned = form.cleaned_data
+            time_value = (cleaned.get("preferred_time") or "").strip()
+            meridiem_value = (cleaned.get("preferred_meridiem") or "").strip().upper()
+            if time_value and meridiem_value:
+                cleaned["preferred_time_slot"] = f"{time_value} {meridiem_value}"
+            elif time_value:
+                cleaned["preferred_time_slot"] = time_value
+            else:
+                cleaned["preferred_time_slot"] = ""
+            data.update(cleaned)
+        else:
+            data = _update_session_from_form_data(data, form)
+            _set_booking_data(request, data)
+            is_free = _is_first_consultation(data.get("email"), data.get("phone"))
+            pricing = _get_active_pricing()
+            consultation_price = 0
+            if not is_free and pricing:
+                consultation_price = float(pricing.consultation_price)
+            return render(
+                request,
+                "electricity/booking/step_7.html",
+                {
+                    "form": form,
+                    "step": 7,
+                    "progress_percent": 100,
+                    "title": _("Review your request"),
+                    "data": data,
+                    "consultation_free": is_free,
+                    "consultation_price": consultation_price,
+                    "currency": pricing.currency if pricing else "SEK",
+                },
+            )
     if request.method == "POST" and form.is_valid():
-        data.update(form.cleaned_data)
         required = [
             "consultation_type",
             "property_type",
@@ -813,7 +896,7 @@ def booking_step_7(request):
         if data.get("contact_type") == "private":
             required.append("personal_id")
         if data.get("contact_type") == "business":
-            required.extend(["company_name", "organization_number", "company_address"])
+            required.extend(["company_name", "organization_number"])
         guard = _require_fields_or_redirect(request, required, "electricity:booking_step_6")
         if guard:
             return guard
@@ -896,7 +979,7 @@ def legacy_consultation_booking_thank_you(request):
 def _electrician_pricing_breakdown(data):
     pricing = _get_active_pricing()
     hourly_rate = 85
-    currency = "USD"
+    currency = "SEK"
     if pricing:
         hourly_rate = float(pricing.hourly_rate_electrician or pricing.labor_rate or hourly_rate)
         currency = pricing.currency or currency
@@ -932,33 +1015,29 @@ def electrician_booking_step(request, step):
         if step == 1:
             hours = request.POST.get("hours")
             work_description = request.POST.get("work_description", "").strip()
-            property_type = request.POST.get("property_type")
             access_confirm = request.POST.get("access_confirm")
+            data.update(
+                {
+                    "hours": hours,
+                    "work_description": work_description,
+                    "access_confirm": access_confirm == "yes",
+                }
+            )
             if not hours:
                 errors.append("Please select the number of hours.")
             if not work_description:
                 errors.append("Please describe the work.")
-            if not property_type:
-                errors.append("Please select a property type.")
             if access_confirm != "yes":
                 errors.append("Please confirm access to the work area.")
             if not errors:
-                data.update(
-                    {
-                        "hours": hours,
-                        "work_description": work_description,
-                        "property_type": property_type,
-                        "access_confirm": True,
-                    }
-                )
                 _set_electrician_booking_data(request, data)
                 return redirect("electricity:electrician_booking_step", step=2)
         elif step == 2:
             service_type = request.POST.get("service_type")
+            data["service_type"] = service_type
             if not service_type:
                 errors.append("Please select a service type.")
             if not errors:
-                data["service_type"] = service_type
                 _set_electrician_booking_data(request, data)
                 return redirect("electricity:electrician_booking_step", step=3)
         elif step == 3:
@@ -969,7 +1048,23 @@ def electrician_booking_step(request, step):
             full_name = request.POST.get("full_name", "").strip()
             phone = request.POST.get("phone", "").strip()
             email = request.POST.get("email", "").strip()
+            company_name = request.POST.get("company_name", "").strip()
+            organization_number = request.POST.get("organization_number", "").strip()
             contact_confirm = request.POST.get("contact_confirm")
+            data.update(
+                {
+                    "street_address": street_address,
+                    "zip_code": zip_code,
+                    "city": city,
+                    "customer_type": customer_type,
+                    "full_name": full_name,
+                    "phone": phone,
+                    "email": email,
+                    "company_name": company_name,
+                    "organization_number": organization_number,
+                    "contact_confirm": contact_confirm == "yes",
+                }
+            )
             if not street_address:
                 errors.append("Street address is required.")
             if not zip_code:
@@ -978,27 +1073,23 @@ def electrician_booking_step(request, step):
                 errors.append("City is required.")
             if not customer_type:
                 errors.append("Please choose a customer type.")
-            if not full_name:
-                errors.append("Full name is required.")
-            if not phone:
-                errors.append("Phone number is required.")
-            if not email:
-                errors.append("Email address is required.")
+            if customer_type == "business":
+                if not company_name:
+                    errors.append("Company name is required.")
+                if not organization_number:
+                    errors.append("Organization number is required.")
+                if not email:
+                    errors.append("Email address is required.")
+            else:
+                if not full_name:
+                    errors.append("Full name is required.")
+                if not phone:
+                    errors.append("Phone number is required.")
+                if not email:
+                    errors.append("Email address is required.")
             if contact_confirm != "yes":
                 errors.append("Please confirm your contact details.")
             if not errors:
-                data.update(
-                    {
-                        "street_address": street_address,
-                        "zip_code": zip_code,
-                        "city": city,
-                        "customer_type": customer_type,
-                        "full_name": full_name,
-                        "phone": phone,
-                        "email": email,
-                        "contact_confirm": True,
-                    }
-                )
                 _set_electrician_booking_data(request, data)
                 return redirect("electricity:electrician_booking_step", step=4)
         elif step == 4:
@@ -1015,30 +1106,36 @@ def electrician_booking_step(request, step):
         elif step == 6:
             preferred_date = request.POST.get("preferred_date", "")
             arrival_window = request.POST.get("arrival_window")
+            data.update(
+                {
+                    "preferred_date": preferred_date,
+                    "arrival_window": arrival_window,
+                }
+            )
             if not preferred_date:
                 errors.append("Please select a preferred date.")
             if not arrival_window:
                 errors.append("Please select an arrival window.")
             if not errors:
-                data.update(
-                    {
-                        "preferred_date": preferred_date,
-                        "arrival_window": arrival_window,
-                    }
-                )
                 _set_electrician_booking_data(request, data)
                 return redirect("electricity:electrician_booking_step", step=7)
         elif step == 7:
             pricing_ack = request.POST.get("pricing_ack")
+            data["pricing_ack"] = pricing_ack == "yes"
             if pricing_ack != "yes":
                 errors.append("Please acknowledge the pricing estimate.")
             if not errors:
-                data["pricing_ack"] = True
                 _set_electrician_booking_data(request, data)
                 return redirect("electricity:electrician_booking_step", step=8)
         elif step == 8:
             confirm_info = request.POST.get("confirm_info")
             accept_terms = request.POST.get("accept_terms")
+            data.update(
+                {
+                    "confirm_info": confirm_info == "yes",
+                    "accept_terms": accept_terms == "yes",
+                }
+            )
             if confirm_info != "yes":
                 errors.append("Please confirm the booking information.")
             if accept_terms != "yes":
@@ -1047,13 +1144,13 @@ def electrician_booking_step(request, step):
                 pricing = _electrician_pricing_breakdown(data)
                 booking = ElectricianBooking.objects.create(
                     customer_type=data.get("customer_type") or ElectricianBooking.CustomerType.PRIVATE,
-                    full_name=data.get("full_name", ""),
+                    full_name=data.get("company_name") or data.get("full_name", ""),
                     email=data.get("email", ""),
-                    phone=data.get("phone", ""),
+                    phone=data.get("organization_number") or data.get("phone", ""),
                     street_address=data.get("street_address", ""),
                     city=data.get("city", ""),
                     zip_code=data.get("zip_code", ""),
-                    property_type=data.get("property_type", ""),
+                    property_type=data.get("property_type") or data.get("service_type", ""),
                     work_description=data.get("work_description", ""),
                     access_notes=data.get("access_notes", ""),
                     parking_info=data.get("parking_info", ""),
@@ -1071,6 +1168,9 @@ def electrician_booking_step(request, step):
                 request.session.pop(ELECTRICIAN_BOOKING_SESSION_KEY, None)
                 request.session["electrician_booking_reference"] = f"RWM-{booking.id:06d}"
                 return redirect("electricity:electrician_booking_thank_you")
+
+        if errors:
+            _set_electrician_booking_data(request, data)
 
     progress = int((step / 8) * 100)
     return render(

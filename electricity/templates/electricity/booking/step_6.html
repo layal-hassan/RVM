@@ -26,20 +26,17 @@
     {{ form.personal_id }}
 </div>
 
-<div class="form-row contact-business" data-business>
-    <label class="form-label">{% trans "Company name" %}</label>
-    {{ form.company_name }}
+<div class="form-row split-row contact-business" data-business>
+    <div>
+        <label class="form-label">{% trans "Company name" %}</label>
+        {{ form.company_name }}
+    </div>
+    <div>
+        <label class="form-label">{% trans "Organization number" %}</label>
+        {{ form.organization_number }}
+    </div>
 </div>
-<div class="form-row contact-business" data-business>
-    <label class="form-label">{% trans "Organization number" %}</label>
-    {{ form.organization_number }}
-</div>
-<div class="form-row contact-business" data-business>
-    <label class="form-label">{% trans "Company address" %}</label>
-    {{ form.company_address }}
-</div>
-
-<div class="form-row">
+<div class="form-row contact-private" data-private>
     <label class="form-label">{% trans "Full Name" %}</label>
     {{ form.full_name }}
 </div>

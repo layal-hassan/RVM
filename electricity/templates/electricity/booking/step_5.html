@@ -15,6 +15,7 @@
         </div>
         <div class="upload-title">{% trans "Browse Files" %}</div>
         <div class="upload-note">{% trans "JPG, PNG up to 10MB" %}</div>
+        <div class="upload-filename" data-upload-name></div>
         {{ form.photo }}
     </label>
     <label class="upload-card">
@@ -25,6 +26,7 @@
         </div>
         <div class="upload-title">{% trans "Select Video" %}</div>
         <div class="upload-note">{% trans "MP4, MOV up to 50MB" %}</div>
+        <div class="upload-filename" data-upload-name></div>
         {{ form.video }}
     </label>
     <label class="upload-card">
@@ -35,6 +37,7 @@
         </div>
         <div class="upload-title">{% trans "Select Docs" %}</div>
         <div class="upload-note">{% trans "PDF, DOCX up to 20MB" %}</div>
+        <div class="upload-filename" data-upload-name></div>
         {{ form.document }}
     </label>
 </div>

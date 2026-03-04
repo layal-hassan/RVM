@@ -22,6 +22,60 @@
   overflow-x: hidden;
 }
 
+.on-call-booking-page.modal-open {
+  overflow: hidden;
+}
+
+.oc-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 14, 20, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 2000;
+}
+
+.oc-modal {
+  width: min(520px, 92vw);
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(233, 226, 214, 0.95);
+  padding: 26px 28px;
+  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.22);
+  text-align: center;
+}
+
+.oc-modal-title {
+  font-size: 20px;
+  margin: 8px 0 6px;
+}
+
+.oc-modal-note {
+  color: var(--oc-muted);
+  margin: 0 0 12px;
+}
+
+.oc-modal-ref {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  background: #f7f2e6;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b4a22;
+}
+
+.oc-modal-actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+}
+
 .on-call-booking-page::before {
   content: "";
   position: fixed;
@@ -199,7 +253,7 @@ body.electricity-body.on-call-booking-page {
 
 .oncall-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
+  grid-template-columns: minmax(0, 1fr) 380px;
   gap: 28px;
 }
 
@@ -406,13 +460,15 @@ body.electricity-body.on-call-booking-page {
   background: linear-gradient(180deg, #ffffff 0%, #fbf8f2 100%);
   border: 1px solid rgba(233, 226, 214, 0.9);
   border-radius: 18px;
-  padding: 24px;
+  padding: 34px;
   box-shadow: 0 22px 44px rgba(15, 23, 42, 0.08);
   height: fit-content;
+  width: 100%;
 }
 
 .summary-title {
   font-weight: 700;
+  font-size: 16px;
   margin-bottom: 16px;
 }
 
@@ -420,18 +476,18 @@ body.electricity-body.on-call-booking-page {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .summary-note {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--oc-muted);
   margin: 16px 0;
 }
 
 .summary-availability {
   text-align: center;
-  font-size: 12px;
+  font-size: 13px;
   color: #2d6a4f;
   margin-top: 10px;
 }
@@ -596,67 +652,6 @@ textarea.form-control {
 }
 
 
-.on-call-booking-page select,
-.on-call-booking-page select.form-select,
-.on-call-booking-page select.form-control {
-  -webkit-appearance: auto;
-  appearance: auto;
-  width: 100%;
-  border-radius: 14px;
-  border: 1px solid var(--oc-border);
-  color: var(--nm-ink, var(--oc-ink));
-  padding: 12px 14px;
-  font-family: inherit;
-  font-size: 15px;
-  line-height: 1.2;
-  background-image: none;
-  box-shadow: none;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-[dir="rtl"] .on-call-booking-page select,
-[dir="rtl"] .on-call-booking-page select.form-select,
-[dir="rtl"] .on-call-booking-page select.form-control {
-  padding-left: 16px;
-  padding-right: 16px;
-  text-align: right;
-}
-
-.on-call-booking-page select:hover,
-.on-call-booking-page select.form-select:hover,
-.on-call-booking-page select.form-control:hover {
-  transform: translateY(-1px);
-}
-
-.on-call-booking-page select:focus,
-.on-call-booking-page select.form-select:focus,
-.on-call-booking-page select.form-control:focus {
-  outline: none;
-  box-shadow:
-    inset 3px 3px 8px rgba(0, 0, 0, 0.12),
-    inset -3px -3px 8px var(--nm-highlight, rgba(255, 255, 255, 0.9)),
-    0 0 0 4px var(--nm-ring, rgba(201, 162, 74, 0.28));
-}
-
-.on-call-booking-page select:disabled,
-.on-call-booking-page select.form-select:disabled,
-.on-call-booking-page select.form-control:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
-  box-shadow:
-    inset 2px 2px 6px rgba(0, 0, 0, 0.08),
-    inset -2px -2px 6px var(--nm-highlight, rgba(255, 255, 255, 0.9));
-}
-
-.on-call-booking-page select[multiple],
-.on-call-booking-page select[size]:not([size="1"]) {
-  background-image: linear-gradient(180deg, var(--nm-surface, #f3ede3), var(--nm-surface, #f3ede3));
-  padding-right: 16px;
-}
-
-.on-call-booking-page select option {
-  color: #1f2937;
-}
 
 .toggle-row {
   display: flex;
@@ -983,10 +978,7 @@ textarea.form-control {
     right: 12px;
   }
 
-  .form-control,
-  .on-call-booking-page select,
-  .on-call-booking-page select.form-select,
-  .on-call-booking-page select.form-control {
+  .form-control {
     font-size: 14px;
     padding: 11px 40px 11px 14px;
   }

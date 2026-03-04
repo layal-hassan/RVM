@@ -106,7 +106,7 @@
             </span>
             {% trans "Headquarters" %}
           </h4>
-          <p>{% trans "Stockholm Business Park, Sweden" %}</p>
+          <p>{% trans "Kikarvägen 18, 175 46 Järfälla, Stockholm" %}</p>
         </div>
       </div>
     </div>
@@ -122,20 +122,19 @@
       </div>
       <div class="contact-form-row">
         <label>{% trans "Phone Number" %}
-          <input type="tel" name="phone" placeholder="+46 00 000 00 00">
+          <input type="tel" name="phone" placeholder="0046760355633">
         </label>
         <label>{% trans "Project Address" %}
           <input type="text" name="address" placeholder="{% trans "Street name, City" %}">
         </label>
       </div>
-      <label>{% trans "Type of Request" %}
-        <select name="request_type">
-          <option>{% trans "Residential Electrical Service" %}</option>
-          <option>{% trans "Commercial Installation" %}</option>
-          <option>{% trans "Emergency Support" %}</option>
-          <option>{% trans "Smart Home Consultation" %}</option>
-        </select>
-      </label>
+        <div class="contact-field">
+          <label for="request_type">{% trans "Type of Request" %}</label>
+          <select id="request_type" name="request_type">
+            <option>{% trans "Residential Electrical Service" %}</option>
+            <option>{% trans "Commercial Space" %}</option>
+          </select>
+        </div>
       <label>{% trans "Your Message" %}
         <textarea rows="4" name="message" placeholder="{% trans "Tell us more about your needs..." %}" required></textarea>
       </label>

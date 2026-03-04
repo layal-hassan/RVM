@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin Access</title>
   <link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;600;700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css">
+  <link rel="stylesheet" href="{% static 'electricity/css/select-system.css' %}">
   <link rel="stylesheet" href="{% static 'electricity/css/admin_login.css' %}">
 </head>
 <body class="admin-login-body">
@@ -61,6 +61,6 @@
     </div>
   </div>
   <script defer src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
-  <script defer src="{% static 'electricity/js/selects.js' %}"></script>
+  <script defer src="{% static 'electricity/js/global.js' %}"></script>
 </body>
 </html>

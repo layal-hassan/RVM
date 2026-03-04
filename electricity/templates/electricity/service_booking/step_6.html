@@ -20,7 +20,7 @@
         <div class="form-grid">
           <label class="form-label">
             {% trans "Estimated hours" %}
-            <select class="form-select" name="hourly_hours" id="hourly-hours">
+            <select name="hourly_hours" id="hourly-hours">
               <option value="1" {% if data.hourly_hours|stringformat:"s" == "1" %}selected{% endif %}>{% trans "1 hour" %}</option>
               <option value="2" {% if data.hourly_hours|stringformat:"s" == "2" %}selected{% endif %}>{% trans "2 hours" %}</option>
               <option value="3" {% if data.hourly_hours|stringformat:"s" == "3" %}selected{% endif %}>{% trans "3 hours" %}</option>
@@ -56,7 +56,7 @@
 
         <label class="form-label">
           {% trans "Select Time Slot" %}
-          <select class="form-select" name="preferred_time_slot">
+          <select class="time-slot-select" name="preferred_time_slot">
             <option value="">{% trans "Select time slot" %}</option>
             {% for slot in available_slots %}
               <option value="{{ slot.start }}" {% if data.preferred_time_slot == slot.start %}selected{% endif %}>
@@ -86,7 +86,7 @@
 
         <label class="form-label">
           {% trans "Select Time Slot" %}
-          <select class="form-select" name="alt_time_slot">
+          <select name="alt_time_slot">
             <option value="">{% trans "Select time slot" %}</option>
             {% for slot in alt_available_slots %}
               <option value="{{ slot.start }}" {% if data.alt_time_slot == slot.start %}selected{% endif %}>

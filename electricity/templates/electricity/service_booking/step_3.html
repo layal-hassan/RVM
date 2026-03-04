@@ -19,7 +19,7 @@
 
       <label class="form-label">
         {% trans "Property Type" %}
-        <select class="form-select" name="property_type">
+        <select name="property_type">
           <option value="">{% trans "Select type" %}</option>
 
           <option value="Apartment" {% if data.property_type == "Apartment" %}selected{% endif %}>
@@ -38,7 +38,7 @@
 
       <label class="form-label">
         {% trans "Year of Construction" %}
-        <select class="form-select" name="year_built">
+        <select name="year_built">
           <option value="">{% trans "Select range" %}</option>
 
           <option value="before_1980" {% if data.year_built == "before_1980" %}selected{% endif %}>

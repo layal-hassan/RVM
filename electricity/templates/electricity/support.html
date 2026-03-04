@@ -76,7 +76,7 @@
   </svg>
 </div>
         <h3>{% trans "Priority Line" %}</h3>
-        <p>+46 8 200 888 00</p>
+        <p>0046760355633</p>
         <span>{% trans "Mon - Fri 08:00 - 17:00" %}</span>
       </div>
       <div class="support-channel">
@@ -87,7 +87,7 @@
   </svg>
 </div>
         <h3>{% trans "Concierge Email" %}</h3>
-        <p>priority@rwmel.se</p>
+        <p>Support@rwmel.se</p>
         <span>{% trans "24-hour response guarantee" %}</span>
       </div>
       <div class="support-channel">
@@ -144,21 +144,18 @@
         </div>
         <div>
           <label>{% trans "Type of Request" %}</label>
-          <select class="form-control" name="request_type">
+          <select name="request_type">
             <option value="">{% trans "Select" %}</option>
-            <option value="technical" {% if data.request_type == "technical" %}selected{% endif %}>{% trans "Technical Issue" %}</option>
-            <option value="billing" {% if data.request_type == "billing" %}selected{% endif %}>{% trans "Billing" %}</option>
-            <option value="maintenance" {% if data.request_type == "maintenance" %}selected{% endif %}>{% trans "Maintenance" %}</option>
-            <option value="documentation" {% if data.request_type == "documentation" %}selected{% endif %}>{% trans "Documentation" %}</option>
+            <option value="residential_service" {% if data.request_type == "residential_service" %}selected{% endif %}>{% trans "Residential electrical service" %}</option>
+            <option value="commercial_space" {% if data.request_type == "commercial_space" %}selected{% endif %}>{% trans "Commercial space" %}</option>
           </select>
         </div>
         <div>
           <label>{% trans "Customer Type" %}</label>
-          <select class="form-control" name="customer_type">
+          <select name="customer_type">
             <option value="">{% trans "Select" %}</option>
-            <option value="residential" {% if data.customer_type == "residential" %}selected{% endif %}>{% trans "Residential Client" %}</option>
-            <option value="business" {% if data.customer_type == "business" %}selected{% endif %}>{% trans "Business Client" %}</option>
-            <option value="brf" {% if data.customer_type == "brf" %}selected{% endif %}>{% trans "Housing Association" %}</option>
+            <option value="private_individual" {% if data.customer_type == "private_individual" %}selected{% endif %}>{% trans "Private individual" %}</option>
+            <option value="business_organization" {% if data.customer_type == "business_organization" %}selected{% endif %}>{% trans "Business organization" %}</option>
           </select>
         </div>
         <div class="full">

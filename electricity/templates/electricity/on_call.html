@@ -54,6 +54,13 @@
         <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Request a Call Back" %}</a>
       </div>
     </div>
+    <div class="oncall-photo-wrap">
+      <img
+        class="oncall-photo"
+        src="{% static 'electricity/img/emergency-electrician.jpg' %}"
+        alt="{% trans "Emergency electrician" %}"
+      >
+    </div>
   </div>
 </section>
 
@@ -65,19 +72,47 @@
     </div>
     <div class="oncall-cards">
       <article class="oncall-card">
-        <h4>{% trans "Businesses" %}</h4>
+        <div class="oncall-card-head">
+          <span class="oncall-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+              <path d="M4 20V4h16v16H4zm4-9h8V6H8v5zm0 7h8v-5H8v5z"/>
+            </svg>
+          </span>
+          <h4>{% trans "Businesses" %}</h4>
+        </div>
         <p>{% trans "Protect critical systems and keep operations running with priority dispatch." %}</p>
       </article>
       <article class="oncall-card">
-        <h4>{% trans "Property Owners" %}</h4>
+        <div class="oncall-card-head">
+          <span class="oncall-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+              <path d="M4 21V10l8-5 8 5v11h-6v-6h-4v6H4zm6-8h4V9h-4v4z"/>
+            </svg>
+          </span>
+          <h4>{% trans "Property Owners" %}</h4>
+        </div>
         <p>{% trans "Rapid resolution for technical incidents across managed properties." %}</p>
       </article>
       <article class="oncall-card">
-        <h4>{% trans "Housing Assocs (BRF)" %}</h4>
+        <div class="oncall-card-head">
+          <span class="oncall-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+              <path d="M16 11a4 4 0 1 0-8 0 4 4 0 0 0 8 0zm-10 9v-1a6 6 0 0 1 12 0v1H6z"/>
+            </svg>
+          </span>
+          <h4>{% trans "Housing Assocs (BRF)" %}</h4>
+        </div>
         <p>{% trans "Maintain resident safety with structured emergency escalation." %}</p>
       </article>
       <article class="oncall-card">
-        <h4>{% trans "Managed Properties" %}</h4>
+        <div class="oncall-card-head">
+          <span class="oncall-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+              <path d="M3 21V7l9-4 9 4v14h-6v-6h-6v6H3zm6-8h6V9H9v4z"/>
+            </svg>
+          </span>
+          <h4>{% trans "Managed Properties" %}</h4>
+        </div>
         <p>{% trans "Guaranteed response windows for multi-site operations and facilities." %}</p>
       </article>
     </div>
@@ -93,19 +128,47 @@
     </div>
     <div class="oncall-list">
       <div class="oncall-list-item">
-        <strong>{% trans "Power Outages" %}</strong>
+        <div class="oncall-list-head">
+          <span class="oncall-list-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+              <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/>
+            </svg>
+          </span>
+          <strong>{% trans "Power Outages" %}</strong>
+        </div>
         <p>{% trans "Total loss of power in commercial units or apartment blocks." %}</p>
       </div>
       <div class="oncall-list-item">
-        <strong>{% trans "Circuit Tripping" %}</strong>
+        <div class="oncall-list-head">
+          <span class="oncall-list-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+              <path d="M12 3l10 18H2L12 3zm0 4l-6.5 12h13L12 7zm-1 4h2v4h-2v-4zm0 6h2v2h-2v-2z"/>
+            </svg>
+          </span>
+          <strong>{% trans "Circuit Tripping" %}</strong>
+        </div>
         <p>{% trans "Repeated breaker trips causing critical system shutdowns." %}</p>
       </div>
       <div class="oncall-list-item">
-        <strong>{% trans "Safety Faults" %}</strong>
+        <div class="oncall-list-head">
+          <span class="oncall-list-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+              <path d="M12 2l7 3v6c0 5-3.4 9.4-7 11-3.6-1.6-7-6-7-11V5l7-3zm0 4.2L7 8.3v2.6c0 3.8 2.3 7 5 8.4 2.7-1.4 5-4.6 5-8.4V8.3l-5-2.1z"/>
+            </svg>
+          </span>
+          <strong>{% trans "Safety Faults" %}</strong>
+        </div>
         <p>{% trans "Exposed wiring, burning smells, or water-damaged electricals." %}</p>
       </div>
       <div class="oncall-list-item">
-        <strong>{% trans "Common Areas" %}</strong>
+        <div class="oncall-list-head">
+          <span class="oncall-list-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+              <path d="M4 22V8l8-4 8 4v14h-6v-6h-4v6H4zm6-8h4v-4h-4v4z"/>
+            </svg>
+          </span>
+          <strong>{% trans "Common Areas" %}</strong>
+        </div>
         <p>{% trans "Failure in hallway lighting, elevators, or garage security gates." %}</p>
       </div>
     </div>

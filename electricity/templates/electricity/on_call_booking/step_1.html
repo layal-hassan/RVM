@@ -22,14 +22,7 @@
         <h3 class="block-title">{% trans "When do you need on-call coverage?" %}</h3>
         <div class="choice-grid">
 
-          <label class="choice-card">
-            <input type="checkbox" name="coverage_times" value="business_hours" {% if "business_hours" in data.coverage_times %}checked{% endif %}>
-            <span class="choice-content">
-              <span class="choice-title">{% trans "Business hours" %}</span>
-              <span class="choice-note">{% trans "Standard operations 08:00 - 17:00" %}</span>
-            </span>
-            <span class="choice-check"></span>
-          </label>
+          {# Business hours option hidden for now #}
 
           <label class="choice-card">
             <input type="checkbox" name="coverage_times" value="evenings" {% if "evenings" in data.coverage_times %}checked{% endif %}>
@@ -68,6 +61,7 @@
           <label class="choice-card">
             <input type="radio" name="response_speed" value="standard" {% if data.response_speed == "standard" %}checked{% endif %}>
             <span class="choice-content">
+              <span class="choice-pill">{% trans "Normal" %}</span>
               <span class="choice-title">{% trans "Standard response" %}</span>
               <span class="choice-note">{% trans "Service response within 4-8 hours of the reported incident." %}</span>
             </span>

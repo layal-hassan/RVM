@@ -64,29 +64,12 @@
       {% trans "Incomplete information may affect time and price." %}
     </div>
 
-    <div class="eb-split">
-      <div>
-        <label class="eb-label">{% trans "Property type" %}</label>
-        <div class="eb-radio-grid">
-          <label class="eb-radio-card">
-            <input type="radio" name="property_type" value="residential" {% if data.property_type == "residential" %}checked{% endif %}>
-            <span>{% trans "Residential Property" %}</span>
-          </label>
-
-          <label class="eb-radio-card">
-            <input type="radio" name="property_type" value="commercial" {% if data.property_type == "commercial" %}checked{% endif %}>
-            <span>{% trans "Commercial Space" %}</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="eb-logistics">
-        <div class="eb-logistics-title">{% trans "Logistics" %}</div>
-        <label class="eb-checkbox">
-          <input type="checkbox" name="access_confirm" value="yes" {% if data.access_confirm %}checked{% endif %}>
-          <span>{% trans "I confirm that the service professional will have full access to the work area at the scheduled time." %}</span>
-        </label>
-      </div>
+    <div class="eb-logistics">
+      <div class="eb-logistics-title">{% trans "Logistics" %}</div>
+      <label class="eb-checkbox">
+        <input type="checkbox" name="access_confirm" value="yes" {% if data.access_confirm %}checked{% endif %}>
+        <span>{% trans "I confirm that the service professional will have full access to the work area at the scheduled time." %}</span>
+      </label>
     </div>
   </section>
 

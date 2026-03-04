@@ -120,26 +120,23 @@
           </div>
           <div class="service-body">
             <h3>{{ service.title }}</h3>
-            <span class="service-tag">{% trans "Smart Infrastructure" %}</span>
-            {% if service.bullet_points %}
-              <details class="service-specs">
-                <summary>{% trans "Specifications" %}</summary>
-                <ul class="service-bullets">
-                  {% for line in service.bullet_points|split_lines %}
-                    <li>{{ line }}</li>
-                  {% endfor %}
-                </ul>
-              </details>
-            {% elif service.short_description %}
-              <details class="service-specs">
-                <summary>{% trans "Specifications" %}</summary>
-                <ul class="service-bullets">
-                  {% for line in service.short_description|split_lines %}
-                    <li>{{ line }}</li>
-                  {% endfor %}
-                </ul>
-              </details>
-            {% endif %}
+              {% if service.bullet_points %}
+                <div class="service-specs">
+                  <ul class="service-bullets">
+                    {% for line in service.bullet_points|split_lines %}
+                      <li>{{ line }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% elif service.short_description %}
+                <div class="service-specs">
+                  <ul class="service-bullets">
+                    {% for line in service.short_description|split_lines %}
+                      <li>{{ line }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
             <div class="service-actions">
               <a class="mini-cta" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a consultation" %}</a>
               <a class="mini-cta mini-cta-secondary" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Book a service" %}</a>
@@ -156,23 +153,6 @@
   </div>
 </section>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const specsList = document.querySelectorAll(".service-specs");
-    specsList.forEach((specs) => {
-      specs.addEventListener("toggle", () => {
-        if (!specs.open) {
-          return;
-        }
-        specsList.forEach((other) => {
-          if (other !== specs) {
-            other.open = false;
-          }
-        });
-      });
-    });
-  });
-</script>
 
 <section class="section engineering-section">
   <div class="container engineering-grid">

@@ -12,8 +12,8 @@
   {% if CURRENT_LANGUAGE == "ar" %}
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
   {% endif %}
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css">
   <link rel="stylesheet" href="{% static 'electricity/css/electricity.css' %}">
+  <link rel="stylesheet" href="{% static 'electricity/css/select-system.css' %}">
   {% block extra_head %}{% endblock %}
   <link rel="stylesheet" href="{% static 'electricity/css/global_header.css' %}">
 </head>
@@ -53,8 +53,8 @@
         <h4>{% trans "Contact" %}</h4>
         <ul class="footer-contact">
           <li><span>{% trans "Address" %}</span> {% trans "Rådmansgatan 12, 114 44 Stockholm, Sweden" %}</li>
-          <li><span>{% trans "Phone" %}</span> +46 8 123 456 00</li>
-          <li><span>{% trans "Email" %}</span> support@rwmel.com</li>
+          <li><span>{% trans "Phone" %}</span> 0046760355633</li>
+          <li><span>{% trans "Email" %}</span> Support@rwmel.se</li>
         </ul>
       </div>
     </div>
@@ -69,8 +69,8 @@
       <div class="footer-lang">{% trans "Sweden (EN)" %}</div>
     </div>
   </footer>
-  <script defer src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
-  <script defer src="{% static 'electricity/js/selects.js' %}"></script>
+  <script defer src="{% static 'electricity/vendor/tom-select/tom-select.complete.min.js' %}"></script>
+  <script defer src="{% static 'electricity/js/global.js' %}"></script>
   <script defer src="{% static 'electricity/js/global_header.js' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>

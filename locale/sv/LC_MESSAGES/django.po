@@ -2401,8 +2401,8 @@ msgid "Contact Person"
 msgstr ""
 
 #: .\electricity\templates\electricity\on_call_booking\step_2.html:61
-msgid "+46 00 000 00 00"
-msgstr "+46 00 000 00 00"
+msgid "0046760355633"
+msgstr "0046760355633"
 
 #: .\electricity\templates\electricity\on_call_booking\step_2.html:66
 msgid "contact@organization.com"
@@ -5312,7 +5312,7 @@ msgstr "Få tillgång till dina bokningar och hantera dina förfrågningar."
 msgid "Invalid username or password."
 msgstr "Felaktigt användarnamn eller lösenord."
 
-
+  
 
 
 

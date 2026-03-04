@@ -65,7 +65,7 @@ class Step2Form(forms.Form):
             ("large", _("200-400 m2")),
             ("xlarge", _("400+ m2")),
         ],
-        widget=forms.Select(attrs={"class": "form-select booking-input"}),
+        widget=forms.Select(attrs={"class": "booking-input"}),
     )
     year_built = forms.CharField(
         required=False, max_length=10, widget=forms.TextInput(attrs={"class": "form-control booking-input"})
@@ -114,7 +114,11 @@ class Step6Form(forms.Form):
         choices=[("private", _("Private")), ("business", _("Business"))],
         widget=forms.RadioSelect,
     )
-    full_name = forms.CharField(max_length=160, widget=forms.TextInput(attrs={"class": "form-control booking-input"}))
+    full_name = forms.CharField(
+        required=False,
+        max_length=160,
+        widget=forms.TextInput(attrs={"class": "form-control booking-input"}),
+    )
     email = forms.EmailField(required=False, widget=forms.EmailInput(attrs={"class": "form-control booking-input"}))
     phone = forms.CharField(required=False, max_length=40, widget=forms.TextInput(attrs={"class": "form-control booking-input"}))
     personal_id = forms.CharField(
@@ -151,6 +155,7 @@ class Step6Form(forms.Form):
         widget=forms.CheckboxSelectMultiple,
     )
     time_window = forms.ChoiceField(
+        required=False,
         choices=[
             ("morning", _("Morning")),
             ("midday", _("Midday")),
@@ -166,8 +171,22 @@ class Step7Form(forms.Form):
         required=False,
         widget=forms.DateInput(attrs={"type": "date", "class": "form-control booking-input"}),
     )
-    preferred_time_slot = forms.CharField(
-        required=False, max_length=60, widget=forms.TextInput(attrs={"class": "form-control booking-input"})
+    preferred_time = forms.CharField(
+        required=False,
+        max_length=5,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control booking-input time-slot-input",
+                "placeholder": "00:00",
+                "inputmode": "numeric",
+                "autocomplete": "off",
+            }
+        ),
+    )
+    preferred_meridiem = forms.ChoiceField(
+        required=False,
+        choices=[("AM", "AM"), ("PM", "PM")],
+        widget=forms.Select(attrs={"class": "booking-input time-slot-meridiem"}),
     )
 
 

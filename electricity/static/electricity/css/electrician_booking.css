@@ -10,6 +10,16 @@
   --eb-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
 }
 
+.eb-form-grid.contact-private,
+.eb-form-grid.contact-business {
+  display: none !important;
+}
+
+.eb-form-grid.contact-private.is-visible,
+.eb-form-grid.contact-business.is-visible {
+  display: grid !important;
+}
+
 .electrician-booking-page {
   background: linear-gradient(180deg, #f8f6f1 0%, #f4f1ea 55%, #f1ede6 100%);
   color: var(--eb-ink);
@@ -546,7 +556,6 @@ body.electricity-body.electrician-booking-page {
 
 .eb-textarea:focus,
 .eb-card input:focus,
-.eb-card select:focus,
 .eb-card textarea:focus {
   outline: none;
   border-color: rgba(211, 178, 106, 0.7);
@@ -808,6 +817,16 @@ body.electricity-body.electrician-booking-page {
   display: grid;
   place-items: center;
   font-size: 18px;
+}
+
+.eb-help-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .eb-help-title {
