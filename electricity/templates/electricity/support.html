@@ -146,8 +146,8 @@
           <label>{% trans "Type of Request" %}</label>
           <select name="request_type">
             <option value="">{% trans "Select" %}</option>
-            <option value="residential_service" {% if data.request_type == "residential_service" %}selected{% endif %}>{% trans "Residential electrical service" %}</option>
-            <option value="commercial_space" {% if data.request_type == "commercial_space" %}selected{% endif %}>{% trans "Commercial space" %}</option>
+            <option value="residential_service" {% if data.request_type == "residential_service" %}selected{% endif %}>{% trans "Residential" %}</option>
+            <option value="commercial_space" {% if data.request_type == "commercial_space" %}selected{% endif %}>{% trans "Commercial" %}</option>
           </select>
         </div>
         <div>

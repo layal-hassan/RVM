@@ -1,5 +1,5 @@
 ﻿{% extends "electricity/dashboard/base.html" %}
-{% load electricity_extr i18n %}
+{% load electricity_extras i18n %}
 
 {% block page_title %}Service Bookings{% endblock %}
 {% block page_subtitle %}Summary view for service booking flow.{% endblock %}
@@ -21,7 +21,7 @@
         {% for row in items %}
             <div class="panel-row">
                 {% for field in fields %}
-                    <span>{{ row|attr:field|pretty_value }}</span>
+                    <span>{{ row|display_value:field }}</span>
                 {% endfor %}
             </div>
         {% empty %}

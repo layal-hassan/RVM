@@ -1,4 +1,4 @@
-﻿{% load static i18n %}
+{% load static i18n electricity_extras %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,7 +58,7 @@
             <div class="panel-row">
               <span>{{ booking.full_name }}</span>
               <span>{{ booking.preferred_date|default:"-" }} {{ booking.preferred_time_slot|default:"" }}</span>
-              <span>{{ booking.consultation_type|default:"-" }}</span>
+              <span>{{ booking|display_value:"consultation_type" }}{% if booking.urgent %} / Urgent{% endif %}</span>
               <span>{{ booking.get_status_display }}</span>
               <span class="row-actions">
                 <a href="{% url 'electricity:provider_order_detail' booking.id %}">Open</a>
@@ -73,7 +73,7 @@
           <div class="panel-row panel-row-head">
             <span>Customer</span>
             <span>Date</span>
-            <span>Type</span>
+            <span>Requested Work</span>
             <span>Status</span>
             <span>Actions</span>
           </div>
@@ -81,7 +81,7 @@
             <div class="panel-row">
               <span>{{ booking.full_name }}</span>
               <span>{{ booking.preferred_date|default:"-" }} {{ booking.preferred_time_slot|default:"" }}</span>
-              <span>{{ booking.account_type|default:"-" }}</span>
+              <span>{{ booking|display_value:"services"|default:booking.work_description|truncatechars:60 }}</span>
               <span>{{ booking.get_status_display }}</span>
               <span class="row-actions">
                 <a href="{% url 'electricity:provider_service_booking_detail' booking.id %}">Open</a>
@@ -96,7 +96,7 @@
           <div class="panel-row panel-row-head">
             <span>Organization</span>
             <span>Contact</span>
-            <span>City</span>
+            <span>Coverage</span>
             <span>Status</span>
             <span>Actions</span>
           </div>
@@ -104,7 +104,7 @@
             <div class="panel-row">
               <span>{{ booking.organization_name|default:"-" }}</span>
               <span>{{ booking.contact_person|default:"-" }}</span>
-              <span>{{ booking.city|default:"-" }}</span>
+              <span>{{ booking|display_value:"coverage_scope" }}</span>
               <span>{{ booking.get_status_display }}</span>
               <span class="row-actions">
                 <a href="{% url 'electricity:provider_on_call_booking_detail' booking.id %}">Open</a>

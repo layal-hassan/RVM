@@ -25,7 +25,23 @@
     </div>
   </div>
 
-  <div class="eb-receipt-details">
+  <div class="eb-receipt-printable">
+    <div class="eb-receipt-print-header">
+      <div>
+        <div class="eb-invoice-brand">RWM EL</div>
+        <div class="eb-invoice-sub">{% trans "Electrical & Infrastructure Solutions" %}</div>
+        <div class="eb-invoice-contact">
+          Kikarvägen 18, 175 46 Järfälla, Stockholm · support@rwm.se · 0046760355633
+        </div>
+      </div>
+      <div class="eb-invoice-meta">
+        <div class="eb-invoice-title">{% trans "Booking Invoice" %}</div>
+        <div>{% trans "Reference" %}: #{{ reference }}</div>
+        <div>{% trans "Date" %}: {% now "Y-m-d" %}</div>
+      </div>
+    </div>
+
+    <div class="eb-receipt-details">
 
     <div class="eb-receipt-section">
       <div class="eb-receipt-title">{% trans "Booking Details" %}</div>
@@ -92,6 +108,7 @@
       </div>
     </div>
 
+    </div>
   </div>
 
 

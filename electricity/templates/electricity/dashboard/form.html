@@ -20,10 +20,83 @@
         {% for field in form %}
             <div class="panel-row">
                 <span class="row-title">{{ field.label }}</span>
-                <span class="row-meta">{{ field.value|default:"-" }}</span>
+                <span class="row-meta">
+                    {% if field.field.widget.input_type == "file" %}
+                        {% with file_obj=form.instance|attr:field.name %}
+                            {% if file_obj %}
+                                <div class="media-preview">
+                                    {% if field.name == "photo" %}
+                                        <a href="{{ file_obj.url }}" target="_blank" rel="noopener" class="media-preview-link">
+                                            <img src="{{ file_obj.url }}" alt="{{ field.label }}" class="media-preview-image">
+                                        </a>
+                                        <a href="{{ file_obj.url }}" target="_blank" rel="noopener" class="media-preview-link">
+                                            {{ file_obj|file_display_name }}
+                                        </a>
+                                    {% elif field.name == "video" %}
+                                        <video controls preload="metadata" class="media-preview-video">
+                                            <source src="{{ file_obj.url }}">
+                                        </video>
+                                        <a href="{{ file_obj.url }}" target="_blank" rel="noopener" class="media-preview-link">
+                                            {{ file_obj|file_display_name }}
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ file_obj.url }}" target="_blank" rel="noopener" class="media-preview-link">
+                                            {{ file_obj|file_display_name }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                -
+                            {% endif %}
+                        {% endwith %}
+                    {% else %}
+                        {{ form.instance|display_value:field.name }}
+                    {% endif %}
+                </span>
             </div>
         {% endfor %}
     </div>
+    {% with attachment_manager=form.instance|attr:"attachments" %}
+        {% if attachment_manager %}
+            {% with attachment_list=attachment_manager.all %}
+                {% if attachment_list %}
+                    <div class="dash-section">
+                        <div class="panel-header">
+                            <div>
+                                <h3>Attachments</h3>
+                                <div class="panel-meta">Uploaded files linked to this booking.</div>
+                            </div>
+                        </div>
+                        <div class="attachment-grid">
+                            {% for attachment in attachment_list %}
+                                <div class="attachment-card">
+                                    <div class="attachment-kind">{{ attachment.get_kind_display }}</div>
+                                    {% if attachment.kind == "photo" %}
+                                        <a href="{{ attachment.file.url }}" target="_blank" rel="noopener" class="media-preview-link">
+                                            <img src="{{ attachment.file.url }}" alt="{{ attachment|file_display_name }}" class="media-preview-image">
+                                        </a>
+                                    {% elif attachment.kind == "video" %}
+                                        <video controls preload="metadata" class="media-preview-video">
+                                            <source src="{{ attachment.file.url }}">
+                                        </video>
+                                    {% else %}
+                                        <div class="attachment-file">
+                                            <a href="{{ attachment.file.url }}" target="_blank" rel="noopener" class="media-preview-link">
+                                                {{ attachment|file_display_name }}
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                    <a href="{{ attachment.file.url }}" target="_blank" rel="noopener" class="media-preview-link">
+                                        {{ attachment|file_display_name }}
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+    {% endwith %}
     <div class="form-actions">
         <a class="dash-btn ghost" href="{% url back_url %}">Back</a>
     </div>

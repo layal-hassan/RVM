@@ -1,43 +1,41 @@
 {% extends "electricity/on_call_booking/base.html" %}
 {% load i18n %}
 {% block booking_content %}
-<form method="post" class="on-call-form">
-  {% csrf_token %}
-
-  {% if submitted %}
-    <div class="success-banner">
-      <strong>{% trans "Application received." %}</strong>
-      {% trans "Your on-call registration has been submitted. Reference ID:" %} {{ booking_id }}.
-    </div>
-
-    <div class="oc-modal-backdrop" id="oc-success-modal" role="dialog" aria-modal="true">
-      <div class="oc-modal">
-        <div class="hero-badge">{% trans "Application received." %}</div>
-        <div class="oc-modal-title">{% trans "Submission confirmed" %}</div>
-        <p class="oc-modal-note">
-          {% trans "Your on-call registration has been submitted successfully." %}
-        </p>
-        <div class="oc-modal-ref">
-          {% trans "Reference ID" %}: {{ booking_id }}
+{% if submitted %}
+  <div class="oc-modal-backdrop is-static" id="oc-success-modal" role="dialog" aria-modal="true">
+    <div class="oc-modal oc-modal-wide">
+      <div class="hero-badge">{% trans "Application received." %}</div>
+      <div class="oc-modal-title">{% trans "Submission confirmed" %}</div>
+      <p class="oc-modal-note">
+        {% trans "Your on-call registration has been submitted successfully." %}
+      </p>
+      <div class="oc-modal-ref">
+        {% trans "Reference ID" %}: {{ booking_id }}
+      </div>
+      {% if submitted_summary %}
+        <div class="oc-modal-summary">
+          {% for item in submitted_summary %}
+            <div class="oc-modal-summary-row">
+              <span>{{ item.label }}</span>
+              <strong>{{ item.value }}</strong>
+            </div>
+          {% endfor %}
         </div>
-        <div class="oc-modal-actions">
-          <button type="button" class="btn btn-primary oc-modal-close">{% trans "OK" %}</button>
-        </div>
+      {% endif %}
+      <div class="oc-modal-actions">
+        <a href="{{ redirect_after_submit_url }}" class="btn btn-primary oc-modal-close">{% trans "Services" %}</a>
+        <a href="{% url 'electricity:home' %}" class="btn btn-light oc-modal-secondary">{% trans "Home" %}</a>
       </div>
     </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const modal = document.getElementById("oc-success-modal");
-        const closeBtn = modal ? modal.querySelector(".oc-modal-close") : null;
-        if (!modal || !closeBtn) return;
-        document.body.classList.add("modal-open");
-        closeBtn.addEventListener("click", function () {
-          modal.remove();
-          document.body.classList.remove("modal-open");
-        });
-      });
-    </script>
-  {% endif %}
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.body.classList.add("modal-open");
+    });
+  </script>
+{% else %}
+<form method="post" class="on-call-form">
+  {% csrf_token %}
 
   <div class="oncall-header">
     <div class="section-label">{% trans "Finalize Registration" %}</div>
@@ -93,13 +91,21 @@
 
     <div class="summary-note">
       {% trans "Estimated total:" %}
-      <strong>{{ emergency_estimated_total|default:"0" }} {{ currency|default:"SEK" }}</strong>
-      ({{ hourly_rate_emergency|default:"0" }} {{ currency|default:"SEK" }}/{% trans "hr" %})
+      <strong>{{ pricing_display_label }}</strong>
     </div>
   </div>
 
   <div class="form-card review-card">
     <div class="form-card-title">{% trans "Review & Submit" %}</div>
+
+    {% if selection_summary_rows %}
+      {% for item in selection_summary_rows %}
+        <div class="review-row">
+          <span>{{ item.label }}</span>
+          <strong>{{ item.value }}</strong>
+        </div>
+      {% endfor %}
+    {% endif %}
 
     {% trans "On-Call Pro (Monthly)" as default_service_plan %}
     <div class="review-row">
@@ -131,4 +137,5 @@
   </div>
 
 </form>
+{% endif %}
 {% endblock %}

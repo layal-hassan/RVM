@@ -154,11 +154,35 @@
     });
     if (privateBlock) privateBlock.classList.toggle("is-visible", type === "private");
     if (businessBlock) businessBlock.classList.toggle("is-visible", type === "business");
+    if (privateBlock) {
+      privateBlock.querySelectorAll("input, select, textarea").forEach(function (field) {
+        field.disabled = type !== "private";
+      });
+    }
+    if (businessBlock) {
+      businessBlock.querySelectorAll("input, select, textarea").forEach(function (field) {
+        field.disabled = type !== "business";
+      });
+    }
   }
 
   document.querySelectorAll("input[name='customer_type']").forEach(function (input) {
     input.addEventListener("change", toggleContactBlocks);
   });
   toggleContactBlocks();
+
+  function attachReceiptActions() {
+    var printBtn = document.querySelector(".eb-receipt-print");
+    var pdfBtn = document.querySelector(".eb-receipt-pdf");
+    if (!printBtn && !pdfBtn) return;
+    function handlePrint(event) {
+      if (event) event.preventDefault();
+      window.print();
+    }
+    if (printBtn) printBtn.addEventListener("click", handlePrint);
+    if (pdfBtn) pdfBtn.addEventListener("click", handlePrint);
+  }
+
+  attachReceiptActions();
 })();
 

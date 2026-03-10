@@ -9,6 +9,11 @@
 {% if consultation_free %}
   <div class="success-banner">{% trans "Your first consultation is free." %}</div>
 {% endif %}
+{% if form.non_field_errors %}
+  <div class="booking-errors">
+    {{ form.non_field_errors }}
+  </div>
+{% endif %}
 <div class="form-row">
     <label class="form-label">{% trans "Are you a private individual or a business?" %}</label>
     <div class="toggle-group">
@@ -19,36 +24,57 @@
             </label>
         {% endfor %}
     </div>
+    {% if form.contact_type.errors %}
+      <div class="booking-field-error">{{ form.contact_type.errors|join:", " }}</div>
+    {% endif %}
 </div>
 
 <div class="form-row contact-private{% if form.contact_type.value != "business" %} is-visible{% endif %}" data-private>
     <label class="form-label">{% trans "Personal ID number" %}</label>
     {{ form.personal_id }}
+    {% if form.personal_id.errors %}
+      <div class="booking-field-error">{{ form.personal_id.errors|join:", " }}</div>
+    {% endif %}
 </div>
 
 <div class="form-row split-row contact-business{% if form.contact_type.value == "business" %} is-visible{% endif %}" data-business>
     <div>
         <label class="form-label">{% trans "Company name" %}</label>
         {{ form.company_name }}
+        {% if form.company_name.errors %}
+          <div class="booking-field-error">{{ form.company_name.errors|join:", " }}</div>
+        {% endif %}
     </div>
     <div>
         <label class="form-label">{% trans "Organization number" %}</label>
         {{ form.organization_number }}
+        {% if form.organization_number.errors %}
+          <div class="booking-field-error">{{ form.organization_number.errors|join:", " }}</div>
+        {% endif %}
     </div>
 </div>
 <div class="form-row contact-private" data-private>
     <label class="form-label">{% trans "Full Name" %}</label>
     {{ form.full_name }}
+    {% if form.full_name.errors %}
+      <div class="booking-field-error">{{ form.full_name.errors|join:", " }}</div>
+    {% endif %}
 </div>
 
 <div class="form-row split-row">
     <div>
         <label class="form-label">{% trans "Email" %}</label>
         {{ form.email }}
+        {% if form.email.errors %}
+          <div class="booking-field-error">{{ form.email.errors|join:", " }}</div>
+        {% endif %}
     </div>
     <div>
         <label class="form-label">{% trans "Phone Number" %}</label>
         {{ form.phone }}
+        {% if form.phone.errors %}
+          <div class="booking-field-error">{{ form.phone.errors|join:", " }}</div>
+        {% endif %}
     </div>
 </div>
 
@@ -62,6 +88,9 @@
             </label>
         {% endfor %}
     </div>
+    {% if form.availability_days.errors %}
+      <div class="booking-field-error">{{ form.availability_days.errors|join:", " }}</div>
+    {% endif %}
 </div>
 
 <div class="form-row">
@@ -74,6 +103,9 @@
             </label>
         {% endfor %}
     </div>
+    {% if form.time_window.errors %}
+      <div class="booking-field-error">{{ form.time_window.errors|join:", " }}</div>
+    {% endif %}
 </div>
 {% endblock %}
 

@@ -35,6 +35,11 @@
   justify-content: center;
   padding: 24px;
   z-index: 2000;
+  overflow-y: auto;
+}
+
+.oc-modal-backdrop.is-static {
+  align-items: flex-start;
 }
 
 .oc-modal {
@@ -45,6 +50,13 @@
   padding: 26px 28px;
   box-shadow: 0 28px 60px rgba(15, 23, 42, 0.22);
   text-align: center;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  margin: auto 0;
+}
+
+.oc-modal-wide {
+  width: min(680px, 94vw);
 }
 
 .oc-modal-title {
@@ -74,6 +86,47 @@
   margin-top: 18px;
   display: flex;
   justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  position: sticky;
+  bottom: 0;
+  background: #ffffff;
+  padding-top: 12px;
+}
+
+.oc-modal-summary {
+  margin-top: 18px;
+  border: 1px solid rgba(233, 226, 214, 0.95);
+  border-radius: 16px;
+  overflow: hidden;
+  text-align: start;
+}
+
+.oc-modal-summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(233, 226, 214, 0.95);
+}
+
+.oc-modal-summary-row:last-child {
+  border-bottom: 0;
+}
+
+.oc-modal-summary-row span {
+  color: var(--oc-muted);
+}
+
+.oc-modal-summary-row strong {
+  color: var(--oc-ink);
+  text-align: end;
+  overflow-wrap: anywhere;
+}
+
+.oc-modal-close,
+.oc-modal-secondary {
+  min-width: 160px;
 }
 
 .on-call-booking-page::before {
@@ -782,6 +835,30 @@ textarea.form-control {
 @media (max-width: 992px) {
   .oncall-grid {
     grid-template-columns: 1fr;
+  }
+
+  .oc-modal-summary-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .oc-modal-summary-row strong {
+    text-align: start;
+  }
+
+  .oc-modal {
+    padding: 22px 18px;
+  }
+
+  .oc-modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .oc-modal-close,
+  .oc-modal-secondary {
+    min-width: 0;
+    width: 100%;
   }
 
   .choice-grid,

@@ -1,3 +1,4 @@
+import json
 import re
 from django import forms
 from django.conf import settings
@@ -36,6 +37,145 @@ def _translated_fields(*base_fields):
         for lang in languages:
             fields.append(f"{base}_{lang}")
     return fields
+
+
+class HumanizedJSONModelForm(forms.ModelForm):
+    JSON_TEXTAREA_ROWS = 4
+    JSON_LABEL_MAPS = {
+        "coverage_times": {
+            "evenings": _("Evenings"),
+            "nights": _("Nights"),
+            "weekends": _("Weekends & holidays"),
+        },
+        "coverage_scope": {
+            "power_outages": _("Power outages"),
+            "fuse_boards": _("Fuse boards"),
+            "common_areas": _("Common areas"),
+            "critical_systems": _("Critical systems"),
+            "general_faults": _("General faults"),
+        },
+        "availability_days": {
+            "mon": _("Mon"),
+            "tue": _("Tue"),
+            "wed": _("Wed"),
+            "thu": _("Thu"),
+            "fri": _("Fri"),
+            "sat": _("Sat"),
+            "sun": _("Sun"),
+        },
+        "interests": {
+            "upgrades": _("Electrical upgrades"),
+            "lighting": _("Lighting solutions"),
+            "ev": _("EV charging"),
+            "automation": _("Home automation"),
+            "maintenance": _("Maintenance"),
+        },
+    }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._json_field_names = []
+        model = getattr(self.Meta, "model", None)
+        if not model:
+            return
+
+        for model_field in model._meta.fields:
+            if model_field.get_internal_type() != "JSONField" or model_field.name not in self.fields:
+                continue
+
+            self._json_field_names.append(model_field.name)
+            existing_field = self.fields[model_field.name]
+            self.fields[model_field.name] = forms.CharField(
+                required=not model_field.blank,
+                label=existing_field.label,
+                help_text=_("Enter one item per line."),
+                widget=forms.Textarea(
+                    attrs={
+                        "class": "form-control",
+                        "rows": self.JSON_TEXTAREA_ROWS,
+                    }
+                ),
+            )
+            if not self.is_bound:
+                self.initial[model_field.name] = self._format_json_value(
+                    model_field.name,
+                    getattr(self.instance, model_field.name, None),
+                )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        for field_name in getattr(self, "_json_field_names", []):
+            raw_value = cleaned_data.get(field_name)
+            if isinstance(raw_value, str):
+                cleaned_data[field_name] = self._parse_json_value(field_name, raw_value)
+        return cleaned_data
+
+    def _format_json_value(self, field_name, value):
+        if value in (None, "", [], {}):
+            return ""
+        if isinstance(value, list):
+            return "\n".join(self._format_json_item(field_name, item) for item in value if item not in (None, ""))
+        if isinstance(value, dict):
+            return "\n".join(f"{key}: {val}" for key, val in value.items())
+        return str(value)
+
+    def _format_json_item(self, field_name, item):
+        if field_name == "services":
+            service_map = self._service_title_map([item])
+            label = service_map.get(str(item))
+            if label:
+                return label
+        label_map = self.JSON_LABEL_MAPS.get(field_name, {})
+        return str(label_map.get(item, item))
+
+    def _parse_json_value(self, field_name, raw_value):
+        text = (raw_value or "").strip()
+        if not text:
+            return []
+
+        if text[0] in "[{":
+            try:
+                parsed = json.loads(text)
+            except json.JSONDecodeError:
+                parsed = None
+            if parsed is not None:
+                return parsed
+
+        lines = [line.strip(" ,") for line in text.splitlines() if line.strip(" ,")]
+        if len(lines) <= 1 and "," in text:
+            lines = [part.strip(" ,") for part in text.split(",") if part.strip(" ,")]
+
+        if field_name == "services":
+            return self._parse_service_items(lines)
+        return lines
+
+    def _service_title_map(self, values):
+        service_ids = []
+        for value in values:
+            if str(value).isdigit():
+                service_ids.append(int(value))
+        if not service_ids:
+            return {}
+        return {
+            str(service.id): service.title
+            for service in ElectricalService.objects.filter(id__in=service_ids)
+        }
+
+    def _parse_service_items(self, items):
+        services = ElectricalService.objects.all().only("id", "title")
+        title_map = {service.title.strip().lower(): str(service.id) for service in services if service.title}
+        parsed = []
+        for item in items:
+            match = re.search(r"\b(?:id|service)\s*[:#-]?\s*(\d+)\b", item, flags=re.IGNORECASE)
+            if match:
+                parsed.append(match.group(1))
+                continue
+            if item.isdigit():
+                parsed.append(item)
+                continue
+            mapped = title_map.get(item.strip().lower())
+            parsed.append(mapped or item)
+        return parsed
 
 
 class Step1Form(forms.Form):
@@ -104,10 +244,44 @@ class Step4Form(forms.Form):
     )
 
 
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+
+class MultipleFileField(forms.FileField):
+    widget = MultipleFileInput
+
+    def clean(self, data, initial=None):
+        single_clean = super().clean
+        if not data:
+            return []
+        if isinstance(data, (list, tuple)):
+            return [single_clean(item, initial) for item in data]
+        return [single_clean(data, initial)]
+
+
 class Step5Form(forms.Form):
-    photo = forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={"class": "booking-file"}))
-    video = forms.FileField(required=False, widget=forms.ClearableFileInput(attrs={"class": "booking-file"}))
-    document = forms.FileField(required=False, widget=forms.ClearableFileInput(attrs={"class": "booking-file"}))
+    photo = MultipleFileField(
+        required=False,
+        widget=MultipleFileInput(
+            attrs={"class": "booking-file", "accept": "image/jpeg,image/png,image/webp"}
+        ),
+    )
+    video = MultipleFileField(
+        required=False,
+        widget=MultipleFileInput(
+            attrs={"class": "booking-file", "accept": "video/mp4,video/quicktime,video/webm"}
+        ),
+    )
+    document = MultipleFileField(
+        required=False,
+        widget=MultipleFileInput(
+            attrs={
+                "class": "booking-file",
+                "accept": ".pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx",
+            }
+        ),
+    )
 
 
 class Step6Form(forms.Form):
@@ -226,25 +400,25 @@ class ZipCheckForm(forms.Form):
         return value
 
 
-class OutsideAreaRequestForm(forms.ModelForm):
+class OutsideAreaRequestForm(HumanizedJSONModelForm):
     class Meta:
         model = ServiceRequestOutsideArea
         fields = ("full_name", "email", "phone", "details")
 
 
-class AcceptedZipCodeForm(forms.ModelForm):
+class AcceptedZipCodeForm(HumanizedJSONModelForm):
     class Meta:
         model = AcceptedZipCode
         fields = ("code", "is_active", "note")
 
 
-class ServiceRequestOutsideAreaAdminForm(forms.ModelForm):
+class ServiceRequestOutsideAreaAdminForm(HumanizedJSONModelForm):
     class Meta:
         model = ServiceRequestOutsideArea
         fields = ("full_name", "email", "phone", "zip_code", "request_type", "details")
 
 
-class ServicePricingForm(forms.ModelForm):
+class ServicePricingForm(HumanizedJSONModelForm):
     class Meta:
         model = ServicePricing
         fields = _translated_fields("name") + [
@@ -259,7 +433,7 @@ class ServicePricingForm(forms.ModelForm):
         ]
 
 
-class ElectricalServiceForm(forms.ModelForm):
+class ElectricalServiceForm(HumanizedJSONModelForm):
     class Meta:
         model = ElectricalService
         fields = _translated_fields("title", "short_description", "bullet_points") + [
@@ -276,43 +450,43 @@ class ElectricalServiceForm(forms.ModelForm):
         ]
 
 
-class ConsultationRequestForm(forms.ModelForm):
+class ConsultationRequestForm(HumanizedJSONModelForm):
     class Meta:
         model = ConsultationRequest
         exclude = ("created_at",)
 
 
-class ConsultationBookingForm(forms.ModelForm):
+class ConsultationBookingForm(HumanizedJSONModelForm):
     class Meta:
         model = ConsultationBooking
         exclude = ("created_at",)
 
 
-class ServiceBookingForm(forms.ModelForm):
+class ServiceBookingForm(HumanizedJSONModelForm):
     class Meta:
         model = ServiceBooking
         exclude = ("created_at",)
 
 
-class ElectricianBookingForm(forms.ModelForm):
+class ElectricianBookingForm(HumanizedJSONModelForm):
     class Meta:
         model = ElectricianBooking
         exclude = ("created_at",)
 
 
-class OnCallBookingForm(forms.ModelForm):
+class OnCallBookingForm(HumanizedJSONModelForm):
     class Meta:
         model = OnCallBooking
         exclude = ("created_at",)
 
 
-class SupportTicketForm(forms.ModelForm):
+class SupportTicketForm(HumanizedJSONModelForm):
     class Meta:
         model = SupportTicket
         exclude = ("created_at",)
 
 
-class CustomerProfileForm(forms.ModelForm):
+class CustomerProfileForm(HumanizedJSONModelForm):
     class Meta:
         model = CustomerProfile
         exclude = ("created_at",)
@@ -320,7 +494,7 @@ class CustomerProfileForm(forms.ModelForm):
 
 
 
-class ProviderShiftForm(forms.ModelForm):
+class ProviderShiftForm(HumanizedJSONModelForm):
     WEEKDAY_CHOICES = [
         (0, "Monday"),
         (1, "Tuesday"),
@@ -343,13 +517,13 @@ class ProviderShiftForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["weekday"].widget = forms.Select(choices=self.WEEKDAY_CHOICES)
 
-class ProviderProfileForm(forms.ModelForm):
+class ProviderProfileForm(HumanizedJSONModelForm):
     class Meta:
         model = ProviderProfile
         fields = "__all__"
 
 
-class ProviderAssignForm(forms.ModelForm):
+class ProviderAssignForm(HumanizedJSONModelForm):
     class Meta:
         model = ConsultationBooking
         fields = ("assigned_provider",)
@@ -361,37 +535,37 @@ class ProviderAssignForm(forms.ModelForm):
             field.label_from_instance = lambda obj: f"{obj.display_name} - {obj.availability_status}"
 
 
-class ServiceBookingAssignForm(forms.ModelForm):
+class ServiceBookingAssignForm(HumanizedJSONModelForm):
     class Meta:
         model = ServiceBooking
         fields = ("assigned_provider",)
 
 
-class OnCallBookingAssignForm(forms.ModelForm):
+class OnCallBookingAssignForm(HumanizedJSONModelForm):
     class Meta:
         model = OnCallBooking
         fields = ("assigned_provider",)
 
 
-class ElectricianBookingAssignForm(forms.ModelForm):
+class ElectricianBookingAssignForm(HumanizedJSONModelForm):
     class Meta:
         model = ElectricianBooking
         fields = ("assigned_provider",)
 
 
-class FAQEntryForm(forms.ModelForm):
+class FAQEntryForm(HumanizedJSONModelForm):
     class Meta:
         model = FAQEntry
         fields = _translated_fields("question", "answer") + ["is_active", "order"]
 
 
-class BookingStatusUpdateForm(forms.ModelForm):
+class BookingStatusUpdateForm(HumanizedJSONModelForm):
     class Meta:
         model = BookingStatusUpdate
         fields = ("status", "note")
 
 
-class ServiceBookingStatusUpdateForm(forms.ModelForm):
+class ServiceBookingStatusUpdateForm(HumanizedJSONModelForm):
     class Meta:
         model = ServiceBookingStatusUpdate
         fields = ("status", "note")

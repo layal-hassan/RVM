@@ -10,6 +10,7 @@ from django.core.files import File
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect, render
 from django.http import Http404, HttpResponse, JsonResponse
+from django.urls import reverse
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
@@ -56,6 +57,7 @@ from .models import (
     BookingStatusUpdate,
     ServiceBookingStatusUpdate,
     ConsultationBooking,
+    ConsultationBookingAttachment,
     ConsultationRequest,
     ElectricalService,
     ContactInquiry,
@@ -156,6 +158,27 @@ def support(request):
             AdminNotification.objects.create(
                 message=f"New support ticket from {ticket.full_name}.",
             )
+            subject = f"Support Request: {data.get('request_type') or 'General'}"
+            body = (
+                f"Name: {data.get('full_name')}\n"
+                f"Email: {data.get('email')}\n"
+                f"Phone: {data.get('phone')}\n"
+                f"Customer Type: {data.get('customer_type')}\n"
+                f"Project Address: {data.get('project_address')}\n"
+                f"Request Type: {data.get('request_type')}\n"
+                f"\nMessage:\n{data.get('message')}\n"
+            )
+            try:
+                from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "support@rwm.se"
+                send_mail(
+                    subject,
+                    body,
+                    from_email,
+                    ["support@rwm.se"],
+                    reply_to=[data.get("email")] if data.get("email") else None,
+                )
+            except Exception:
+                pass
             return render(
                 request,
                 "electricity/support.html",
@@ -616,6 +639,40 @@ def _save_temp_upload(request, field_name):
     return os.path.join("temp_uploads", stored_name)
 
 
+def _normalize_temp_uploads(temp_uploads):
+    normalized = {}
+    for field in ("photo", "video", "document"):
+        value = (temp_uploads or {}).get(field, [])
+        if not value:
+            normalized[field] = []
+        elif isinstance(value, list):
+            normalized[field] = value
+        else:
+            normalized[field] = [value]
+    return normalized
+
+
+def _save_temp_uploads(request, field_name):
+    uploads = request.FILES.getlist(field_name)
+    if not uploads:
+        return []
+    temp_dir = os.path.join(settings.MEDIA_ROOT, "temp_uploads")
+    os.makedirs(temp_dir, exist_ok=True)
+    fs = FileSystemStorage(location=temp_dir)
+    saved_paths = []
+    for upload in uploads:
+        filename = f"{uuid.uuid4().hex}_{upload.name}"
+        stored_name = fs.save(filename, upload)
+        saved_paths.append(
+            {
+                "path": os.path.join("temp_uploads", stored_name),
+                "name": upload.name,
+                "size": upload.size,
+            }
+        )
+    return saved_paths
+
+
 def _attach_temp_file(instance, temp_path, field_name):
     if not temp_path:
         return
@@ -624,6 +681,55 @@ def _attach_temp_file(instance, temp_path, field_name):
         return
     with open(full_path, "rb") as handle:
         getattr(instance, field_name).save(os.path.basename(full_path), File(handle), save=False)
+
+
+def _create_attachments_from_temp_uploads(booking, temp_uploads):
+    for kind, items in _normalize_temp_uploads(temp_uploads).items():
+        for item in items:
+            temp_path = item.get("path") if isinstance(item, dict) else item
+            if not temp_path:
+                continue
+            full_path = os.path.join(settings.MEDIA_ROOT, temp_path)
+            if not os.path.exists(full_path):
+                continue
+            original_name = item.get("name", "") if isinstance(item, dict) else ""
+            with open(full_path, "rb") as handle:
+                attachment = ConsultationBookingAttachment(
+                    booking=booking,
+                    kind=kind,
+                    original_name=original_name or os.path.basename(full_path),
+                )
+                attachment.file.save(os.path.basename(full_path), File(handle), save=True)
+
+
+def _temp_uploads_for_display(temp_uploads):
+    labels = {
+        "photo": _("Photo"),
+        "video": _("Video"),
+        "document": _("Document"),
+    }
+    items = []
+    for kind, values in _normalize_temp_uploads(temp_uploads).items():
+        for value in values:
+            if isinstance(value, dict):
+                name = value.get("name") or os.path.basename(value.get("path", ""))
+                size = value.get("size") or 0
+            else:
+                name = os.path.basename(value)
+                size = 0
+            items.append(
+                {
+                    "kind": kind,
+                    "label": labels[kind],
+                    "name": name,
+                    "size_kb": max(1, round(size / 1024)) if size else None,
+                }
+            )
+    return items
+
+
+def _choice_label(choices, value):
+    return dict(choices).get(value, value)
 
 
 def booking_step_1(request):
@@ -753,11 +859,11 @@ def booking_step_5(request):
     form = Step5Form(request.POST or None, request.FILES or None)
     if request.method == "POST":
         if form.is_valid():
-            temp_uploads = data.get("temp_uploads", {})
+            temp_uploads = _normalize_temp_uploads(data.get("temp_uploads", {}))
             for field in ("photo", "video", "document"):
-                saved_path = _save_temp_upload(request, field)
-                if saved_path:
-                    temp_uploads[field] = saved_path
+                saved_items = _save_temp_uploads(request, field)
+                if saved_items:
+                    temp_uploads[field].extend(saved_items)
             data["temp_uploads"] = temp_uploads
             _set_booking_data(request, data)
             return redirect("electricity:booking_step_6")
@@ -771,6 +877,7 @@ def booking_step_5(request):
             "step": 5,
             "progress_percent": 71,
             "title": _("Add photos or documents (optional)"),
+            "existing_uploads": _temp_uploads_for_display(data.get("temp_uploads", {})),
         },
     )
 
@@ -949,12 +1056,28 @@ def booking_step_7(request):
             is_first_free=is_free,
         )
 
-        temp_uploads = data.get("temp_uploads", {})
-        _attach_temp_file(booking, temp_uploads.get("photo"), "photo")
-        _attach_temp_file(booking, temp_uploads.get("video"), "video")
-        _attach_temp_file(booking, temp_uploads.get("document"), "document")
-
         booking.save()
+        temp_uploads = _normalize_temp_uploads(data.get("temp_uploads", {}))
+        first_photo = temp_uploads["photo"][0] if temp_uploads["photo"] else None
+        first_video = temp_uploads["video"][0] if temp_uploads["video"] else None
+        first_document = temp_uploads["document"][0] if temp_uploads["document"] else None
+        _attach_temp_file(
+            booking,
+            first_photo.get("path") if isinstance(first_photo, dict) else first_photo,
+            "photo",
+        )
+        _attach_temp_file(
+            booking,
+            first_video.get("path") if isinstance(first_video, dict) else first_video,
+            "video",
+        )
+        _attach_temp_file(
+            booking,
+            first_document.get("path") if isinstance(first_document, dict) else first_document,
+            "document",
+        )
+        booking.save(update_fields=["photo", "video", "document"])
+        _create_attachments_from_temp_uploads(booking, temp_uploads)
         AdminNotification.objects.create(
             booking=booking,
             message=f"New consultation booking from {booking.full_name}.",
@@ -1836,8 +1959,22 @@ def on_call_booking_step(request, step):
                     on_call_booking=booking,
                     message=f"New on-call booking from {booking.organization_name or booking.contact_person}.",
                 )
-                request.session["on_call_booking_id"] = f"OC-{booking.id:06d}"
-                request.session["on_call_booking_submitted"] = True
+                booking_id = f"OC-{booking.id:06d}"
+                request.session["on_call_booking_id"] = booking_id
+                request.session["on_call_booking_success"] = {
+                    "booking_id": booking_id,
+                    "organization_name": booking.organization_name or booking.contact_person,
+                    "contact_person": booking.contact_person,
+                    "site_address": booking.site_address,
+                    "coverage_times": list(booking.coverage_times or []),
+                    "coverage_scope": list(booking.coverage_scope or []),
+                    "response_speed": booking.response_speed,
+                    "property_type": booking.property_type,
+                    "assets_count": booking.assets_count,
+                    "emergency_hours": booking.emergency_hours,
+                    "estimated_total": estimated_total,
+                    "currency": pricing.currency if pricing else "SEK",
+                }
                 request.session.pop(ON_CALL_BOOKING_SESSION_KEY, None)
                 return redirect("electricity:on_call_booking_step", step=4)
 
@@ -1865,7 +2002,8 @@ def on_call_booking_step(request, step):
         return redirect("electricity:on_call_booking_step", step=step + 1)
 
     progress_percent = int((step / 4) * 100)
-    submitted = bool(request.session.pop("on_call_booking_submitted", False)) if step == 4 else False
+    success_payload = request.session.pop("on_call_booking_success", None) if step == 4 else None
+    submitted = bool(success_payload)
     context = {
         "step": step,
         "progress_percent": progress_percent,
@@ -1874,19 +2012,131 @@ def on_call_booking_step(request, step):
         "data": data,
         "errors": errors,
         "submitted": submitted,
-        "booking_id": request.session.get("on_call_booking_id", "OC-000000"),
+        "booking_id": (success_payload or {}).get(
+            "booking_id",
+            request.session.get("on_call_booking_id", "OC-000000"),
+        ),
+        "redirect_after_submit_url": reverse("electricity:services"),
     }
     if step == 4:
         pricing = _get_active_pricing()
         hourly_rate_emergency = float(pricing.hourly_rate_emergency) if pricing else 0
         currency = pricing.currency if pricing else "SEK"
+        to_discuss_label = _("To discuss")
         try:
             emergency_hours = int(data.get("emergency_hours") or 0)
         except (TypeError, ValueError):
             emergency_hours = 0
+        entity_type_labels = dict(OnCallBooking.EntityType.choices)
+        response_speed_labels = dict(OnCallBooking.ResponseSpeed.choices)
+        coverage_time_labels = {
+            "evenings": _("Evenings"),
+            "nights": _("Nights"),
+            "weekends": _("Weekends & holidays"),
+        }
+        coverage_scope_labels = {
+            "power_outages": _("Power outages"),
+            "fuse_boards": _("Fuse boards"),
+            "common_areas": _("Common areas"),
+            "critical_systems": _("Critical systems"),
+            "general_faults": _("General faults"),
+        }
+        property_type_labels = {
+            "commercial": _("Commercial"),
+            "industrial": _("Industrial"),
+            "mixed_use": _("Mixed Use"),
+            "residential": _("Residential"),
+        }
+        selection_summary_rows = [
+            {
+                "label": _("Entity type"),
+                "value": entity_type_labels.get(data.get("entity_type"), "-"),
+            },
+            {
+                "label": _("Coverage times"),
+                "value": ", ".join(
+                    coverage_time_labels.get(item, item)
+                    for item in (data.get("coverage_times") or [])
+                ) or "-",
+            },
+            {
+                "label": _("Response speed"),
+                "value": response_speed_labels.get(data.get("response_speed"), "-"),
+            },
+            {
+                "label": _("Coverage scope"),
+                "value": ", ".join(
+                    coverage_scope_labels.get(item, item)
+                    for item in (data.get("coverage_scope") or [])
+                ) or "-",
+            },
+            {
+                "label": _("Property type"),
+                "value": property_type_labels.get(data.get("property_type"), data.get("property_type") or "-"),
+            },
+            {
+                "label": _("Assets count"),
+                "value": str(data.get("assets_count") or "-"),
+            },
+        ]
         context["hourly_rate_emergency"] = hourly_rate_emergency
         context["emergency_estimated_total"] = hourly_rate_emergency * emergency_hours
         context["currency"] = currency
+        context["pricing_display_label"] = to_discuss_label
+        context["selection_summary_rows"] = selection_summary_rows
+        if success_payload:
+            summary = [
+                {
+                    "label": _("Organization"),
+                    "value": success_payload.get("organization_name") or "-",
+                },
+                {
+                    "label": _("Contact person"),
+                    "value": success_payload.get("contact_person") or "-",
+                },
+                {
+                    "label": _("Site address"),
+                    "value": success_payload.get("site_address") or "-",
+                },
+                {
+                    "label": _("Coverage times"),
+                    "value": ", ".join(
+                        coverage_time_labels.get(item, item)
+                        for item in (success_payload.get("coverage_times") or [])
+                    ) or "-",
+                },
+                {
+                    "label": _("Coverage scope"),
+                    "value": ", ".join(
+                        coverage_scope_labels.get(item, item)
+                        for item in (success_payload.get("coverage_scope") or [])
+                    ) or "-",
+                },
+                {
+                    "label": _("Response speed"),
+                    "value": response_speed_labels.get(success_payload.get("response_speed"), "-"),
+                },
+                {
+                    "label": _("Property type"),
+                    "value": property_type_labels.get(
+                        success_payload.get("property_type"),
+                        success_payload.get("property_type") or "-",
+                    ),
+                },
+                {
+                    "label": _("Assets count"),
+                    "value": str(success_payload.get("assets_count") or "-"),
+                },
+                {
+                    "label": _("Estimated emergency hours"),
+                    "value": str(success_payload.get("emergency_hours") or "-"),
+                },
+                {
+                    "label": _("Estimated total"),
+                    "value": to_discuss_label,
+                },
+            ]
+            context["submitted_summary"] = summary
     return render(request, f"electricity/on_call_booking/step_{step}.html", context)
 
 
@@ -3618,10 +3868,14 @@ def provider_on_call_booking_detail(request, pk):
         return guard
     provider = request.user.provider_profile
     booking = OnCallBooking.objects.get(pk=pk, assigned_provider=provider)
+    show_customer_contact = booking.status == OnCallBooking.Status.ACTIVE
     return render(
         request,
         "electricity/provider/on_call_booking_detail.html",
-        {"booking": booking},
+        {
+            "booking": booking,
+            "show_customer_contact": show_customer_contact,
+        },
     )
 
 

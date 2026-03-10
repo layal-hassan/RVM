@@ -204,10 +204,10 @@
         <span class="terms-index">19.</span>
         <h2>{% trans "Governing Law" %}</h2>
         <p>{% trans "This agreement is governed by Swedish law. Any disputes that cannot be settled amicably shall be settled by a Swedish general court, with Stockholm District Court as the first instance." %}</p>
-        <button class="terms-download" type="button">
+        <a class="terms-download" href="{% static 'electricity/pdf/terms.pdf' %}" download>
           {% trans "Download PDF Version" %}
           <span>{% trans "download" %}</span>
-        </button>
+        </a>
       </section>
     </div>
   </div>
@@ -217,9 +217,25 @@
   document.addEventListener('DOMContentLoaded', () => {
     const links = document.querySelectorAll('.terms-link');
     const sections = document.querySelectorAll('.terms-section');
+    const headerOffset = 120;
+
+    links.forEach((link) => {
+      const targetId = link.getAttribute('href')?.slice(1);
+      const target = targetId ? document.getElementById(targetId) : null;
+      if (!target) return;
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const top = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+        window.scrollTo({ top, behavior: 'smooth' });
+        links.forEach((item) => item.classList.remove('is-active'));
+        link.classList.add('is-active');
+        window.history.replaceState(null, '', `#${targetId}`);
+      });
+    });
+
     function changeActiveLink() {
       let index = sections.length;
-      while (--index && window.scrollY + 250 < sections[index].offsetTop) {}
+      while (--index && window.scrollY + headerOffset + 120 < sections[index].offsetTop) {}
       links.forEach((link) => link.classList.remove('is-active'));
       if (links[index]) links[index].classList.add('is-active');
     }

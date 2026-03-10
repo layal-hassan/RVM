@@ -1,4 +1,4 @@
-﻿{% load static i18n %}
+{% load static i18n electricity_extras %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,15 +39,32 @@
           </div>
         </div>
         <div class="panel-table">
-          <div class="panel-row"><span>Account Type</span><span>{{ booking.get_account_type_display }}</span></div>
+          <div class="panel-row"><span>Account Type</span><span>{{ booking|display_value:"account_type" }}</span></div>
+          <div class="panel-row"><span>Pricing Type</span><span>{{ booking.get_pricing_type_display|default:"-" }}</span></div>
           <div class="panel-row"><span>Address</span><span>{{ booking.street_address|default:"-" }}</span></div>
+          <div class="panel-row"><span>ZIP</span><span>{{ booking.zip_code|default:"-" }}</span></div>
           <div class="panel-row"><span>City</span><span>{{ booking.city|default:"-" }}</span></div>
           <div class="panel-row"><span>Region</span><span>{{ booking.region|default:"-" }}</span></div>
+          <div class="panel-row"><span>Country</span><span>{{ booking.country|default:"-" }}</span></div>
           <div class="panel-row"><span>Phone</span><span>{{ booking.phone|default:"-" }}</span></div>
           <div class="panel-row"><span>Email</span><span>{{ booking.email|default:"-" }}</span></div>
-          <div class="panel-row"><span>Property Type</span><span>{{ booking.property_type|default:"-" }}</span></div>
+          <div class="panel-row"><span>Property Type</span><span>{{ booking|display_value:"property_type" }}</span></div>
+          <div class="panel-row"><span>Year Built</span><span>{{ booking.year_built|default:"-" }}</span></div>
+          <div class="panel-row"><span>Property Size</span><span>{{ booking.property_size|default:"-" }}</span></div>
+          <div class="panel-row"><span>System Upgraded</span><span>{{ booking|display_value:"system_upgraded" }}</span></div>
+          <div class="panel-row"><span>Requested Services</span><span>{{ booking|display_value:"services" }}</span></div>
           <div class="panel-row"><span>Work Description</span><span>{{ booking.work_description|default:"-" }}</span></div>
-          <div class="panel-row"><span>Urgent</span><span>{% if booking.urgent %}Yes{% else %}No{% endif %}</span></div>
+          <div class="panel-row"><span>Urgent</span><span>{{ booking|display_value:"urgent" }}</span></div>
+          <div class="panel-row"><span>Primary Slot</span><span>{{ booking.preferred_date|default:"-" }} {{ booking.preferred_time_slot|default:"" }}</span></div>
+          <div class="panel-row"><span>Alternative Slot</span><span>{{ booking.alt_date|default:"-" }} {{ booking.alt_time_slot|default:"" }}</span></div>
+          <div class="panel-row"><span>Billing Type</span><span>{{ booking|display_value:"billing_type" }}</span></div>
+          <div class="panel-row"><span>Company</span><span>{{ booking.company_name|default:"-" }}</span></div>
+          <div class="panel-row"><span>Organization Number</span><span>{{ booking.organization_number|default:"-" }}</span></div>
+          <div class="panel-row"><span>ROT Deduction</span><span>{{ booking|display_value:"rot_deduction" }}</span></div>
+          <div class="panel-row"><span>BRF Property</span><span>{{ booking|display_value:"brf_property" }}</span></div>
+          <div class="panel-row"><span>BRF Name</span><span>{{ booking.brf_name|default:"-" }}</span></div>
+          <div class="panel-row"><span>Apartment Number</span><span>{{ booking.apartment_number|default:"-" }}</span></div>
+          <div class="panel-row"><span>Estimated Total</span><span>{{ booking.currency|default:"SEK" }} {{ booking.estimated_total|default:"0" }}</span></div>
         </div>
       </section>
 

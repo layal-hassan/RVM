@@ -1,0 +1,38 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+/.venv/
+/venv/
+/env/
+/ENV/
+/Lib/
+/Scripts/
+/Include/
+/pyvenv.cfg
+
+# Django
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Localization compiled files
+*.mo
+locale/*/LC_MESSAGES/*.mo
+django.mo.tmp.*
+
+# Tooling / temp
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+tmp/
+.env
+
+# OS files
+.DS_Store
+Thumbs.db

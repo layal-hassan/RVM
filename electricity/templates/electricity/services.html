@@ -184,10 +184,7 @@
       <div class="hero-actions">
         <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN" %}</a>
       </div>
-      <p class="engineering-lead">
-        {% trans "And if it’s electrical, we handle it. If a service isn’t listed here, it doesn’t mean we don’t do it—contact us and we’ll assess your needs." %}
-      </p>
-    </div>
+</div>
   </div>
 </section>
 
@@ -226,7 +223,7 @@
 
 <section class="section section-light">
   <div class="container">
-    <div class="cta-panel muted-panel">
+    <div class="cta-panel muted-panel muted-panel-back4">
       <div>
         <div class="eyebrow">{% trans "More Smart Home Details" %}</div>
         <h2>{% trans "Coming Soon" %}</h2>
@@ -249,11 +246,11 @@
     <div class="mini-cta-card">
       <h3>{% trans "BOOK A LICENSED ELECTRICIAN" %}</h3>
       <p>{% trans "Fast, professional help for installations, repairs, troubleshooting, and essential electrical work—done safely and to code." %}</p>
-      <a class="card-link" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN" %}</a>
+      <a class="card-link" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN →" %}</a>
     </div>
     <div class="mini-cta-card">
       <h3>{% trans "START PLANNING" %}</h3>
-      <p>{% trans "For projects that need discussion before work begins. Use this option if you’re planning upgrades, new installations, or want professional advice before deciding on next steps." %}</p>
+      <p>{% trans "Planning upgrades or new installations? Get clear professional advice before deciding on next steps and timelines." %}</p>
       <a class="card-link" href="{% url 'electricity:booking_step_1' %}">{% trans "START PLANNING →" %}</a>
     </div>
   </div>
@@ -356,3 +353,5 @@
   </div>
 </section>
 {% endblock %}
+
+

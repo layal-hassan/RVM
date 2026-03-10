@@ -25,7 +25,7 @@
         {% for row in items %}
             <div class="panel-row">
                 {% for field in fields %}
-                    <span>{{ row|attr:field|pretty_value }}</span>
+                    <span>{{ row|display_value:field }}</span>
                 {% endfor %}
                 <span class="row-actions">
                     {% if assign_url %}

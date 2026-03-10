@@ -8,13 +8,13 @@
 
 .ts-control {
     width: 100%;
-    min-height: 50px;
-    padding: 14px 48px 14px 18px;
+    min-height: 45px;
+    padding: 8px 48px 8px 18px;
     border-radius: 16px;
     border: 1px solid #e4d8c3;
     background: #fffaf2;
     color: #1f2937;
-    font-size: 15px;
+    font-size: 13px;
     display: flex;
     align-items: center;
     cursor: pointer;

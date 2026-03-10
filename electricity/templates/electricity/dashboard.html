@@ -234,7 +234,7 @@
                 {% for row in card.rows %}
                     <div class="panel-row">
                         {% for field in card.fields %}
-                            <span>{{ row|attr:field.name|pretty_value }}</span>
+                            <span>{{ row|display_value:field.name }}</span>
                         {% endfor %}
                     </div>
                 {% empty %}

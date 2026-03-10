@@ -1,4 +1,4 @@
-﻿{% load static i18n %}
+{% load static i18n electricity_extras %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,14 +39,89 @@
           </div>
         </div>
         <div class="panel-table">
-          <div class="panel-row"><span>Service</span><span>{{ booking.consultation_type }}</span></div>
-          <div class="panel-row"><span>Property</span><span>{{ booking.property_type }}</span></div>
+          <div class="panel-row"><span>Service</span><span>{{ booking|display_value:"consultation_type" }}</span></div>
+          <div class="panel-row"><span>Property</span><span>{{ booking|display_value:"property_type" }}</span></div>
           <div class="panel-row"><span>Address</span><span>{{ booking.company_address|default:"-" }}</span></div>
           <div class="panel-row"><span>Phone</span><span>{{ booking.phone|default:"-" }}</span></div>
           <div class="panel-row"><span>Email</span><span>{{ booking.email|default:"-" }}</span></div>
           <div class="panel-row"><span>Notes</span><span>{{ booking.project_description|default:"-" }}</span></div>
         </div>
       </section>
+
+      {% if booking.photo or booking.video or booking.document %}
+        <section class="dash-panel dash-panel-wide">
+          <div class="panel-header">
+            <div>
+              <h2>Primary Media</h2>
+              <div class="panel-meta">Files attached directly to this booking.</div>
+            </div>
+          </div>
+          <div class="attachment-grid">
+            {% if booking.photo %}
+              <div class="attachment-card">
+                <div class="attachment-kind">Photo</div>
+                <a href="{{ booking.photo.url }}" target="_blank" rel="noopener" class="media-preview-link">
+                  <img src="{{ booking.photo.url }}" alt="{{ booking.photo|file_display_name }}" class="media-preview-image">
+                </a>
+                <a href="{{ booking.photo.url }}" target="_blank" rel="noopener" class="media-preview-link attachment-file">
+                  {{ booking.photo|file_display_name }}
+                </a>
+              </div>
+            {% endif %}
+            {% if booking.video %}
+              <div class="attachment-card">
+                <div class="attachment-kind">Video</div>
+                <video controls preload="metadata" class="media-preview-video">
+                  <source src="{{ booking.video.url }}">
+                </video>
+                <a href="{{ booking.video.url }}" target="_blank" rel="noopener" class="media-preview-link attachment-file">
+                  {{ booking.video|file_display_name }}
+                </a>
+              </div>
+            {% endif %}
+            {% if booking.document %}
+              <div class="attachment-card">
+                <div class="attachment-kind">Document</div>
+                <a href="{{ booking.document.url }}" target="_blank" rel="noopener" class="media-preview-link attachment-file">
+                  {{ booking.document|file_display_name }}
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </section>
+      {% endif %}
+
+      {% with attachment_manager=booking|attr:"attachments" %}
+        {% if attachment_manager.exists %}
+          <section class="dash-panel dash-panel-wide">
+            <div class="panel-header">
+              <div>
+                <h2>Additional Attachments</h2>
+                <div class="panel-meta">Uploaded files associated with this consultation.</div>
+              </div>
+            </div>
+            <div class="attachment-grid">
+              {% for attachment in attachment_manager.all %}
+                <div class="attachment-card">
+                  <div class="attachment-kind">{{ attachment.get_kind_display }}</div>
+                  {% if attachment.kind == "photo" %}
+                    <a href="{{ attachment.file.url }}" target="_blank" rel="noopener" class="media-preview-link">
+                      <img src="{{ attachment.file.url }}" alt="{{ attachment|file_display_name }}" class="media-preview-image">
+                    </a>
+                  {% elif attachment.kind == "video" %}
+                    <video controls preload="metadata" class="media-preview-video">
+                      <source src="{{ attachment.file.url }}">
+                    </video>
+                  {% endif %}
+                  <a href="{{ attachment.file.url }}" target="_blank" rel="noopener" class="media-preview-link attachment-file">
+                    {{ attachment|file_display_name }}
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+      {% endwith %}
 
       <section class="dash-panel dash-panel-wide">
         <div class="panel-header">

@@ -1649,12 +1649,13 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   margin: 0;
   padding-left: 18px;
   color: #4f545a;
-  line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.7;
 }
 
 .engineering-side {
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.7;
   color: #4f545a;
 }
 
@@ -1691,9 +1692,29 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .muted-panel {
-  background: #1b2433;
+  background: linear-gradient(120deg, rgba(12, 18, 30, 0.72), rgba(12, 18, 30, 0.58)), url("../img/back2.jpg");
+  background-size: cover;
+  background-position: center;
   color: #f3f3f3;
   border-radius: 22px;
+}
+
+.muted-panel-back4 {
+  background: linear-gradient(120deg, rgba(12, 18, 30, 0.72), rgba(12, 18, 30, 0.58)), url("../img/back4.jpg");
+  background-size: cover;
+  background-position: center 22%;
+}
+
+@media (max-width: 900px) {
+  .muted-panel-back4 {
+    background-position: center 28%;
+  }
+}
+
+@media (max-width: 600px) {
+  .muted-panel-back4 {
+    background-position: center 34%;
+  }
 }
 
 .muted-panel .eyebrow {
@@ -1732,6 +1753,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .mini-cta-card p {
   color: #45484d;
+  min-height: 56px;
 }
 
 .mini-cta-card .card-link {
@@ -2097,6 +2119,18 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   border-left-color: #d3b26a;
   background: rgba(211, 178, 106, 0.28);
   font-weight: 600;
+  position: relative;
+  padding-right: 28px;
+}
+
+.terms-link.is-active::after {
+  content: "✓";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #8c6b28;
 }
 
 .terms-content {
@@ -2493,13 +2527,14 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #d3b26a;
+  background: #0f1c2e;
   box-shadow: inset 0 0 0 4px #ffffff;
   border: 1px solid rgba(177, 139, 61, 0.4);
 }
 
 .contact-section.contact-inquiry .contact-chip input:checked + span::before {
-  box-shadow: inset 0 0 0 2px #ffffff;
+  background: #0f1c2e;
+  box-shadow: inset 0 0 0 3px #ffffff;
   border-color: rgba(177, 139, 61, 0.8);
 }
 

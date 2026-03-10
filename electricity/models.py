@@ -510,6 +510,29 @@ class ConsultationBooking(models.Model):
         return f"{self.full_name} - {self.created_at:%Y-%m-%d}"
 
 
+class ConsultationBookingAttachment(models.Model):
+    class AttachmentKind(models.TextChoices):
+        PHOTO = "photo", "Photo"
+        VIDEO = "video", "Video"
+        DOCUMENT = "document", "Document"
+
+    booking = models.ForeignKey(
+        ConsultationBooking,
+        on_delete=models.CASCADE,
+        related_name="attachments",
+    )
+    kind = models.CharField(max_length=20, choices=AttachmentKind.choices)
+    file = models.FileField(upload_to="electricity/booking/attachments/")
+    original_name = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at", "id"]
+
+    def __str__(self):
+        return self.original_name or self.file.name
+
+
 class ProviderShift(models.Model):
     provider = models.ForeignKey(
         "ProviderProfile",
