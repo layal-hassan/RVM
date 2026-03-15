@@ -172,12 +172,12 @@ def support(request):
                 f"\nMessage:\n{data.get('message')}\n"
             )
             try:
-                from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "support@rwm.se"
+                from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "Support@rwmel.se"
                 send_mail(
                     subject,
                     body,
                     from_email,
-                    ["support@rwm.se"],
+                    ["Support@rwmel.se"],
                     reply_to=[data.get("email")] if data.get("email") else None,
                 )
             except Exception:
