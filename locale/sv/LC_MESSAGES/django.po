@@ -5322,7 +5322,12 @@ msgstr "Ny här?"
 msgid "Create an account"
 msgstr "Skapa ett konto"
 
+msgid "Electrical Services"
+msgstr "Elservice"
 
+
+msgid "Emergency Services"
+msgstr "Eljour (Akut service)"
 
 msgid "A \"Dispatch\" or \"Service Call\" includes the travel time to the site, vehicle expenses, and the administrative handling of the service request."
 msgstr "Ett utryckningsbesök eller serviceärende inkluderar restid till platsen, fordonskostnader samt administrativ hantering av serviceförfrågan."

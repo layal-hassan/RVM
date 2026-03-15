@@ -1,0 +1,63 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+3 0 obj
+<< /Length 1349 >>
+stream
+BT /F2 24 Tf 1 0 0 1 52 748 Tm (Invoice) Tj ET
+52 710 m 560 710 l S
+BT /F2 11 Tf 1 0 0 1 52 686 Tm (Invoice Number) Tj ET
+BT /F1 11 Tf 1 0 0 1 220 686 Tm (INV-20260315-5DBD41) Tj ET
+BT /F2 11 Tf 1 0 0 1 52 660 Tm (Customer) Tj ET
+BT /F1 11 Tf 1 0 0 1 220 660 Tm (Haidar Hassan) Tj ET
+BT /F2 11 Tf 1 0 0 1 52 634 Tm (Issued At) Tj ET
+BT /F1 11 Tf 1 0 0 1 220 634 Tm (2026-03-15 09:59) Tj ET
+BT /F2 11 Tf 1 0 0 1 52 608 Tm (Status) Tj ET
+BT /F1 11 Tf 1 0 0 1 220 608 Tm (Paid) Tj ET
+BT /F2 11 Tf 1 0 0 1 52 582 Tm (Amount) Tj ET
+BT /F1 11 Tf 1 0 0 1 220 582 Tm (50.00 SEK) Tj ET
+52 550 m 560 550 l S
+BT /F2 14 Tf 1 0 0 1 52 528 Tm (Details) Tj ET
+BT /F2 11 Tf 1 0 0 1 52 504 Tm (Payment Method) Tj ET
+BT /F1 11 Tf 1 0 0 1 182 504 Tm (Visa **** 4242) Tj ET
+BT /F2 11 Tf 1 0 0 1 52 478 Tm (Booking Type) Tj ET
+BT /F1 11 Tf 1 0 0 1 182 478 Tm (Private) Tj ET
+BT /F2 11 Tf 1 0 0 1 52 452 Tm (Booking ID) Tj ET
+BT /F1 11 Tf 1 0 0 1 182 452 Tm (71) Tj ET
+BT /F2 11 Tf 1 0 0 1 52 426 Tm (Service Summary) Tj ET
+BT /F1 11 Tf 1 0 0 1 182 426 Tm (abcd) Tj ET
+BT /F2 11 Tf 1 0 0 1 52 400 Tm (Paid At) Tj ET
+BT /F1 11 Tf 1 0 0 1 182 400 Tm (2026-03-15 10:06) Tj ET
+52 366 m 560 366 l S
+BT /F1 10 Tf 1 0 0 1 52 344 Tm (Reference: Stripe PaymentIntent pi_3TBBOqCjWX9wguV40mv1kNUb) Tj ET
+BT /F1 10 Tf 1 0 0 1 52 320 Tm (Thank you for choosing Hembla Experten.) Tj ET
+endstream
+endobj
+4 0 obj
+<< /Type /Page /Parent 5 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 3 0 R >>
+endobj
+5 0 obj
+<< /Type /Pages /Kids [4 0 R] /Count 1 >>
+endobj
+6 0 obj
+<< /Type /Catalog /Pages 5 0 R >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000015 00000 n 
+0000000085 00000 n 
+0000000160 00000 n 
+0000001561 00000 n 
+0000001697 00000 n 
+0000001754 00000 n 
+trailer
+<< /Size 7 /Root 6 0 R >>
+startxref
+1803
+%%EOF

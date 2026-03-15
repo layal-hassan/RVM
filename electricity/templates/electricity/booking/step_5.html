@@ -43,6 +43,7 @@
     data-upload-summary
     data-empty-text="{% trans 'No files selected yet. You can skip this step and add them later.' %}"
 >
+    <div data-upload-removals></div>
     <div class="upload-summary-empty" data-upload-empty {% if existing_uploads %}hidden{% endif %}>
         {% trans "No files selected yet. You can skip this step and add them later." %}
     </div>
@@ -54,6 +55,14 @@
             {% if item.size_kb %}
             <span class="upload-summary-size">{{ item.size_kb }} KB</span>
             {% endif %}
+            <button
+                type="button"
+                class="upload-summary-remove"
+                data-remove-existing="{{ item.remove_value }}"
+                aria-label="{% blocktrans with name=item.name %}Remove {{ name }}{% endblocktrans %}"
+            >
+                x
+            </button>
         </div>
         {% endfor %}
     </div>

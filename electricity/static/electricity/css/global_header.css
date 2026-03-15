@@ -168,6 +168,12 @@ body.dash-body {
   min-width: 0;
 }
 
+.rwm-electricity-global-header .rwm-egh-nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .rwm-electricity-global-header .rwm-egh-link {
   color: var(--rwmh-text);
   text-decoration: none;
@@ -180,9 +186,61 @@ body.dash-body {
   transition: color 0.2s ease;
 }
 
+.rwm-electricity-global-header .rwm-egh-link-button {
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
 .rwm-electricity-global-header .rwm-egh-link:hover,
 .rwm-electricity-global-header .rwm-egh-link:focus-visible {
   color: var(--rwmh-gold);
+}
+
+.rwm-electricity-global-header .rwm-egh-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 0;
+  min-width: 240px;
+  padding: 10px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(18, 20, 24, 0.98), rgba(12, 14, 17, 0.98));
+  box-shadow: 0 22px 40px rgba(0, 0, 0, 0.35);
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 6;
+}
+
+.rwm-electricity-global-header .rwm-egh-dropdown-link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.rwm-electricity-global-header .rwm-egh-dropdown-link:hover,
+.rwm-electricity-global-header .rwm-egh-dropdown-link:focus-visible {
+  background: rgba(199, 164, 91, 0.14);
+  color: #f0d490;
+  transform: translateX(2px);
+}
+
+.rwm-electricity-global-header .rwm-egh-dropdown:hover .rwm-egh-dropdown-menu,
+.rwm-electricity-global-header .rwm-egh-dropdown:focus-within .rwm-egh-dropdown-menu,
+.rwm-electricity-global-header .rwm-egh-dropdown.is-open .rwm-egh-dropdown-menu {
+  display: flex;
 }
 
 .rwm-electricity-global-header .rwm-egh-lang {
@@ -396,7 +454,16 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
   text-align: right;
 }
 
+[dir="rtl"] .rwm-electricity-global-header .rwm-egh-dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
 [dir="rtl"] .rwm-electricity-global-header .rwm-egh-lang-option {
+  text-align: right;
+}
+
+[dir="rtl"] .rwm-electricity-global-header .rwm-egh-dropdown-link {
   text-align: right;
 }
 
@@ -488,16 +555,40 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
     gap: 10px;
   }
 
-  .rwm-electricity-global-header .rwm-egh-link {
+  .rwm-electricity-global-header .rwm-egh-link,
+  .rwm-electricity-global-header .rwm-egh-link-button {
     padding: 12px 14px;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     letter-spacing: 0.2em;
+    justify-content: space-between;
+    width: 100%;
   }
 
   .rwm-electricity-global-header .rwm-egh-right {
     gap: 12px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-nav-item {
+    width: 100%;
+    display: block;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-dropdown-menu {
+    position: static;
+    min-width: 0;
+    margin-top: 8px;
+    padding: 8px;
+    border-radius: 14px;
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .rwm-electricity-global-header .rwm-egh-dropdown-link {
+    min-height: 42px;
+    padding: 10px 12px;
+    letter-spacing: 0.12em;
   }
 
   .rwm-electricity-global-header .rwm-egh-lang {

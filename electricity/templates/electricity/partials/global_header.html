@@ -14,7 +14,24 @@
       <div class="rwm-egh-left">
         <nav class="rwm-egh-nav" aria-label="{% trans 'Main navigation' %}">
           <a class="rwm-egh-link" href="{% url 'electricity:home' %}">{% trans "Home" %}</a>
-          <a class="rwm-egh-link" href="{% url 'electricity:services' %}">{% trans "Services" %}</a>
+          <div class="rwm-egh-nav-item rwm-egh-dropdown" data-rwmh-dropdown>
+            <button
+              class="rwm-egh-link rwm-egh-link-button"
+              type="button"
+              aria-expanded="false"
+              data-rwmh-dropdown-trigger
+            >
+              <span>{% trans "Services" %}</span>
+            </button>
+            <div class="rwm-egh-dropdown-menu">
+              <a class="rwm-egh-dropdown-link" href="{% url 'electricity:services' %}#service-ecosystem">
+                {% trans "Electrical Services" %}
+              </a>
+              <a class="rwm-egh-dropdown-link" href="{% url 'electricity:on_call' %}">
+                {% trans "Emergency Services" %}
+              </a>
+            </div>
+          </div>
           <a class="rwm-egh-link" href="{% url 'electricity:services' %}#pricing">{% trans "Pricing" %}</a>
           <a class="rwm-egh-link" href="{% url 'electricity:contact' %}">{% trans "Contact" %}</a>
         </nav>

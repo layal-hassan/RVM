@@ -111,14 +111,7 @@
     box-shadow: none;
     padding: 12px 44px 12px 16px;
     min-height: auto;
-    background-image:
-        linear-gradient(45deg, transparent 50%, #7a5a12 50%),
-        linear-gradient(135deg, #7a5a12 50%, transparent 50%);
-    background-position:
-        calc(100% - 18px) 52%,
-        calc(100% - 12px) 52%;
-    background-size: 7px 7px, 7px 7px;
-    background-repeat: no-repeat;
+    background-image: none;
 }
 
 /* keep dropdown normal */

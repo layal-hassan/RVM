@@ -1040,6 +1040,8 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   }
 
   .bottom-cta .hero-actions .btn {
+    width: min(100%, 280px);
+    min-height: 44px;
     padding: 10px 14px;
     font-size: 11px;
     letter-spacing: 0.1em;
@@ -1996,7 +1998,16 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .bottom-cta .hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  gap: 14px;
+}
+
+.bottom-cta .hero-actions .btn {
+  width: min(100%, 320px);
+  min-height: 52px;
 }
 
 .bottom-cta p {

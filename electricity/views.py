@@ -2,6 +2,7 @@ import os
 import re
 import uuid
 import datetime
+import logging
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -74,6 +75,8 @@ from .models import (
     ServiceRequestOutsideArea,
 )
 from django.contrib.auth.models import User
+
+logger = logging.getLogger(__name__)
 
 
 def home(request):
@@ -178,7 +181,7 @@ def support(request):
                     reply_to=[data.get("email")] if data.get("email") else None,
                 )
             except Exception:
-                pass
+                logger.exception("Support ticket email failed to send.")
             return render(
                 request,
                 "electricity/support.html",
@@ -239,6 +242,7 @@ def contact(request):
                     )
                     status = "sent"
                 except Exception:
+                    logger.exception("Contact inquiry email failed to send.")
                     status = "error"
 
     return render(request, "electricity/contact.html", {"contact_status": status})
@@ -673,6 +677,34 @@ def _save_temp_uploads(request, field_name):
     return saved_paths
 
 
+def _remove_temp_uploads(temp_uploads, removal_values):
+    normalized = _normalize_temp_uploads(temp_uploads)
+    removals = {"photo": set(), "video": set(), "document": set()}
+    for value in removal_values:
+        try:
+            kind, index_text = (value or "").split(":", 1)
+            index = int(index_text)
+        except (ValueError, TypeError):
+            continue
+        if kind in removals and index >= 0:
+            removals[kind].add(index)
+
+    cleaned = {}
+    for kind, items in normalized.items():
+        kept_items = []
+        for index, item in enumerate(items):
+            if index in removals[kind]:
+                temp_path = item.get("path") if isinstance(item, dict) else item
+                if temp_path:
+                    full_path = os.path.join(settings.MEDIA_ROOT, temp_path)
+                    if os.path.exists(full_path):
+                        os.remove(full_path)
+                continue
+            kept_items.append(item)
+        cleaned[kind] = kept_items
+    return cleaned
+
+
 def _attach_temp_file(instance, temp_path, field_name):
     if not temp_path:
         return
@@ -710,7 +742,7 @@ def _temp_uploads_for_display(temp_uploads):
     }
     items = []
     for kind, values in _normalize_temp_uploads(temp_uploads).items():
-        for value in values:
+        for index, value in enumerate(values):
             if isinstance(value, dict):
                 name = value.get("name") or os.path.basename(value.get("path", ""))
                 size = value.get("size") or 0
@@ -723,6 +755,7 @@ def _temp_uploads_for_display(temp_uploads):
                     "label": labels[kind],
                     "name": name,
                     "size_kb": max(1, round(size / 1024)) if size else None,
+                    "remove_value": f"{kind}:{index}",
                 }
             )
     return items
@@ -860,6 +893,7 @@ def booking_step_5(request):
     if request.method == "POST":
         if form.is_valid():
             temp_uploads = _normalize_temp_uploads(data.get("temp_uploads", {}))
+            temp_uploads = _remove_temp_uploads(temp_uploads, request.POST.getlist("remove_temp_uploads"))
             for field in ("photo", "video", "document"):
                 saved_items = _save_temp_uploads(request, field)
                 if saved_items:

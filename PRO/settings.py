@@ -194,6 +194,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 # DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# DATA_UPLOAD_MAX_MEMORY_SIZE = 80 * 1024 * 1024
+# FILE_UPLOAD_MAX_MEMORY_SIZE = 80 * 1024 * 1024
 
 
 
@@ -229,6 +231,8 @@ _load_dotenv(BASE_DIR.parent / ".env")
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/ 
 # SECURITY WARNING: keep the secret key used in production secre 
 SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ImproperlyConfigured("The SECRET_KEY setting must not be empty.")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -241,8 +245,15 @@ ALLOWED_HOSTS = ["45.93.137.166", "rwmel.se", "www.rwmel.se"]
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
-    SESSION_COOKIE_SECURE =  False
-    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+    X_FRAME_OPTIONS = "DENY"
 
 
 
@@ -375,17 +386,48 @@ LOGOUT_REDIRECT_URL = "/accounts/login/"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 80 * 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = 80 * 1024 * 1024
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "standard": {
+            "format": "%(asctime)s %(levelname)s %(name)s %(message)s",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "standard",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+        "electricity": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
 
 
 
-# git pull origin main
-# source venv/bin/activate
-# pip install -r requirements.txt
-# python manage.py migrate
-# python manage.py collectstatic --noinput
-# sudo systemctl restart rwmel
+
+# # git pull origin main
+# # source venv/bin/activate
+# # pip install -r requirements.txt
+# # python manage.py migrate
+# # python manage.py collectstatic --noinput
+# # sudo systemctl restart rwmel
+# #sudo nano /etc/nginx/sites-available/rwmel
