@@ -1,7 +1,11 @@
+import datetime
+
 from django.test import TestCase
+from django.urls import reverse
+from django.utils import timezone
 
 from .forms import OnCallBookingForm, ServiceBookingForm
-from .models import ElectricalService, OnCallBooking, ServiceBooking
+from .models import ElectricianBooking, ElectricalService, OnCallBooking, ServiceBooking, ServicePricing
 from .templatetags.electricity_extras import _service_title_map, display_value, file_display_name
 
 
@@ -107,3 +111,75 @@ class HumanizedJSONModelFormTests(TestCase):
 
         self.assertTrue(form.is_valid(), form.errors)
         self.assertEqual(form.cleaned_data["services"], [str(service.id)])
+
+
+class ElectricianBookingReceiptTests(TestCase):
+    def test_thank_you_uses_saved_booking_details_instead_of_cleared_session_defaults(self):
+        booking = ElectricianBooking.objects.create(
+            customer_type=ElectricianBooking.CustomerType.BUSINESS,
+            full_name="ACME AB",
+            email="ops@example.com",
+            phone="556677-8899",
+            street_address="Sveavagen 10",
+            city="Stockholm",
+            zip_code="111 57",
+            property_type="commercial",
+            work_description="Replace faulty breaker and inspect panel.",
+            hours=3,
+            hourly_rate_snapshot="688.00",
+            transport_fee_snapshot="495.00",
+            estimated_total="2559.00",
+            preferred_date=datetime.date(2026, 10, 5),
+            arrival_window="Morning (08:00 AM - 12:00 PM)",
+            currency="SEK",
+        )
+        session = self.client.session
+        session["electrician_booking_id"] = booking.id
+        session["electrician_booking_reference"] = f"RWM-{booking.id:06d}"
+        session.save()
+
+        response = self.client.get(reverse("electricity:electrician_booking_thank_you"))
+
+        self.assertContains(response, "Commercial Maintenance")
+        self.assertContains(response, "Business / Organization")
+        self.assertContains(response, "Sveavagen 10, 111 57 Stockholm")
+        self.assertContains(response, "Replace faulty breaker and inspect panel.")
+        self.assertContains(response, "SEK 495.00")
+        self.assertContains(response, "SEK 2559.00")
+        self.assertNotContains(response, "1248 Oakwood Ave")
+        self.assertNotContains(response, "Residential Property")
+
+    def test_pricing_breakdown_adds_transport_fee_to_total(self):
+        pricing = ServicePricing.objects.create(
+            name="Default",
+            transport_fee="495.00",
+            hourly_rate_electrician="100.00",
+            currency="SEK",
+            is_active=True,
+        )
+
+        from .views import _electrician_pricing_breakdown
+
+        breakdown = _electrician_pricing_breakdown({"hours": "3"})
+
+        self.assertEqual(breakdown["minimum_callout"], 100.0)
+        self.assertEqual(breakdown["additional_total"], 200.0)
+        self.assertEqual(breakdown["transport_fee"], 495.0)
+        self.assertEqual(breakdown["total"], 795.0)
+
+    def test_step_6_rejects_past_dates(self):
+        session = self.client.session
+        session["electricity_electrician_booking"] = {}
+        session.save()
+
+        yesterday = (timezone.localdate() - datetime.timedelta(days=1)).isoformat()
+        response = self.client.post(
+            reverse("electricity:electrician_booking_step", args=[6]),
+            {
+                "preferred_date": yesterday,
+                "arrival_window": "Morning (08:00 AM - 12:00 PM)",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Please choose a date from today onward.")

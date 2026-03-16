@@ -614,6 +614,35 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
     gap: 6px;
     letter-spacing: 0.06em;
   }
+
+  [dir="rtl"] .rwm-electricity-global-header .rwm-electricity-global-header__inner {
+    flex-direction: row;
+  }
+
+  [dir="rtl"] .rwm-electricity-global-header .rwm-egh-logo {
+    order: 1;
+    margin-inline-start: 0;
+  }
+
+  [dir="rtl"] .rwm-electricity-global-header .rwm-egh-toggle {
+    order: 2;
+    margin-inline-start: auto;
+    margin-inline-end: 0;
+  }
+
+  [dir="rtl"] .rwm-electricity-global-header .rwm-egh-navwrap {
+    order: 3;
+    flex-direction: column;
+  }
+
+  [dir="rtl"] .rwm-electricity-global-header .rwm-egh-left,
+  [dir="rtl"] .rwm-electricity-global-header .rwm-egh-right,
+  [dir="rtl"] .rwm-electricity-global-header .rwm-egh-nav {
+    direction: rtl;
+    align-items: stretch;
+    justify-content: flex-start;
+    text-align: right;
+  }
 }
 
 @media (max-width: 600px) {

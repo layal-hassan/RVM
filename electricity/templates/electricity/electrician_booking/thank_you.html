@@ -48,35 +48,35 @@
 
       <div class="eb-receipt-row">
         <span>{% trans "Service type" %}</span>
-        <strong>{{ data.service_type|default:"Residential Electrical Repair"|title }}</strong>
+        <strong>{{ receipt.service_type }}</strong>
       </div>
 
       <div class="eb-receipt-row">
         <span>{% trans "Hours booked" %}</span>
-        <strong>{{ data.hours|default:"1" }} {% trans "hour(s)" %}</strong>
+        <strong>{{ receipt.hours }} {% trans "hour(s)" %}</strong>
       </div>
 
       <div class="eb-receipt-row">
-        <span>{% trans "Property type" %}</span>
-        <strong>{{ data.property_type|default:"Residential Property"|title }}</strong>
+        <span>{% trans "Customer type" %}</span>
+        <strong>{{ receipt.customer_type }}</strong>
       </div>
 
       <div class="eb-receipt-row">
         <span>{% trans "Location" %}</span>
-        <strong>{{ data.street_address|default:"1248 Oakwood Ave" }}, {{ data.city|default:"Silver Springs" }}</strong>
+        <strong>{{ receipt.location }}</strong>
       </div>
 
       <div class="eb-receipt-row">
         <span>{% trans "Appointment" %}</span>
         <strong>
-          {% if data.preferred_date %}{{ data.preferred_date }}{% else %}Thursday, Oct 5{% endif %}
-          {% if data.arrival_window %} | {{ data.arrival_window }}{% else %} | 8 AM - 12 PM{% endif %}
+          {% if receipt.appointment_date and receipt.appointment_date != "-" %}{{ receipt.appointment_date|date:"l, M j" }}{% else %}-{% endif %}
+          | {{ receipt.arrival_window }}
         </strong>
       </div>
 
       <div class="eb-receipt-row eb-receipt-note">
         <span>{% trans "Work description" %}</span>
-        <strong>{{ data.work_description|default:"Electrical service request details." }}</strong>
+        <strong>{{ receipt.work_description }}</strong>
       </div>
     </div>
 
@@ -87,6 +87,11 @@
       <div class="eb-receipt-row">
         <span>{% trans "Minimum Callout Fee (1st hr)" %}</span>
         <strong>{{ pricing.currency }} {{ pricing.minimum_callout|floatformat:2 }}</strong>
+      </div>
+
+      <div class="eb-receipt-row">
+        <span>{% trans "Transport Fee" %}</span>
+        <strong>{{ pricing.currency }} {{ pricing.transport_fee|floatformat:2 }}</strong>
       </div>
 
       <div class="eb-receipt-row">

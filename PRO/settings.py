@@ -51,7 +51,33 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 #     else:
 #         raise ImproperlyConfigured("The SECRET_KEY setting must not be empty.")
 
-# ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+# _default_allowed_hosts = ["127.0.0.1", "localhost"]
+# _production_hosts = ["45.93.137.166", "rwmel.se", "www.rwmel.se"]
+# _env_allowed_hosts = [
+#     host.strip() for host in os.getenv("ALLOWED_HOSTS", ",".join(_default_allowed_hosts)).split(",") if host.strip()
+# ]
+# ALLOWED_HOSTS = list(dict.fromkeys(_env_allowed_hosts + ([] if DEBUG else _production_hosts)))
+
+# _env_csrf_trusted_origins = [
+#     origin.strip()
+#     for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+#     if origin.strip()
+# ]
+# CSRF_TRUSTED_ORIGINS = list(
+#     dict.fromkeys(
+#         _env_csrf_trusted_origins
+#         + (
+#             []
+#             if DEBUG
+#             else [
+#                 "https://rwmel.se",
+#                 "https://www.rwmel.se",
+#                 "http://45.93.137.166",
+#                 "https://45.93.137.166",
+#             ]
+#         )
+#     )
+# )
 
 # if not DEBUG:
 #     SECURE_BROWSER_XSS_FILTER = True
@@ -239,7 +265,33 @@ if not SECRET_KEY:
 DEBUG = False
 
 ALLOWED_HOSTS = ["45.93.137.166", "rwmel.se", "www.rwmel.se"]
+_default_allowed_hosts = ["127.0.0.1", "localhost"]
+_production_hosts = ["45.93.137.166", "rwmel.se", "www.rwmel.se"]
+_env_allowed_hosts = [
+    host.strip() for host in os.getenv("ALLOWED_HOSTS", ",".join(_default_allowed_hosts)).split(",") if host.strip()
+]
+ALLOWED_HOSTS = list(dict.fromkeys(_env_allowed_hosts + ([] if DEBUG else _production_hosts)))
 
+_env_csrf_trusted_origins = [
+    origin.strip()
+    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+CSRF_TRUSTED_ORIGINS = list(
+    dict.fromkeys(
+        _env_csrf_trusted_origins
+        + (
+            []
+            if DEBUG
+            else [
+                "https://rwmel.se",
+                "https://www.rwmel.se",
+                "http://45.93.137.166",
+                "https://45.93.137.166",
+            ]
+        )
+    )
+)
 
 
 if not DEBUG:
@@ -424,10 +476,10 @@ LOGGING = {
 
 
 
-# # git pull origin main
-# # source venv/bin/activate
-# # pip install -r requirements.txt
-# # python manage.py migrate
-# # python manage.py collectstatic --noinput
-# # sudo systemctl restart rwmel
-# #sudo nano /etc/nginx/sites-available/rwmel
+# git pull origin main
+# source venv/bin/activate
+# pip install -r requirements.txt
+# python manage.py migrate
+# python manage.py collectstatic --noinput
+# sudo systemctl restart rwmel
+#sudo nano /etc/nginx/sites-available/rwmel

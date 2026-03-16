@@ -21,6 +21,11 @@
       </div>
 
       <div class="eb-price-row">
+        <span>{% trans "Transport Fee" %}</span>
+        <strong>{{ pricing.currency }} {{ pricing.transport_fee|floatformat:2 }}</strong>
+      </div>
+
+      <div class="eb-price-row">
         <span>
           {% blocktrans with hours=pricing.additional_hours rate=pricing.hourly_rate currency=pricing.currency %}
           Estimated Additional Time ({{ hours }} hrs x {{ currency }} {{ rate }}/hr)

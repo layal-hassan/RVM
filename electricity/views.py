@@ -257,6 +257,12 @@ BOOKING_SESSION_KEY = "electricity_booking"
 SERVICE_BOOKING_SESSION_KEY = "electricity_service_booking"
 ON_CALL_BOOKING_SESSION_KEY = "electricity_on_call_booking"
 ELECTRICIAN_BOOKING_SESSION_KEY = "electricity_electrician_booking"
+
+ELECTRICIAN_SERVICE_TYPE_LABELS = {
+    "residential": _("Residential Electrical Repair"),
+    "installation": _("New Installations"),
+    "commercial": _("Commercial Maintenance"),
+}
 ZIP_CHECK_SESSION_KEY = "electricity_zip_checks"
 
 SLOT_MINUTES = 30
@@ -506,6 +512,12 @@ def _get_electrician_booking_data(request):
 
 def _set_electrician_booking_data(request, data):
     request.session[ELECTRICIAN_BOOKING_SESSION_KEY] = data
+
+
+def _electrician_service_type_label(value):
+    if not value:
+        return "-"
+    return ELECTRICIAN_SERVICE_TYPE_LABELS.get(value, str(value).replace("_", " ").title())
     request.session.modified = True
 
 
@@ -1155,9 +1167,11 @@ def legacy_consultation_booking_thank_you(request):
 def _electrician_pricing_breakdown(data):
     pricing = _get_active_pricing()
     hourly_rate = 85
+    transport_fee = 0
     currency = "SEK"
     if pricing:
         hourly_rate = float(pricing.hourly_rate_electrician or pricing.labor_rate or hourly_rate)
+        transport_fee = float(pricing.transport_fee or 0)
         currency = pricing.currency or currency
     try:
         hours = int(data.get("hours") or 1)
@@ -1167,15 +1181,73 @@ def _electrician_pricing_breakdown(data):
     minimum_callout = hourly_rate
     additional_hours = max(hours - 1, 0)
     additional_total = additional_hours * hourly_rate
-    total = minimum_callout + additional_total
+    labor_total = minimum_callout + additional_total
+    total = labor_total + transport_fee
     return {
         "hours": hours,
         "hourly_rate": hourly_rate,
+        "transport_fee": transport_fee,
         "minimum_callout": minimum_callout,
         "additional_hours": additional_hours,
         "additional_total": additional_total,
+        "labor_total": labor_total,
         "total": total,
         "currency": currency,
+    }
+
+
+def _electrician_pricing_from_booking(booking):
+    hourly_rate = float(booking.hourly_rate_snapshot or 0)
+    transport_fee = float(booking.transport_fee_snapshot or 0)
+    hours = max(int(booking.hours or 1), 1)
+    additional_hours = max(hours - 1, 0)
+    additional_total = additional_hours * hourly_rate
+    labor_total = hourly_rate + additional_total
+    return {
+        "hours": hours,
+        "hourly_rate": hourly_rate,
+        "transport_fee": transport_fee,
+        "minimum_callout": hourly_rate,
+        "additional_hours": additional_hours,
+        "additional_total": additional_total,
+        "labor_total": labor_total,
+        "total": float(booking.estimated_total or 0),
+        "currency": booking.currency or "SEK",
+    }
+
+
+def _electrician_receipt_context(booking=None, data=None):
+    data = data or {}
+    if booking:
+        service_type = _electrician_service_type_label(booking.property_type)
+        customer_type = booking.get_customer_type_display() or "-"
+        city_line = " ".join(part for part in [booking.zip_code, booking.city] if part)
+        location = ", ".join(part for part in [booking.street_address, city_line] if part) or "-"
+        pricing = _electrician_pricing_from_booking(booking)
+        hours = pricing["hours"]
+        appointment_date = booking.preferred_date
+        arrival_window = booking.arrival_window or "-"
+        work_description = booking.work_description or "-"
+    else:
+        service_type = _electrician_service_type_label(data.get("service_type"))
+        customer_type = dict(ElectricianBooking.CustomerType.choices).get(data.get("customer_type"), "-")
+        city_line = " ".join(part for part in [data.get("zip_code", ""), data.get("city", "")] if part)
+        location = ", ".join(part for part in [data.get("street_address", ""), city_line] if part) or "-"
+        pricing = _electrician_pricing_breakdown(data)
+        hours = pricing["hours"]
+        appointment_date = data.get("preferred_date") or "-"
+        arrival_window = data.get("arrival_window") or "-"
+        work_description = data.get("work_description") or "-"
+
+    return {
+        "service_type": service_type,
+        "customer_type": customer_type,
+        "location": location,
+        "appointment_date": appointment_date,
+        "arrival_window": arrival_window,
+        "hours": hours,
+        "work_description": work_description,
+        "pricing": pricing,
     }
 
 
@@ -1288,8 +1360,13 @@ def electrician_booking_step(request, step):
                     "arrival_window": arrival_window,
                 }
             )
+            parsed_preferred_date = _parse_date(preferred_date)
             if not preferred_date:
                 errors.append("Please select a preferred date.")
+            elif not parsed_preferred_date:
+                errors.append("Please select a valid date.")
+            elif parsed_preferred_date < timezone.localdate():
+                errors.append("Please choose a date from today onward.")
             if not arrival_window:
                 errors.append("Please select an arrival window.")
             if not errors:
@@ -1304,6 +1381,7 @@ def electrician_booking_step(request, step):
                 _set_electrician_booking_data(request, data)
                 return redirect("electricity:electrician_booking_step", step=8)
         elif step == 8:
+            preferred_date = _parse_date(data.get("preferred_date"))
             confirm_info = request.POST.get("confirm_info")
             accept_terms = request.POST.get("accept_terms")
             data.update(
@@ -1312,6 +1390,10 @@ def electrician_booking_step(request, step):
                     "accept_terms": accept_terms == "yes",
                 }
             )
+            if not preferred_date:
+                errors.append("Please select a valid date.")
+            elif preferred_date < timezone.localdate():
+                errors.append("Please choose a date from today onward.")
             if confirm_info != "yes":
                 errors.append("Please confirm the booking information.")
             if accept_terms != "yes":
@@ -1333,6 +1415,7 @@ def electrician_booking_step(request, step):
                     additional_notes=data.get("additional_notes", ""),
                     hours=pricing["hours"],
                     hourly_rate_snapshot=pricing["hourly_rate"],
+                    transport_fee_snapshot=pricing["transport_fee"],
                     estimated_total=pricing["total"],
                     preferred_date=_parse_date(data.get("preferred_date")),
                     arrival_window=data.get("arrival_window", ""),
@@ -1342,6 +1425,7 @@ def electrician_booking_step(request, step):
                     message=f"New electrician booking from {booking.full_name}.",
                 )
                 request.session.pop(ELECTRICIAN_BOOKING_SESSION_KEY, None)
+                request.session["electrician_booking_id"] = booking.id
                 request.session["electrician_booking_reference"] = f"RWM-{booking.id:06d}"
                 return redirect("electricity:electrician_booking_thank_you")
 
@@ -1364,12 +1448,20 @@ def electrician_booking_step(request, step):
 
 def electrician_booking_thank_you(request):
     reference = request.session.get("electrician_booking_reference", "RWM-000000")
+    booking_id = request.session.get("electrician_booking_id")
+    booking = ElectricianBooking.objects.filter(pk=booking_id).first() if booking_id else None
     data = _get_electrician_booking_data(request)
-    pricing = _electrician_pricing_breakdown(data)
+    receipt = _electrician_receipt_context(booking=booking, data=data)
     return render(
         request,
         "electricity/electrician_booking/thank_you.html",
-        {"reference": reference, "data": data, "pricing": pricing},
+        {
+            "reference": reference,
+            "booking": booking,
+            "data": data,
+            "pricing": receipt["pricing"],
+            "receipt": receipt,
+        },
     )
 
 

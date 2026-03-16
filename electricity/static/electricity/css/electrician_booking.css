@@ -649,6 +649,14 @@ body.electricity-body.electrician-booking-page {
   border-color: transparent;
 }
 
+.eb-calendar-day.is-disabled {
+  color: #d3d6dd;
+  cursor: not-allowed;
+  background: #f5f2eb;
+  border-color: transparent;
+  box-shadow: none;
+}
+
 .eb-calendar-day.is-selected {
   background: linear-gradient(135deg, #e2c27a, var(--eb-gold));
   color: #1b1406;
@@ -656,11 +664,18 @@ body.electricity-body.electrician-booking-page {
   box-shadow: 0 12px 24px rgba(211, 178, 106, 0.35);
 }
 
-.eb-calendar-day:hover:not(.is-muted):not(.is-selected) {
+.eb-calendar-day:hover:not(.is-muted):not(.is-selected):not(.is-disabled) {
   transform: translateY(-2px);
   border-color: rgba(211, 178, 106, 0.6);
   box-shadow: 0 10px 20px rgba(15, 23, 42, 0.1);
   background: #fffdf7;
+}
+
+.eb-calendar-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .eb-pricing-box {

@@ -17,7 +17,12 @@
     <div class="eb-schedule-grid">
       <div>
         <div class="eb-label">{% trans "Select Date" %}</div>
-        <div class="eb-calendar" data-selected="{{ data.preferred_date|default:'' }}"></div>
+        <div class="eb-alert">
+          {% trans "Please choose a date from today onward. Past dates are not available for booking." %}
+        </div>
+        <div class="eb-calendar"
+             data-selected="{{ data.preferred_date|default:'' }}"
+             data-alert-message="{% trans 'Please choose a date from today onward.' %}"></div>
         <input type="hidden" name="preferred_date" id="preferred_date" value="{{ data.preferred_date|default:'' }}">
       </div>
 

@@ -7,6 +7,15 @@
     return date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate());
   }
 
+  function startOfDay(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+  function showCalendarAlert(message) {
+    if (!message) return;
+    window.alert(message);
+  }
+
   function updateSummary() {
     var dateEl = document.querySelector("[data-summary-date]");
     var timeEl = document.querySelector("[data-summary-time]");
@@ -26,14 +35,26 @@
   }
 
   function buildCalendar(container) {
+    var today = startOfDay(new Date());
+    var todayValue = formatDate(today);
+    var alertMessage = container.getAttribute("data-alert-message") || "Please choose a date from today onward.";
     var selectedValue = container.getAttribute("data-selected") || "";
     var selectedDate = selectedValue ? new Date(selectedValue) : new Date();
     if (isNaN(selectedDate.getTime())) {
       selectedDate = new Date();
     }
+    if (selectedValue && selectedValue < todayValue) {
+      selectedValue = "";
+    }
+    if (selectedDate < today) {
+      selectedDate = today;
+    }
     var month = selectedDate.getMonth();
     var year = selectedDate.getFullYear();
     var hiddenInput = container.parentElement.querySelector('input[name="preferred_date"]');
+    if (hiddenInput && hiddenInput.value && hiddenInput.value < todayValue) {
+      hiddenInput.value = "";
+    }
 
     function render() {
       container.innerHTML = "";
@@ -52,6 +73,10 @@
       prevBtn.className = "eb-calendar-btn";
       prevBtn.textContent = "<";
       prevBtn.addEventListener("click", function () {
+        if (prevBtn.disabled) {
+          showCalendarAlert(alertMessage);
+          return;
+        }
         month -= 1;
         if (month < 0) {
           month = 11;
@@ -77,6 +102,8 @@
       nav.appendChild(nextBtn);
       header.appendChild(title);
       header.appendChild(nav);
+
+      prevBtn.disabled = year < today.getFullYear() || (year === today.getFullYear() && month <= today.getMonth());
 
       var grid = document.createElement("div");
       grid.className = "eb-calendar-grid";
@@ -105,12 +132,21 @@
           cell.type = "button";
           cell.className = "eb-calendar-day";
           cell.textContent = dayNumber;
-          var cellDate = new Date(year, month, dayNumber);
+          var cellDate = startOfDay(new Date(year, month, dayNumber));
           var cellValue = formatDate(cellDate);
+          var isPastDate = cellDate < today;
+          if (isPastDate) {
+            cell.classList.add("is-disabled");
+            cell.setAttribute("aria-disabled", "true");
+          }
           if (selectedValue === cellValue) {
             cell.classList.add("is-selected");
           }
           cell.addEventListener("click", function () {
+            if (isPastDate) {
+              showCalendarAlert(alertMessage);
+              return;
+            }
             selectedValue = cellValue;
             if (hiddenInput) {
               hiddenInput.value = cellValue;
@@ -134,6 +170,9 @@
   }
 
   document.querySelectorAll(".eb-calendar").forEach(function (container) {
+    if (!container.getAttribute("data-alert-message")) {
+      container.setAttribute("data-alert-message", "Please choose a date from today onward.");
+    }
     buildCalendar(container);
   });
 
