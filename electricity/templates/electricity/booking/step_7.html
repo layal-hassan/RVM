@@ -62,16 +62,7 @@
         </div>
         <div class="review-row">
             <span>{% trans "Time Slot" %}</span>
-            <span class="review-field-wrap">
-                <div class="form-row split-row review-schedule-grid">
-                    <div>
-                        {{ form.preferred_time }}
-                    </div>
-                    <div>
-                        {{ form.preferred_meridiem }}
-                    </div>
-                </div>
-            </span>
+            <span class="review-field-wrap">{{ form.preferred_time }}</span>
         </div>
     </div>
     <div class="review-card">

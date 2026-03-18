@@ -373,19 +373,15 @@ class Step7Form(forms.Form):
     preferred_time = forms.CharField(
         required=False,
         max_length=5,
-        widget=forms.TextInput(
+        widget=forms.TimeInput(
             attrs={
+                "type": "time",
                 "class": "form-control booking-input time-slot-input",
                 "placeholder": "00:00",
-                "inputmode": "numeric",
+                "step": "60",
                 "autocomplete": "off",
             }
         ),
-    )
-    preferred_meridiem = forms.ChoiceField(
-        required=False,
-        choices=[("AM", "AM"), ("PM", "PM")],
-        widget=forms.Select(attrs={"class": "booking-input time-slot-meridiem"}),
     )
 
 

@@ -1016,24 +1016,14 @@ def booking_step_7(request):
     data = _get_booking_data(request)
     initial = dict(data)
     existing_slot = data.get("preferred_time_slot") or ""
-    if existing_slot and "preferred_time" not in initial and "preferred_meridiem" not in initial:
-        parts = existing_slot.strip().split()
-        if parts:
-            initial["preferred_time"] = parts[0]
-        if len(parts) > 1:
-            initial["preferred_meridiem"] = parts[1].upper()
+    if existing_slot and "preferred_time" not in initial:
+        initial["preferred_time"] = existing_slot.strip().split()[0]
     form = Step7Form(request.POST or None, initial=initial)
     if request.method == "POST":
         if form.is_valid():
             cleaned = form.cleaned_data
             time_value = (cleaned.get("preferred_time") or "").strip()
-            meridiem_value = (cleaned.get("preferred_meridiem") or "").strip().upper()
-            if time_value and meridiem_value:
-                cleaned["preferred_time_slot"] = f"{time_value} {meridiem_value}"
-            elif time_value:
-                cleaned["preferred_time_slot"] = time_value
-            else:
-                cleaned["preferred_time_slot"] = ""
+            cleaned["preferred_time_slot"] = time_value if time_value else ""
             data.update(cleaned)
         else:
             data = _update_session_from_form_data(data, form)

@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll("select").forEach(function (el) {
-        if (!el.classList.contains("ts-initialized")) {
+        if (!el.classList.contains("ts-initialized") && !el.classList.contains("no-tom-select")) {
             new TomSelect(el, {
                 dropdownParent: "body",
                 allowEmptyOption: true,
