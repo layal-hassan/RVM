@@ -8,7 +8,7 @@ from django.utils import timezone
 
 class ElectricalService(models.Model):
     title = models.CharField(max_length=120)
-    short_description = models.TextField()
+    short_description = models.TextField(blank=True, default="")
     bullet_points = models.TextField(blank=True, default="")
     icon = models.ImageField(upload_to='electricity/services/', blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True, null=True)

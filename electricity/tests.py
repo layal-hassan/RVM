@@ -112,7 +112,7 @@ class HumanizedJSONModelFormTests(TestCase):
         self.assertTrue(form.is_valid(), form.errors)
         self.assertEqual(form.cleaned_data["services"], [str(service.id)])
 
-    def test_electrical_service_form_requires_default_language_for_required_fields(self):
+    def test_electrical_service_form_allows_empty_short_description(self):
         form = ElectricalServiceForm(
             data={
                 "title_en": "Panel Upgrade",
@@ -136,8 +136,9 @@ class HumanizedJSONModelFormTests(TestCase):
             }
         )
 
-        self.assertFalse(form.is_valid())
-        self.assertIn("short_description_en", form.errors)
+        self.assertTrue(form.is_valid(), form.errors)
+        item = form.save()
+        self.assertEqual(item.short_description, "")
 
 
 class ElectricianBookingReceiptTests(TestCase):
