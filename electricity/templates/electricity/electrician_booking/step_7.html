@@ -17,27 +17,59 @@
     <div class="eb-pricing-box">
       <div class="eb-price-row">
         <span>{% trans "Minimum Callout Fee (1st hr)" %}</span>
-        <strong>{{ pricing.currency }} {{ pricing.minimum_callout|floatformat:2 }}</strong>
+        <strong data-pricing-minimum>{{ pricing.currency }} {{ pricing.minimum_callout|floatformat:2 }}</strong>
       </div>
 
       <div class="eb-price-row">
         <span>{% trans "Transport Fee" %}</span>
-        <strong>{{ pricing.currency }} {{ pricing.transport_fee|floatformat:2 }}</strong>
+        <strong data-pricing-transport>{{ pricing.currency }} {{ pricing.transport_fee|floatformat:2 }}</strong>
       </div>
 
       <div class="eb-price-row">
-        <span>
-          {% blocktrans with hours=pricing.additional_hours rate=pricing.hourly_rate currency=pricing.currency %}
+        <span data-pricing-additional-label
+              data-hours="{{ pricing.additional_hours }}"
+              data-rate="{{ pricing.effective_hourly_rate|floatformat:2 }}"
+              data-currency="{{ pricing.currency }}">
+          {% blocktrans with hours=pricing.additional_hours rate=pricing.effective_hourly_rate currency=pricing.currency %}
           Estimated Additional Time ({{ hours }} hrs x {{ currency }} {{ rate }}/hr)
           {% endblocktrans %}
         </span>
-        <strong>{{ pricing.currency }} {{ pricing.additional_total|floatformat:2 }}</strong>
+        <strong data-pricing-additional>{{ pricing.currency }} {{ pricing.additional_total|floatformat:2 }}</strong>
+      </div>
+
+      {% if data.customer_type == "private" %}
+      <div class="eb-rot-box">
+        <label class="eb-checkbox eb-checkbox-strong">
+          <input type="checkbox"
+                 name="use_rot"
+                 value="yes"
+                 data-rot-toggle
+                 {% if data.use_rot %}checked{% endif %}>
+          <span>{% trans "I want to use preliminary ROT deduction for this booking." %}</span>
+        </label>
+        <div class="eb-inline-note">
+          {% trans "ROT currently applies to private individuals only and only to labor cost, not transport or materials. Final approval depends on your eligibility with Skatteverket." %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="eb-price-row eb-price-row-discount{% if not pricing.rot_requested %} d-none{% endif %}" data-rot-row>
+        <span>{% blocktrans with percent=pricing.rot_percent %}ROT deduction ({{ percent }}% of labor cost){% endblocktrans %}</span>
+        <strong data-pricing-rot>-{{ pricing.currency }} {{ pricing.rot_discount|floatformat:2 }}</strong>
       </div>
 
       <div class="eb-price-total">
-        <span>{% trans "Total Estimated Booking" %}</span>
-        <strong>{{ pricing.currency }} {{ pricing.total|floatformat:2 }}</strong>
+        <span>{% trans "Total Estimated Booking (incl. VAT and ROT, if applied)" %}</span>
+        <strong data-pricing-total>{{ pricing.currency }} {{ pricing.total|floatformat:2 }}</strong>
       </div>
+    </div>
+
+    <div hidden
+         data-pricing-config
+         data-currency="{{ pricing.currency }}"
+         data-labor-total="{{ pricing.labor_total|floatformat:2 }}"
+         data-transport-fee="{{ pricing.transport_fee|floatformat:2 }}"
+         data-rot-percent="{{ pricing.rot_percent|floatformat:2 }}">
     </div>
 
     <label class="eb-checkbox eb-pricing-check">
@@ -58,8 +90,50 @@
     </a>
 
     <button class="btn btn-primary" type="submit">
-        {% trans "Continue to Step 8 ->" %}
+        {% trans "Continue to Step 8" %}
     </button>
   </div>
 </form>
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script>
+    (function () {
+      const toggle = document.querySelector("[data-rot-toggle]");
+      const config = document.querySelector("[data-pricing-config]");
+      if (!toggle || !config) return;
+
+      const currency = config.dataset.currency || "SEK";
+      const laborTotal = Number(config.dataset.laborTotal || 0);
+      const transportFee = Number(config.dataset.transportFee || 0);
+      const rotPercent = Number(config.dataset.rotPercent || 0);
+
+      const rotRow = document.querySelector("[data-rot-row]");
+      const rotValue = document.querySelector("[data-pricing-rot]");
+      const totalValue = document.querySelector("[data-pricing-total]");
+
+      function formatMoney(value) {
+        return currency + " " + value.toFixed(2);
+      }
+
+      function renderPricing() {
+        const rotDiscount = toggle.checked ? laborTotal * (rotPercent / 100) : 0;
+        const total = laborTotal + transportFee - rotDiscount;
+
+        if (rotRow) {
+          rotRow.classList.toggle("d-none", !toggle.checked);
+        }
+        if (rotValue) {
+          rotValue.textContent = "-" + formatMoney(rotDiscount);
+        }
+        if (totalValue) {
+          totalValue.textContent = formatMoney(total);
+        }
+      }
+
+      toggle.addEventListener("change", renderPricing);
+      renderPricing();
+    })();
+  </script>
 {% endblock %}

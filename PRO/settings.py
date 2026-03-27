@@ -39,52 +39,27 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 # # Quick-start development settings - unsuitable for production
 # # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# # SERVER-CONFIG-ONLY (commented to avoid conflicts on deploy; uncomment locally if needed)
-# # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.getenv("DEBUG", "True") == "True"
+# # Local development settings only.
+# DEBUG = True
 
 # # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.getenv("SECRET_KEY")
-# if not SECRET_KEY:
-#     if DEBUG:
-#         SECRET_KEY = "dev-only-unsafe-secret-key"
-#     else:
-#         raise ImproperlyConfigured("The SECRET_KEY setting must not be empty.")
+# SECRET_KEY = os.getenv("SECRET_KEY", "dev-only-unsafe-secret-key")
 
-# _default_allowed_hosts = ["127.0.0.1", "localhost"]
-# _production_hosts = ["45.93.137.166", "rwmel.se", "www.rwmel.se"]
-# _env_allowed_hosts = [
-#     host.strip() for host in os.getenv("ALLOWED_HOSTS", ",".join(_default_allowed_hosts)).split(",") if host.strip()
-# ]
-# ALLOWED_HOSTS = list(dict.fromkeys(_env_allowed_hosts + ([] if DEBUG else _production_hosts)))
+# ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
-# _env_csrf_trusted_origins = [
-#     origin.strip()
-#     for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-#     if origin.strip()
-# ]
-# CSRF_TRUSTED_ORIGINS = list(
-#     dict.fromkeys(
-#         _env_csrf_trusted_origins
-#         + (
-#             []
-#             if DEBUG
-#             else [
-#                 "https://rwmel.se",
-#                 "https://www.rwmel.se",
-#                 "http://45.93.137.166",
-#                 "https://45.93.137.166",
-#             ]
-#         )
-#     )
-# )
+# CSRF_TRUSTED_ORIGINS = []
 
 # if not DEBUG:
 #     SECURE_BROWSER_XSS_FILTER = True
 #     SECURE_CONTENT_TYPE_NOSNIFF = True
 #     SESSION_COOKIE_SECURE = True
 #     CSRF_COOKIE_SECURE = True
-#  #++++
+# else:
+#     # Django's development server only serves HTTP locally.
+#     SESSION_COOKIE_SECURE = False
+#     CSRF_COOKIE_SECURE = False
+#     SECURE_SSL_REDIRECT = False
+#     SECURE_PROXY_SSL_HEADER = None
 
 # # Application definition
 
@@ -483,3 +458,19 @@ LOGGING = {
 # python manage.py collectstatic --noinput
 # sudo systemctl restart rwmel
 #sudo nano /etc/nginx/sites-available/rwmel
+# cd /var/www/rwmel
+# source venv/bin/activate
+# export USE_POSTGRES=true
+# export DB_NAME=rwmel
+# export DB_USER=rwmeluser
+# export DB_PASSWORD='StrongPassword123!'
+# export DB_HOST=localhost
+# export DB_PORT=5432
+# python manage.py migrate
+# python manage.py collectstatic --noinput
+# python manage.py shell
+# sudo systemctl restart rwmel
+# python manage.py shell -c "from django.conf import settings; print(settings.DATABASES['default']['ENGINE'])"
+# django.db.backends.postgresql
+# امر واحد 
+# cd /var/www/rwmel && source venv/bin/activate && export USE_POSTGRES=true DB_NAME=rwmel DB_USER=rwmeluser DB_PASSWORD='StrongPassword123!' DB_HOST=localhost DB_PORT=5432

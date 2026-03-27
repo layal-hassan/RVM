@@ -154,6 +154,10 @@ html[dir="rtl"] .booking-input {
     display: block;
 }
 
+.contact-business.split-row.is-visible {
+    display: grid;
+}
+
 .option-grid,
 .service-grid,
 .time-grid {
@@ -419,6 +423,12 @@ html[dir="rtl"] .booking-input {
     gap: 12px;
 }
 
+.contact-toggle-group {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 180px));
+    gap: 16px;
+}
+
 .contact-type-inputs {
     display: none;
 }
@@ -449,6 +459,22 @@ html[dir="rtl"] .booking-input {
     box-shadow: 0 10px 24px rgba(0, 51, 102, 0.05);
 }
 
+.contact-toggle-option {
+    min-width: 0;
+    min-height: 64px;
+    padding: 0 22px;
+    border-radius: 20px;
+    font-size: 0.96rem;
+    font-weight: 600;
+    border-color: #eadfcd;
+    box-shadow: 0 6px 18px rgba(0, 51, 102, 0.04);
+}
+
+.contact-toggle-option:hover {
+    border-color: #e0c37d;
+    transform: translateY(-1px);
+}
+
 .toggle-option.is-active {
     border-color: var(--gold);
     background: linear-gradient(180deg, #fffaf0 0%, #fff4da 100%);
@@ -456,10 +482,30 @@ html[dir="rtl"] .booking-input {
     transform: translateY(-1px);
 }
 
+.contact-toggle-option.is-active {
+    box-shadow: 0 10px 24px rgba(255, 184, 0, 0.14);
+}
+
 .split-row {
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.contact-business.split-row {
+    row-gap: 22px;
+    column-gap: 18px;
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+
+.contact-business.split-row > div {
+    display: grid;
+    gap: 15px;
+}
+
+.contact-business.split-row + .split-row {
+    margin-top: 24px;
 }
 
 .booking-actions {
@@ -855,6 +901,10 @@ html[dir="rtl"] .booking-input {
         gap: 10px;
     }
 
+    .contact-toggle-group {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .toggle-option {
         min-width: 0;
         width: 100%;
@@ -862,6 +912,12 @@ html[dir="rtl"] .booking-input {
         padding: 0 12px;
         font-size: 0.95rem;
         border-radius: 18px;
+    }
+
+    .contact-toggle-option {
+        min-height: 56px;
+        padding: 0 14px;
+        font-size: 0.92rem;
     }
 
     .booking-btn {

@@ -687,11 +687,30 @@ body.electricity-body.electrician-booking-page {
   gap: 10px;
 }
 
+.eb-rot-box {
+  margin-top: 6px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #fff8e7;
+  border: 1px solid #edd9a6;
+}
+
+.eb-checkbox-strong {
+  margin-top: 0;
+  color: var(--eb-ink);
+  font-weight: 600;
+}
+
 .eb-price-row {
   display: flex;
   justify-content: space-between;
   gap: 10px;
   font-size: 13px;
+}
+
+.eb-price-row-discount {
+  color: #1f5f3b;
+  font-weight: 600;
 }
 
 .eb-price-total {

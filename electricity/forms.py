@@ -302,7 +302,9 @@ class Step6Form(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "form-control booking-input",
-                "placeholder": _("Personal ID number"),
+                "placeholder": "yyyymmdd-xxxx",
+                "inputmode": "numeric",
+                "pattern": r"\d{8}-\d{4}",
                 "data-contact-field": "private",
             }
         ),
@@ -363,6 +365,14 @@ class Step6Form(forms.Form):
         ],
         widget=forms.RadioSelect,
     )
+
+    def clean_personal_id(self):
+        value = (self.cleaned_data.get("personal_id") or "").strip()
+        if not value:
+            return value
+        if not re.fullmatch(r"\d{8}-\d{4}", value):
+            raise ValidationError(_("Please enter your personal ID in the format yyyymmdd-xxxx."))
+        return value
 
 
 class Step7Form(forms.Form):

@@ -249,6 +249,8 @@ class ElectricianBooking(models.Model):
     hours = models.PositiveIntegerField(default=1)
     hourly_rate_snapshot = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     transport_fee_snapshot = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    rot_requested = models.BooleanField(default=False)
+    rot_percent_snapshot = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     estimated_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     currency = models.CharField(max_length=10, default="SEK")
 

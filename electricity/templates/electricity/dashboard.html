@@ -6,7 +6,7 @@
 
 {% block content %}
 <section class="dash-stats">
-    <div class="stat-card">
+    <a class="stat-card stat-card-link" href="{% url 'electricity:dashboard_services' %}">
         <div class="stat-icon stat-icon-services" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
                 <path d="M4 13.5l4-4 4 4 4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -17,8 +17,8 @@
             <div class="stat-label">Services</div>
             <div class="stat-value">{{ stats.services }}</div>
         </div>
-    </div>
-    <div class="stat-card">
+    </a>
+    <a class="stat-card stat-card-link" href="{% url 'electricity:dashboard_requests' %}">
         <div class="stat-icon stat-icon-requests" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
                 <path d="M7 7h10M7 11h10M7 15h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -29,8 +29,8 @@
             <div class="stat-label">Consultation Requests</div>
             <div class="stat-value">{{ stats.requests }}</div>
         </div>
-    </div>
-    <div class="stat-card">
+    </a>
+    <a class="stat-card stat-card-link" href="{% url 'electricity:dashboard_bookings' %}">
         <div class="stat-icon stat-icon-bookings" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
                 <path d="M8 3v4M16 3v4M4 9h16M6 7h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -40,8 +40,8 @@
             <div class="stat-label">Bookings</div>
             <div class="stat-value">{{ stats.bookings }}</div>
         </div>
-    </div>
-    <div class="stat-card">
+    </a>
+    <a class="stat-card stat-card-link" href="{% url 'electricity:dashboard_service_bookings' %}">
         <div class="stat-icon stat-icon-service" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
                 <path d="M6 4h12l-1.5 7h-9L6 4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
@@ -52,8 +52,8 @@
             <div class="stat-label">Service Bookings</div>
             <div class="stat-value">{{ stats.service_bookings }}</div>
         </div>
-    </div>
-    <div class="stat-card">
+    </a>
+    <a class="stat-card stat-card-link" href="{% url 'electricity:dashboard_electrician_bookings' %}">
         <div class="stat-icon stat-icon-electrician" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
                 <path d="M12 3v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -64,8 +64,8 @@
             <div class="stat-label">Electrician Bookings</div>
             <div class="stat-value">{{ stats.electrician_bookings }}</div>
         </div>
-    </div>
-    <div class="stat-card">
+    </a>
+    <a class="stat-card stat-card-link" href="{% url 'electricity:dashboard_on_call_bookings' %}">
         <div class="stat-icon stat-icon-oncall" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
                 <path d="M12 4v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -77,8 +77,8 @@
             <div class="stat-label">On-Call Bookings</div>
             <div class="stat-value">{{ stats.on_call_bookings }}</div>
         </div>
-    </div>
-    <div class="stat-card">
+    </a>
+    <a class="stat-card stat-card-link" href="{% url 'electricity:dashboard_zip_codes' %}">
         <div class="stat-icon stat-icon-zip" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
                 <path d="M7 4h10v4H7zM5 8h14v12H5z" stroke="currentColor" stroke-width="2"/>
@@ -89,8 +89,8 @@
             <div class="stat-label">ZIP Codes</div>
             <div class="stat-value">{{ stats.zip_codes }}</div>
         </div>
-    </div>
-    <div class="stat-card">
+    </a>
+    <a class="stat-card stat-card-link" href="{% url 'electricity:dashboard_outside_area_requests' %}">
         <div class="stat-icon stat-icon-outside" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
                 <path d="M4 12h16M12 4v16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -101,7 +101,7 @@
             <div class="stat-label">Outside Area</div>
             <div class="stat-value">{{ stats.outside_area }}</div>
         </div>
-    </div>
+    </a>
     <div class="stat-card">
         <div class="stat-icon stat-icon-total" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">

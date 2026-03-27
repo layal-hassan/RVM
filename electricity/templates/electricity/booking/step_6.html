@@ -32,11 +32,11 @@
             {% if form.contact_type.value == "business" %}checked{% endif %}
         >
     </div>
-    <div class="toggle-group">
-        <button type="button" class="toggle-option" data-contact-option="private">
+    <div class="toggle-group contact-toggle-group">
+        <button type="button" class="toggle-option contact-toggle-option" data-contact-option="private">
             <span>{% trans "Private" %}</span>
         </button>
-        <button type="button" class="toggle-option" data-contact-option="business">
+        <button type="button" class="toggle-option contact-toggle-option" data-contact-option="business">
             <span>{% trans "Business" %}</span>
         </button>
     </div>
@@ -69,7 +69,7 @@
         {% endif %}
     </div>
 </div>
-<div class="form-row contact-private" data-private>
+<div class="form-row contact-private{% if form.contact_type.value != "business" %} is-visible{% endif %}" data-private>
     <label class="form-label">{% trans "Full Name" %}</label>
     {{ form.full_name }}
     {% if form.full_name.errors %}

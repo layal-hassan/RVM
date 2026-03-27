@@ -53,6 +53,33 @@
               <div class="eb-service-sub">{% trans "12:00 PM - 05:00 PM" %}</div>
             </div>
           </label>
+
+          <label class="eb-arrival-card">
+            <input type="radio"
+                   name="arrival_window"
+                   value="Evening (05:00 PM - 10:00 PM)"
+                   {% if data.arrival_window == "Evening (05:00 PM - 10:00 PM)" %}checked{% endif %}>
+            <div class="eb-arrival-icon">EV</div>
+            <div>
+              <div class="eb-service-title">{% trans "Evening" %}</div>
+              <div class="eb-service-sub">{% trans "05:00 PM - 10:00 PM" %}</div>
+            </div>
+          </label>
+
+          <label class="eb-arrival-card">
+            <input type="radio"
+                   name="arrival_window"
+                   value="Night (10:00 PM - 06:00 AM)"
+                   {% if data.arrival_window == "Night (10:00 PM - 06:00 AM)" %}checked{% endif %}>
+            <div class="eb-arrival-icon">NG</div>
+            <div>
+              <div class="eb-service-title">{% trans "Night" %}</div>
+              <div class="eb-service-sub">{% trans "10:00 PM - 06:00 AM" %}</div>
+            </div>
+          </label>
+        </div>
+        <div class="eb-inline-note">
+          {% trans "Evening and Night bookings are billed at double the standard hourly rate." %}
         </div>
       </div>
     </div>
@@ -65,7 +92,7 @@
     </a>
 
     <button class="btn btn-primary" type="submit">
-        {% trans "Continue to Step 7 ->" %}
+        {% trans "Continue to Step 7" %}
     </button>
   </div>
 </form>

@@ -1159,28 +1159,45 @@ def _electrician_pricing_breakdown(data):
     hourly_rate = 85
     transport_fee = 0
     currency = "SEK"
+    rot_percent = 30.0
     if pricing:
         hourly_rate = float(pricing.hourly_rate_electrician or pricing.labor_rate or hourly_rate)
         transport_fee = float(pricing.transport_fee or 0)
         currency = pricing.currency or currency
+        rot_percent = float(pricing.rot_percent or rot_percent)
     try:
         hours = int(data.get("hours") or 1)
     except (TypeError, ValueError):
         hours = 1
     hours = max(1, hours)
-    minimum_callout = hourly_rate
+    arrival_window = data.get("arrival_window", "")
+    multiplier = 2 if arrival_window in {
+        "Evening (05:00 PM - 10:00 PM)",
+        "Night (10:00 PM - 06:00 AM)",
+    } else 1
+    effective_hourly_rate = hourly_rate * multiplier
+    minimum_callout = effective_hourly_rate
     additional_hours = max(hours - 1, 0)
-    additional_total = additional_hours * hourly_rate
+    additional_total = additional_hours * effective_hourly_rate
     labor_total = minimum_callout + additional_total
-    total = labor_total + transport_fee
+    total_before_rot = labor_total + transport_fee
+    use_rot = bool(data.get("use_rot")) and data.get("customer_type") == ElectricianBooking.CustomerType.PRIVATE
+    rot_discount = labor_total * (rot_percent / 100) if use_rot else 0
+    total = total_before_rot - rot_discount
     return {
         "hours": hours,
         "hourly_rate": hourly_rate,
+        "effective_hourly_rate": effective_hourly_rate,
+        "arrival_multiplier": multiplier,
         "transport_fee": transport_fee,
+        "rot_percent": rot_percent,
+        "rot_requested": use_rot,
+        "rot_discount": rot_discount,
         "minimum_callout": minimum_callout,
         "additional_hours": additional_hours,
         "additional_total": additional_total,
         "labor_total": labor_total,
+        "total_before_rot": total_before_rot,
         "total": total,
         "currency": currency,
     }
@@ -1189,18 +1206,32 @@ def _electrician_pricing_breakdown(data):
 def _electrician_pricing_from_booking(booking):
     hourly_rate = float(booking.hourly_rate_snapshot or 0)
     transport_fee = float(booking.transport_fee_snapshot or 0)
+    rot_percent = float(booking.rot_percent_snapshot or 0)
     hours = max(int(booking.hours or 1), 1)
+    multiplier = 2 if booking.arrival_window in {
+        "Evening (05:00 PM - 10:00 PM)",
+        "Night (10:00 PM - 06:00 AM)",
+    } else 1
+    effective_hourly_rate = hourly_rate * multiplier
     additional_hours = max(hours - 1, 0)
-    additional_total = additional_hours * hourly_rate
-    labor_total = hourly_rate + additional_total
+    additional_total = additional_hours * effective_hourly_rate
+    labor_total = effective_hourly_rate + additional_total
+    total_before_rot = labor_total + transport_fee
+    rot_discount = labor_total * (rot_percent / 100) if booking.rot_requested else 0
     return {
         "hours": hours,
         "hourly_rate": hourly_rate,
+        "effective_hourly_rate": effective_hourly_rate,
+        "arrival_multiplier": multiplier,
         "transport_fee": transport_fee,
-        "minimum_callout": hourly_rate,
+        "rot_percent": rot_percent,
+        "rot_requested": bool(booking.rot_requested),
+        "rot_discount": rot_discount,
+        "minimum_callout": effective_hourly_rate,
         "additional_hours": additional_hours,
         "additional_total": additional_total,
         "labor_total": labor_total,
+        "total_before_rot": total_before_rot,
         "total": float(booking.estimated_total or 0),
         "currency": booking.currency or "SEK",
     }
@@ -1283,6 +1314,7 @@ def electrician_booking_step(request, step):
             zip_code = request.POST.get("zip_code", "").strip()
             city = request.POST.get("city", "").strip()
             customer_type = request.POST.get("customer_type")
+            personal_id = request.POST.get("personal_id", "").strip()
             full_name = request.POST.get("full_name", "").strip()
             phone = request.POST.get("phone", "").strip()
             email = request.POST.get("email", "").strip()
@@ -1295,6 +1327,7 @@ def electrician_booking_step(request, step):
                     "zip_code": zip_code,
                     "city": city,
                     "customer_type": customer_type,
+                    "personal_id": personal_id,
                     "full_name": full_name,
                     "phone": phone,
                     "email": email,
@@ -1319,6 +1352,10 @@ def electrician_booking_step(request, step):
                 if not email:
                     errors.append("Email address is required.")
             else:
+                if not personal_id:
+                    errors.append("Personal ID number is required.")
+                elif not re.fullmatch(r"\d{8}-\d{4}", personal_id):
+                    errors.append("Please enter your personal ID in the format yyyymmdd-xxxx.")
                 if not full_name:
                     errors.append("Full name is required.")
                 if not phone:
@@ -1364,7 +1401,9 @@ def electrician_booking_step(request, step):
                 return redirect("electricity:electrician_booking_step", step=7)
         elif step == 7:
             pricing_ack = request.POST.get("pricing_ack")
+            use_rot = request.POST.get("use_rot")
             data["pricing_ack"] = pricing_ack == "yes"
+            data["use_rot"] = use_rot == "yes" and data.get("customer_type") == ElectricianBooking.CustomerType.PRIVATE
             if pricing_ack != "yes":
                 errors.append("Please acknowledge the pricing estimate.")
             if not errors:
@@ -1395,6 +1434,9 @@ def electrician_booking_step(request, step):
                     full_name=data.get("company_name") or data.get("full_name", ""),
                     email=data.get("email", ""),
                     phone=data.get("organization_number") or data.get("phone", ""),
+                    personal_id=data.get("personal_id", ""),
+                    company_name=data.get("company_name", ""),
+                    organization_number=data.get("organization_number", ""),
                     street_address=data.get("street_address", ""),
                     city=data.get("city", ""),
                     zip_code=data.get("zip_code", ""),
@@ -1406,6 +1448,8 @@ def electrician_booking_step(request, step):
                     hours=pricing["hours"],
                     hourly_rate_snapshot=pricing["hourly_rate"],
                     transport_fee_snapshot=pricing["transport_fee"],
+                    rot_requested=pricing["rot_requested"],
+                    rot_percent_snapshot=pricing["rot_percent"] if pricing["rot_requested"] else 0,
                     estimated_total=pricing["total"],
                     preferred_date=_parse_date(data.get("preferred_date")),
                     arrival_window=data.get("arrival_window", ""),
@@ -1422,6 +1466,7 @@ def electrician_booking_step(request, step):
         if errors:
             _set_electrician_booking_data(request, data)
 
+    pricing = _electrician_pricing_breakdown(data)
     progress = int((step / 8) * 100)
     return render(
         request,

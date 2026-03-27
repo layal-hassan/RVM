@@ -89,6 +89,13 @@
         <strong>{{ pricing.currency }} {{ pricing.minimum_callout|floatformat:2 }}</strong>
       </div>
 
+      {% if pricing.arrival_multiplier > 1 %}
+      <div class="eb-receipt-row">
+        <span>{% trans "Evening / Night rate multiplier" %}</span>
+        <strong>{{ pricing.arrival_multiplier }}x</strong>
+      </div>
+      {% endif %}
+
       <div class="eb-receipt-row">
         <span>{% trans "Transport Fee" %}</span>
         <strong>{{ pricing.currency }} {{ pricing.transport_fee|floatformat:2 }}</strong>
@@ -96,15 +103,22 @@
 
       <div class="eb-receipt-row">
         <span>
-          {% blocktrans with hours=pricing.additional_hours rate=pricing.hourly_rate currency=pricing.currency %}
+          {% blocktrans with hours=pricing.additional_hours rate=pricing.effective_hourly_rate currency=pricing.currency %}
           Additional Time ({{ hours }} hrs x {{ currency }} {{ rate }}/hr)
           {% endblocktrans %}
         </span>
         <strong>{{ pricing.currency }} {{ pricing.additional_total|floatformat:2 }}</strong>
       </div>
 
+      {% if pricing.rot_requested %}
+      <div class="eb-receipt-row">
+        <span>{% blocktrans with percent=pricing.rot_percent %}ROT deduction ({{ percent }}% of labor cost){% endblocktrans %}</span>
+        <strong>-{{ pricing.currency }} {{ pricing.rot_discount|floatformat:2 }}</strong>
+      </div>
+      {% endif %}
+
       <div class="eb-receipt-total">
-        <span>{% trans "Total Estimated Booking" %}</span>
+        <span>{% trans "Total Estimated Booking (incl. VAT and ROT, if applied)" %}</span>
         <strong>{{ pricing.currency }} {{ pricing.total|floatformat:2 }}</strong>
       </div>
 
