@@ -461,7 +461,7 @@ class ServicePricingForm(HumanizedJSONModelForm):
 class ElectricalServiceForm(HumanizedJSONModelForm):
     class Meta:
         model = ElectricalService
-        fields = _translated_fields("title", "short_description", "bullet_points") + [
+        fields = _translated_fields("title", "bullet_points") + [
             "icon",
             "service_fee",
             "base_fee",

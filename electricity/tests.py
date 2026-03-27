@@ -118,9 +118,6 @@ class HumanizedJSONModelFormTests(TestCase):
                 "title_en": "Panel Upgrade",
                 "title_ar": "Panel Arabic",
                 "title_sv": "Paneluppgradering",
-                "short_description_en": "",
-                "short_description_ar": "",
-                "short_description_sv": "",
                 "bullet_points_en": "",
                 "bullet_points_ar": "",
                 "bullet_points_sv": "",
@@ -137,6 +134,7 @@ class HumanizedJSONModelFormTests(TestCase):
         )
 
         self.assertTrue(form.is_valid(), form.errors)
+        self.assertNotIn("short_description_en", form.fields)
         item = form.save()
         self.assertEqual(item.short_description, "")
 
