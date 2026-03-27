@@ -101,6 +101,7 @@ class HumanizedJSONModelForm(forms.ModelForm):
                     model_field.name,
                     getattr(self.instance, model_field.name, None),
                 )
+        self._require_default_translation_fields(model)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -109,6 +110,24 @@ class HumanizedJSONModelForm(forms.ModelForm):
             if isinstance(raw_value, str):
                 cleaned_data[field_name] = self._parse_json_value(field_name, raw_value)
         return cleaned_data
+
+    def _require_default_translation_fields(self, model):
+        default_language = getattr(settings, "MODELTRANSLATION_DEFAULT_LANGUAGE", "")
+        if not default_language:
+            return
+
+        for field_name, field in self.fields.items():
+            suffix = f"_{default_language}"
+            if not field_name.endswith(suffix):
+                continue
+
+            base_name = field_name[: -len(suffix)]
+            try:
+                model_field = model._meta.get_field(base_name)
+            except Exception:
+                continue
+
+            field.required = not getattr(model_field, "blank", True)
 
     def _format_json_value(self, field_name, value):
         if value in (None, "", [], {}):

@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from .forms import OnCallBookingForm, ServiceBookingForm
+from .forms import ElectricalServiceForm, OnCallBookingForm, ServiceBookingForm
 from .models import ElectricianBooking, ElectricalService, OnCallBooking, ServiceBooking, ServicePricing
 from .templatetags.electricity_extras import _service_title_map, display_value, file_display_name
 
@@ -111,6 +111,33 @@ class HumanizedJSONModelFormTests(TestCase):
 
         self.assertTrue(form.is_valid(), form.errors)
         self.assertEqual(form.cleaned_data["services"], [str(service.id)])
+
+    def test_electrical_service_form_requires_default_language_for_required_fields(self):
+        form = ElectricalServiceForm(
+            data={
+                "title_en": "Panel Upgrade",
+                "title_ar": "Panel Arabic",
+                "title_sv": "Paneluppgradering",
+                "short_description_en": "",
+                "short_description_ar": "",
+                "short_description_sv": "",
+                "bullet_points_en": "",
+                "bullet_points_ar": "",
+                "bullet_points_sv": "",
+                "service_fee": "0",
+                "base_fee": "0",
+                "hourly_rate": "0",
+                "night_rate": "0",
+                "transport_fee": "0",
+                "rot_percent": "30",
+                "currency": "SEK",
+                "is_active": "on",
+                "order": "0",
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("short_description_en", form.errors)
 
 
 class ElectricianBookingReceiptTests(TestCase):
