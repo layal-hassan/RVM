@@ -36,6 +36,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 # _load_dotenv(BASE_DIR.parent / ".env")
 
 
+# def _env_bool(name: str, default: bool = False) -> bool:
+#     value = os.getenv(name)
+#     if value is None:
+#         return default
+#     return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 # # Quick-start development settings - unsuitable for production
 # # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -197,6 +204,23 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 # DATA_UPLOAD_MAX_MEMORY_SIZE = 80 * 1024 * 1024
 # FILE_UPLOAD_MAX_MEMORY_SIZE = 80 * 1024 * 1024
+
+# DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Support@rwmel.se")
+# SERVER_EMAIL = os.getenv("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
+# CONTACT_TO_EMAIL = os.getenv("CONTACT_TO_EMAIL", "Info@rwmel.se")
+# EMAIL_HOST = os.getenv("EMAIL_HOST", "")
+# EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+# EMAIL_USE_TLS = _env_bool("EMAIL_USE_TLS", True)
+# EMAIL_USE_SSL = _env_bool("EMAIL_USE_SSL", False)
+# EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "20"))
+# EMAIL_BACKEND = os.getenv(
+#     "EMAIL_BACKEND",
+#     "django.core.mail.backends.smtp.EmailBackend"
+#     if EMAIL_HOST
+#     else "django.core.mail.backends.console.EmailBackend",
+# )
 
 
 
@@ -463,11 +487,7 @@ LOGGING = {
 # export USE_POSTGRES=true
 # export DB_NAME=rwmel
 # export DB_USER=rwmeluser
-# export DB_PASSWORD='StrongPassword123!'
-# export DB_HOST=localhost
-# export DB_PORT=5432
-# python manage.py migrate
-# python manage.py collectstatic --noinput
+#ايواhon manage.py collectstatic --noinput
 # python manage.py shell
 # sudo systemctl restart rwmel
 # python manage.py shell -c "from django.conf import settings; print(settings.DATABASES['default']['ENGINE'])"

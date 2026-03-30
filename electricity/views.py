@@ -79,6 +79,53 @@ from django.contrib.auth.models import User
 logger = logging.getLogger(__name__)
 
 
+def _booking_team_name(assigned_provider=None):
+    if assigned_provider and getattr(assigned_provider, "display_name", "").strip():
+        return assigned_provider.display_name.strip()
+    return "RWM EL"
+
+
+def _send_booking_confirmation_email(
+    *,
+    to_email,
+    customer_name,
+    booking_reference,
+    booking_type_label,
+    team_name,
+    preferred_date=None,
+    preferred_time=None,
+):
+    if not to_email:
+        return
+
+    subject = f"Booking Confirmation - {booking_reference}"
+    lines = [
+        f"مرحباً {customer_name or 'عميلنا الكريم'}،",
+        "",
+        f"تم استلام طلب الحجز بنجاح.",
+        f"رقم الحجز: {booking_reference}",
+        f"نوع الحجز: {booking_type_label}",
+        f"الفريق المسؤول: {team_name}",
+    ]
+    if preferred_date:
+        lines.append(f"التاريخ المطلوب: {preferred_date}")
+    if preferred_time:
+        lines.append(f"الوقت المطلوب: {preferred_time}")
+    lines.extend(
+        [
+            "",
+            "سيقوم فريقنا بمراجعة الحجز والتواصل معك عند الحاجة.",
+            "",
+            "RWM EL",
+        ]
+    )
+    try:
+        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "Support@rwmel.se"
+        send_mail(subject, "\n".join(lines), from_email, [to_email])
+    except Exception:
+        logger.exception("Booking confirmation email failed to send to %s.", to_email)
+
+
 def home(request):
     return render(request, "electricity/landing.html")
 
@@ -231,7 +278,7 @@ def contact(request):
                     f"\nMessage:\n{message}\n"
                 )
                 try:
-                    to_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "Support@rwmel.se"
+                    to_email = getattr(settings, "CONTACT_TO_EMAIL", None) or "Info@rwmel.se"
                     from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "Support@rwmel.se"
                     send_mail(
                         subject,
@@ -1118,6 +1165,15 @@ def booking_step_7(request):
             booking=booking,
             message=f"New consultation booking from {booking.full_name}.",
         )
+        _send_booking_confirmation_email(
+            to_email=booking.email,
+            customer_name=booking.full_name,
+            booking_reference=f"CB-{booking.id:06d}",
+            booking_type_label="Consultation Booking",
+            team_name=_booking_team_name(booking.assigned_provider),
+            preferred_date=booking.preferred_date,
+            preferred_time=booking.preferred_time_slot,
+        )
         request.session.pop(BOOKING_SESSION_KEY, None)
         return redirect("electricity:booking_thank_you")
 
@@ -1457,6 +1513,15 @@ def electrician_booking_step(request, step):
                 )
                 AdminNotification.objects.create(
                     message=f"New electrician booking from {booking.full_name}.",
+                )
+                _send_booking_confirmation_email(
+                    to_email=booking.email,
+                    customer_name=booking.full_name,
+                    booking_reference=f"RWM-{booking.id:06d}",
+                    booking_type_label="Electrician Booking",
+                    team_name=_booking_team_name(booking.assigned_provider),
+                    preferred_date=booking.preferred_date,
+                    preferred_time=booking.arrival_window,
                 )
                 request.session.pop(ELECTRICIAN_BOOKING_SESSION_KEY, None)
                 request.session["electrician_booking_id"] = booking.id
@@ -1870,6 +1935,15 @@ def service_booking_step(request, step):
                 service_booking=booking,
                 message=f"New service booking from {booking.full_name}.",
             )
+            _send_booking_confirmation_email(
+                to_email=booking.email,
+                customer_name=booking.full_name,
+                booking_reference=f"SB-{booking.id:06d}",
+                booking_type_label="Service Booking",
+                team_name=_booking_team_name(booking.assigned_provider),
+                preferred_date=booking.preferred_date,
+                preferred_time=booking.preferred_time_slot,
+            )
             request.session["service_booking_id"] = f"SB-{booking.id:06d}"
             request.session["service_booking_pk"] = booking.id
             request.session.pop(SERVICE_BOOKING_SESSION_KEY, None)
@@ -2121,6 +2195,13 @@ def on_call_booking_step(request, step):
                     message=f"New on-call booking from {booking.organization_name or booking.contact_person}.",
                 )
                 booking_id = f"OC-{booking.id:06d}"
+                _send_booking_confirmation_email(
+                    to_email=booking.email,
+                    customer_name=booking.contact_person or booking.organization_name,
+                    booking_reference=booking_id,
+                    booking_type_label="On-Call Booking",
+                    team_name=_booking_team_name(booking.assigned_provider),
+                )
                 request.session["on_call_booking_id"] = booking_id
                 request.session["on_call_booking_success"] = {
                     "booking_id": booking_id,
