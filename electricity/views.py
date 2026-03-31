@@ -12,7 +12,7 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect, render
 from django.http import Http404, HttpResponse, JsonResponse
 from django.urls import reverse
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage, send_mail
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils import timezone
@@ -120,7 +120,101 @@ def _send_booking_confirmation_email(
         ]
     )
     try:
-        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "Support@rwmel.se"
+        from_email = (
+            getattr(settings, "BOOKING_FROM_EMAIL", None)
+            or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+            or "services@rwmel.se"
+        )
+        send_mail(subject, "\n".join(lines), from_email, [to_email])
+    except Exception:
+        logger.exception("Booking confirmation email failed to send to %s.", to_email)
+
+
+def _service_titles_for_ids(service_ids):
+    if not service_ids:
+        return []
+    services = ElectricalService.objects.filter(id__in=service_ids)
+    title_by_id = {str(item.id): item.title for item in services}
+    return [title_by_id[str(service_id)] for service_id in service_ids if str(service_id) in title_by_id]
+
+
+def _format_currency_amount(amount, currency):
+    if amount in (None, ""):
+        return None
+    try:
+        return f"{currency} {float(amount):.2f}"
+    except (TypeError, ValueError):
+        return f"{currency} {amount}"
+
+
+def _on_call_coverage_time_labels():
+    return {
+        "evenings": "Evenings",
+        "nights": "Nights",
+        "weekends": "Weekends & holidays",
+    }
+
+
+def _on_call_coverage_scope_labels():
+    return {
+        "power_outages": "Power outages",
+        "fuse_boards": "Fuse boards",
+        "common_areas": "Common areas",
+        "critical_systems": "Critical systems",
+        "general_faults": "General faults",
+    }
+
+
+def _send_custom_booking_confirmation_email(
+    *,
+    to_email,
+    customer_name,
+    booking_reference,
+    booking_type_label,
+    team_name,
+    preferred_date=None,
+    preferred_time=None,
+    summary_lines=None,
+    next_steps=None,
+):
+    if not to_email:
+        return
+
+    subject = f"Booking Confirmation - {booking_reference}"
+    lines = [
+        f"Hello {customer_name or 'Valued Customer'},",
+        "",
+        "We have received your booking request successfully.",
+        "",
+        "Booking details:",
+        f"- Reference: {booking_reference}",
+        f"- Booking type: {booking_type_label}",
+        f"- Service team: {team_name}",
+    ]
+    if preferred_date:
+        lines.append(f"- Requested date: {preferred_date}")
+    if preferred_time:
+        lines.append(f"- Requested time: {preferred_time}")
+    if summary_lines:
+        lines.extend(["", "Summary:"])
+        lines.extend(f"- {line}" for line in summary_lines if line)
+    lines.extend(["", "Next steps:"])
+    if next_steps:
+        lines.extend(f"- {line}" for line in next_steps if line)
+    else:
+        lines.extend(
+            [
+                "- Our team will review your booking and contact you if any clarification is needed.",
+                "- Please keep this reference for future communication.",
+            ]
+        )
+    lines.extend(["", "Regards,", "RWM EL"])
+    try:
+        from_email = (
+            getattr(settings, "BOOKING_FROM_EMAIL", None)
+            or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+            or "services@rwmel.se"
+        )
         send_mail(subject, "\n".join(lines), from_email, [to_email])
     except Exception:
         logger.exception("Booking confirmation email failed to send to %s.", to_email)
@@ -278,15 +372,17 @@ def contact(request):
                     f"\nMessage:\n{message}\n"
                 )
                 try:
-                    to_email = getattr(settings, "CONTACT_TO_EMAIL", None) or "Info@rwmel.se"
-                    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "Support@rwmel.se"
-                    send_mail(
+                    to_email = getattr(settings, "CONTACT_TO_EMAIL", None) or "info@rwmel.se"
+                    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "support@rwmel.se"
+                    email_message = EmailMessage(
                         subject,
                         body,
                         from_email,
                         [to_email],
-                        reply_to=[email] if email else None,
                     )
+                    if email:
+                        email_message.reply_to = [email]
+                    email_message.send()
                     status = "sent"
                 except Exception:
                     logger.exception("Contact inquiry email failed to send.")
@@ -1165,7 +1261,7 @@ def booking_step_7(request):
             booking=booking,
             message=f"New consultation booking from {booking.full_name}.",
         )
-        _send_booking_confirmation_email(
+        _send_custom_booking_confirmation_email(
             to_email=booking.email,
             customer_name=booking.full_name,
             booking_reference=f"CB-{booking.id:06d}",
@@ -1173,6 +1269,16 @@ def booking_step_7(request):
             team_name=_booking_team_name(booking.assigned_provider),
             preferred_date=booking.preferred_date,
             preferred_time=booking.preferred_time_slot,
+            summary_lines=[
+                f"Consultation type: {booking.consultation_type or '-'}",
+                f"Property type: {booking.property_type or '-'}",
+                f"Property size: {booking.property_size or '-'}",
+                f"Consultation fee: {'Free first consultation' if booking.is_first_free else _format_currency_amount(booking.consultation_price, pricing.currency if pricing else 'SEK')}",
+            ],
+            next_steps=[
+                "We will review your consultation request and confirm the suitable slot.",
+                "If we need more project details, our team will contact you using the information you submitted.",
+            ],
         )
         request.session.pop(BOOKING_SESSION_KEY, None)
         return redirect("electricity:booking_thank_you")
@@ -1485,14 +1591,27 @@ def electrician_booking_step(request, step):
                 errors.append("Please accept the Terms of Service.")
             if not errors:
                 pricing = _electrician_pricing_breakdown(data)
+                additional_notes = data.get("additional_notes", "")
+                identity_notes = []
+                if data.get("customer_type") == ElectricianBooking.CustomerType.BUSINESS:
+                    if data.get("company_name"):
+                        identity_notes.append(f"Company name: {data.get('company_name')}")
+                    if data.get("organization_number"):
+                        identity_notes.append(
+                            f"Organization number: {data.get('organization_number')}"
+                        )
+                else:
+                    if data.get("personal_id"):
+                        identity_notes.append(f"Personal ID: {data.get('personal_id')}")
+                if identity_notes:
+                    additional_notes = "\n".join(
+                        part for part in [additional_notes, *identity_notes] if part
+                    )
                 booking = ElectricianBooking.objects.create(
                     customer_type=data.get("customer_type") or ElectricianBooking.CustomerType.PRIVATE,
                     full_name=data.get("company_name") or data.get("full_name", ""),
                     email=data.get("email", ""),
-                    phone=data.get("organization_number") or data.get("phone", ""),
-                    personal_id=data.get("personal_id", ""),
-                    company_name=data.get("company_name", ""),
-                    organization_number=data.get("organization_number", ""),
+                    phone=data.get("phone", ""),
                     street_address=data.get("street_address", ""),
                     city=data.get("city", ""),
                     zip_code=data.get("zip_code", ""),
@@ -1500,7 +1619,7 @@ def electrician_booking_step(request, step):
                     work_description=data.get("work_description", ""),
                     access_notes=data.get("access_notes", ""),
                     parking_info=data.get("parking_info", ""),
-                    additional_notes=data.get("additional_notes", ""),
+                    additional_notes=additional_notes,
                     hours=pricing["hours"],
                     hourly_rate_snapshot=pricing["hourly_rate"],
                     transport_fee_snapshot=pricing["transport_fee"],
@@ -1514,7 +1633,7 @@ def electrician_booking_step(request, step):
                 AdminNotification.objects.create(
                     message=f"New electrician booking from {booking.full_name}.",
                 )
-                _send_booking_confirmation_email(
+                _send_custom_booking_confirmation_email(
                     to_email=booking.email,
                     customer_name=booking.full_name,
                     booking_reference=f"RWM-{booking.id:06d}",
@@ -1522,6 +1641,16 @@ def electrician_booking_step(request, step):
                     team_name=_booking_team_name(booking.assigned_provider),
                     preferred_date=booking.preferred_date,
                     preferred_time=booking.arrival_window,
+                    summary_lines=[
+                        f"Service type: {_electrician_service_type_label(booking.property_type)}",
+                        f"Service address: {', '.join(part for part in [booking.street_address, booking.zip_code, booking.city] if part) or '-'}",
+                        f"Estimated duration: {booking.hours} hour(s)",
+                        f"Estimated total: {_format_currency_amount(booking.estimated_total, booking.currency or 'SEK')}",
+                    ],
+                    next_steps=[
+                        "Our dispatch team will review your requested arrival window.",
+                        "You will be contacted if we need access details or scheduling adjustments.",
+                    ],
                 )
                 request.session.pop(ELECTRICIAN_BOOKING_SESSION_KEY, None)
                 request.session["electrician_booking_id"] = booking.id
@@ -1935,7 +2064,7 @@ def service_booking_step(request, step):
                 service_booking=booking,
                 message=f"New service booking from {booking.full_name}.",
             )
-            _send_booking_confirmation_email(
+            _send_custom_booking_confirmation_email(
                 to_email=booking.email,
                 customer_name=booking.full_name,
                 booking_reference=f"SB-{booking.id:06d}",
@@ -1943,6 +2072,16 @@ def service_booking_step(request, step):
                 team_name=_booking_team_name(booking.assigned_provider),
                 preferred_date=booking.preferred_date,
                 preferred_time=booking.preferred_time_slot,
+                summary_lines=[
+                    f"Selected services: {', '.join(_service_titles_for_ids(booking.services)) or 'Custom service request'}",
+                    f"Service address: {', '.join(part for part in [booking.street_address, booking.zip_code, booking.city] if part) or '-'}",
+                    f"Pricing model: {booking.get_pricing_type_display()}",
+                    f"Estimated total: {_format_currency_amount(booking.estimated_total, booking.currency or 'SEK')}",
+                ],
+                next_steps=[
+                    "We will review provider availability for your selected time.",
+                    "Your assigned team will contact you if any change is needed before arrival.",
+                ],
             )
             request.session["service_booking_id"] = f"SB-{booking.id:06d}"
             request.session["service_booking_pk"] = booking.id
@@ -2195,12 +2334,22 @@ def on_call_booking_step(request, step):
                     message=f"New on-call booking from {booking.organization_name or booking.contact_person}.",
                 )
                 booking_id = f"OC-{booking.id:06d}"
-                _send_booking_confirmation_email(
+                _send_custom_booking_confirmation_email(
                     to_email=booking.email,
                     customer_name=booking.contact_person or booking.organization_name,
                     booking_reference=booking_id,
                     booking_type_label="On-Call Booking",
                     team_name=_booking_team_name(booking.assigned_provider),
+                    summary_lines=[
+                        f"Organization: {booking.organization_name or '-'}",
+                        f"Coverage times: {', '.join(_on_call_coverage_time_labels().get(item, item) for item in (booking.coverage_times or [])) or '-'}",
+                        f"Coverage scope: {', '.join(_on_call_coverage_scope_labels().get(item, item) for item in (booking.coverage_scope or [])) or '-'}",
+                        f"Estimated total: {_format_currency_amount(estimated_total, pricing.currency if pricing else 'SEK')}",
+                    ],
+                    next_steps=[
+                        "Our team will review your requested coverage and response profile.",
+                        "We will contact you to finalize activation details if needed.",
+                    ],
                 )
                 request.session["on_call_booking_id"] = booking_id
                 request.session["on_call_booking_success"] = {

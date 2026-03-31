@@ -1,11 +1,15 @@
 import datetime
+from unittest.mock import patch
 
 from django.test import TestCase
+from django.test.utils import override_settings
 from django.urls import reverse
 from django.utils import timezone
+from django.core import mail
+from django.contrib.auth.models import User
 
 from .forms import ElectricalServiceForm, OnCallBookingForm, ServiceBookingForm
-from .models import ElectricianBooking, ElectricalService, OnCallBooking, ServiceBooking, ServicePricing
+from .models import ElectricianBooking, ElectricalService, OnCallBooking, ProviderProfile, ProviderShift, ServiceBooking, ServicePricing
 from .templatetags.electricity_extras import _service_title_map, display_value, file_display_name
 
 
@@ -121,6 +125,8 @@ class HumanizedJSONModelFormTests(TestCase):
                 "bullet_points_en": "",
                 "bullet_points_ar": "",
                 "bullet_points_sv": "",
+                "price": "1200",
+                "duration_minutes": "60",
                 "service_fee": "0",
                 "base_fee": "0",
                 "hourly_rate": "0",
@@ -138,8 +144,53 @@ class HumanizedJSONModelFormTests(TestCase):
         item = form.save()
         self.assertEqual(item.short_description, "")
 
+    def test_electrical_service_form_includes_booking_fields(self):
+        form = ElectricalServiceForm()
+
+        self.assertIn("price", form.fields)
+        self.assertIn("duration_minutes", form.fields)
+
 
 class ElectricianBookingReceiptTests(TestCase):
+    def test_confirm_booking_step_creates_booking_without_server_error(self):
+        session = self.client.session
+        session["electricity_electrician_booking"] = {
+            "hours": "2",
+            "work_description": "Replace faulty breaker.",
+            "service_type": "commercial",
+            "street_address": "Sveavagen 10",
+            "zip_code": "111 57",
+            "city": "Stockholm",
+            "customer_type": ElectricianBooking.CustomerType.BUSINESS,
+            "company_name": "ACME AB",
+            "organization_number": "556677-8899",
+            "phone": "0701234567",
+            "email": "ops@example.com",
+            "access_notes": "Gate code 1234",
+            "parking_info": "Visitor parking",
+            "additional_notes": "Call before arrival.",
+            "preferred_date": (timezone.localdate() + datetime.timedelta(days=1)).isoformat(),
+            "arrival_window": "Morning (08:00 AM - 12:00 PM)",
+            "pricing_ack": True,
+        }
+        session.save()
+
+        response = self.client.post(
+            reverse("electricity:electrician_booking_step", args=[8]),
+            {
+                "confirm_info": "yes",
+                "accept_terms": "yes",
+            },
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("electricity:electrician_booking_thank_you"))
+        booking = ElectricianBooking.objects.get()
+        self.assertEqual(booking.full_name, "ACME AB")
+        self.assertEqual(booking.phone, "0701234567")
+        self.assertIn("Organization number: 556677-8899", booking.additional_notes)
+
     def test_thank_you_uses_saved_booking_details_instead_of_cleared_session_defaults(self):
         booking = ElectricianBooking.objects.create(
             customer_type=ElectricianBooking.CustomerType.BUSINESS,
@@ -164,7 +215,7 @@ class ElectricianBookingReceiptTests(TestCase):
         session["electrician_booking_reference"] = f"RWM-{booking.id:06d}"
         session.save()
 
-        response = self.client.get(reverse("electricity:electrician_booking_thank_you"))
+        response = self.client.get(reverse("electricity:electrician_booking_thank_you"), secure=True)
 
         self.assertContains(response, "Commercial Maintenance")
         self.assertContains(response, "Business / Organization")
@@ -205,7 +256,230 @@ class ElectricianBookingReceiptTests(TestCase):
                 "preferred_date": yesterday,
                 "arrival_window": "Morning (08:00 AM - 12:00 PM)",
             },
+            secure=True,
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Please choose a date from today onward.")
+
+
+class ContactFormTests(TestCase):
+    @override_settings(
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+        CONTACT_TO_EMAIL="info@rwmel.se",
+        DEFAULT_FROM_EMAIL="support@rwmel.se",
+    )
+    def test_contact_form_sends_to_info_address(self):
+        response = self.client.post(
+            reverse("electricity:contact"),
+            {
+                "full_name": "Test User",
+                "email": "customer@example.com",
+                "phone": "0701234567",
+                "address": "Main Street 1",
+                "request_type": "Residential",
+                "inquiry_type": "tech_support",
+                "message": "Need help with a breaker issue.",
+                "consent": "on",
+            },
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Thank you! We have received your request.")
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["info@rwmel.se"])
+        self.assertEqual(mail.outbox[0].from_email, "support@rwmel.se")
+        self.assertEqual(mail.outbox[0].reply_to, ["customer@example.com"])
+
+
+class BookingEmailTests(TestCase):
+    @override_settings(
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+        BOOKING_FROM_EMAIL="services@rwmel.se",
+        DEFAULT_FROM_EMAIL="support@rwmel.se",
+    )
+    def test_booking_confirmation_helper_uses_booking_from_email(self):
+        from .views import _send_custom_booking_confirmation_email
+
+        _send_custom_booking_confirmation_email(
+            to_email="customer@example.com",
+            customer_name="Customer",
+            booking_reference="REF-000001",
+            booking_type_label="Service Booking",
+            team_name="RWM EL",
+            preferred_date=datetime.date(2026, 5, 1),
+            preferred_time="09:00",
+            summary_lines=["Estimated total: SEK 1200.00"],
+            next_steps=["We will confirm your booking shortly."],
+        )
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].from_email, "services@rwmel.se")
+        self.assertEqual(mail.outbox[0].to, ["customer@example.com"])
+        self.assertIn("Summary:", mail.outbox[0].body)
+        self.assertIn("Estimated total: SEK 1200.00", mail.outbox[0].body)
+        self.assertIn("Next steps:", mail.outbox[0].body)
+
+    @override_settings(BOOKING_FROM_EMAIL="services@rwmel.se")
+    def test_consultation_booking_triggers_customer_confirmation_email(self):
+        session = self.client.session
+        session["electricity_zip_checks"] = {"consultation": "11144"}
+        session["electricity_booking"] = {
+            "consultation_type": "inspection",
+            "property_type": "apartment",
+            "property_size": "80",
+            "urgent": True,
+            "full_name": "Consult Customer",
+            "contact_type": "private",
+            "personal_id": "19900101-1234",
+            "email": "consult@example.com",
+            "phone": "0701111111",
+            "preferred_date": datetime.date(2026, 5, 1).isoformat(),
+        }
+        session.save()
+
+        with patch("electricity.views._send_custom_booking_confirmation_email") as mocked:
+            response = self.client.post(
+                reverse("electricity:booking_step_7"),
+                {"preferred_date": "2026-05-01", "preferred_time": "09:00"},
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 302)
+        mocked.assert_called_once()
+        self.assertEqual(mocked.call_args.kwargs["to_email"], "consult@example.com")
+        self.assertEqual(mocked.call_args.kwargs["booking_type_label"], "Consultation Booking")
+        self.assertIn("Consultation type:", mocked.call_args.kwargs["summary_lines"][0])
+
+    @override_settings(BOOKING_FROM_EMAIL="services@rwmel.se")
+    def test_electrician_booking_triggers_customer_confirmation_email(self):
+        session = self.client.session
+        session["electricity_electrician_booking"] = {
+            "hours": "2",
+            "work_description": "Replace faulty breaker.",
+            "service_type": "commercial",
+            "street_address": "Sveavagen 10",
+            "zip_code": "111 57",
+            "city": "Stockholm",
+            "customer_type": ElectricianBooking.CustomerType.BUSINESS,
+            "company_name": "ACME AB",
+            "organization_number": "556677-8899",
+            "phone": "0701234567",
+            "email": "electrician@example.com",
+            "additional_notes": "Call before arrival.",
+            "preferred_date": (timezone.localdate() + datetime.timedelta(days=1)).isoformat(),
+            "arrival_window": "Morning (08:00 AM - 12:00 PM)",
+            "pricing_ack": True,
+        }
+        session.save()
+
+        with patch("electricity.views._send_custom_booking_confirmation_email") as mocked:
+            response = self.client.post(
+                reverse("electricity:electrician_booking_step", args=[8]),
+                {"confirm_info": "yes", "accept_terms": "yes"},
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 302)
+        mocked.assert_called_once()
+        self.assertEqual(mocked.call_args.kwargs["to_email"], "electrician@example.com")
+        self.assertEqual(mocked.call_args.kwargs["booking_type_label"], "Electrician Booking")
+        self.assertIn("Estimated total:", mocked.call_args.kwargs["summary_lines"][3])
+
+    @override_settings(BOOKING_FROM_EMAIL="services@rwmel.se")
+    def test_on_call_booking_triggers_customer_confirmation_email(self):
+        session = self.client.session
+        session["electricity_zip_checks"] = {"on_call": "11144"}
+        session["electricity_on_call_booking"] = {
+            "entity_type": "business",
+            "organization_name": "ACME AB",
+            "organization_number": "556677-8899",
+            "contact_person": "Ops Team",
+            "phone": "0701234567",
+            "email": "oncall@example.com",
+            "company_address": "Main Street 1",
+            "zip_code": "11144",
+            "city": "Stockholm",
+            "coverage_times": ["evenings"],
+            "response_speed": "standard",
+            "coverage_scope": ["power_outages"],
+            "property_type": "commercial",
+            "assets_count": "2",
+            "primary_region": "Stockholm",
+        }
+        session.save()
+
+        with patch("electricity.views._send_custom_booking_confirmation_email") as mocked:
+            response = self.client.post(
+                reverse("electricity:on_call_booking_step", args=[4]),
+                {"recurring_issues": "Frequent outages", "emergency_hours": "2"},
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 302)
+        mocked.assert_called_once()
+        self.assertEqual(mocked.call_args.kwargs["to_email"], "oncall@example.com")
+        self.assertEqual(mocked.call_args.kwargs["booking_type_label"], "On-Call Booking")
+        self.assertIn("Coverage scope:", mocked.call_args.kwargs["summary_lines"][2])
+
+    @override_settings(BOOKING_FROM_EMAIL="services@rwmel.se")
+    def test_service_booking_triggers_customer_confirmation_email(self):
+        service = ElectricalService.objects.create(
+            title="Panel Upgrade",
+            short_description="Upgrade panel",
+            price="1200.00",
+            duration_minutes=60,
+            is_active=True,
+        )
+        provider_user = User.objects.create_user(username="provider1", password="x")
+        provider = ProviderProfile.objects.create(
+            user=provider_user,
+            display_name="Provider One",
+            zip_code="11144",
+            is_active=True,
+        )
+        preferred_date = timezone.localdate() + datetime.timedelta(days=1)
+        ProviderShift.objects.create(
+            provider=provider,
+            weekday=preferred_date.weekday(),
+            start_time=datetime.time(8, 0),
+            end_time=datetime.time(17, 0),
+        )
+
+        session = self.client.session
+        session["electricity_zip_checks"] = {"service": "11144"}
+        session["electricity_service_booking"] = {
+            "account_type": ServiceBooking.AccountType.PRIVATE,
+            "full_name": "Service Customer",
+            "email": "service@example.com",
+            "phone": "0709999999",
+            "street_address": "Main Street 1",
+            "city": "Stockholm",
+            "region": "Stockholm",
+            "country": "Sweden",
+            "property_type": "apartment",
+            "year_built": "2000",
+            "property_size": "90",
+            "services": [str(service.id)],
+            "work_description": "Upgrade panel",
+            "pricing_type": ServiceBooking.PricingType.FIXED,
+            "preferred_date": preferred_date.isoformat(),
+            "preferred_time_slot": "09:00",
+            "billing_type": "private",
+            "personal_id": "19900101-1234",
+        }
+        session.save()
+
+        with patch("electricity.views._send_custom_booking_confirmation_email") as mocked:
+            response = self.client.post(
+                reverse("electricity:service_booking_step", args=[11]),
+                {},
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 302)
+        mocked.assert_called_once()
+        self.assertEqual(mocked.call_args.kwargs["to_email"], "service@example.com")
+        self.assertEqual(mocked.call_args.kwargs["booking_type_label"], "Service Booking")
+        self.assertIn("Selected services:", mocked.call_args.kwargs["summary_lines"][0])

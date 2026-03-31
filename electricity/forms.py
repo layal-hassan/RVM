@@ -463,6 +463,8 @@ class ElectricalServiceForm(HumanizedJSONModelForm):
         model = ElectricalService
         fields = _translated_fields("title", "bullet_points") + [
             "icon",
+            "price",
+            "duration_minutes",
             "service_fee",
             "base_fee",
             "hourly_rate",

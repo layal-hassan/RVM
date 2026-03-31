@@ -2519,6 +2519,10 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   align-items: center;
   gap: 10px;
   cursor: pointer;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contact-section.contact-inquiry .contact-chip input {
@@ -2538,15 +2542,26 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #0f1c2e;
-  box-shadow: inset 0 0 0 4px #ffffff;
-  border: 1px solid rgba(177, 139, 61, 0.4);
+  background: #ffffff;
+  box-shadow: inset 0 0 0 2px #ffffff;
+  border: 2px solid rgba(15, 28, 46, 0.45);
 }
 
 .contact-section.contact-inquiry .contact-chip input:checked + span::before {
   background: #0f1c2e;
-  box-shadow: inset 0 0 0 3px #ffffff;
-  border-color: rgba(177, 139, 61, 0.8);
+  box-shadow: inset 0 0 0 4px #ffffff;
+  border-color: #0f1c2e;
+}
+
+.contact-section.contact-inquiry .contact-chip:has(input:checked) {
+  background: rgba(177, 139, 61, 0.16);
+  border-color: rgba(177, 139, 61, 0.55);
+  box-shadow: 0 8px 20px rgba(20, 20, 20, 0.08);
+}
+
+.contact-section.contact-inquiry .contact-chip:has(input:focus-visible) {
+  border-color: #0f1c2e;
+  box-shadow: 0 0 0 3px rgba(15, 28, 46, 0.12);
 }
 
 .contact-section.contact-inquiry .contact-card {
