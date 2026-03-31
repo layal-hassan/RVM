@@ -26,15 +26,15 @@
       <h2>{% trans "How Can We Help You?" %}</h2>
     </div>
     <div class="contact-chips" data-inquiry-chips>
-      <button type="button" class="contact-chip is-active" data-inquiry-value="new_booking">
-        <span>{% trans "New service bookings" %}</span>
-      </button>
-      <button type="button" class="contact-chip" data-inquiry-value="consultation">
-        <span>{% trans "Professional consultations" %}</span>
-      </button>
-      <button type="button" class="contact-chip" data-inquiry-value="tech_support">
-        <span>{% trans "Technical questions &amp; support" %}</span>
-      </button>
+      <span class="contact-chip is-active" data-inquiry-value="new_booking" tabindex="0" role="button">
+        {% trans "New service bookings" %}
+      </span>
+      <span class="contact-chip" data-inquiry-value="consultation" tabindex="0" role="button">
+        {% trans "Professional consultations" %}
+      </span>
+      <span class="contact-chip" data-inquiry-value="tech_support" tabindex="0" role="button">
+        {% trans "Technical questions &amp; support" %}
+      </span>
     </div>
     <div class="contact-card-grid">
       <article class="contact-card">
@@ -201,6 +201,12 @@
 
     chips.forEach((chip) => {
       chip.addEventListener("click", () => setActive(chip.dataset.inquiryValue));
+      chip.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          setActive(chip.dataset.inquiryValue);
+        }
+      });
     });
 
     setActive(hiddenInput.value || chips[0].dataset.inquiryValue);
