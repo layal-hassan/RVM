@@ -25,19 +25,16 @@
       <div class="contact-eyebrow">{% trans "Inquiry Types" %}</div>
       <h2>{% trans "How Can We Help You?" %}</h2>
     </div>
-    <div class="contact-chips">
-      <label class="contact-chip">
-        <input type="radio" name="inquiry_type" value="new_booking" form="contact-form" required>
+    <div class="contact-chips" data-inquiry-chips>
+      <button type="button" class="contact-chip is-active" data-inquiry-value="new_booking">
         <span>{% trans "New service bookings" %}</span>
-      </label>
-      <label class="contact-chip">
-        <input type="radio" name="inquiry_type" value="consultation" form="contact-form">
+      </button>
+      <button type="button" class="contact-chip" data-inquiry-value="consultation">
         <span>{% trans "Professional consultations" %}</span>
-      </label>
-      <label class="contact-chip">
-        <input type="radio" name="inquiry_type" value="tech_support" form="contact-form">
+      </button>
+      <button type="button" class="contact-chip" data-inquiry-value="tech_support">
         <span>{% trans "Technical questions &amp; support" %}</span>
-      </label>
+      </button>
     </div>
     <div class="contact-card-grid">
       <article class="contact-card">
@@ -112,6 +109,7 @@
     </div>
     <form id="contact-form" class="contact-form-card" method="post" action="{% url 'electricity:contact' %}">
       {% csrf_token %}
+      <input type="hidden" name="inquiry_type" id="contact_inquiry_type" value="new_booking">
       <div class="contact-form-row">
         <label>{% trans "Full Name" %}
           <input type="text" name="full_name" placeholder="{% trans "John Doe" %}" required>
@@ -185,5 +183,28 @@
     <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Book Consultation" %}</a>
   </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const chips = Array.from(document.querySelectorAll("[data-inquiry-value]"));
+    const hiddenInput = document.getElementById("contact_inquiry_type");
+    if (!chips.length || !hiddenInput) return;
+
+    const setActive = (value) => {
+      hiddenInput.value = value;
+      chips.forEach((chip) => {
+        chip.classList.toggle("is-active", chip.dataset.inquiryValue === value);
+      });
+    };
+
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => setActive(chip.dataset.inquiryValue));
+    });
+
+    setActive(hiddenInput.value || chips[0].dataset.inquiryValue);
+  });
+</script>
 {% endblock %}
 

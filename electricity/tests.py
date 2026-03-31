@@ -292,6 +292,33 @@ class ContactFormTests(TestCase):
         self.assertEqual(mail.outbox[0].from_email, "support@rwmel.se")
         self.assertEqual(mail.outbox[0].reply_to, ["customer@example.com"])
 
+    @override_settings(
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+        CONTACT_TO_EMAIL="info@rwmel.se",
+        DEFAULT_FROM_EMAIL="services@rwmel.se",
+        EMAIL_HOST_USER="support@rwmel.se",
+    )
+    def test_contact_form_defaults_inquiry_type_and_uses_smtp_user_as_sender(self):
+        response = self.client.post(
+            reverse("electricity:contact"),
+            {
+                "full_name": "Test User",
+                "email": "customer@example.com",
+                "phone": "0701234567",
+                "address": "Main Street 1",
+                "request_type": "Residential",
+                "message": "Need help with a breaker issue.",
+                "consent": "on",
+            },
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Thank you! We have received your request.")
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["info@rwmel.se"])
+        self.assertEqual(mail.outbox[0].from_email, "support@rwmel.se")
+
 
 class BookingEmailTests(TestCase):
     @override_settings(

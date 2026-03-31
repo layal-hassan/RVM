@@ -339,7 +339,7 @@ def contact(request):
         phone = request.POST.get("phone", "").strip()
         address = request.POST.get("address", "").strip()
         request_type = request.POST.get("request_type", "").strip()
-        inquiry_type = request.POST.get("inquiry_type", "").strip()
+        inquiry_type = request.POST.get("inquiry_type", "").strip() or "new_booking"
         message = request.POST.get("message", "").strip()
         consent = request.POST.get("consent")
 
@@ -373,7 +373,11 @@ def contact(request):
                 )
                 try:
                     to_email = getattr(settings, "CONTACT_TO_EMAIL", None) or "info@rwmel.se"
-                    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "support@rwmel.se"
+                    from_email = (
+                        getattr(settings, "EMAIL_HOST_USER", None)
+                        or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+                        or "support@rwmel.se"
+                    )
                     email_message = EmailMessage(
                         subject,
                         body,
