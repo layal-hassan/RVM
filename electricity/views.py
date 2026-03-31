@@ -313,14 +313,20 @@ def support(request):
                 f"\nMessage:\n{data.get('message')}\n"
             )
             try:
-                from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "Support@rwmel.se"
-                send_mail(
+                from_email = (
+                    getattr(settings, "EMAIL_HOST_USER", None)
+                    or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+                    or "support@rwmel.se"
+                )
+                email_message = EmailMessage(
                     subject,
                     body,
                     from_email,
-                    ["Support@rwmel.se"],
-                    reply_to=[data.get("email")] if data.get("email") else None,
+                    ["support@rwmel.se"],
                 )
+                if data.get("email"):
+                    email_message.reply_to = [data.get("email")]
+                email_message.send()
             except Exception:
                 logger.exception("Support ticket email failed to send.")
             return render(
