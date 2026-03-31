@@ -2531,21 +2531,15 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #ffffff;
-  box-shadow: inset 0 0 0 2px #ffffff;
-  border: 2px solid rgba(15, 28, 46, 0.45);
+  background: #0f1c2e;
+  box-shadow: inset 0 0 0 4px #ffffff;
+  border: 2px solid #0f1c2e;
   flex: 0 0 16px;
 }
 
 .contact-section.contact-inquiry .contact-chip.is-active {
-  color: #6a4d16;
-  background: rgba(177, 139, 61, 0.10);
-}
-
-.contact-section.contact-inquiry .contact-chip.is-active::before {
-  background: #0f1c2e;
-  box-shadow: inset 0 0 0 4px #ffffff;
-  border-color: #0f1c2e;
+  color: #1c1c1c;
+  background: transparent;
 }
 
 .contact-section.contact-inquiry .contact-chip:focus-visible {
