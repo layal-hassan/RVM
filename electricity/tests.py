@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.core import mail
 from django.contrib.auth.models import User
 
-from .forms import ElectricalServiceForm, OnCallBookingForm, ServiceBookingForm, Step2Form
+from .forms import ElectricalServiceForm, OnCallBookingForm, ServiceBookingForm
 from .models import ElectricianBooking, ElectricalService, OnCallBooking, ProviderProfile, ProviderShift, ServiceBooking, ServicePricing
 from .templatetags.electricity_extras import _service_title_map, display_value, file_display_name
 
@@ -150,18 +150,6 @@ class HumanizedJSONModelFormTests(TestCase):
         self.assertIn("price", form.fields)
         self.assertIn("duration_minutes", form.fields)
 
-    def test_step_2_form_accepts_free_form_property_size(self):
-        form = Step2Form(
-            data={
-                "property_type": "apartment",
-                "property_size": "87 m2",
-                "year_built": "2014",
-                "property_type_other": "",
-            }
-        )
-
-        self.assertTrue(form.is_valid(), form.errors)
-        self.assertEqual(form.cleaned_data["property_size"], "87 m2")
 
 
 class ElectricianBookingReceiptTests(TestCase):

@@ -218,14 +218,14 @@ class Step2Form(forms.Form):
         ],
         widget=forms.RadioSelect,
     )
-    property_size = forms.CharField(
-        max_length=40,
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control booking-input",
-                "placeholder": _("Example: 85 m2"),
-            }
-        ),
+    property_size = forms.ChoiceField(
+        choices=[
+            ("small", _("Under 100 m2")),
+            ("medium", _("100-200 m2")),
+            ("large", _("200-400 m2")),
+            ("xlarge", _("400+ m2")),
+        ],
+        widget=forms.Select(attrs={"class": "booking-input"}),
     )
     year_built = forms.CharField(
         required=False, max_length=10, widget=forms.TextInput(attrs={"class": "form-control booking-input"})
