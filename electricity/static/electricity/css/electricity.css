@@ -538,9 +538,11 @@ img {
 }
 
 .footer-ref.footer-v2 {
-    background: #ffffff;
-    color: #1f1f1f;
-    border-top: 1px solid #e7e1d6;
+    background:
+      radial-gradient(circle at top right, rgba(202, 161, 61, 0.1), transparent 24%),
+      linear-gradient(180deg, #0c0f08 0%, #11140b 100%);
+    color: #f3eee1;
+    border-top: 1px solid rgba(202, 161, 61, 0.16);
     padding: 70px 0 34px;
   }
 
@@ -563,14 +565,14 @@ img {
 
 .footer-v2 .footer-copy {
     max-width: 320px;
-    color: #2b2b2b;
+    color: rgba(236, 230, 214, 0.72);
     font-weight: 500;
     margin-bottom: 24px;
   }
 
 .footer-cert {
   margin-top: 12px;
-  color: #2b2b2b;
+  color: #f3eee1;
 }
 
 .cert-logo {
@@ -583,7 +585,7 @@ img {
 .footer-v2 .footer-brand h4 {
     margin: 0 0 16px;
     font-size: 15px;
-    color: #12355a;
+    color: #f2ca63;
     text-transform: uppercase;
     letter-spacing: 0.12em;
   }
@@ -592,31 +594,33 @@ img {
     list-style: none;
     padding: 0;
     margin: 0;
-    color: #1f1f1f;
+    color: rgba(236, 230, 214, 0.78);
     display: grid;
     gap: 10px;
     font-size: 13px;
   }
 
 .footer-v2 .footer-col a {
-    color: #1f1f1f;
+    color: rgba(236, 230, 214, 0.78);
     text-decoration: none;
   }
 
 .footer-v2 .footer-col a:hover {
-    color: #d3b26a;
+    color: #f2ca63;
   }
 
 body.electricity-body.about-page .footer-ref.footer-v2 {
   font-family: "Vesper Libre", serif;
-  color: #1f1f1f;
-  background: #ffffff;
+  color: #f3eee1;
+  background:
+    radial-gradient(circle at top right, rgba(202, 161, 61, 0.1), transparent 24%),
+    linear-gradient(180deg, #0c0f08 0%, #11140b 100%);
 }
 
 body.electricity-body.about-page .footer-ref.footer-v2 h4,
 body.electricity-body.about-page .footer-ref.footer-v2 .footer-col h4,
 body.electricity-body.about-page .footer-ref.footer-v2 .footer-brand h4 {
-  color: #12355a;
+  color: #f2ca63;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -625,13 +629,13 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-copy,
 body.electricity-body.about-page .footer-ref.footer-v2 .footer-col ul,
 body.electricity-body.about-page .footer-ref.footer-v2 .footer-col a,
 body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
-  color: #1f1f1f;
+  color: rgba(236, 230, 214, 0.78);
 }
 
 .footer-v2 .footer-contact span {
     display: block;
     font-size: 10px;
-    color: #7a7a7a;
+    color: rgba(236, 230, 214, 0.46);
     letter-spacing: 0.18em;
     text-transform: uppercase;
     margin-bottom: 4px;
@@ -658,9 +662,9 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
     grid-template-columns: 1fr auto auto;
     align-items: center;
     gap: 18px;
-    color: #6f6f6f;
+    color: rgba(236, 230, 214, 0.52);
     font-size: 12px;
-    border-top: 1px solid #ece7df;
+    border-top: 1px solid rgba(202, 161, 61, 0.14);
     padding-top: 18px;
     margin-top: 36px;
   }
@@ -671,20 +675,21 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   }
 
 .footer-v2 .footer-links a {
-    color: #6f6f6f;
+    color: rgba(236, 230, 214, 0.58);
     text-decoration: none;
   }
 
 .footer-v2 .footer-links a:hover {
-    color: #1f1f1f;
+    color: #f2ca63;
   }
 
 .footer-v2 .footer-lang {
-    background: #f5f2ec;
+    background: rgba(202, 161, 61, 0.12);
     padding: 6px 12px;
     border-radius: 999px;
-    color: #1f1f1f;
+    color: #f3e4bb;
     font-size: 11px;
+    border: 1px solid rgba(202, 161, 61, 0.18);
   }
 
 /* About page uses Tailwind, which overrides .container. Normalize footer layout here. */
@@ -703,11 +708,11 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 .footer-sister {
   text-align: center;
   font-weight: 600;
-  color: #1f1f1f;
+  color: #f3eee1;
 }
 
 .footer-sister span {
-  color: #f0a023;
+  color: #f2ca63;
 }
 
 .footer-socials {
@@ -720,22 +725,25 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #e1e1e1;
+  background: rgba(202, 161, 61, 0.12);
   display: grid;
   place-items: center;
-  color: #6b6b6b;
+  color: #f2ca63;
   font-weight: 700;
 }
 
 .footer-rights {
   text-align: right;
-  color: #9a9a9a;
+  color: rgba(236, 230, 214, 0.46);
 }
 
 .zip-check {
-  padding: 90px 0;
-  background: #f7f4ef;
-  color: #1c1c1c;
+  padding: 110px 0 120px;
+  background:
+    radial-gradient(circle at top, rgba(171, 132, 49, 0.14), transparent 26%),
+    linear-gradient(180deg, #0b0d07 0%, #12150b 38%, #171a0d 100%);
+  color: #f5f1e6;
+  min-height: calc(100vh - 180px);
 }
 
 .zip-shell {
@@ -744,64 +752,135 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .zip-card {
-  background: #ffffff;
-  border-radius: 28px;
-  padding: 48px;
-  max-width: 720px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(23, 26, 15, 0.98), rgba(15, 18, 10, 0.98));
+  border-radius: 12px;
+  padding: 52px 54px 38px;
+  max-width: 860px;
   width: 100%;
-  box-shadow: 0 24px 60px rgba(12, 12, 12, 0.18);
-  border: 1px solid #e8e2d8;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
+  border: 1px solid rgba(202, 161, 61, 0.18);
+}
+
+.zip-card-glow {
+  position: absolute;
+  inset: -20% auto auto 62%;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(202, 161, 61, 0.18) 0%, rgba(202, 161, 61, 0.05) 34%, transparent 70%);
+  pointer-events: none;
+  filter: blur(8px);
 }
 
 .zip-badge {
   display: inline-flex;
   align-items: center;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: 999px;
-  background: #f3e7cc;
-  color: #7a5b18;
-  font-size: 11px;
-  letter-spacing: 0.2em;
+  background: rgba(202, 161, 61, 0.14);
+  color: #f2ca63;
+  font-size: 10px;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(202, 161, 61, 0.24);
 }
 
 .zip-card h1 {
-  color: #0a192f;
-  font-size: clamp(28px, 4vw, 36px);
-  margin-bottom: 10px;
+  color: #f5f1e6;
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 1.02;
+  margin-bottom: 18px;
+  max-width: 10ch;
+  text-transform: uppercase;
+}
+
+.zip-kicker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #d5b14d;
+}
+
+.zip-kicker-line {
+  width: 52px;
+  height: 1px;
+  background: #d5b14d;
 }
 
 .zip-card p {
-  color: #5a5a5a;
+  color: rgba(236, 230, 214, 0.74);
   margin-bottom: 24px;
+}
+
+.zip-lead {
+  max-width: 620px;
+  font-size: 17px;
+  line-height: 1.75;
 }
 
 .zip-form {
   display: grid;
-  gap: 16px;
+  gap: 14px;
+  max-width: 760px;
 }
 
 .zip-label {
   font-weight: 600;
-  color: #0a192f;
+  color: #f3e4bb;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 13px;
 }
 
 .zip-input-row {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 14px;
+  align-items: stretch;
 }
 
 .zip-input-row input,
 .zip-grid input,
 .zip-form textarea {
-  border: 1px solid #e4ded2;
-  background: #fbf8f2;
-  border-radius: 14px;
-  padding: 12px 14px;
-  font-size: 14px;
-  color: #1f1f1f;
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  background: rgba(247, 244, 237, 0.05);
+  border-radius: 8px;
+  padding: 18px 18px;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  color: #f5f1e6;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.zip-input-row input::placeholder {
+  color: rgba(236, 230, 214, 0.42);
+}
+
+.zip-input-row input:focus,
+.zip-grid input:focus,
+.zip-form textarea:focus {
+  outline: none;
+  border-color: rgba(202, 161, 61, 0.52);
+  box-shadow: 0 0 0 4px rgba(202, 161, 61, 0.1);
+}
+
+.zip-check .btn.btn-primary {
+  width: 100%;
+  min-height: 78px;
+  border-radius: 999px;
+  border: 2px solid rgba(18, 15, 8, 0.78);
+  background: #caa13d;
+  color: #17150f;
+  font-size: 20px;
+  letter-spacing: 0.18em;
+  box-shadow: 0 18px 40px rgba(202, 161, 61, 0.22);
 }
 
 .zip-grid {
@@ -815,13 +894,13 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   display: grid;
   gap: 8px;
   font-weight: 600;
-  color: #0a192f;
+  color: #f3e4bb;
 }
 
 .zip-error {
-  background: #fff1f2;
-  color: #9f1239;
-  border: 1px solid #fecdd3;
+  background: rgba(127, 29, 29, 0.22);
+  color: #fecaca;
+  border: 1px solid rgba(248, 113, 113, 0.28);
   border-radius: 12px;
   padding: 10px 12px;
 }
@@ -840,18 +919,66 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .zip-note {
-  margin-top: 12px;
-  font-size: 12px;
-  color: #7a7a7a;
+  margin-top: 18px;
+  font-size: 13px;
+  color: rgba(236, 230, 214, 0.58);
+}
+
+.zip-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.zip-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(236, 230, 214, 0.62);
+}
+
+.zip-meta span::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d5b14d;
+  box-shadow: 0 0 0 2px rgba(202, 161, 61, 0.16);
 }
 
 @media (max-width: 700px) {
   .zip-card {
-    padding: 28px;
+    padding: 30px 22px 26px;
+  }
+
+  .zip-card h1 {
+    font-size: clamp(30px, 9vw, 44px);
+    max-width: none;
+  }
+
+  .zip-lead {
+    font-size: 15px;
+    line-height: 1.7;
   }
 
   .zip-input-row {
     grid-template-columns: 1fr;
+  }
+
+  .zip-input-row input,
+  .zip-grid input,
+  .zip-form textarea {
+    font-size: 22px;
+    padding: 16px;
+  }
+
+  .zip-check .btn.btn-primary {
+    min-height: 58px;
+    font-size: 15px;
   }
 
   .zip-grid {
@@ -1093,7 +1220,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
     content: "";
     width: 70px;
     height: 2px;
-    background: #e7e1d6;
+    background: rgba(202, 161, 61, 0.18);
     margin-top: 12px;
     border-radius: 999px;
   }
@@ -1143,8 +1270,10 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 /* ===== Services Page Reference Layout ===== */
 .services-page {
-  background: #f7f4ef;
-  color: #1b1b1b;
+  background:
+    radial-gradient(circle at top, rgba(171, 132, 49, 0.12), transparent 24%),
+    linear-gradient(180deg, #0b0d07 0%, #12150b 38%, #171a0d 100%);
+  color: #f5f1e6;
   font-family: "Vesper Libre", serif;
 }
 
@@ -1156,41 +1285,48 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .hero-ref {
-  min-height: 78vh;
+  min-height: 82vh;
   color: #f5f5f5;
 }
 
 .services-page .hero-content {
-  padding: 120px 0 110px;
-  max-width: 620px;
+  padding: 138px 0 118px;
+  max-width: 660px;
 }
 
 .services-page .hero-kicker {
-  color: #d3b26a;
-  letter-spacing: 0.25em;
+  color: #d5b14d;
+  letter-spacing: 0.32em;
+  font-size: 11px;
 }
 
 .services-page .hero-title {
-  font-size: clamp(36px, 4.8vw, 64px);
-  line-height: 1.02;
-  text-transform: none;
-  font-weight: 700;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 0.98;
+  text-transform: uppercase;
+  font-weight: 800;
+  max-width: 10ch;
+  margin-bottom: 22px;
 }
 
 .services-page .hero-italic {
-  font-style: italic;
-  color: #d3b26a;
+  font-style: normal;
+  color: #f2ca63;
+  text-shadow: 0 0 24px rgba(211, 178, 106, 0.18);
 }
 
 .services-page .hero-subtitle {
-  font-size: 16px;
-  color: rgba(245, 245, 245, 0.85);
-  max-width: 520px;
+  font-size: 15px;
+  color: rgba(241, 235, 220, 0.78);
+  max-width: 560px;
+  margin-bottom: 28px;
 }
 
 .services-page .hero-actions .btn {
-  border-radius: 999px;
-  font-size: 11px;
+  border-radius: 6px;
+  min-height: 48px;
+  padding: 14px 20px;
+  font-size: 10px;
   letter-spacing: 0.18em;
 }
 
@@ -1207,19 +1343,26 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .services-page .btn-primary {
-  background: #d3b26a;
-  color: #141414;
+  background: #caa13d;
+  color: #17150f;
+  box-shadow: 0 18px 38px rgba(202, 161, 61, 0.22);
 }
 
 .services-page .btn-secondary {
-  background: rgba(12, 14, 18, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #f5f5f5;
+  background: rgba(14, 17, 10, 0.72);
+  border: 1px solid rgba(202, 161, 61, 0.45);
+  color: #f4ecda;
+}
+
+.services-page .btn-primary:hover,
+.services-page .btn-secondary:hover,
+.services-page .mini-cta:hover {
+  transform: translateY(-2px);
 }
 
 .feature-strip {
-  background: #fbf7f1;
-  padding: 46px 0 24px;
+  background: #14170c;
+  padding: 38px 0 30px;
 }
 
 .feature-grid {
@@ -1229,14 +1372,14 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .feature-card {
-  background: #ffffff;
-  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(25, 29, 17, 0.98), rgba(15, 18, 10, 0.98));
+  border-radius: 8px;
   padding: 24px 26px;
-  border: 1px solid rgba(197, 170, 111, 0.18);
+  border: 1px solid rgba(202, 161, 61, 0.2);
   display: flex;
   gap: 16px;
   align-items: flex-start;
-  box-shadow: 0 18px 40px rgba(22, 19, 14, 0.08);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
 }
 
 .feature-icon {
@@ -1261,22 +1404,24 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .feature-card h3 {
   margin: 0 0 6px;
-  font-size: 17px;
-  font-family: "Playfair Display", serif;
+  font-size: 15px;
+  font-family: "Vesper Libre", serif;
   font-weight: 600;
-  color: #2f2b26;
+  color: #f3e5be;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .feature-card p {
   margin: 0;
-  color: #6b6458;
+  color: rgba(236, 230, 214, 0.72);
   font-size: 13px;
 }
 
 .callout-band {
-  background: linear-gradient(120deg, #0c1420 0%, #101a2b 55%, #0b111a 100%);
-  color: #f5f5f5;
-  padding: 56px 0;
+  background: linear-gradient(90deg, #c39a35 0%, #d6ad4a 52%, #bf942f 100%);
+  color: #17150f;
+  padding: 30px 0;
   position: relative;
   overflow: hidden;
 }
@@ -1285,7 +1430,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 80% 30%, rgba(211, 178, 106, 0.2), transparent 55%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.12), transparent 35%, rgba(41, 31, 5, 0.12) 100%);
   pointer-events: none;
 }
 
@@ -1298,12 +1443,13 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .callout-copy h2 {
-  font-size: clamp(28px, 3.5vw, 40px);
-  margin-bottom: 10px;
+  font-size: clamp(24px, 3vw, 34px);
+  margin-bottom: 8px;
+  text-transform: uppercase;
 }
 
 .callout-copy p {
-  color: rgba(245, 245, 245, 0.75);
+  color: rgba(23, 21, 15, 0.76);
   margin: 0;
 }
 
@@ -1316,13 +1462,13 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .callout-note {
   font-size: 12px;
-  color: rgba(245, 245, 245, 0.6);
+  color: rgba(23, 21, 15, 0.62);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .catalog-section {
-  background: #f5f7f9;
+  background: #12150b;
   padding: 60px 0;
 }
 
@@ -1378,55 +1524,57 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 /* Services: technical catalog panel matches light reference card */
 .services-page .catalog-section {
-  background: #ffffff;
+  background: #12150b;
   padding: 56px 0;
 }
 
 .services-page .catalog-panel {
   max-width: 920px;
-  background: #f7f9fb;
-  border: 1px solid #e3e9f1;
-  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(21, 24, 13, 0.96), rgba(16, 19, 10, 0.96));
+  border: 1px solid rgba(202, 161, 61, 0.18);
+  border-radius: 10px;
   padding: 30px 36px;
-  box-shadow: none;
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.22);
 }
 
 .services-page .catalog-panel h3 {
   font-size: 14px;
   letter-spacing: 0.05em;
   margin: 10px 0 6px;
+  color: #f3e4bb;
 }
 
 .services-page .catalog-panel p {
   font-size: 12.5px;
   line-height: 1.6;
-  color: #6f7f92;
+  color: rgba(236, 230, 214, 0.7);
 }
 
 .services-page .catalog-emphasis {
-  color: #44556a;
+  color: #f2ca63;
   font-style: italic;
 }
 
 .services-page .catalog-icon {
   width: 34px;
   height: 34px;
-  background: #f1ede2;
-  box-shadow: none;
+  background: rgba(202, 161, 61, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(202, 161, 61, 0.2);
 }
 
 .services-page .catalog-icon svg {
   width: 15px;
   height: 15px;
+  fill: #d5b14d;
 }
 
 .services-page .section-light {
-  background: #f7f4ef;
-  color: #1b1b1b;
+  background: #14170c;
+  color: #f5f1e6;
 }
 
 .services-page .section-copy {
-  color: #5d6166;
+  color: rgba(236, 230, 214, 0.68);
 }
 
 .services-page .service-grid {
@@ -1457,11 +1605,11 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .services-page .service-card {
-  border-radius: 20px;
+  border-radius: 8px;
   padding: 18px;
-  background: #ffffff;
-  border: 1px solid rgba(227, 210, 176, 0.55);
-  box-shadow: 0 18px 30px rgba(22, 19, 14, 0.08);
+  background: linear-gradient(180deg, rgba(24, 28, 15, 0.98), rgba(15, 18, 10, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.18);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -1469,8 +1617,11 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .services-page .service-media {
   height: 140px;
-  border-radius: 16px;
-  background: #f3efe7;
+  border-radius: 6px;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(211, 178, 106, 0.16), transparent 44%),
+    linear-gradient(180deg, #15190e 0%, #0f120a 100%);
+  border: 1px solid rgba(202, 161, 61, 0.08);
 }
 
 .services-page .service-media img {
@@ -1480,8 +1631,16 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .services-page .mini-cta {
-  background: #121416;
-  color: #f5f5f5;
+  background: #caa13d;
+  color: #17150f;
+  border-radius: 6px;
+  flex: 1 1 150px;
+}
+
+.services-page .mini-cta-secondary {
+  background: transparent;
+  color: #f4ecda;
+  border: 1px solid rgba(202, 161, 61, 0.4);
 }
 
 .services-page .service-body {
@@ -1507,13 +1666,14 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   top: 6px;
   width: 4px;
   height: 46px;
-  background: #d3b26a;
+  background: #d5b14d;
   border-radius: 999px;
 }
 
 .ecosystem-header h2 {
   font-size: clamp(32px, 4vw, 44px);
   margin: 0;
+  text-transform: uppercase;
 }
 
 .services-page .section-copy {
@@ -1549,7 +1709,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   list-style: none;
   padding: 0;
   margin: 0 0 14px;
-  color: #6b6458;
+  color: rgba(236, 230, 214, 0.72);
   font-size: 12px;
   display: block;
 }
@@ -1573,13 +1733,20 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .service-description {
   margin: 0 0 14px;
-  color: #6b6458;
+  color: rgba(236, 230, 214, 0.72);
   font-size: 12px;
   line-height: 1.6;
 }
 
 .services-page .service-actions {
   margin-top: auto;
+}
+
+.services-page .service-body h3 {
+  color: #f3e4bb;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 [dir="rtl"] .service-specs summary {
@@ -1597,7 +1764,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .engineering-section {
-  background: #f7f4ef;
+  background: #11140a;
   padding: 60px 0 70px;
 }
 
@@ -1610,9 +1777,9 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .engineering-media {
   align-self: stretch;
-  background: #d3b26a;
+  background: linear-gradient(180deg, #caa13d, #8b6a24);
   padding: 10px;
-  border-radius: 22px;
+  border-radius: 10px;
   display: flex;
 }
 
@@ -1630,11 +1797,11 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   margin-bottom: 14px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #d3b26a;
+  color: #f2ca63;
 }
 
 .engineering-lead {
-  color: #4b535d;
+  color: rgba(236, 230, 214, 0.74);
   margin-bottom: 18px;
   line-height: 1.7;
 }
@@ -1650,19 +1817,19 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 .engineering-list {
   margin: 0;
   padding-left: 18px;
-  color: #4f545a;
-  font-size: 16px;
+  color: rgba(236, 230, 214, 0.76);
+  font-size: 15px;
   line-height: 1.7;
 }
 
 .engineering-side {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.7;
-  color: #4f545a;
+  color: rgba(236, 230, 214, 0.72);
 }
 
 .insight-strip {
-  background: #0e1726;
+  background: #0d1008;
   color: #f5f5f5;
   padding: 60px 0;
 }
@@ -1675,9 +1842,9 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .insight-card {
   padding: 24px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(211, 178, 106, 0.15);
+  border-radius: 8px;
+  background: rgba(21, 24, 13, 0.92);
+  border: 1px solid rgba(202, 161, 61, 0.16);
   backdrop-filter: blur(6px);
 }
 
@@ -1694,15 +1861,16 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .muted-panel {
-  background: linear-gradient(120deg, rgba(12, 18, 30, 0.72), rgba(12, 18, 30, 0.58)), url("../img/back2.jpg");
+  background: linear-gradient(120deg, rgba(12, 15, 8, 0.78), rgba(12, 15, 8, 0.68)), url("../img/back2.jpg");
   background-size: cover;
   background-position: center;
   color: #f3f3f3;
-  border-radius: 22px;
+  border-radius: 10px;
+  border: 1px solid rgba(202, 161, 61, 0.16);
 }
 
 .muted-panel-back4 {
-  background: linear-gradient(120deg, rgba(12, 18, 30, 0.72), rgba(12, 18, 30, 0.58)), url("../img/back4.jpg");
+  background: linear-gradient(120deg, rgba(12, 15, 8, 0.8), rgba(12, 15, 8, 0.68)), url("../img/back4.jpg");
   background-size: cover;
   background-position: center 22%;
 }
@@ -1732,7 +1900,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .mini-cta-section {
-  background: #f7f4ef;
+  background: #14170c;
   padding-top: 30px;
 }
 
@@ -1743,27 +1911,28 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .mini-cta-card {
-  background: #e6ddcf;
-  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(22, 26, 14, 0.98), rgba(15, 18, 10, 0.98));
+  border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 12px 24px rgba(12, 12, 12, 0.06);
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
 }
 
 .mini-cta-card h3 {
-  color: #1f2226;
+  color: #f3e4bb;
 }
 
 .mini-cta-card p {
-  color: #45484d;
+  color: rgba(236, 230, 214, 0.72);
   min-height: 56px;
 }
 
 .mini-cta-card .card-link {
-  color: #8f6a1b;
+  color: #f2ca63;
 }
 
 .pricing-preview {
-  background: #0b1424;
+  background: #0e1109;
   color: #f5f5f5;
   padding: 80px 0 90px;
 }
@@ -1808,14 +1977,14 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0;
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 6px;
-    overflow: visible;
-    background: #0c1728;
-  }
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+}
 
 .pricing-grid-4 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1823,9 +1992,11 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .pricing-card {
   padding: 26px 22px 20px;
-  border-right: 1px solid rgba(255, 255, 255, 0.07);
-  background: #0c1728;
-  box-shadow: none;
+  border-right: none;
+  background: linear-gradient(180deg, rgba(24, 28, 16, 0.98), rgba(16, 19, 10, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.14);
+  border-radius: 8px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
   position: relative;
 }
 
@@ -1841,7 +2012,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 .pricing-card-terms {
   display: grid;
   gap: 16px;
-  background: rgba(255, 255, 255, 0.04);
+  background: linear-gradient(180deg, rgba(31, 35, 19, 0.98), rgba(17, 20, 11, 0.98));
 }
 
 .pricing-card h3 {
@@ -1978,12 +2149,13 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .bottom-cta {
   background:
-    linear-gradient(180deg, rgba(58, 63, 72, 0.88) 0%, rgba(58, 63, 72, 0.92) 100%),
+    linear-gradient(180deg, rgba(14, 17, 10, 0.84) 0%, rgba(14, 17, 10, 0.92) 100%),
     url("../img/bottom-cta-bg.jpg");
   background-size: cover;
   background-position: center;
   color: #f5f5f5;
-  border-radius: 26px;
+  border-radius: 10px;
+  border: 1px solid rgba(202, 161, 61, 0.2);
   margin: 40px auto 0;
 }
 

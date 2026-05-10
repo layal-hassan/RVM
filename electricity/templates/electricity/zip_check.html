@@ -2,14 +2,20 @@
 {% load static i18n %}
 
 {% block title %}{% trans "Coverage Check | Hembla experten" %}{% endblock %}
+{% block body_class %}zip-check-page{% endblock %}
 
 {% block content %}
 <section class="zip-check">
   <div class="container zip-shell">
     <div class="zip-card">
+      <div class="zip-card-glow" aria-hidden="true"></div>
       <div class="zip-badge">{% trans "Coverage check" %}</div>
+      <div class="zip-kicker">
+        <span class="zip-kicker-line"></span>
+        <span>{% trans "Service availability" %}</span>
+      </div>
       <h1>{% trans "Let's confirm your ZIP code" %}</h1>
-      <p>{% trans "We currently serve selected areas in Sweden. Enter your ZIP code to continue with your booking." %}</p>
+      <p class="zip-lead">{% trans "We currently serve selected areas in Sweden. Enter your ZIP code to continue with your booking." %}</p>
       <form method="post" class="zip-form">
         {% csrf_token %}
         <label class="zip-label">{% trans "Swedish ZIP Code" %}</label>
@@ -22,6 +28,10 @@
         {% endif %}
       </form>
       <div class="zip-note">{% trans "We never share your information. This step only checks coverage." %}</div>
+      <div class="zip-meta">
+        <span>{% trans "Fast coverage validation" %}</span>
+        <span>{% trans "No commitment required" %}</span>
+      </div>
     </div>
   </div>
 </section>
