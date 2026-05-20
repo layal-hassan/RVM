@@ -1,10 +1,12 @@
 body.support-page {
-  background: #ffffff;
+  background:
+    radial-gradient(circle at top, rgba(202, 161, 61, 0.12), transparent 34%),
+    linear-gradient(180deg, #090c07 0%, #0d1009 40%, #080a06 100%);
   padding-top: var(--rwmh-height);
 }
 
 .support-page {
-  color: #1f2937;
+  color: #f5f1e6;
   font-family: "Sora", "Vesper Libre", serif;
 }
 
@@ -13,53 +15,71 @@ body.support-page {
 }
 
 .support-hero {
-  padding: 120px 0 110px;
+  padding: 132px 0 118px;
   background:
-    radial-gradient(1200px 600px at 20% 20%, rgba(211, 178, 106, 0.18), transparent 55%),
-    linear-gradient(180deg, rgba(6, 10, 18, 0.88), rgba(6, 10, 18, 0.35)),
-    url("../img/support-lamp.png") right center/cover no-repeat;
-  background-color: #0b0c0e;
+    radial-gradient(900px 520px at 18% 20%, rgba(202, 161, 61, 0.2), transparent 52%),
+    linear-gradient(90deg, rgba(7, 9, 6, 0.94) 0%, rgba(9, 12, 7, 0.82) 44%, rgba(9, 12, 7, 0.38) 100%),
+    url("https://images.unsplash.com/photo-1712159018726-4564d92f3ec2?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000") right center/cover no-repeat;
+  background-color: #090c07;
   text-align: left;
   border-radius: 0;
   margin: 0;
   max-width: none;
   color: #f5f7fb;
-  min-height: 70vh;
+  min-height: 74vh;
+  border-top: 1px solid rgba(202, 161, 61, 0.08);
+  border-bottom: 1px solid rgba(202, 161, 61, 0.12);
 }
 
 .support-hero h1 {
-  font-size: clamp(38px, 4.6vw, 60px);
-  margin-bottom: 14px;
-  color: #f5f7fb;
+  font-size: clamp(42px, 5.4vw, 78px);
+  line-height: 1;
+  margin-bottom: 18px;
+  color: #f5f1e6;
   font-family: "Vesper Libre", serif;
   font-weight: 700;
 }
 
 .support-hero-content {
-  max-width: 640px;
+  max-width: 760px;
   margin: 0;
-  padding: 26px 26px 30px;
-  background: rgba(10, 14, 22, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(6px);
+  padding: 40px 34px 38px;
+  background: linear-gradient(180deg, rgba(21, 25, 15, 0.92), rgba(12, 15, 8, 0.92));
+  border: 1px solid rgba(202, 161, 61, 0.18);
+  border-radius: 30px;
+  box-shadow: 0 30px 72px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.support-hero-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(202, 161, 61, 0.12), transparent 34%);
+  pointer-events: none;
+}
+
+.support-hero-content > * {
+  position: relative;
+  z-index: 1;
 }
 
 .support-badge {
   display: inline-block;
-  padding: 8px 18px;
+  padding: 10px 18px;
   border-radius: 999px;
-  background: rgba(11, 12, 14, 0.55);
-  border: 1px solid rgba(211, 178, 106, 0.35);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-  color: #d3b26a;
+  background: rgba(202, 161, 61, 0.08);
+  border: 1px solid rgba(202, 161, 61, 0.28);
+  box-shadow: none;
+  color: #f3e4bb;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   font-size: 11px;
   font-family: "Sora", sans-serif;
   font-weight: 600;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 
 .support-actions {
@@ -71,7 +91,7 @@ body.support-page {
 
 .support-hero .btn {
   border-radius: 999px;
-  padding: 12px 22px;
+  padding: 14px 24px;
   font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -80,42 +100,44 @@ body.support-page {
 }
 
 .support-actions .btn-secondary {
-  color: #e6edf7;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  color: #f5f1e6;
+  border: 1px solid rgba(202, 161, 61, 0.22);
+  background: rgba(247, 244, 237, 0.04);
+  box-shadow: inset 0 0 0 1px rgba(202, 161, 61, 0.04);
 }
 
 .support-actions .btn-primary {
-  background: linear-gradient(135deg, #d7b874, #c19945);
-  color: #1a1408;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.35);
+  background: #caa13d;
+  color: #17150f;
+  border: 1px solid #caa13d;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
 }
 
 .support-section {
-  padding: 70px 0;
-  background: #0b1220;
-  color: #e5e9f2;
+  padding: 82px 0;
+  background: transparent;
+  color: #f5f1e6;
 }
 
 .support-section.light {
-  background: #0b1220;
+  background: linear-gradient(180deg, rgba(14, 18, 11, 0.96), rgba(9, 12, 7, 0.96));
+  border-top: 1px solid rgba(202, 161, 61, 0.1);
+  border-bottom: 1px solid rgba(202, 161, 61, 0.1);
 }
 
 .support-title {
   text-align: center;
-  font-size: 28px;
+  font-size: clamp(30px, 3vw, 48px);
   margin-bottom: 26px;
-  color: #f5f7fb;
+  color: #f5f1e6;
   font-family: "Vesper Libre", serif;
   font-weight: 700;
 }
 
 .support-subtitle {
   text-align: center;
-  color: rgba(229, 233, 242, 0.7);
-  margin-bottom: 24px;
+  color: rgba(236, 230, 214, 0.72);
+  margin-bottom: 28px;
   font-size: 15px;
 }
 
@@ -130,31 +152,50 @@ body.support-page {
 .support-card,
 .support-channel,
 .support-step {
-  background: #121a2b;
-  border: 1px solid #1f2a3d;
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: 0 16px 30px rgba(6, 10, 18, 0.4);
+  background: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  border-radius: 24px;
+  padding: 28px 24px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
   text-align: center;
-  color: #e5e9f2;
+  color: #f5f1e6;
+  position: relative;
+  overflow: hidden;
+}
+
+.support-card::before,
+.support-channel::before,
+.support-step::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(202, 161, 61, 0.12), transparent 32%);
+  pointer-events: none;
+}
+
+.support-card > *,
+.support-channel > *,
+.support-step > * {
+  position: relative;
+  z-index: 1;
 }
 
 .support-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  margin: 0 auto 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  margin: 0 auto 14px;
   display: grid;
   place-items: center;
-  background: rgba(211, 178, 106, 0.1);
-  border: 1px solid rgba(211, 178, 106, 0.4);
-  color: #d3b26a;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  background: rgba(202, 161, 61, 0.12);
+  border: 1px solid rgba(202, 161, 61, 0.34);
+  color: #caa13d;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
 }
 
 .support-card h3,
 .support-channel h3 {
-  color: #f5f7fb;
+  color: #f5f1e6;
   font-family: "Vesper Libre", serif;
   font-weight: 700;
 }
@@ -162,19 +203,34 @@ body.support-page {
 .support-card p,
 .support-channel p,
 .support-channel span {
-  color: rgba(229, 233, 242, 0.75);
+  color: rgba(236, 230, 214, 0.72);
   font-size: 14px;
 }
 
 .support-form {
-  background: #ffffff;
-  border: 1px solid #e9e2d6;
-  border-radius: 20px;
-  padding: 36px;
-  box-shadow: 0 18px 32px rgba(12, 18, 33, 0.08);
-  color: #1f2937;
+  background: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.18);
+  border-radius: 28px;
+  padding: 40px;
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.24);
+  color: #f5f1e6;
   max-width: 920px;
   margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.support-form::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(202, 161, 61, 0.12), transparent 32%);
+  pointer-events: none;
+}
+
+.support-form > * {
+  position: relative;
+  z-index: 1;
 }
 
 .form-grid {
@@ -189,23 +245,47 @@ body.support-page {
 
 .form-control {
   width: 100%;
-  border-radius: 12px;
-  border: 1px solid #e1d8c8;
-  padding: 12px 14px;
-  background: #fdfbf7;
-  color: #1f2937;
+  border-radius: 14px;
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  padding: 13px 14px;
+  background: rgba(247, 244, 237, 0.05);
+  color: #f5f1e6;
   font-size: 14px;
 }
 
 .support-form label {
   display: block;
   font-weight: 600;
-  color: #0a192f;
+  color: #f3e4bb;
   margin-bottom: 6px;
   font-size: 12px;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   font-family: "Sora", sans-serif;
+}
+
+.support-form select.form-control,
+.support-form select,
+.support-form input.form-control,
+.support-form input,
+.support-form textarea.form-control,
+.support-form textarea {
+  background: rgba(247, 244, 237, 0.05);
+  color: #f5f1e6;
+  border: 1px solid rgba(202, 161, 61, 0.16);
+}
+
+.support-form input::placeholder,
+.support-form textarea::placeholder {
+  color: rgba(236, 230, 214, 0.42);
+}
+
+.support-form input:focus,
+.support-form select:focus,
+.support-form textarea:focus {
+  border-color: rgba(202, 161, 61, 0.48);
+  box-shadow: 0 0 0 4px rgba(202, 161, 61, 0.1);
+  outline: none;
 }
 
 .support-form textarea.form-control {
@@ -220,9 +300,9 @@ body.support-page {
 }
 
 .support-success {
-  background: #ecfdf3;
-  border: 1px solid #b9f2cf;
-  color: #0f5132;
+  background: linear-gradient(180deg, rgba(27, 59, 35, 0.94), rgba(18, 43, 25, 0.94));
+  border: 1px solid rgba(116, 201, 143, 0.26);
+  color: #d8f6e3;
   padding: 12px 16px;
   border-radius: 12px;
   text-align: center;
@@ -258,18 +338,20 @@ body.support-page {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #fff7df;
-  color: #8c6b28;
+  background: linear-gradient(180deg, rgba(202, 161, 61, 0.18), rgba(202, 161, 61, 0.1));
+  color: #f3e4bb;
   display: grid;
   place-items: center;
   margin: 0 auto 10px;
   font-weight: 700;
   font-family: "Sora", sans-serif;
+  border: 1px solid rgba(202, 161, 61, 0.26);
 }
 
 .support-step h4 {
   font-family: "Vesper Libre", serif;
   font-weight: 700;
+  color: #f5f1e6;
 }
 
 html[lang="ar"] .support-page {
@@ -301,6 +383,7 @@ html[lang="ar"] .support-steps .step-circle {
 
   .support-hero-content {
     margin: 0 auto;
+    padding: 30px 22px;
   }
 
   .support-actions {

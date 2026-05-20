@@ -37,6 +37,7 @@
         </nav>
       </div>
       <div class="rwm-egh-right">
+        {% comment %}Temporarily hidden until translations are finalized.
         <div class="rwm-egh-lang">
           <button class="rwm-egh-lang-trigger" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{% trans 'Change language' %}">
             <span class="rwm-egh-lang-icon" aria-hidden="true">
@@ -55,6 +56,7 @@
             <button class="rwm-egh-lang-option{% if CURRENT_LANGUAGE == 'ar' %} is-active{% endif %}" type="submit" name="language" value="ar">{% trans "Arabic" %}</button>
           </form>
         </div>
+        {% endcomment %}
         <a class="rwm-egh-btn rwm-egh-btn-primary rwm-egh-btn-compact" href="http://hembla-experten.se/" target="_blank" rel="noopener">
           {% trans "Back to Hembla Experten" %}
         </a>

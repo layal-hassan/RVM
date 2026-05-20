@@ -174,3 +174,20 @@
     loadSlots(altDateInput, altSlotSelect, altSlotNote);
   }
 })();
+
+(() => {
+  document.querySelectorAll("[data-date-trigger]").forEach((trigger) => {
+    const shell = trigger.closest(".date-input-shell");
+    const input = shell ? shell.querySelector('input[type="date"]') : null;
+    if (!input) return;
+
+    trigger.addEventListener("click", () => {
+      if (typeof input.showPicker === "function") {
+        input.showPicker();
+        return;
+      }
+      input.focus();
+      input.click();
+    });
+  });
+})();

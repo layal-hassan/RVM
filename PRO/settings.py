@@ -10,222 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 # """
 
-# import os
-# from pathlib import Path
-
-# from django.core.exceptions import ImproperlyConfigured
-
-# # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# def _load_dotenv(dotenv_path: Path) -> None:
-#     if not dotenv_path.exists():
-#         return
-#     for raw_line in dotenv_path.read_text(encoding="utf-8").splitlines():
-#         line = raw_line.strip()
-#         if not line or line.startswith("#") or "=" not in line:
-#             continue
-#         key, value = line.split("=", 1)
-#         key = key.strip()
-#         value = value.strip().strip("'").strip('"')
-#         os.environ.setdefault(key, value)
-
-
-# _load_dotenv(BASE_DIR / ".env")
-# _load_dotenv(BASE_DIR.parent / ".env")
-
-
-# def _env_bool(name: str, default: bool = False) -> bool:
-#     value = os.getenv(name)
-#     if value is None:
-#         return default
-#     return value.strip().lower() in {"1", "true", "yes", "on"}
-
-
-# # Quick-start development settings - unsuitable for production
-# # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# # Local development settings only.
-# DEBUG = True
-
-# # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.getenv("SECRET_KEY", "dev-only-unsafe-secret-key")
-
-# ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-
-# CSRF_TRUSTED_ORIGINS = []
-
-# if not DEBUG:
-#     SECURE_BROWSER_XSS_FILTER = True
-#     SECURE_CONTENT_TYPE_NOSNIFF = True
-#     SESSION_COOKIE_SECURE = True
-#     CSRF_COOKIE_SECURE = True
-# else:
-#     # Django's development server only serves HTTP locally.
-#     SESSION_COOKIE_SECURE = False
-#     CSRF_COOKIE_SECURE = False
-#     SECURE_SSL_REDIRECT = False
-#     SECURE_PROXY_SSL_HEADER = None
-
-# # Application definition
-
-# INSTALLED_APPS = [
-#     'modeltranslation',
-#     'django.contrib.admin',
-#     'django.contrib.auth',
-#     'django.contrib.contenttypes',
-#     'django.contrib.sessions',
-#     'django.contrib.messages',
-#     'django.contrib.staticfiles',
-#     'electricity.apps.ElectricityConfig',
-# ]
-
-# MIDDLEWARE = [
-#     'django.middleware.security.SecurityMiddleware',
-#     'django.contrib.sessions.middleware.SessionMiddleware',
-#     'django.middleware.locale.LocaleMiddleware',
-#     'django.middleware.common.CommonMiddleware',
-#     'django.middleware.csrf.CsrfViewMiddleware',
-#     'django.contrib.auth.middleware.AuthenticationMiddleware',
-#     'django.contrib.messages.middleware.MessageMiddleware',
-#     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-# ]
-
-# ROOT_URLCONF = 'PRO.urls'
-
-# TEMPLATES = [
-#     {
-#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-#         'DIRS': [],
-#         'APP_DIRS': True,
-#         'OPTIONS': {
-#             'context_processors': [
-#                 'django.template.context_processors.debug',
-#                 'django.template.context_processors.request',
-#                 'django.contrib.auth.context_processors.auth',
-#                 'django.contrib.messages.context_processors.messages',
-#                 'django.template.context_processors.i18n',
-#             ],
-#         },
-#     },
-# ]
-
-# WSGI_APPLICATION = 'PRO.wsgi.application'
-
-
-# # Database
-# # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-# USE_POSTGRES = os.getenv("USE_POSTGRES", "").lower() in {"1", "true", "yes"}
-# DB_NAME = os.getenv("DB_NAME", "")
-# if USE_POSTGRES or DB_NAME:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql',
-#             'NAME': os.getenv("DB_NAME", "electricity"),
-#             'USER': os.getenv("DB_USER", "postgres"),
-#             'PASSWORD': os.getenv("DB_PASSWORD", ""),
-#             'HOST': os.getenv("DB_HOST", "localhost"),
-#             'PORT': os.getenv("DB_PORT", "5432"),
-#             'CONN_MAX_AGE': int(os.getenv("DB_CONN_MAX_AGE", "60")),
-#         }
-#     }
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': BASE_DIR / 'db.sqlite3',
-#         }
-#     }
-
-
-# # Password validation
-# # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
-# AUTH_PASSWORD_VALIDATORS = [
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-#     },
-# ]
-
-
-# # Internationalization
-# # https://docs.djangoproject.com/en/4.2/topics/i18n/
-
-# LANGUAGE_CODE = 'en-us'
-
-# LANGUAGES = [
-#     ("en", "English"),
-#     ("sv", "Swedish"),
-#     ("ar", "Arabic"),
-# ]
-
-# MODELTRANSLATION_LANGUAGES = ("en", "ar", "sv")
-# MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
-# MODELTRANSLATION_FALLBACK_LANGUAGES = ("en",)
-
-# TIME_ZONE = 'Europe/Stockholm'
-
-# USE_I18N = True
-
-# USE_TZ = True
-
-# LOCALE_PATHS = [
-#     BASE_DIR / "locale",
-# ]
-
-
-# # Static files (CSS, JavaScript, Images)
-# # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-# STATIC_URL = '/static/'
-# STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# LOGIN_URL = "/accounts/login/"
-# LOGIN_REDIRECT_URL = "/accounts/profile/"
-# LOGOUT_REDIRECT_URL = "/accounts/login/"
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = BASE_DIR / 'media'
-
-# # Default primary key field type
-# # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
-# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# DATA_UPLOAD_MAX_MEMORY_SIZE = 80 * 1024 * 1024
-# FILE_UPLOAD_MAX_MEMORY_SIZE = 80 * 1024 * 1024
-
-# DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Support@rwmel.se")
-# SERVER_EMAIL = os.getenv("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
-# CONTACT_TO_EMAIL = os.getenv("CONTACT_TO_EMAIL", "Info@rwmel.se")
-# EMAIL_HOST = os.getenv("EMAIL_HOST", "")
-# EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
-# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
-# EMAIL_USE_TLS = _env_bool("EMAIL_USE_TLS", True)
-# EMAIL_USE_SSL = _env_bool("EMAIL_USE_SSL", False)
-# EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "20"))
-# EMAIL_BACKEND = os.getenv(
-#     "EMAIL_BACKEND",
-#     "django.core.mail.backends.smtp.EmailBackend"
-#     if EMAIL_HOST
-#     else "django.core.mail.backends.console.EmailBackend",
-# )
-
-
-
-########################################################################server
-
 import os
 from pathlib import Path
 
@@ -252,61 +36,37 @@ _load_dotenv(BASE_DIR / ".env")
 _load_dotenv(BASE_DIR.parent / ".env")
 
 
+def _env_bool(name: str, default: bool = False) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/ 
-# SECURITY WARNING: keep the secret key used in production secre 
-SECRET_KEY = os.getenv("SECRET_KEY")
-if not SECRET_KEY:
-    raise ImproperlyConfigured("The SECRET_KEY setting must not be empty.")
+# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
+# Local development settings only.
+DEBUG = True
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-only-unsafe-secret-key")
 
-ALLOWED_HOSTS = ["45.93.137.166", "rwmel.se", "www.rwmel.se"]
-_default_allowed_hosts = ["127.0.0.1", "localhost"]
-_production_hosts = ["45.93.137.166", "rwmel.se", "www.rwmel.se"]
-_env_allowed_hosts = [
-    host.strip() for host in os.getenv("ALLOWED_HOSTS", ",".join(_default_allowed_hosts)).split(",") if host.strip()
-]
-ALLOWED_HOSTS = list(dict.fromkeys(_env_allowed_hosts + ([] if DEBUG else _production_hosts)))
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
-_env_csrf_trusted_origins = [
-    origin.strip()
-    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-    if origin.strip()
-]
-CSRF_TRUSTED_ORIGINS = list(
-    dict.fromkeys(
-        _env_csrf_trusted_origins
-        + (
-            []
-            if DEBUG
-            else [
-                "https://rwmel.se",
-                "https://www.rwmel.se",
-                "http://45.93.137.166",
-                "https://45.93.137.166",
-            ]
-        )
-    )
-)
-
+CSRF_TRUSTED_ORIGINS = []
 
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
-    X_FRAME_OPTIONS = "DENY"
-
-
+else:
+    # Django's development server only serves HTTP locally.
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False
+    SECURE_PROXY_SSL_HEADER = None
 
 # Application definition
 
@@ -437,19 +197,23 @@ LOGOUT_REDIRECT_URL = "/accounts/login/"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 DATA_UPLOAD_MAX_MEMORY_SIZE = 80 * 1024 * 1024
 FILE_UPLOAD_MAX_MEMORY_SIZE = 80 * 1024 * 1024
 
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "support@rwmel.se")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Support@rwmel.se")
 SERVER_EMAIL = os.getenv("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
-BOOKING_FROM_EMAIL = os.getenv("BOOKING_FROM_EMAIL", DEFAULT_FROM_EMAIL)
-CONTACT_TO_EMAIL = os.getenv("CONTACT_TO_EMAIL", "info@rwmel.se")
+CONTACT_TO_EMAIL = os.getenv("CONTACT_TO_EMAIL", "Info@rwmel.se")
 EMAIL_HOST = os.getenv("EMAIL_HOST", "")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "true").strip().lower() in {"1", "true", "yes", "on"}
-EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "false").strip().lower() in {"1", "true", "yes", "on"}
+EMAIL_USE_TLS = _env_bool("EMAIL_USE_TLS", True)
+EMAIL_USE_SSL = _env_bool("EMAIL_USE_SSL", False)
 EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "20"))
 EMAIL_BACKEND = os.getenv(
     "EMAIL_BACKEND",
@@ -458,37 +222,273 @@ EMAIL_BACKEND = os.getenv(
     else "django.core.mail.backends.console.EmailBackend",
 )
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "standard": {
-            "format": "%(asctime)s %(levelname)s %(name)s %(message)s",
-        },
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "formatter": "standard",
-        },
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["console"],
-            "level": "INFO",
-        },
-        "electricity": {
-            "handlers": ["console"],
-            "level": "INFO",
-            "propagate": False,
-        },
-    },
-}
+########################################################################server
+
+# import os
+# from pathlib import Path
+
+# from django.core.exceptions import ImproperlyConfigured
+
+# # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+# def _load_dotenv(dotenv_path: Path) -> None:
+#     if not dotenv_path.exists():
+#         return
+#     for raw_line in dotenv_path.read_text(encoding="utf-8").splitlines():
+#         line = raw_line.strip()
+#         if not line or line.startswith("#") or "=" not in line:
+#             continue
+#         key, value = line.split("=", 1)
+#         key = key.strip()
+#         value = value.strip().strip("'").strip('"')
+#         os.environ.setdefault(key, value)
+
+
+# _load_dotenv(BASE_DIR / ".env")
+# _load_dotenv(BASE_DIR.parent / ".env")
+
+
+# # Quick-start development settings - unsuitable for production
+# # See https://docs.djangoproject.com/en/4.2/howto/deployment/ 
+# # SECURITY WARNING: keep the secret key used in production secre 
+# SECRET_KEY = os.getenv("SECRET_KEY")
+# if not SECRET_KEY:
+#     raise ImproperlyConfigured("The SECRET_KEY setting must not be empty.")
+
+
+# # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = False
+
+# ALLOWED_HOSTS = ["45.93.137.166", "rwmel.se", "www.rwmel.se"]
+# _default_allowed_hosts = ["127.0.0.1", "localhost"]
+# _production_hosts = ["45.93.137.166", "rwmel.se", "www.rwmel.se"]
+# _env_allowed_hosts = [
+#     host.strip() for host in os.getenv("ALLOWED_HOSTS", ",".join(_default_allowed_hosts)).split(",") if host.strip()
+# ]
+# ALLOWED_HOSTS = list(dict.fromkeys(_env_allowed_hosts + ([] if DEBUG else _production_hosts)))
+
+# _env_csrf_trusted_origins = [
+#     origin.strip()
+#     for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+#     if origin.strip()
+# ]
+# CSRF_TRUSTED_ORIGINS = list(
+#     dict.fromkeys(
+#         _env_csrf_trusted_origins
+#         + (
+#             []
+#             if DEBUG
+#             else [
+#                 "https://rwmel.se",
+#                 "https://www.rwmel.se",
+#                 "http://45.93.137.166",
+#                 "https://45.93.137.166",
+#             ]
+#         )
+#     )
+# )
+
+
+# if not DEBUG:
+#     SECURE_BROWSER_XSS_FILTER = True
+#     SECURE_CONTENT_TYPE_NOSNIFF = True
+#     SESSION_COOKIE_SECURE = True
+#     CSRF_COOKIE_SECURE = True
+#     SECURE_SSL_REDIRECT = True
+#     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+#     SECURE_HSTS_SECONDS = 31536000
+#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#     SECURE_HSTS_PRELOAD = True
+#     SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+#     X_FRAME_OPTIONS = "DENY"
+
+
+
+# # Application definition
+
+# INSTALLED_APPS = [
+#     'modeltranslation',
+#     'django.contrib.admin',
+#     'django.contrib.auth',
+#     'django.contrib.contenttypes',
+#     'django.contrib.sessions',
+#     'django.contrib.messages',
+#     'django.contrib.staticfiles',
+#     'electricity.apps.ElectricityConfig',
+# ]
+
+# MIDDLEWARE = [
+#     'django.middleware.security.SecurityMiddleware',
+#     'django.contrib.sessions.middleware.SessionMiddleware',
+#     'django.middleware.locale.LocaleMiddleware',
+#     'django.middleware.common.CommonMiddleware',
+#     'django.middleware.csrf.CsrfViewMiddleware',
+#     'django.contrib.auth.middleware.AuthenticationMiddleware',
+#     'django.contrib.messages.middleware.MessageMiddleware',
+#     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+# ]
+
+# ROOT_URLCONF = 'PRO.urls'
+
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         'DIRS': [],
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'django.template.context_processors.debug',
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#                 'django.template.context_processors.i18n',
+#             ],
+#         },
+#     },
+# ]
+
+# WSGI_APPLICATION = 'PRO.wsgi.application'
+
+
+# # Database
+# # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+# USE_POSTGRES = os.getenv("USE_POSTGRES", "").lower() in {"1", "true", "yes"}
+# DB_NAME = os.getenv("DB_NAME", "")
+# if USE_POSTGRES or DB_NAME:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': os.getenv("DB_NAME", "electricity"),
+#             'USER': os.getenv("DB_USER", "postgres"),
+#             'PASSWORD': os.getenv("DB_PASSWORD", ""),
+#             'HOST': os.getenv("DB_HOST", "localhost"),
+#             'PORT': os.getenv("DB_PORT", "5432"),
+#             'CONN_MAX_AGE': int(os.getenv("DB_CONN_MAX_AGE", "60")),
+#         }
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
+
+
+# # Password validation
+# # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+#     },
+# ]
+
+
+# # Internationalization
+# # https://docs.djangoproject.com/en/4.2/topics/i18n/
+
+# LANGUAGE_CODE = 'en-us'
+
+# LANGUAGES = [
+#     ("en", "English"),
+#     ("sv", "Swedish"),
+#     ("ar", "Arabic"),
+# ]
+
+# MODELTRANSLATION_LANGUAGES = ("en", "ar", "sv")
+# MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
+# MODELTRANSLATION_FALLBACK_LANGUAGES = ("en",)
+
+# TIME_ZONE = 'Europe/Stockholm'
+
+# USE_I18N = True
+
+# USE_TZ = True
+
+# LOCALE_PATHS = [
+#     BASE_DIR / "locale",
+# ]
+
+
+# # Static files (CSS, JavaScript, Images)
+# # https://docs.djangoproject.com/en/4.2/howto/static-files/
+
+# STATIC_URL = '/static/'
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# LOGIN_URL = "/accounts/login/"
+# LOGIN_REDIRECT_URL = "/accounts/profile/"
+# LOGOUT_REDIRECT_URL = "/accounts/login/"
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR / 'media'
+
+# DATA_UPLOAD_MAX_MEMORY_SIZE = 80 * 1024 * 1024
+# FILE_UPLOAD_MAX_MEMORY_SIZE = 80 * 1024 * 1024
+
+# DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "support@rwmel.se")
+# SERVER_EMAIL = os.getenv("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
+# BOOKING_FROM_EMAIL = os.getenv("BOOKING_FROM_EMAIL", DEFAULT_FROM_EMAIL)
+# CONTACT_TO_EMAIL = os.getenv("CONTACT_TO_EMAIL", "info@rwmel.se")
+# EMAIL_HOST = os.getenv("EMAIL_HOST", "")
+# EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+# EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "true").strip().lower() in {"1", "true", "yes", "on"}
+# EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "false").strip().lower() in {"1", "true", "yes", "on"}
+# EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "20"))
+# EMAIL_BACKEND = os.getenv(
+#     "EMAIL_BACKEND",
+#     "django.core.mail.backends.smtp.EmailBackend"
+#     if EMAIL_HOST
+#     else "django.core.mail.backends.console.EmailBackend",
+# )
+
+# # Default primary key field type
+# # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
+# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "formatters": {
+#         "standard": {
+#             "format": "%(asctime)s %(levelname)s %(name)s %(message)s",
+#         },
+#     },
+#     "handlers": {
+#         "console": {
+#             "class": "logging.StreamHandler",
+#             "formatter": "standard",
+#         },
+#     },
+#     "loggers": {
+#         "django": {
+#             "handlers": ["console"],
+#             "level": "INFO",
+#         },
+#         "electricity": {
+#             "handlers": ["console"],
+#             "level": "INFO",
+#             "propagate": False,
+#         },
+#     },
+# }
 
 
 

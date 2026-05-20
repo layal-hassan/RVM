@@ -105,7 +105,12 @@
 
           {% trans "Select Date" %}
 
-          <input class="form-control" type="date" name="preferred_date" value="{{ data.preferred_date|default:'' }}">
+          <div class="date-input-shell">
+            <input class="form-control" type="date" name="preferred_date" value="{{ data.preferred_date|default:'' }}">
+            <button class="date-input-trigger" type="button" data-date-trigger aria-label="{% trans 'Open calendar' %}">
+              <span aria-hidden="true">📅</span>
+            </button>
+          </div>
 
         </label>
 
@@ -169,7 +174,12 @@
 
           {% trans "Select Date" %}
 
-          <input class="form-control" type="date" name="alt_date" value="{{ data.alt_date|default:'' }}">
+          <div class="date-input-shell">
+            <input class="form-control" type="date" name="alt_date" value="{{ data.alt_date|default:'' }}">
+            <button class="date-input-trigger" type="button" data-date-trigger aria-label="{% trans 'Open calendar' %}">
+              <span aria-hidden="true">📅</span>
+            </button>
+          </div>
 
         </label>
 

@@ -1,0 +1,94 @@
+:root {
+  --site-type-hero: 30px;
+  --site-type-heading: 19px;
+  --site-type-body: 12px;
+}
+
+body,
+p,
+li,
+label,
+input,
+textarea,
+select,
+button,
+td,
+th,
+.btn,
+.booking-description,
+.booking-step-label,
+.booking-step-note,
+.admin-login-subtitle,
+.admin-login-note,
+.brand-sub,
+.landing-subtitle,
+.landing-kicker,
+.landing-note,
+.hero-subtitle,
+.hero-kicker,
+.hero-note,
+.about-hero-subtitle,
+.contact-hero-quote,
+.oncall-subtitle,
+.support-subtitle,
+.panel-meta,
+.dash-subtitle,
+.terms-hero p,
+.faq-hero p,
+.thankyou-card p,
+.thankyou-note,
+.site-announcement__text,
+.site-announcement__badge,
+.rwm-egh-link,
+.rwm-egh-btn,
+.landing-cta {
+  font-size: var(--site-type-body) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+.booking-title,
+.section-header h2,
+.panel-header h2,
+.dash-card-title,
+.terms-info-title,
+.terms-glass-title,
+.contact-meta-title,
+.side-title {
+  font-size: var(--site-type-heading) !important;
+}
+
+.landing-title,
+.hero-title,
+.about-hero-title,
+.contact-hero-content h1,
+.oncall-title,
+.support-hero h1,
+.faq-hero h1,
+.terms-hero h1,
+.thankyou-card h1,
+.admin-login-card h1 {
+  font-size: var(--site-type-hero) !important;
+  line-height: 1.15 !important;
+}
+
+.oncall-title span {
+  font-size: inherit !important;
+}
+
+@media (max-width: 600px) {
+  .landing-title,
+  .hero-title,
+  .about-hero-title,
+  .contact-hero-content h1,
+  .oncall-title,
+  .support-hero h1,
+  .faq-hero h1,
+  .terms-hero h1,
+  .thankyou-card h1,
+  .admin-login-card h1 {
+    font-size: var(--site-type-hero) !important;
+  }
+}

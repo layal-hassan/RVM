@@ -33,36 +33,217 @@
         scroll-behavior: smooth;
       }
       body {
-        @apply bg-off-white text-navy-deep font-sans antialiased;
+        @apply font-sans antialiased;
       }
       h1, h2, h3, h4 {
-        @apply font-serif text-navy-deep;
+        @apply font-serif;
       }
       .nav-link {
-        @apply flex items-center gap-3 py-2 px-3 text-sm font-medium text-navy-deep/60 hover:text-primary transition-all border-l-2 border-transparent hover:border-primary/30;
+        @apply flex items-center gap-3 py-2 px-3 text-sm font-medium transition-all border-l-2 border-transparent;
       }
       .nav-link.active {
-        @apply text-navy-deep border-primary font-semibold bg-primary/5;
+        @apply font-semibold;
       }
       .policy-section {
-        @apply py-16 border-b border-navy-deep/5 last:border-0;
+        @apply py-16 last:border-0;
       }
       .section-number {
         @apply font-serif text-primary text-2xl mb-4 block;
       }
       .glass-card {
-        @apply bg-navy-deep/95 backdrop-blur-md border border-primary/30 rounded-2xl p-10 shadow-2xl;
+        @apply backdrop-blur-md rounded-2xl p-10 shadow-2xl;
       }
       .right-card {
-        @apply bg-white border border-navy-deep/5 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow;
+        @apply rounded-xl p-6 transition-shadow;
       }
     }
   </style>
   <style>
     body.electricity-body.privacy-page {
-      background: #fcfcf9;
-      color: #0a0c12;
+      --privacy-bg: #090c07;
+      --privacy-panel: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+      --privacy-panel-strong: linear-gradient(180deg, rgba(29, 34, 20, 0.98), rgba(16, 19, 10, 0.98));
+      --privacy-border: rgba(202, 161, 61, 0.18);
+      --privacy-border-strong: rgba(202, 161, 61, 0.3);
+      --privacy-gold: #caa13d;
+      --privacy-ink: #f5f1e6;
+      --privacy-muted: rgba(236, 230, 214, 0.72);
+      background:
+        radial-gradient(circle at top, rgba(202, 161, 61, 0.12), transparent 34%),
+        linear-gradient(180deg, #090c07 0%, #0d1009 40%, #080a06 100%);
+      color: var(--privacy-ink);
       font-family: "Inter", sans-serif;
+    }
+
+    .privacy-page h1,
+    .privacy-page h2,
+    .privacy-page h3,
+    .privacy-page h4 {
+      color: var(--privacy-ink) !important;
+    }
+
+    .privacy-page p,
+    .privacy-page li,
+    .privacy-page span,
+    .privacy-page .text-navy-deep\/80,
+    .privacy-page .text-navy-deep\/70,
+    .privacy-page .text-navy-deep\/60,
+    .privacy-page .text-navy-deep\/40,
+    .privacy-page .text-sm,
+    .privacy-page .prose {
+      color: var(--privacy-muted);
+    }
+
+    .privacy-page .text-primary {
+      color: var(--privacy-gold) !important;
+    }
+
+    .privacy-page section.w-full.bg-white {
+      background:
+        linear-gradient(180deg, rgba(9, 12, 7, 0.9), rgba(9, 12, 7, 0.72)),
+        radial-gradient(circle at top, rgba(202, 161, 61, 0.14), transparent 38%) !important;
+      border-bottom: 1px solid rgba(202, 161, 61, 0.12) !important;
+    }
+
+    .privacy-page section.w-full.bg-white > div {
+      width: min(1100px, calc(100% - 32px));
+      padding: 92px 32px 86px;
+      border: 1px solid rgba(202, 161, 61, 0.16);
+      border-radius: 32px;
+      background: linear-gradient(180deg, rgba(16, 20, 11, 0.76), rgba(9, 12, 7, 0.92));
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.26);
+      backdrop-filter: blur(6px);
+    }
+
+    .privacy-page .inline-block.py-1.px-3.bg-primary\/10 {
+      background: rgba(202, 161, 61, 0.1) !important;
+      border: 1px solid rgba(202, 161, 61, 0.28);
+      color: #f3e4bb !important;
+      border-radius: 999px;
+      padding: 10px 18px;
+    }
+
+    .privacy-page .max-w-3xl .font-serif.italic {
+      color: rgba(245, 241, 230, 0.82) !important;
+    }
+
+    .privacy-page .w-full.max-w-\[1400px\] {
+      gap: 28px;
+      align-items: flex-start;
+    }
+
+    .privacy-page aside .sticky {
+      background: var(--privacy-panel);
+      border: 1px solid var(--privacy-border);
+      border-radius: 28px;
+      box-shadow: 0 22px 54px rgba(0, 0, 0, 0.22);
+      top: calc(var(--rwmh-height) + 24px);
+      padding: 28px 18px;
+      max-height: calc(100vh - 140px);
+    }
+
+    .privacy-page .nav-link {
+      color: var(--privacy-muted);
+      border-radius: 16px;
+      border: 1px solid transparent;
+    }
+
+    .privacy-page .nav-link:hover {
+      background: rgba(202, 161, 61, 0.08);
+      border-color: rgba(202, 161, 61, 0.16);
+      color: var(--privacy-ink) !important;
+      transform: translateX(2px);
+    }
+
+    .privacy-page .nav-link.active {
+      background: linear-gradient(180deg, rgba(202, 161, 61, 0.18), rgba(202, 161, 61, 0.1));
+      border-color: rgba(202, 161, 61, 0.28);
+      color: var(--privacy-ink) !important;
+    }
+
+    .privacy-page .policy-section {
+      background: var(--privacy-panel);
+      border: 1px solid var(--privacy-border);
+      border-radius: 30px;
+      padding: 48px 40px;
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .privacy-page .policy-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(202, 161, 61, 0.12), transparent 32%);
+      pointer-events: none;
+    }
+
+    .privacy-page .policy-section > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .privacy-page .bg-white,
+    .privacy-page .right-card,
+    .privacy-page .bg-white.border,
+    .privacy-page .p-6.border.border-navy-deep\/5.bg-white.rounded-xl,
+    .privacy-page .bg-white.border.border-navy-deep\/5.p-5.rounded-lg,
+    .privacy-page li.bg-white {
+      background: var(--privacy-panel) !important;
+      border: 1px solid var(--privacy-border) !important;
+      color: var(--privacy-ink) !important;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
+    }
+
+    .privacy-page .glass-card {
+      background: var(--privacy-panel-strong) !important;
+      border: 1px solid var(--privacy-border-strong) !important;
+    }
+
+    .privacy-page .glass-card p,
+    .privacy-page .glass-card .text-white\/80,
+    .privacy-page .glass-card .text-white\/60 {
+      color: var(--privacy-muted) !important;
+    }
+
+    .privacy-page .glass-card .bg-white\/5 {
+      background: rgba(202, 161, 61, 0.08) !important;
+      border-color: rgba(202, 161, 61, 0.18) !important;
+    }
+
+    .privacy-page .bg-navy-deep,
+    .privacy-page .inline-flex.items-center.gap-2.text-sm.font-bold.uppercase.tracking-widest.bg-navy-deep {
+      background: linear-gradient(180deg, rgba(202, 161, 61, 0.18), rgba(202, 161, 61, 0.1)) !important;
+      border: 1px solid rgba(202, 161, 61, 0.24);
+      color: var(--privacy-ink) !important;
+    }
+
+    .privacy-page .w-12.h-12.bg-primary\/10.rounded-full,
+    .privacy-page .p-3.bg-primary\/20.rounded-lg.text-primary {
+      background: rgba(202, 161, 61, 0.12) !important;
+    }
+
+    .privacy-page .w-2.h-2.bg-primary.rounded-full {
+      background: var(--privacy-gold) !important;
+    }
+
+    .privacy-page a.text-primary {
+      color: var(--privacy-gold) !important;
+    }
+
+    @media (max-width: 900px) {
+      .privacy-page section.w-full.bg-white > div {
+        width: calc(100% - 24px);
+        padding: 72px 24px 64px;
+        border-radius: 24px;
+      }
+
+      .privacy-page .policy-section {
+        padding: 34px 22px;
+        border-radius: 24px;
+      }
     }
   </style>
 {% endblock %}

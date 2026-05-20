@@ -4,6 +4,242 @@
 {% block title %}{% trans "Terms & Conditions | RWM EL Pro Edition" %}{% endblock %}
 {% block body_class %}terms-page{% endblock %}
 
+{% block extra_head %}
+  <style>
+    body.electricity-body.terms-page {
+      --terms-bg: #090c07;
+      --terms-bg-soft: #10140d;
+      --terms-panel: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+      --terms-panel-strong: linear-gradient(180deg, rgba(29, 34, 20, 0.98), rgba(16, 19, 10, 0.98));
+      --terms-border: rgba(202, 161, 61, 0.18);
+      --terms-border-strong: rgba(202, 161, 61, 0.3);
+      --terms-gold: #caa13d;
+      --terms-ink: #f5f1e6;
+      --terms-muted: rgba(236, 230, 214, 0.72);
+      background:
+        radial-gradient(circle at top, rgba(202, 161, 61, 0.12), transparent 34%),
+        linear-gradient(180deg, #090c07 0%, #0d1009 40%, #080a06 100%);
+      color: var(--terms-ink);
+    }
+
+    .terms-hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(9, 12, 7, 0.56), rgba(9, 12, 7, 0.74)),
+        linear-gradient(90deg, rgba(9, 12, 7, 0.62), rgba(9, 12, 7, 0.22) 42%, rgba(9, 12, 7, 0.62) 100%);
+      border-bottom: 1px solid rgba(202, 161, 61, 0.12);
+    }
+
+    .terms-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(10, 13, 8, 0.22), rgba(10, 13, 8, 0.5)),
+        url("https://images.unsplash.com/photo-1758518731462-d091b0b4ed0d?auto=format&fit=crop&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000");
+      background-size: cover;
+      background-position: center 32%;
+      opacity: 0.78;
+      transform: scale(1.03);
+    }
+
+    .terms-hero-inner {
+      position: relative;
+      z-index: 1;
+      width: min(1100px, calc(100% - 32px));
+      padding: 92px 32px 86px;
+      border: 1px solid rgba(202, 161, 61, 0.16);
+      border-radius: 32px;
+      background: linear-gradient(180deg, rgba(16, 20, 11, 0.58), rgba(9, 12, 7, 0.76));
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.26);
+      backdrop-filter: blur(4px);
+    }
+
+    .terms-badge {
+      background: rgba(202, 161, 61, 0.1);
+      border: 1px solid rgba(202, 161, 61, 0.28);
+      color: #f3e4bb;
+    }
+
+    .terms-hero h1,
+    .terms-section h2,
+    .terms-info-title,
+    .terms-glass-title {
+      color: var(--terms-ink) !important;
+    }
+
+    .terms-meta,
+    .terms-lead,
+    .terms-section p,
+    .terms-box p,
+    .terms-info-card p,
+    .terms-soft-card p,
+    .terms-glass p,
+    .terms-glass-foot,
+    .terms-list div,
+    .terms-download span {
+      color: var(--terms-muted) !important;
+    }
+
+    .terms-index,
+    .terms-box-kicker,
+    .terms-nav-title {
+      color: var(--terms-gold) !important;
+    }
+
+    .terms-body {
+      background: transparent;
+    }
+
+    .terms-layout {
+      gap: 28px;
+      align-items: start;
+    }
+
+    .terms-nav {
+      background: var(--terms-panel);
+      border: 1px solid var(--terms-border);
+      border-radius: 28px;
+      box-shadow: 0 22px 54px rgba(0, 0, 0, 0.22);
+      top: calc(var(--rwmh-height) + 24px);
+    }
+
+    .terms-nav-links {
+      gap: 8px;
+    }
+
+    .terms-link {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--terms-muted);
+      border-radius: 16px;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    .terms-link:hover {
+      background: rgba(202, 161, 61, 0.08);
+      border-color: rgba(202, 161, 61, 0.16);
+      color: var(--terms-ink);
+      transform: translateX(2px);
+    }
+
+    .terms-link.is-active {
+      background: linear-gradient(180deg, rgba(202, 161, 61, 0.18), rgba(202, 161, 61, 0.1));
+      border-color: rgba(202, 161, 61, 0.28);
+      color: var(--terms-ink);
+      box-shadow: none;
+    }
+
+    .terms-link.is-active::after {
+      color: var(--terms-gold);
+    }
+
+    .terms-content {
+      display: grid;
+      gap: 24px;
+    }
+
+    .terms-section,
+    .terms-info-card,
+    .terms-box,
+    .terms-glass,
+    .terms-soft-card {
+      background: var(--terms-panel);
+      border: 1px solid var(--terms-border);
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.2);
+    }
+
+    .terms-section {
+      border-radius: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .terms-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(202, 161, 61, 0.12), transparent 32%);
+      pointer-events: none;
+    }
+
+    .terms-section > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .terms-info-card,
+    .terms-box,
+    .terms-soft-card {
+      border-radius: 22px;
+    }
+
+    .terms-quote {
+      background: var(--terms-panel-strong);
+      border-left: 6px solid var(--terms-gold);
+      color: var(--terms-ink);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
+    }
+
+    .terms-glass {
+      background: var(--terms-panel-strong);
+      border-color: var(--terms-border-strong);
+      border-radius: 24px;
+    }
+
+    .terms-glass-note {
+      background: rgba(202, 161, 61, 0.08);
+      border: 1px solid rgba(202, 161, 61, 0.18);
+      color: var(--terms-muted);
+    }
+
+    .terms-glass-note span,
+    .terms-list strong,
+    .terms-download {
+      color: var(--terms-ink) !important;
+    }
+
+    .terms-download {
+      background: linear-gradient(180deg, rgba(202, 161, 61, 0.16), rgba(202, 161, 61, 0.08));
+      border: 1px solid rgba(202, 161, 61, 0.24);
+      border-radius: 999px;
+    }
+
+    .terms-download:hover {
+      background: #caa13d;
+      color: #17150f !important;
+      border-color: #caa13d;
+    }
+
+    .terms-download:hover span {
+      color: #17150f !important;
+    }
+
+    @media (max-width: 900px) {
+      .terms-hero-inner {
+        padding: 72px 24px 64px;
+        border-radius: 24px;
+      }
+
+      .terms-nav {
+        top: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .terms-hero-inner {
+        width: calc(100% - 24px);
+        padding: 56px 18px 52px;
+      }
+
+      .terms-section {
+        border-radius: 24px;
+      }
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
 <section class="terms-hero">
   <div class="container terms-hero-inner">

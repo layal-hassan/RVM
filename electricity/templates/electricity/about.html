@@ -32,38 +32,30 @@
   <style type="text/tailwindcss">
     @layer base {
       body {
-        @apply bg-background-light text-navy antialiased;
+        @apply antialiased;
       }
-    }
-    .scandi-border {
-      border-color: rgba(10, 25, 47, 0.1);
     }
     .story-text {
-      line-height: 1.8;
-      letter-spacing: 0.01em;
-    }
-    .about-panel {
-      background: #f7f3ea;
-      border: 1px solid rgba(10, 25, 47, 0.08);
-      border-radius: 28px;
-      padding: 72px 48px;
-      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.06);
-    }
-    @media (max-width: 900px) {
-      .about-panel {
-        padding: 56px 28px;
-      }
-    }
-    @media (max-width: 600px) {
-      .about-panel {
-        padding: 48px 22px;
-      }
+      line-height: 1.9;
+      letter-spacing: 0.015em;
     }
   </style>
   <style>
     body.electricity-body.about-page {
-      background: linear-gradient(180deg, #f7f3ea 0%, #f2ede3 60%, #efe8dd 100%);
-      color: #0a192f;
+      --about-bg: #090c07;
+      --about-bg-soft: #11150d;
+      --about-panel: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+      --about-panel-strong: linear-gradient(180deg, rgba(30, 35, 20, 0.98), rgba(16, 19, 10, 0.98));
+      --about-border: rgba(202, 161, 61, 0.18);
+      --about-border-strong: rgba(202, 161, 61, 0.34);
+      --about-gold: #caa13d;
+      --about-ink: #f5f1e6;
+      --about-muted: rgba(236, 230, 214, 0.72);
+      --about-subtle: rgba(236, 230, 214, 0.54);
+      background:
+        radial-gradient(circle at top, rgba(202, 161, 61, 0.12), transparent 36%),
+        linear-gradient(180deg, #090c07 0%, #0c1009 42%, #080a06 100%);
+      color: var(--about-ink);
       font-family: "Manrope", sans-serif;
       padding-top: 0;
     }
@@ -73,7 +65,8 @@
     }
 
     .about-hero {
-      min-height: 80vh;
+      min-height: calc(100vh - var(--rwmh-height));
+      padding: 110px 0 84px;
     }
 
     .about-hero-title {
@@ -83,10 +76,149 @@
 
     .about-hero-subtitle {
       font-size: 18px;
+      color: rgba(245, 241, 230, 0.88);
     }
 
     .about-hero-actions {
       justify-content: center;
+    }
+
+    .about-hero-content {
+      width: min(1100px, calc(100% - 32px));
+      padding: 42px 32px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 32px;
+      background: linear-gradient(180deg, rgba(8, 10, 6, 0.45), rgba(8, 10, 6, 0.72));
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+    }
+
+    .about-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(202, 161, 61, 0.36);
+      background: rgba(202, 161, 61, 0.1);
+      color: #f3e4bb;
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    .about-grid {
+      display: grid;
+      gap: 28px;
+    }
+
+    .about-panel {
+      background: var(--about-panel);
+      border: 1px solid var(--about-border);
+      border-radius: 30px;
+      padding: 72px 48px;
+      box-shadow: 0 28px 72px rgba(0, 0, 0, 0.22);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(202, 161, 61, 0.12), transparent 34%);
+      pointer-events: none;
+    }
+
+    .about-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-section-band {
+      background:
+        linear-gradient(180deg, rgba(17, 21, 13, 0.96), rgba(11, 14, 8, 0.96));
+      border-top: 1px solid rgba(202, 161, 61, 0.12);
+      border-bottom: 1px solid rgba(202, 161, 61, 0.12);
+    }
+
+    .about-quote-card {
+      background: var(--about-panel-strong);
+      border: 1px solid var(--about-border-strong);
+      border-left: 8px solid var(--about-gold);
+      padding: 36px;
+      border-radius: 24px;
+      box-shadow: 0 20px 44px rgba(0, 0, 0, 0.18);
+    }
+
+    .about-feature-media {
+      min-height: 500px;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid var(--about-border);
+      box-shadow: 0 26px 56px rgba(0, 0, 0, 0.24);
+    }
+
+    .about-standard-card {
+      background: rgba(14, 17, 10, 0.96);
+      border: 1px solid rgba(202, 161, 61, 0.12);
+      padding: 34px 28px;
+      min-height: 100%;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .about-standard-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(202, 161, 61, 0.28);
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.2);
+    }
+
+    .about-cta {
+      background:
+        radial-gradient(circle at top, rgba(202, 161, 61, 0.16), transparent 34%),
+        linear-gradient(180deg, #0d1109 0%, #090c07 100%);
+      border-top: 1px solid rgba(202, 161, 61, 0.14);
+    }
+
+    .about-cta-card {
+      background: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+      border: 1px solid rgba(202, 161, 61, 0.18);
+      border-radius: 32px;
+      padding: 56px 32px;
+      box-shadow: 0 26px 64px rgba(0, 0, 0, 0.22);
+    }
+
+    .about-page h2,
+    .about-page h3,
+    .about-page blockquote {
+      color: var(--about-ink) !important;
+    }
+
+    .about-page p,
+    .about-page li,
+    .about-page .story-text,
+    .about-page .text-gray-600,
+    .about-page .text-gray-700,
+    .about-page .text-gray-300,
+    .about-page .text-gray-400 {
+      color: var(--about-muted) !important;
+    }
+
+    .about-page .text-primary {
+      color: var(--about-gold) !important;
+    }
+
+    .about-page .btn.btn-secondary {
+      background: rgba(247, 244, 237, 0.04);
+      border: 1px solid rgba(202, 161, 61, 0.26);
+      color: #f5f1e6;
+    }
+
+    .about-page .btn.btn-secondary:hover {
+      background: rgba(202, 161, 61, 0.12);
+      border-color: rgba(202, 161, 61, 0.42);
+      color: #f5f1e6;
     }
 
     @media (max-width: 600px) {
@@ -110,6 +242,25 @@
       .about-hero-actions .btn {
         width: 100%;
       }
+
+      .about-hero-content {
+        padding: 28px 18px;
+        border-radius: 24px;
+      }
+
+      .about-panel {
+        padding: 46px 22px;
+        border-radius: 24px;
+      }
+
+      .about-quote-card,
+      .about-cta-card {
+        padding: 28px 20px;
+      }
+
+      .about-feature-media {
+        min-height: 320px;
+      }
     }
   </style>
 {% endblock %}
@@ -117,10 +268,11 @@
 {% block content %}
 <div class="relative about-hero w-full flex items-center justify-center overflow-hidden">
   <div class="absolute inset-0 z-0">
-    <div class="absolute inset-0 bg-navy/40 z-10"></div>
-    <div class="w-full h-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDU9zuAaRWDEx-ZxOOUKThUVV90oghaqF_QXBHrXzXC_Lat7pyzM_WHLfKkDrUmO-7UgAl8GvJ5DRIbJMmk2HGv5y6lIGIJiUqo9WPlcA4BdIadipJaJzm9_r6y3bcGviPt3Jg2M6vrtNLuuN29FQ3I9Z-zG66XDp230IYkg1ssMRL5sbi4YqLjezL-2QFX4AzoyLvanxT6Vy5HPY-x_xvP2rd1aL6dFUkv6o5boZ_XmbVz5P3eRs1S8mSEZpSd8bmIjZ_7kv6gKYA");'></div>
+    <div class="absolute inset-0 z-10" style="background: linear-gradient(180deg, rgba(6, 8, 5, 0.2), rgba(6, 8, 5, 0.78));"></div>
+    <div class="w-full h-full bg-cover bg-center" style='background-image: url("{% static "electricity/img/about-hero-worker.jpg" %}");'></div>
   </div>
   <div class="relative z-20 text-center px-4 max-w-5xl mx-auto about-hero-content">
+    <span class="about-eyebrow">{% trans "Built For Long-Term Safety" %}</span>
     <h1 class="text-white font-serif font-bold mb-6 tracking-tight about-hero-title">{% trans "About RWM EL" %}</h1>
     <p class="text-white font-light mb-10 max-w-3xl mx-auto leading-relaxed italic about-hero-subtitle">
       {% trans "Because electrical work is a responsibility — not a shortcut." %}
@@ -150,7 +302,7 @@
   </div>
 </section>
 
-<section class="bg-[#efe7db] dark:bg-navy/30 py-28 border-y border-[#e6dccb]">
+<section class="about-section-band py-28">
   <div class="max-w-[1200px] mx-auto px-6">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
       <div class="space-y-8">
@@ -160,7 +312,7 @@
           <p>{% trans "Every wire we pull and every panel we install is a testament to our commitment to Swedish engineering excellence and local safety regulations." %}</p>
         </div>
       </div>
-      <div class="bg-white dark:bg-navy p-12 border-l-8 border-primary shadow-sm">
+      <div class="about-quote-card">
         <p class="text-navy dark:text-white text-2xl font-serif italic leading-relaxed">
           {% trans "Electrical work is regulated in Sweden because incorrect installations are dangerous. We don't just follow the law; we champion the safety it provides." %}
         </p>
@@ -169,11 +321,11 @@
   </div>
 </section>
 
-<section class="py-28 text-center bg-[#f3efe6] dark:bg-charcoal border-y border-[#e6dccb]">
+<section class="py-28 text-center about-section-band">
   <div class="max-w-2xl mx-auto px-6">
     <div class="flex flex-col items-center mb-10">
       <span class="material-symbols-outlined text-primary text-6xl mb-6">shield_with_heart</span>
-      <div class="w-16 h-px bg-navy/20 dark:bg-white/20 mb-8"></div>
+      <div class="w-16 h-px mb-8" style="background: rgba(202, 161, 61, 0.28);"></div>
       <h2 class="text-navy dark:text-white text-4xl font-serif font-bold mb-8">{% trans "Why We Do This" %}</h2>
     </div>
     <div class="story-text text-gray-600 dark:text-gray-400 text-lg font-light leading-relaxed">
@@ -186,7 +338,7 @@
 
 <section class="max-w-[1200px] mx-auto px-6 py-24 lg:py-32 about-panel">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
-    <div class="relative h-[500px] bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDQyMsr3zZk37efVhVnY8Qo20KkzlwpKRVnHXH1rhgkPDVtHaM2LMbG1z1FlwY-RzoSOw-kA-YHy4HBRI2C9WdJ0PTz99hPDOo8Td89dxU5wlJy_x5iI5sHDOUszM1GiLtneVitFj0IMEcys1ml-iy3bT6ILKOnJojuepYIAopsd1iSCo_xNfRHhpklfOgMh9ZFdbHTw7XS_5P3bX_xYdqN5a4c3-mye6nmd-ACBCTN90qJCeqF_fAGX8GJow84VZpk0vqeyoIGHi8");'></div>
+    <div class="relative about-feature-media bg-cover bg-center" style='background-image: linear-gradient(180deg, rgba(8, 10, 6, 0.12), rgba(8, 10, 6, 0.52)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDQyMsr3zZk37efVhVnY8Qo20KkzlwpKRVnHXH1rhgkPDVtHaM2LMbG1z1FlwY-RzoSOw-kA-YHy4HBRI2C9WdJ0PTz99hPDOo8Td89dxU5wlJy_x5iI5sHDOUszM1GiLtneVitFj0IMEcys1ml-iy3bT6ILKOnJojuepYIAopsd1iSCo_xNfRHhpklfOgMh9ZFdbHTw7XS_5P3bX_xYdqN5a4c3-mye6nmd-ACBCTN90qJCeqF_fAGX8GJow84VZpk0vqeyoIGHi8");'></div>
     <div class="flex flex-col justify-center">
       <h2 class="text-navy dark:text-white text-4xl font-serif font-bold mb-8">{% trans "More Than Just Today’s Installation" %}</h2>
       <p class="story-text text-gray-700 dark:text-gray-300 text-lg mb-8">
@@ -214,31 +366,31 @@
   </div>
 </section>
 
-<section class="bg-navy py-32 text-white">
+<section class="about-section-band py-32 text-white">
   <div class="max-w-[1200px] mx-auto px-6">
     <h2 class="text-3xl font-serif font-bold mb-20 text-center tracking-tight">{% trans "The RWM EL Standard" %}</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-px bg-white/10">
-      <div class="bg-navy p-10 flex flex-col items-center text-center group transition-all">
+      <div class="about-standard-card flex flex-col items-center text-center group">
         <span class="material-symbols-outlined text-primary text-4xl mb-8">gavel</span>
         <h3 class="font-bold text-sm tracking-widest uppercase mb-4">{% trans "Compliance" %}</h3>
         <p class="text-gray-400 text-sm leading-relaxed font-light">{% trans "Rigorous adherence to every Swedish electrical safety standard." %}</p>
       </div>
-      <div class="bg-navy p-10 flex flex-col items-center text-center group transition-all">
+      <div class="about-standard-card flex flex-col items-center text-center group">
         <span class="material-symbols-outlined text-primary text-4xl mb-8">health_and_safety</span>
         <h3 class="font-bold text-sm tracking-widest uppercase mb-4">{% trans "Long-term safety" %}</h3>
         <p class="text-gray-400 text-sm leading-relaxed font-light">{% trans "Solutions designed to remain secure for decades, not just years." %}</p>
       </div>
-      <div class="bg-navy p-10 flex flex-col items-center text-center group transition-all">
+      <div class="about-standard-card flex flex-col items-center text-center group">
         <span class="material-symbols-outlined text-primary text-4xl mb-8">visibility</span>
         <h3 class="font-bold text-sm tracking-widest uppercase mb-4">{% trans "Clarity" %}</h3>
         <p class="text-gray-400 text-sm leading-relaxed font-light">{% trans "Transparent documentation and straightforward communication." %}</p>
       </div>
-      <div class="bg-navy p-10 flex flex-col items-center text-center group transition-all">
+      <div class="about-standard-card flex flex-col items-center text-center group">
         <span class="material-symbols-outlined text-primary text-4xl mb-8">architecture</span>
         <h3 class="font-bold text-sm tracking-widest uppercase mb-4">{% trans "Modern planning" %}</h3>
         <p class="text-gray-400 text-sm leading-relaxed font-light">{% trans "Anticipating your future energy needs before they arise." %}</p>
       </div>
-      <div class="bg-navy p-10 flex flex-col items-center text-center group transition-all">
+      <div class="about-standard-card flex flex-col items-center text-center group">
         <span class="material-symbols-outlined text-primary text-4xl mb-8">verified_user</span>
         <h3 class="font-bold text-sm tracking-widest uppercase mb-4">{% trans "No fixes needed" %}</h3>
         <p class="text-gray-400 text-sm leading-relaxed font-light">{% trans "Done right the first time, ensuring no corrections are ever required." %}</p>
@@ -247,14 +399,16 @@
   </div>
 </section>
 
-<section class="bg-white dark:bg-charcoal py-40 text-center border-t border-gray-100 dark:border-gray-800">
+<section class="about-cta py-40 text-center">
   <div class="max-w-4xl mx-auto px-6">
-    <h2 class="text-navy dark:text-white text-4xl md:text-6xl font-serif font-bold mb-12 leading-tight">
-      {% trans "Electrical work should be done right — not corrected later." %}
-    </h2>
-    <a class="bg-navy dark:bg-primary text-white dark:text-navy px-16 py-5 font-bold text-sm tracking-widest uppercase transition-all hover:bg-primary hover:text-navy shadow-2xl inline-flex items-center justify-center" href="{% url 'electricity:contact' %}">
-      {% trans "Contact RWM EL" %}
-    </a>
+    <div class="about-cta-card">
+      <h2 class="text-navy dark:text-white text-4xl md:text-6xl font-serif font-bold mb-12 leading-tight">
+        {% trans "Electrical work should be done right — not corrected later." %}
+      </h2>
+      <a class="btn btn-primary" href="{% url 'electricity:contact' %}">
+        {% trans "Contact RWM EL" %}
+      </a>
+    </div>
   </div>
 </section>
 {% endblock %}

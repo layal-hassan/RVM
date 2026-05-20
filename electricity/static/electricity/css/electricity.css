@@ -738,7 +738,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .zip-check {
-  padding: 110px 0 120px;
+  padding: 88px 0 96px;
   background:
     radial-gradient(circle at top, rgba(171, 132, 49, 0.14), transparent 26%),
     linear-gradient(180deg, #0b0d07 0%, #12150b 38%, #171a0d 100%);
@@ -755,9 +755,9 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   position: relative;
   overflow: hidden;
   background: linear-gradient(180deg, rgba(23, 26, 15, 0.98), rgba(15, 18, 10, 0.98));
-  border-radius: 12px;
-  padding: 52px 54px 38px;
-  max-width: 860px;
+  border-radius: 10px;
+  padding: 42px 44px 30px;
+  max-width: 760px;
   width: 100%;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
   border: 1px solid rgba(202, 161, 61, 0.18);
@@ -777,22 +777,22 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 .zip-badge {
   display: inline-flex;
   align-items: center;
-  padding: 8px 16px;
+  padding: 7px 14px;
   border-radius: 999px;
   background: rgba(202, 161, 61, 0.14);
   color: #f2ca63;
   font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   border: 1px solid rgba(202, 161, 61, 0.24);
 }
 
 .zip-card h1 {
   color: #f5f1e6;
-  font-size: clamp(38px, 5vw, 64px);
-  line-height: 1.02;
-  margin-bottom: 18px;
+  font-size: clamp(30px, 4.1vw, 52px);
+  line-height: 1.04;
+  margin-bottom: 14px;
   max-width: 10ch;
   text-transform: uppercase;
 }
@@ -801,8 +801,8 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 18px;
-  font-size: 11px;
+  margin-bottom: 14px;
+  font-size: 10px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #d5b14d;
@@ -816,19 +816,19 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .zip-card p {
   color: rgba(236, 230, 214, 0.74);
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .zip-lead {
   max-width: 620px;
-  font-size: 17px;
-  line-height: 1.75;
+  font-size: 15px;
+  line-height: 1.65;
 }
 
 .zip-form {
   display: grid;
   gap: 14px;
-  max-width: 760px;
+  max-width: 680px;
 }
 
 .zip-label {
@@ -836,13 +836,13 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   color: #f3e4bb;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .zip-input-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 180px;
-  gap: 14px;
+  grid-template-columns: minmax(0, 1fr) 160px;
+  gap: 12px;
   align-items: stretch;
 }
 
@@ -852,8 +852,8 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   border: 1px solid rgba(202, 161, 61, 0.16);
   background: rgba(247, 244, 237, 0.05);
   border-radius: 8px;
-  padding: 18px 18px;
-  font-size: 28px;
+  padding: 15px 16px;
+  font-size: 22px;
   letter-spacing: 0.04em;
   color: #f5f1e6;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
@@ -873,12 +873,12 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .zip-check .btn.btn-primary {
   width: 100%;
-  min-height: 78px;
+  min-height: 64px;
   border-radius: 999px;
   border: 2px solid rgba(18, 15, 8, 0.78);
   background: #caa13d;
   color: #17150f;
-  font-size: 20px;
+  font-size: 16px;
   letter-spacing: 0.18em;
   box-shadow: 0 18px 40px rgba(202, 161, 61, 0.22);
 }
@@ -919,8 +919,8 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .zip-note {
-  margin-top: 18px;
-  font-size: 13px;
+  margin-top: 14px;
+  font-size: 12px;
   color: rgba(236, 230, 214, 0.58);
 }
 
@@ -928,7 +928,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-top: 18px;
+  margin-top: 14px;
 }
 
 .zip-meta span {
@@ -2587,20 +2587,22 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 /* ===== Contact Page ===== */
 .contact-page {
-  background: #f8f6f2;
-  color: #1c1c1c;
+  background:
+    radial-gradient(circle at top, rgba(202, 161, 61, 0.12), transparent 34%),
+    linear-gradient(180deg, #090c07 0%, #0d1009 40%, #080a06 100%);
+  color: #f5f1e6;
 }
 
 .contact-page .contact-hero .btn-primary {
-  background: #d3b26a;
-  color: #141414;
-  box-shadow: none;
+  background: #caa13d;
+  color: #17150f;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
 }
 
 .contact-page .contact-hero .btn-secondary {
-  background: transparent;
-  border: 1px solid rgba(211, 178, 106, 0.9);
-  color: #f5f5f5;
+  background: rgba(247, 244, 237, 0.04);
+  border: 1px solid rgba(202, 161, 61, 0.26);
+  color: #f5f1e6;
 }
 
 .contact-page .contact-hero .hero-actions {
@@ -2609,22 +2611,25 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .contact-hero {
   position: relative;
-  padding: 110px 0 90px;
+  padding: 126px 0 102px;
 }
 
 .contact-hero-dark {
-  background: #2b312a;
-  color: #f5f5f5;
+  background: #090c07;
+  color: #f5f1e6;
+  border-top: 1px solid rgba(202, 161, 61, 0.08);
+  border-bottom: 1px solid rgba(202, 161, 61, 0.12);
 }
 
 .contact-hero-media {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(10, 10, 10, 0.65), rgba(10, 10, 10, 0.65)),
+  background: radial-gradient(900px 520px at 18% 20%, rgba(202, 161, 61, 0.16), transparent 52%),
+    linear-gradient(90deg, rgba(7, 9, 6, 0.94) 0%, rgba(9, 12, 7, 0.82) 44%, rgba(9, 12, 7, 0.38) 100%),
     url("https://unsplash.com/photos/PkHf7BUWbtk/download?force=true");
   background-size: cover;
   background-position: center;
-  opacity: 0.6;
+  opacity: 0.78;
 }
 
 .contact-hero-center {
@@ -2633,36 +2638,58 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .contact-hero-content {
-  max-width: 720px;
+  max-width: 840px;
   margin: 0 auto;
+  padding: 38px 32px;
+  border-radius: 30px;
+  background: linear-gradient(180deg, rgba(21, 25, 15, 0.92), rgba(12, 15, 8, 0.92));
+  border: 1px solid rgba(202, 161, 61, 0.18);
+  box-shadow: 0 30px 72px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-hero-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(202, 161, 61, 0.12), transparent 34%);
+  pointer-events: none;
+}
+
+.contact-hero-content > * {
+  position: relative;
+  z-index: 1;
 }
 
 .contact-hero-content h1 {
-  font-size: clamp(34px, 5vw, 60px);
-  margin-bottom: 12px;
+  font-size: clamp(44px, 5.8vw, 82px);
+  line-height: 1;
+  margin-bottom: 16px;
+  color: #f5f1e6;
 }
 
 .contact-hero-quote {
   font-style: italic;
-  color: rgba(245, 245, 245, 0.8);
-  margin-bottom: 24px;
+  color: rgba(245, 241, 230, 0.82);
+  margin-bottom: 26px;
 }
 
 .contact-eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.3em;
   font-size: 11px;
-  color: #b18b3d;
+  color: #caa13d;
   margin-bottom: 12px;
 }
 
 .contact-section {
-  padding: 80px 0;
+  padding: 82px 0;
 }
 
 .contact-section.contact-inquiry {
-  background: #ffffff;
-  color: #1c1c1c;
+  background: transparent;
+  color: #f5f1e6;
 }
 
 .contact-section.contact-inquiry .contact-section-header {
@@ -2670,7 +2697,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .contact-section.contact-inquiry .contact-eyebrow {
-  color: #b18b3d;
+  color: #caa13d;
 }
 
 .contact-section.contact-inquiry h2 {
@@ -2683,7 +2710,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .contact-section.contact-inquiry .contact-chip {
   background: transparent;
-  color: #1c1c1c;
+  color: rgba(236, 230, 214, 0.82);
   font-size: 13px;
   text-transform: none;
   letter-spacing: 0.02em;
@@ -2703,26 +2730,26 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #0f1c2e;
-  box-shadow: inset 0 0 0 4px #ffffff;
-  border: 2px solid #0f1c2e;
+  background: #caa13d;
+  box-shadow: inset 0 0 0 4px #11150d;
+  border: 2px solid #caa13d;
   flex: 0 0 16px;
 }
 
 .contact-section.contact-inquiry .contact-chip.is-active {
-  color: #1c1c1c;
+  color: #f5f1e6;
   background: transparent;
 }
 
 .contact-section.contact-inquiry .contact-chip:focus-visible {
-  box-shadow: 0 0 0 3px rgba(15, 28, 46, 0.12);
+  box-shadow: 0 0 0 3px rgba(202, 161, 61, 0.14);
   outline: none;
 }
 
 .contact-section.contact-inquiry .contact-card {
-  background: #ffffff;
-  border: 1px solid #2a2a2a;
-  box-shadow: 0 20px 50px rgba(20, 20, 20, 0.08);
+  background: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
   text-align: center;
 }
 
@@ -2731,12 +2758,12 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   height: 48px;
   border-radius: 16px;
   margin: 0 auto;
-  background: rgba(148, 113, 46, 0.16);
-  color: #6a4d16;
+  background: rgba(202, 161, 61, 0.12);
+  color: #caa13d;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(106, 77, 22, 0.4);
-  box-shadow: 0 10px 20px rgba(20, 20, 20, 0.08);
+  border: 1px solid rgba(202, 161, 61, 0.34);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
 }
 
 .contact-section.contact-inquiry .contact-card h3 {
@@ -2744,14 +2771,14 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .contact-section.contact-inquiry .contact-card p {
-  color: rgba(28, 28, 28, 0.7);
+  color: rgba(236, 230, 214, 0.72);
   font-size: 13px;
 }
 
 .contact-section.contact-inquiry .contact-card-link {
   display: inline-block;
   margin-top: 6px;
-  color: #6a4d16;
+  color: #f3e4bb;
 }
 .contact-section-header {
   display: grid;
@@ -2769,8 +2796,8 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 .contact-chip {
   padding: 8px 14px;
   border-radius: 999px;
-  background: rgba(177, 139, 61, 0.12);
-  color: #1c1c1c;
+  background: rgba(202, 161, 61, 0.08);
+  color: #f5f1e6;
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2783,13 +2810,14 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .contact-card {
-  background: #ffffff;
-  border: 1px solid #2a2a2a;
+  background: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
   border-radius: 22px;
   padding: 24px;
   display: grid;
   gap: 12px;
-  box-shadow: 0 20px 50px rgba(20, 20, 20, 0.08);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
+  color: #f5f1e6;
 }
 
 .contact-card-icon {
@@ -2798,13 +2826,13 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   border-radius: 14px;
   display: grid;
   place-items: center;
-  background: rgba(148, 113, 46, 0.16);
-  color: #6a4d16;
+  background: rgba(202, 161, 61, 0.12);
+  color: #caa13d;
   font-size: 18px;
 }
 
 .contact-card-link {
-  color: #6a4d16;
+  color: #f3e4bb;
   font-weight: 600;
 }
 
@@ -2819,24 +2847,26 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .contact-form-section {
-  background: #ffffff;
+  background: linear-gradient(180deg, rgba(14, 18, 11, 0.96), rgba(9, 12, 7, 0.96));
+  border-top: 1px solid rgba(202, 161, 61, 0.1);
+  border-bottom: 1px solid rgba(202, 161, 61, 0.1);
 }
 
 .contact-form-light {
-  background: #ffffff;
+  background: transparent;
 }
 
 .contact-form-light .contact-form-copy h2,
 .contact-form-light .contact-form-copy p,
 .contact-form-light .contact-form-copy h4 {
-  color: #1c1c1c;
+  color: #f5f1e6;
 }
 
 .contact-form-light .contact-form-card {
-  background: #111a2b;
-  color: #f5f5f5;
-  border: 1px solid rgba(17, 26, 43, 0.2);
-  box-shadow: 0 30px 70px rgba(20, 20, 20, 0.18);
+  background: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+  color: #f5f1e6;
+  border: 1px solid rgba(202, 161, 61, 0.18);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.24);
 }
 
 .contact-form-light .contact-form-card label {
@@ -2845,9 +2875,9 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .contact-form-light .contact-form-card input,
 .contact-form-light .contact-form-card textarea {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  color: #f5f5f5;
+  background: rgba(247, 244, 237, 0.05);
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  color: #f5f1e6;
 }
 
 .contact-form-light .contact-consent {
@@ -2866,7 +2896,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .contact-form-copy p {
-  color: rgba(28, 28, 28, 0.7);
+  color: rgba(236, 230, 214, 0.72);
   margin: 0 0 14px;
   line-height: 1.5;
 }
@@ -2876,11 +2906,11 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .contact-page .contact-form-copy {
-  background: #f7f3ec;
-  border: 1px solid #e7dccb;
-  border-radius: 20px;
-  padding: 22px 24px;
-  box-shadow: 0 20px 45px rgba(20, 20, 20, 0.08);
+  background: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  border-radius: 28px;
+  padding: 26px 28px;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.22);
 }
 
 .contact-meta {
@@ -2901,9 +2931,9 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   border-radius: 999px;
   display: grid;
   place-items: center;
-  color: #b58c33;
-  background: rgba(181, 140, 51, 0.14);
-  border: 1px solid rgba(181, 140, 51, 0.35);
+  color: #caa13d;
+  background: rgba(202, 161, 61, 0.12);
+  border: 1px solid rgba(202, 161, 61, 0.35);
 }
 
 .contact-meta-icon svg {
@@ -2919,27 +2949,31 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .contact-form-card {
-  background: #111a2b;
-  color: #f5f5f5;
+  background: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+  color: #f5f1e6;
   border-radius: 24px;
-  padding: 24px;
+  padding: 28px;
   display: grid;
   gap: 12px;
-  box-shadow: 0 30px 70px rgba(20, 20, 20, 0.2);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.24);
 }
 
 .contact-form-card label {
   display: grid;
   gap: 6px;
   font-size: 13px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f3e4bb;
 }
 
 .contact-form-card .contact-field {
   display: grid;
   gap: 6px;
   font-size: 13px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f3e4bb;
 }
 
 .contact-form-row {
@@ -2950,12 +2984,34 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .contact-form-card input,
 .contact-form-card textarea {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  padding: 9px 12px;
-  color: #f5f5f5;
+  background: rgba(247, 244, 237, 0.05);
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  border-radius: 14px;
+  padding: 12px 14px;
+  color: #f5f1e6;
   font-family: inherit;
+}
+
+.contact-form-card select {
+  background: rgba(247, 244, 237, 0.05);
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  border-radius: 14px;
+  padding: 12px 14px;
+  color: #f5f1e6;
+  font-family: inherit;
+}
+
+.contact-form-card input::placeholder,
+.contact-form-card textarea::placeholder {
+  color: rgba(236, 230, 214, 0.42);
+}
+
+.contact-form-card input:focus,
+.contact-form-card textarea:focus,
+.contact-form-card select:focus {
+  border-color: rgba(202, 161, 61, 0.48);
+  box-shadow: 0 0 0 4px rgba(202, 161, 61, 0.1);
+  outline: none;
 }
 
 
@@ -2965,7 +3021,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   align-items: start;
   column-gap: 10px;
   font-size: 12px;
-  color: rgba(245, 245, 245, 0.7);
+  color: rgba(236, 230, 214, 0.72);
   line-height: 1.4;
 }
 
@@ -2980,7 +3036,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: rgba(245, 245, 245, 0.5);
+  color: rgba(236, 230, 214, 0.54);
   text-align: center;
 }
 
@@ -2990,7 +3046,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .contact-status-success {
-  color: #d3b26a;
+  color: #f3e4bb;
 }
 
 .contact-status-error {
@@ -2998,31 +3054,31 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .contact-steps {
-  background: #f2ede4;
+  background: transparent;
 }
 
 .contact-steps-light {
-  background: #ffffff;
-  color: #1c1c1c;
+  background: transparent;
+  color: #f5f1e6;
 }
 
 .contact-steps-light .contact-step {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0;
+  background: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
+  padding: 24px;
 }
 
 .contact-steps-light .contact-step h3 {
-  color: #1c1c1c;
+  color: #f5f1e6;
 }
 
 .contact-steps-light .contact-step p {
-  color: rgba(28, 28, 28, 0.7);
+  color: rgba(236, 230, 214, 0.72);
 }
 
 .contact-steps-light .contact-step span {
-  color: #b18b3d;
+  color: #caa13d;
 }
 
 .contact-step-grid {
@@ -3033,14 +3089,15 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .contact-step {
   padding: 22px;
-  border-radius: 20px;
-  border: 1px solid rgba(28, 28, 28, 0.08);
-  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  background: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+  color: #f5f1e6;
 }
 
 .contact-step span {
   font-size: 32px;
-  color: #b18b3d;
+  color: #caa13d;
   font-weight: 700;
 }
 
@@ -3049,14 +3106,15 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   display: inline-block;
   width: 70px;
   height: 1px;
-  background: rgba(177, 139, 61, 0.4);
+  background: rgba(202, 161, 61, 0.4);
   margin-left: 14px;
   vertical-align: middle;
 }
 
 .contact-final {
-  background: #111a2b;
-  color: #f5f5f5;
+  background: linear-gradient(180deg, rgba(14, 18, 11, 0.96), rgba(9, 12, 7, 0.96));
+  color: #f5f1e6;
+  border-top: 1px solid rgba(202, 161, 61, 0.1);
 }
 
 .contact-final-inner {
@@ -3116,28 +3174,32 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 /* ===== On-Call & Emergency Page ===== */
 .on-call-page {
-  background: #111a2b;
-  color: #e9edf6;
+  background:
+    radial-gradient(circle at top, rgba(171, 132, 49, 0.1), transparent 24%),
+    linear-gradient(180deg, #0b0d07 0%, #12150b 38%, #171a0d 100%);
+  color: #f5f1e6;
   font-family: "Vesper Libre", serif;
 }
 
 .on-call-page .btn-primary {
-  background: #d3b26a;
-  color: #141414;
-  box-shadow: none;
+  background: #caa13d;
+  color: #17150f;
+  box-shadow: 0 18px 38px rgba(202, 161, 61, 0.22);
 }
 
 .on-call-page .btn-secondary {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #f5f5f5;
+  background: rgba(14, 17, 10, 0.72);
+  border: 1px solid rgba(202, 161, 61, 0.32);
+  color: #f4ecda;
 }
 
 .oncall-hero {
   padding: 120px 0 80px;
-  background: radial-gradient(circle at top left, rgba(70, 90, 140, 0.18), transparent 55%),
-    radial-gradient(circle at 70% 10%, rgba(211, 178, 106, 0.1), transparent 60%),
-    #111a2b;
+  background:
+    radial-gradient(circle at top left, rgba(202, 161, 61, 0.1), transparent 42%),
+    radial-gradient(circle at 70% 10%, rgba(202, 161, 61, 0.08), transparent 52%),
+    linear-gradient(180deg, #0f120a 0%, #14180d 100%);
+  border-bottom: 1px solid rgba(202, 161, 61, 0.12);
 }
 
 .oncall-hero-grid {
@@ -3173,12 +3235,12 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .oncall-title span {
-  color: #d3b26a;
+  color: #f2ca63;
 }
 
 .oncall-subtitle {
   font-size: 16px;
-  color: rgba(233, 237, 246, 0.8);
+  color: rgba(236, 230, 214, 0.78);
   max-width: 560px;
 }
 
@@ -3190,11 +3252,11 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .oncall-hero-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(24, 28, 16, 0.98), rgba(15, 18, 10, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  border-radius: 10px;
   padding: 24px;
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.24);
 }
 
 .oncall-metric-list {
@@ -3205,9 +3267,9 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .oncall-metric {
-  background: rgba(11, 15, 26, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  background: rgba(12, 15, 8, 0.92);
+  border: 1px solid rgba(202, 161, 61, 0.12);
+  border-radius: 8px;
   padding: 14px;
   text-align: center;
 }
@@ -3223,66 +3285,66 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .oncall-section.light {
-  background: #ffffff;
-  color: #1c1c1c;
+  background: #14170c;
+  color: #f5f1e6;
 }
 
 .on-call-page section.oncall-section.light:nth-of-type(even) {
-  background: #f5f1e8;
+  background: #11140a;
 }
 
 .oncall-section.light .oncall-section-header .eyebrow,
 .oncall-section.light .oncall-eyebrow {
-  color: #6b4a12;
+  color: #d5b14d;
 }
 
 .oncall-section.light h2,
 .oncall-section.light h3,
 .oncall-section.light strong {
-  color: #1c1c1c;
+  color: #f3e4bb;
 }
 
 .oncall-section.light .oncall-subtitle,
 .oncall-section.light .oncall-list-item p,
 .oncall-section.light .oncall-section-note {
-  color: rgba(28, 28, 28, 0.82);
+  color: rgba(236, 230, 214, 0.74);
 }
 
 .oncall-section.light .oncall-list-item {
-  background: #fffaf0;
-  border: 1px solid rgba(177, 139, 61, 0.18);
-  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(24, 28, 15, 0.98), rgba(15, 18, 10, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  border-radius: 8px;
   padding: 18px 20px;
-  box-shadow: 0 16px 32px rgba(20, 20, 20, 0.06);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.16);
 }
 
 .oncall-section.light .oncall-list-head {
-  color: #1c1c1c;
+  color: #f3e4bb;
 }
 
 .oncall-section.light .oncall-list-icon {
-  background: rgba(177, 139, 61, 0.12);
-  color: #7a5a12;
+  background: rgba(202, 161, 61, 0.12);
+  color: #f2ca63;
   border-radius: 10px;
   width: 28px;
   height: 28px;
 }
 
 .oncall-section.light .btn-secondary {
-  background: #d3b26a;
-  border: 1px solid #c29a3c;
-  color: #1b1408;
+  background: rgba(14, 17, 10, 0.72);
+  border: 1px solid rgba(202, 161, 61, 0.32);
+  color: #f4ecda;
 }
 
 .oncall-section.light .btn-secondary:hover {
-  background: #c29a3c;
-  border-color: #b08a33;
-  color: #1b1408;
+  background: rgba(202, 161, 61, 0.12);
+  border-color: rgba(202, 161, 61, 0.44);
+  color: #f4ecda;
 }
 
 .oncall-section.light .oncall-photo {
-  border: 1px solid #ece7dd;
-  box-shadow: 0 28px 60px rgba(20, 20, 20, 0.12);
+  border: 1px solid rgba(202, 161, 61, 0.12);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.2);
 }
 
 .oncall-section.light .oncall-photo-badge {
@@ -3296,36 +3358,36 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .oncall-section.light .oncall-card {
-  background: #fffdf8;
-  border: 1px solid #ece7dd;
-  box-shadow: 0 16px 40px rgba(20, 20, 20, 0.08);
+  background: linear-gradient(180deg, rgba(24, 28, 15, 0.98), rgba(15, 18, 10, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
 }
 
 .oncall-section.light .oncall-card-icon {
-  background: rgba(177, 139, 61, 0.12);
-  color: #b18b3d;
+  background: rgba(202, 161, 61, 0.12);
+  color: #f2ca63;
 }
 
 .oncall-section.light .oncall-list-icon {
-  color: #b18b3d;
+  color: #f2ca63;
 }
 
 .oncall-section.light .oncall-cta {
-  background: rgb(17, 26, 43);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 28px 60px rgba(20, 20, 20, 0.12);
+  background: linear-gradient(180deg, rgba(24, 28, 16, 0.98), rgba(15, 18, 10, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.2);
 }
 
 .oncall-section.light .oncall-cta p {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(236, 230, 214, 0.72);
 }
 
 .oncall-section.light .oncall-cta h2 {
-  color: #d3b26a;
+  color: #f2ca63;
 }
 
 .oncall-section.light .oncall-cta-notes {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(236, 230, 214, 0.64);
 }
 
 .oncall-section.light .oncall-cta-icon {
@@ -3357,7 +3419,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 .oncall-section-note {
   margin: 0;
   font-size: 12px;
-  color: rgba(233, 237, 246, 0.6);
+  color: rgba(236, 230, 214, 0.56);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -3418,9 +3480,9 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 .oncall-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  background: rgba(24, 28, 15, 0.98);
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  border-radius: 8px;
   padding: 18px;
   display: grid;
   gap: 10px;
@@ -3442,8 +3504,8 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   border-radius: 10px;
   display: grid;
   place-items: center;
-  background: rgba(211, 178, 106, 0.12);
-  color: #d3b26a;
+  background: rgba(202, 161, 61, 0.12);
+  color: #f2ca63;
 }
 
 .oncall-card-icon svg {
@@ -3472,11 +3534,11 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   align-items: center;
   gap: 12px;
   font-size: 14px;
-  color: #f5f5f5;
+  color: #f3e4bb;
 }
 
 .oncall-list-icon {
-  color: #d3b26a;
+  color: #f2ca63;
   width: 18px;
   height: 18px;
   display: inline-flex;
@@ -3496,29 +3558,29 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 
 .oncall-list-item p {
   margin: 0;
-  color: rgba(233, 237, 246, 0.72);
+  color: rgba(236, 230, 214, 0.72);
   font-size: 13px;
 }
 
 .oncall-cta {
   position: relative;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(24, 28, 16, 0.98), rgba(15, 18, 10, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  border-radius: 10px;
   padding: 38px 32px 34px;
   display: grid;
   gap: 16px;
   text-align: center;
-  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.2);
 }
 
 .oncall-cta::before {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 24px;
-  border-top: 2px solid rgba(211, 178, 106, 0.85);
-  border-left: 2px solid rgba(211, 178, 106, 0.3);
+  border-radius: 10px;
+  border-top: 1px solid rgba(202, 161, 61, 0.22);
+  border-left: 1px solid rgba(202, 161, 61, 0.12);
   pointer-events: none;
 }
 
@@ -3534,7 +3596,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 .oncall-cta p {
   margin: 0 auto;
   max-width: 680px;
-  color: rgba(233, 237, 246, 0.7);
+  color: rgba(236, 230, 214, 0.72);
   font-size: 14px;
 }
 
@@ -3566,7 +3628,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   gap: 14px;
   justify-content: center;
   font-size: 12px;
-  color: rgba(233, 237, 246, 0.65);
+  color: rgba(236, 230, 214, 0.64);
 }
 
 .oncall-cta-notes span {

@@ -1264,3 +1264,353 @@ body.electricity-body.electrician-booking-page {
   }
 }
 
+/* ===== Electrician Booking Theme Refresh ===== */
+.electrician-booking-page {
+  background: #0b0d07;
+  color: #f5f1e6;
+  font-family: "Vesper Libre", serif;
+}
+
+body.electricity-body.electrician-booking-page {
+  background:
+    radial-gradient(circle at top, rgba(171, 132, 49, 0.08), transparent 18%),
+    linear-gradient(180deg, #0b0d07 0%, #0b0d07 100%) !important;
+  color: #f5f1e6;
+}
+
+.electrician-booking-page .eb-main {
+  padding: 70px 0 84px;
+}
+
+.electrician-booking-page .eb-progress,
+.electrician-booking-page .eb-card,
+.electrician-booking-page .eb-confirmation,
+.electrician-booking-page .eb-summary-card,
+.electrician-booking-page .eb-receipt-print-header,
+.electrician-booking-page .eb-receipt-section,
+.electrician-booking-page .eb-next-card {
+  background: linear-gradient(180deg, rgba(23, 26, 15, 0.98), rgba(15, 18, 10, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.22);
+}
+
+.electrician-booking-page .eb-progress,
+.electrician-booking-page .eb-card,
+.electrician-booking-page .eb-confirmation {
+  border-radius: 12px;
+}
+
+.electrician-booking-page .eb-progress-title,
+.electrician-booking-page .eb-progress-count,
+.electrician-booking-page .eb-step,
+.electrician-booking-page .eb-card p,
+.electrician-booking-page .eb-inline-note,
+.electrician-booking-page .eb-service-sub,
+.electrician-booking-page .eb-checkbox,
+.electrician-booking-page .eb-disclaimer,
+.electrician-booking-page .eb-help-phone,
+.electrician-booking-page .eb-support,
+.electrician-booking-page .eb-receipt-disclaimer {
+  color: rgba(236, 230, 214, 0.68);
+}
+
+.electrician-booking-page .eb-progress-title,
+.electrician-booking-page .eb-complete-step,
+.electrician-booking-page .eb-receipt-title,
+.electrician-booking-page .eb-next-title,
+.electrician-booking-page .eb-summary-label {
+  color: #d5b14d;
+}
+
+.electrician-booking-page .eb-progress-bar {
+  background: rgba(247, 244, 237, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(202, 161, 61, 0.1);
+}
+
+.electrician-booking-page .eb-progress-bar span {
+  background: linear-gradient(90deg, #caa13d 0%, #f2ca63 100%);
+  box-shadow: 0 0 18px rgba(202, 161, 61, 0.24);
+}
+
+.electrician-booking-page .eb-step span {
+  background: rgba(247, 244, 237, 0.14);
+  color: #f5f1e6;
+}
+
+.electrician-booking-page .eb-step.is-active span {
+  background: #caa13d;
+  color: #17150f;
+}
+
+.electrician-booking-page .eb-step.is-active {
+  color: #f3e4bb;
+}
+
+.electrician-booking-page .eb-errors {
+  background: rgba(127, 29, 29, 0.22);
+  border: 1px solid rgba(248, 113, 113, 0.24);
+  color: #fecaca;
+}
+
+.electrician-booking-page .eb-card h1,
+.electrician-booking-page .eb-card h2,
+.electrician-booking-page .eb-complete-header h1,
+.electrician-booking-page .eb-confirmation h1 {
+  font-family: "Vesper Libre", serif;
+  color: #f5f1e6;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.electrician-booking-page .eb-card h1 {
+  font-size: clamp(34px, 5vw, 60px);
+}
+
+.electrician-booking-page .eb-card h2,
+.electrician-booking-page .eb-complete-header h1 {
+  font-size: clamp(28px, 4vw, 42px);
+}
+
+.electrician-booking-page .eb-step-badge,
+.electrician-booking-page .eb-summary-step,
+.electrician-booking-page .eb-next-step {
+  background: rgba(202, 161, 61, 0.14);
+  color: #f2ca63;
+  border: 1px solid rgba(202, 161, 61, 0.2);
+}
+
+.electrician-booking-page .eb-hour-card,
+.electrician-booking-page .eb-radio-card,
+.electrician-booking-page .eb-service-card,
+.electrician-booking-page .eb-customer-card,
+.electrician-booking-page .eb-arrival-card,
+.electrician-booking-page .eb-calendar,
+.electrician-booking-page .eb-pricing-box,
+.electrician-booking-page .eb-confirmation-ref {
+  background: linear-gradient(180deg, rgba(24, 28, 15, 0.98), rgba(15, 18, 10, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.16);
+}
+
+.electrician-booking-page .eb-hour-card,
+.electrician-booking-page .eb-radio-card,
+.electrician-booking-page .eb-service-card,
+.electrician-booking-page .eb-customer-card,
+.electrician-booking-page .eb-arrival-card {
+  border-radius: 10px;
+}
+
+.electrician-booking-page .eb-hour-card:hover,
+.electrician-booking-page .eb-radio-card:hover,
+.electrician-booking-page .eb-service-card:hover,
+.electrician-booking-page .eb-customer-card:hover,
+.electrician-booking-page .eb-arrival-card:hover,
+.electrician-booking-page .eb-calendar-day:hover:not(.is-muted):not(.is-selected):not(.is-disabled) {
+  border-color: rgba(202, 161, 61, 0.4);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.18);
+}
+
+.electrician-booking-page .eb-hour-card:has(input:checked),
+.electrician-booking-page .eb-radio-card:has(input:checked),
+.electrician-booking-page .eb-service-card:has(input:checked),
+.electrician-booking-page .eb-customer-card:has(input:checked),
+.electrician-booking-page .eb-arrival-card:has(input:checked) {
+  background: linear-gradient(180deg, rgba(37, 41, 22, 0.98), rgba(20, 23, 12, 0.98));
+  border-color: #caa13d;
+  box-shadow: 0 18px 38px rgba(202, 161, 61, 0.16);
+}
+
+.electrician-booking-page .eb-hour-card input:checked + .eb-hour-value,
+.electrician-booking-page .eb-hour-card input:checked ~ .eb-hour-label {
+  color: #f2ca63;
+}
+
+.electrician-booking-page .eb-hour-value,
+.electrician-booking-page .eb-service-title,
+.electrician-booking-page .eb-logistics-title,
+.electrician-booking-page .eb-summary-title,
+.electrician-booking-page .eb-help-title,
+.electrician-booking-page .eb-receipt-row strong,
+.electrician-booking-page .eb-price-total,
+.electrician-booking-page .eb-invoice-brand,
+.electrician-booking-page .eb-invoice-title {
+  color: #f3e4bb;
+}
+
+.electrician-booking-page .eb-hour-label,
+.electrician-booking-page .eb-label,
+.electrician-booking-page .eb-invoice-sub {
+  color: #d5b14d;
+}
+
+.electrician-booking-page .eb-note,
+.electrician-booking-page .eb-alert,
+.electrician-booking-page .eb-logistics,
+.electrician-booking-page .eb-rot-box {
+  background: linear-gradient(180deg, rgba(202, 161, 61, 0.18), rgba(202, 161, 61, 0.1));
+  border: 1px solid rgba(202, 161, 61, 0.24);
+  color: #f3e4bb;
+}
+
+.electrician-booking-page .eb-textarea,
+.electrician-booking-page .eb-card input.form-control,
+.electrician-booking-page .eb-card textarea.form-control,
+.electrician-booking-page .eb-card select.form-control,
+.electrician-booking-page .eb-card input:not([type="radio"]):not([type="checkbox"]):not([type="hidden"]),
+.electrician-booking-page .eb-card textarea,
+.electrician-booking-page .eb-card select {
+  background: rgba(247, 244, 237, 0.05);
+  color: #f5f1e6;
+  border: 1px solid rgba(202, 161, 61, 0.16);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.electrician-booking-page .eb-textarea::placeholder,
+.electrician-booking-page .eb-card input::placeholder,
+.electrician-booking-page .eb-card textarea::placeholder {
+  color: rgba(236, 230, 214, 0.42);
+}
+
+.electrician-booking-page .eb-textarea:focus,
+.electrician-booking-page .eb-card input:focus,
+.electrician-booking-page .eb-card textarea:focus,
+.electrician-booking-page .eb-card select:focus {
+  border-color: rgba(202, 161, 61, 0.48);
+  box-shadow: 0 0 0 4px rgba(202, 161, 61, 0.1);
+}
+
+.electrician-booking-page .eb-customer-icon,
+.electrician-booking-page .eb-arrival-icon,
+.electrician-booking-page .eb-confirmation-mark {
+  background: rgba(202, 161, 61, 0.12);
+  color: #f2ca63;
+  border-color: rgba(202, 161, 61, 0.2);
+}
+
+.electrician-booking-page .eb-calendar {
+  background: linear-gradient(180deg, rgba(24, 28, 15, 0.98), rgba(15, 18, 10, 0.98));
+}
+
+.electrician-booking-page .eb-calendar-grid .eb-calendar-day,
+.electrician-booking-page .eb-calendar-header,
+.electrician-booking-page .eb-calendar-grid .eb-calendar-day.is-muted {
+  color: #f3e4bb;
+}
+
+.electrician-booking-page .eb-calendar-day {
+  background: rgba(247, 244, 237, 0.04);
+  border: 1px solid rgba(202, 161, 61, 0.16);
+}
+
+.electrician-booking-page .eb-calendar-day.is-disabled {
+  background: rgba(247, 244, 237, 0.03);
+  color: rgba(236, 230, 214, 0.2);
+}
+
+.electrician-booking-page .eb-calendar-day.is-selected {
+  background: linear-gradient(135deg, #f2ca63, #caa13d);
+  color: #17150f;
+  border-color: rgba(202, 161, 61, 0.8);
+}
+
+.electrician-booking-page .eb-calendar-btn {
+  background: rgba(202, 161, 61, 0.12);
+  color: #f2ca63;
+  border: 1px solid rgba(202, 161, 61, 0.24);
+}
+
+.electrician-booking-page .eb-calendar-btn:hover {
+  background: rgba(202, 161, 61, 0.22);
+  border-color: rgba(202, 161, 61, 0.42);
+}
+
+.electrician-booking-page .eb-price-row,
+.electrician-booking-page .eb-summary-row,
+.electrician-booking-page .eb-receipt-row,
+.electrician-booking-page .eb-invoice-meta,
+.electrician-booking-page .eb-invoice-contact {
+  color: rgba(236, 230, 214, 0.72);
+}
+
+.electrician-booking-page .eb-price-row-discount {
+  color: #9be3b9;
+}
+
+.electrician-booking-page .eb-price-total,
+.electrician-booking-page .eb-receipt-total {
+  border-top: 1px solid rgba(202, 161, 61, 0.14);
+}
+
+.electrician-booking-page .eb-help-card {
+  background: linear-gradient(180deg, rgba(24, 28, 16, 0.98), rgba(15, 18, 10, 0.98));
+  border: 1px solid rgba(202, 161, 61, 0.16);
+}
+
+.electrician-booking-page .eb-help-icon {
+  background: rgba(202, 161, 61, 0.12);
+  color: #f2ca63;
+}
+
+.electrician-booking-page .eb-actions .btn,
+.electrician-booking-page .eb-confirmation-actions .btn,
+.electrician-booking-page .eb-confirmation-footer .btn-primary,
+.electrician-booking-page .eb-confirm-btn {
+  border-radius: 6px;
+  min-height: 50px;
+  padding: 14px 22px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.electrician-booking-page .eb-actions .btn-primary,
+.electrician-booking-page .eb-confirmation-footer .btn-primary,
+.electrician-booking-page .eb-confirm-btn {
+  background: #caa13d;
+  border: 1px solid #caa13d;
+  color: #17150f;
+  box-shadow: 0 16px 34px rgba(202, 161, 61, 0.2);
+}
+
+.electrician-booking-page .eb-actions .btn-light,
+.electrician-booking-page .eb-confirmation-actions .btn {
+  background: rgba(247, 244, 237, 0.04);
+  border: 1px solid rgba(202, 161, 61, 0.26);
+  color: #f5f1e6;
+}
+
+.electrician-booking-page .eb-actions .btn:hover,
+.electrician-booking-page .eb-confirmation-actions .btn:hover,
+.electrician-booking-page .eb-confirmation-footer .btn-primary:hover,
+.electrician-booking-page .eb-confirm-btn:hover,
+.electrician-booking-page .eb-confirm-btn:focus {
+  transform: translateY(-2px);
+}
+
+.electrician-booking-page .eb-footer {
+  color: rgba(236, 230, 214, 0.5);
+}
+
+@media (max-width: 600px) {
+  .electrician-booking-page .eb-main {
+    padding: 54px 0 64px;
+  }
+
+  .electrician-booking-page .eb-card h1 {
+    font-size: clamp(28px, 8.5vw, 40px);
+  }
+
+  .electrician-booking-page .eb-card h2,
+  .electrician-booking-page .eb-complete-header h1 {
+    font-size: clamp(24px, 7.5vw, 34px);
+  }
+
+  .electrician-booking-page .eb-actions .btn,
+  .electrician-booking-page .eb-confirmation-actions .btn,
+  .electrician-booking-page .eb-confirmation-footer .btn-primary,
+  .electrician-booking-page .eb-confirm-btn {
+    width: 100%;
+  }
+}
+
