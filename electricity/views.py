@@ -106,6 +106,37 @@ from django.contrib.auth.models import User
 logger = logging.getLogger(__name__)
 
 
+def _build_spec_table(page, spec_rows):
+    default_headers = {
+        1: _("Feature"),
+        2: _("Option 1"),
+        3: _("Option 2"),
+        4: _("Option 3"),
+        5: _("Option 4"),
+        6: _("Option 5"),
+        7: _("Option 6"),
+    }
+    columns = []
+    for index in range(1, 8):
+        if index == 1:
+            row_attr = "label"
+        else:
+            row_attr = f"value_{index - 1}"
+        header_value = getattr(page, f"spec_col_{index}", "") or ""
+        has_row_values = any((getattr(row, row_attr, "") or "").strip() for row in spec_rows)
+        should_show = index <= 5 or bool(header_value.strip()) or has_row_values
+        if not should_show:
+            continue
+        columns.append(
+            {
+                "header": header_value.strip() or default_headers[index],
+                "row_attr": row_attr,
+                "is_header_cell": index == 1,
+            }
+        )
+    return columns
+
+
 def _booking_team_name(assigned_provider=None):
     if assigned_provider and getattr(assigned_provider, "display_name", "").strip():
         return assigned_provider.display_name.strip()
@@ -306,6 +337,7 @@ def service_category_detail(request, slug):
         slug=slug,
     )
     faq_items = page.faqs.filter(is_active=True)
+    spec_rows = list(page.spec_rows.all())
     return render(
         request,
         "electricity/service_category_detail.html",
@@ -313,7 +345,8 @@ def service_category_detail(request, slug):
             "page": page,
             "content_blocks": page.content_blocks.filter(is_active=True, target_service_page__isnull=True),
             "sections": page.sections.all(),
-            "spec_rows": page.spec_rows.all(),
+            "spec_rows": spec_rows,
+            "spec_columns": _build_spec_table(page, spec_rows),
             "faq_items": faq_items,
         },
     )
@@ -330,6 +363,7 @@ def service_detail(request, slug):
         slug=slug,
     )
     faq_items = page.faqs.filter(is_active=True)
+    spec_rows = list(page.spec_rows.all())
     category_blocks = page.parent_category.content_blocks.filter(is_active=True, target_service_page=page)
     detail_blocks = page.content_blocks.filter(is_active=True)
     content_blocks = sorted(
@@ -343,7 +377,8 @@ def service_detail(request, slug):
             "page": page,
             "content_blocks": content_blocks,
             "sections": page.sections.all(),
-            "spec_rows": page.spec_rows.all(),
+            "spec_rows": spec_rows,
+            "spec_columns": _build_spec_table(page, spec_rows),
             "faq_items": faq_items,
         },
     )

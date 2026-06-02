@@ -660,6 +660,9 @@ class ServiceCategoryPageForm(HumanizedJSONModelForm):
             "spec_col_2",
             "spec_col_3",
             "spec_col_4",
+            "spec_col_5",
+            "spec_col_6",
+            "spec_col_7",
             "faq_title",
             "faq_subtitle",
             "cta_title",
@@ -761,7 +764,7 @@ class ServiceCategoryItemForm(HumanizedJSONModelForm):
 class ServiceCategorySpecRowForm(HumanizedJSONModelForm):
     class Meta:
         model = ServiceCategorySpecRow
-        fields = ["page"] + _translated_fields("label", "value_1", "value_2", "value_3", "value_4") + ["order"]
+        fields = ["page"] + _translated_fields("label", "value_1", "value_2", "value_3", "value_4", "value_5", "value_6") + ["order"]
 
 
 class ServiceCategoryFAQForm(HumanizedJSONModelForm):
@@ -793,6 +796,9 @@ class ServiceDetailPageForm(HumanizedJSONModelForm):
             "spec_col_2",
             "spec_col_3",
             "spec_col_4",
+            "spec_col_5",
+            "spec_col_6",
+            "spec_col_7",
             "faq_title",
             "faq_subtitle",
             "cta_title",
@@ -915,7 +921,7 @@ class ServiceDetailSpecRowForm(HumanizedJSONModelForm):
 
     class Meta:
         model = ServiceDetailSpecRow
-        fields = ["page"] + _translated_fields("label", "value_1", "value_2", "value_3", "value_4") + ["order"]
+        fields = ["page"] + _translated_fields("label", "value_1", "value_2", "value_3", "value_4", "value_5", "value_6") + ["order"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

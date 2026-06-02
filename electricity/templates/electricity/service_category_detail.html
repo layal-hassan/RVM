@@ -209,21 +209,21 @@
       <table class="category-spec-table">
         <thead>
           <tr>
-            <th>{% if page.spec_col_1 %}{{ page.spec_col_1 }}{% else %}{% trans "Feature" %}{% endif %}</th>
-            <th>{% if page.spec_col_2 %}{{ page.spec_col_2 }}{% else %}{% trans "Option 1" %}{% endif %}</th>
-            <th>{% if page.spec_col_3 %}{{ page.spec_col_3 }}{% else %}{% trans "Option 2" %}{% endif %}</th>
-            <th>{% if page.spec_col_4 %}{{ page.spec_col_4 }}{% else %}{% trans "Option 3" %}{% endif %}</th>
-            <th>{% trans "Option 4" %}</th>
+            {% for column in spec_columns %}
+            <th>{{ column.header }}</th>
+            {% endfor %}
           </tr>
         </thead>
         <tbody>
           {% for row in spec_rows %}
           <tr>
-            <th>{{ row.label }}</th>
-            <td>{{ row.value_1|default:"-" }}</td>
-            <td>{{ row.value_2|default:"-" }}</td>
-            <td>{{ row.value_3|default:"-" }}</td>
-            <td>{{ row.value_4|default:"-" }}</td>
+            {% for column in spec_columns %}
+              {% if column.is_header_cell %}
+            <th>{{ row|attr:column.row_attr|default:"-" }}</th>
+              {% else %}
+            <td>{{ row|attr:column.row_attr|default:"-" }}</td>
+              {% endif %}
+            {% endfor %}
           </tr>
           {% endfor %}
         </tbody>

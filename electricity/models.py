@@ -314,6 +314,9 @@ class ServiceCategoryPage(models.Model):
     spec_col_2 = models.CharField(max_length=80, blank=True)
     spec_col_3 = models.CharField(max_length=80, blank=True)
     spec_col_4 = models.CharField(max_length=80, blank=True)
+    spec_col_5 = models.CharField(max_length=80, blank=True)
+    spec_col_6 = models.CharField(max_length=80, blank=True)
+    spec_col_7 = models.CharField(max_length=80, blank=True)
     faq_title = models.CharField(max_length=160, blank=True)
     faq_subtitle = models.CharField(max_length=200, blank=True)
     cta_title = models.CharField(max_length=160, blank=True)
@@ -443,6 +446,8 @@ class ServiceCategorySpecRow(models.Model):
     value_2 = models.CharField(max_length=160, blank=True)
     value_3 = models.CharField(max_length=160, blank=True)
     value_4 = models.CharField(max_length=160, blank=True)
+    value_5 = models.CharField(max_length=160, blank=True)
+    value_6 = models.CharField(max_length=160, blank=True)
     order = models.PositiveIntegerField(default=0)
 
     class Meta:
@@ -499,6 +504,9 @@ class ServiceDetailPage(models.Model):
     spec_col_2 = models.CharField(max_length=80, blank=True)
     spec_col_3 = models.CharField(max_length=80, blank=True)
     spec_col_4 = models.CharField(max_length=80, blank=True)
+    spec_col_5 = models.CharField(max_length=80, blank=True)
+    spec_col_6 = models.CharField(max_length=80, blank=True)
+    spec_col_7 = models.CharField(max_length=80, blank=True)
     faq_title = models.CharField(max_length=160, blank=True)
     faq_subtitle = models.CharField(max_length=200, blank=True)
     cta_title = models.CharField(max_length=160, blank=True)
@@ -621,6 +629,8 @@ class ServiceDetailSpecRow(models.Model):
     value_2 = models.CharField(max_length=160, blank=True)
     value_3 = models.CharField(max_length=160, blank=True)
     value_4 = models.CharField(max_length=160, blank=True)
+    value_5 = models.CharField(max_length=160, blank=True)
+    value_6 = models.CharField(max_length=160, blank=True)
     order = models.PositiveIntegerField(default=0)
 
     class Meta:

@@ -61,6 +61,9 @@ class ServiceCategoryPageTranslationOptions(TranslationOptions):
         "spec_col_2",
         "spec_col_3",
         "spec_col_4",
+        "spec_col_5",
+        "spec_col_6",
+        "spec_col_7",
         "faq_title",
         "faq_subtitle",
         "cta_title",
@@ -113,7 +116,7 @@ class ServiceCategoryItemTranslationOptions(TranslationOptions):
 
 @register(ServiceCategorySpecRow)
 class ServiceCategorySpecRowTranslationOptions(TranslationOptions):
-    fields = ("label", "value_1", "value_2", "value_3", "value_4")
+    fields = ("label", "value_1", "value_2", "value_3", "value_4", "value_5", "value_6")
 
 
 @register(ServiceCategoryFAQ)
@@ -143,6 +146,9 @@ class ServiceDetailPageTranslationOptions(TranslationOptions):
         "spec_col_2",
         "spec_col_3",
         "spec_col_4",
+        "spec_col_5",
+        "spec_col_6",
+        "spec_col_7",
         "faq_title",
         "faq_subtitle",
         "cta_title",
@@ -195,7 +201,7 @@ class ServiceDetailItemTranslationOptions(TranslationOptions):
 
 @register(ServiceDetailSpecRow)
 class ServiceDetailSpecRowTranslationOptions(TranslationOptions):
-    fields = ("label", "value_1", "value_2", "value_3", "value_4")
+    fields = ("label", "value_1", "value_2", "value_3", "value_4", "value_5", "value_6")
 
 
 @register(ServiceDetailFAQ)
