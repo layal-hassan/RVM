@@ -203,8 +203,8 @@ body.dash-body {
   position: absolute;
   top: calc(100% + 14px);
   left: 0;
-  min-width: 980px;
-  max-width: min(1160px, calc(100vw - 48px));
+  min-width: 1080px;
+  max-width: min(1280px, calc(100vw - 40px));
   max-height: calc(100vh - var(--rwmh-height) - 32px);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -235,8 +235,8 @@ body.dash-body {
 
 .rwm-electricity-global-header .rwm-egh-mega-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 22px;
+  grid-template-columns: minmax(320px, 1.22fr) minmax(260px, 1fr) minmax(260px, 1fr);
+  gap: 24px;
 }
 
 .rwm-electricity-global-header .rwm-egh-mega-col {
@@ -291,6 +291,8 @@ body.dash-body {
   letter-spacing: 0.02em;
   text-transform: none;
   line-height: 1.45;
+  white-space: normal;
+  overflow-wrap: anywhere;
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
