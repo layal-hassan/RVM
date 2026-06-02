@@ -906,9 +906,48 @@ class ServiceDetailItemForm(HumanizedJSONModelForm):
 
 
 class ServiceDetailSpecRowForm(HumanizedJSONModelForm):
+    parent_category_filter = forms.ModelChoiceField(
+        queryset=ServiceCategoryPage.objects.all().order_by("order", "name"),
+        required=False,
+        label="Parent Category",
+        help_text="Choose the parent category first, then select the exact inner service page for this spec table row.",
+    )
+
     class Meta:
         model = ServiceDetailSpecRow
         fields = ["page"] + _translated_fields("label", "value_1", "value_2", "value_3", "value_4") + ["order"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.order_fields(
+            ["parent_category_filter", "page"]
+            + [name for name in self.fields.keys() if name not in {"parent_category_filter", "page"}]
+        )
+        pages_qs = ServiceDetailPage.objects.select_related("parent_category").order_by(
+            "parent_category__order", "menu_group", "order", "name"
+        )
+        self.fields["page"].queryset = pages_qs
+        self.fields["page"].label = "Service Page"
+        self.fields["page"].help_text = "This spec row will appear only on the selected inner service page."
+
+        selected_parent_id = ""
+        if self.is_bound:
+            selected_parent_id = str(self.data.get("parent_category_filter") or "")
+        elif getattr(self.instance, "pk", None):
+            selected_parent_id = str(getattr(self.instance.page, "parent_category_id", "") or "")
+            self.fields["parent_category_filter"].initial = selected_parent_id or None
+        elif self.initial.get("page"):
+            try:
+                selected_page = pages_qs.get(pk=self.initial["page"])
+                selected_parent_id = str(selected_page.parent_category_id or "")
+                self.fields["parent_category_filter"].initial = selected_parent_id or None
+            except ServiceDetailPage.DoesNotExist:
+                selected_parent_id = ""
+
+        self.service_page_parent_pairs = json.dumps(
+            {str(page.pk): str(page.parent_category_id) for page in pages_qs}
+        )
+        self.selected_parent_category_id = selected_parent_id
 
 
 class ServiceDetailFAQForm(HumanizedJSONModelForm):
