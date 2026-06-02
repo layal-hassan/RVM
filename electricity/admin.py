@@ -5,8 +5,21 @@ from .models import (
     AcceptedZipCode,
     ConsultationBooking,
     ConsultationRequest,
+    CustomerFeedback,
     ElectricalService,
     OnCallBooking,
+    ServiceCategoryFAQ,
+    ServiceCategoryContentBlock,
+    ServiceCategoryItem,
+    ServiceCategoryPage,
+    ServiceCategorySection,
+    ServiceCategorySpecRow,
+    ServiceDetailFAQ,
+    ServiceDetailContentBlock,
+    ServiceDetailItem,
+    ServiceDetailPage,
+    ServiceDetailSection,
+    ServiceDetailSpecRow,
     ServicePricing,
     ServiceBooking,
     ProviderShift,
@@ -103,13 +116,116 @@ class ProviderShiftAdmin(admin.ModelAdmin):
     ordering = ("provider", "weekday", "start_time")
 
 
+class CustomerFeedbackAdmin(admin.ModelAdmin):
+    list_display = ("full_name", "location", "rating", "is_approved", "created_at")
+    list_filter = ("is_approved", "rating", "created_at")
+    search_fields = ("full_name", "email", "location", "message")
+    ordering = ("-created_at",)
+
+
+class ServiceCategoryItemInline(admin.StackedInline):
+    model = ServiceCategoryItem
+    extra = 0
+
+
+class ServiceCategorySectionInline(admin.StackedInline):
+    model = ServiceCategorySection
+    extra = 0
+
+
+class ServiceCategoryContentBlockInline(admin.StackedInline):
+    model = ServiceCategoryContentBlock
+    extra = 0
+
+
+class ServiceCategorySpecRowInline(admin.TabularInline):
+    model = ServiceCategorySpecRow
+    extra = 0
+
+
+class ServiceCategoryFAQInline(admin.StackedInline):
+    model = ServiceCategoryFAQ
+    extra = 0
+
+
+class ServiceCategorySectionAdmin(TranslationAdmin):
+    list_display = ("title", "page", "kind", "order")
+    list_filter = ("kind", "page")
+    inlines = [ServiceCategoryItemInline]
+
+
+class ServiceCategoryContentBlockAdmin(TranslationAdmin):
+    list_display = ("title", "page", "target_service_page", "layout", "is_active", "order")
+    list_filter = ("layout", "page", "target_service_page", "is_active")
+    search_fields = ("title", "eyebrow", "badge")
+
+
+class ServiceCategoryPageAdmin(TranslationAdmin):
+    list_display = ("name", "theme", "slug", "is_active", "order")
+    list_editable = ("is_active", "order")
+    list_filter = ("theme", "is_active")
+    search_fields = ("name", "slug", "nav_label")
+    inlines = [ServiceCategoryContentBlockInline, ServiceCategorySectionInline, ServiceCategorySpecRowInline, ServiceCategoryFAQInline]
+
+
+class ServiceDetailItemInline(admin.StackedInline):
+    model = ServiceDetailItem
+    extra = 0
+
+
+class ServiceDetailSectionInline(admin.StackedInline):
+    model = ServiceDetailSection
+    extra = 0
+
+
+class ServiceDetailContentBlockInline(admin.StackedInline):
+    model = ServiceDetailContentBlock
+    extra = 0
+
+
+class ServiceDetailSpecRowInline(admin.TabularInline):
+    model = ServiceDetailSpecRow
+    extra = 0
+
+
+class ServiceDetailFAQInline(admin.StackedInline):
+    model = ServiceDetailFAQ
+    extra = 0
+
+
+class ServiceDetailSectionAdmin(TranslationAdmin):
+    list_display = ("title", "page", "kind", "order")
+    list_filter = ("kind", "page")
+    inlines = [ServiceDetailItemInline]
+
+
+class ServiceDetailContentBlockAdmin(TranslationAdmin):
+    list_display = ("title", "page", "layout", "is_active", "order")
+    list_filter = ("layout", "page", "is_active")
+    search_fields = ("title", "eyebrow", "badge")
+
+
+class ServiceDetailPageAdmin(TranslationAdmin):
+    list_display = ("name", "parent_category", "menu_group", "slug", "is_active", "order")
+    list_filter = ("parent_category", "menu_group", "is_active")
+    search_fields = ("name", "slug", "menu_group")
+    inlines = [ServiceDetailContentBlockInline, ServiceDetailSectionInline, ServiceDetailSpecRowInline, ServiceDetailFAQInline]
+
+
 admin.site.register(ElectricalService, ElectricalServiceAdmin)
 admin.site.register(ConsultationRequest, ConsultationRequestAdmin)
 admin.site.register(ConsultationBooking, ConsultationBookingAdmin)
 admin.site.register(ServiceBooking, ServiceBookingAdmin)
 admin.site.register(OnCallBooking, OnCallBookingAdmin)
+admin.site.register(ServiceCategoryPage, ServiceCategoryPageAdmin)
+admin.site.register(ServiceCategoryContentBlock, ServiceCategoryContentBlockAdmin)
+admin.site.register(ServiceCategorySection, ServiceCategorySectionAdmin)
+admin.site.register(ServiceDetailPage, ServiceDetailPageAdmin)
+admin.site.register(ServiceDetailContentBlock, ServiceDetailContentBlockAdmin)
+admin.site.register(ServiceDetailSection, ServiceDetailSectionAdmin)
 admin.site.register(ServicePricing, ServicePricingAdmin)
 admin.site.register(SupportTicket, SupportTicketAdmin)
+admin.site.register(CustomerFeedback, CustomerFeedbackAdmin)
 admin.site.register(AcceptedZipCode, AcceptedZipCodeAdmin)
 admin.site.register(ServiceRequestOutsideArea, ServiceRequestOutsideAreaAdmin)
 admin.site.register(ProviderShift, ProviderShiftAdmin)
@@ -119,8 +235,15 @@ electricity_admin_site.register(ConsultationRequest, ConsultationRequestAdmin)
 electricity_admin_site.register(ConsultationBooking, ConsultationBookingAdmin)
 electricity_admin_site.register(ServiceBooking, ServiceBookingAdmin)
 electricity_admin_site.register(OnCallBooking, OnCallBookingAdmin)
+electricity_admin_site.register(ServiceCategoryPage, ServiceCategoryPageAdmin)
+electricity_admin_site.register(ServiceCategoryContentBlock, ServiceCategoryContentBlockAdmin)
+electricity_admin_site.register(ServiceCategorySection, ServiceCategorySectionAdmin)
+electricity_admin_site.register(ServiceDetailPage, ServiceDetailPageAdmin)
+electricity_admin_site.register(ServiceDetailContentBlock, ServiceDetailContentBlockAdmin)
+electricity_admin_site.register(ServiceDetailSection, ServiceDetailSectionAdmin)
 electricity_admin_site.register(ServicePricing, ServicePricingAdmin)
 electricity_admin_site.register(SupportTicket, SupportTicketAdmin)
+electricity_admin_site.register(CustomerFeedback, CustomerFeedbackAdmin)
 electricity_admin_site.register(AcceptedZipCode, AcceptedZipCodeAdmin)
 electricity_admin_site.register(ServiceRequestOutsideArea, ServiceRequestOutsideAreaAdmin)
 electricity_admin_site.register(ProviderShift, ProviderShiftAdmin)

@@ -5,6 +5,9 @@
 {% block page_subtitle %}Fill the details and save.{% endblock %}
 
 {% block content %}
+{% record_preview_url form.instance as preview_url %}
+{% record_dashboard_section_edit_url form.instance as section_edit_url %}
+{% dashboard_related_actions form.instance as related_actions %}
 {% if request.GET.view %}
 <section class="dash-panel dash-panel-wide dash-readonly">
     <div class="panel-header">
@@ -13,6 +16,15 @@
             <div class="panel-meta">View-only details. Click edit to make changes.</div>
         </div>
         <div class="panel-actions">
+            {% if preview_url %}
+            <a class="dash-btn ghost" href="{{ preview_url }}" target="_blank" rel="noopener">Open</a>
+            {% endif %}
+            {% if section_edit_url %}
+            <a class="dash-btn ghost" href="{{ section_edit_url }}">Section</a>
+            {% endif %}
+            {% for action in related_actions %}
+            <a class="dash-btn ghost" href="{{ action.url }}">{{ action.label }}</a>
+            {% endfor %}
             <a class="dash-btn primary" href="{{ request.path }}">Edit</a>
         </div>
     </div>
@@ -99,6 +111,9 @@
     {% endwith %}
     <div class="form-actions">
         <a class="dash-btn ghost" href="{% url back_url %}">Back</a>
+        {% if preview_url %}
+        <a class="dash-btn ghost" href="{{ preview_url }}" target="_blank" rel="noopener">Open</a>
+        {% endif %}
     </div>
 </section>
 {% else %}
@@ -108,6 +123,20 @@
             <h2>{{ title }}</h2>
             <div class="panel-meta">All changes stay in this dashboard.</div>
         </div>
+        <div class="panel-actions">
+            {% if preview_url %}
+            <a class="dash-btn ghost" href="{{ preview_url }}" target="_blank" rel="noopener">Open</a>
+            {% endif %}
+            {% if section_edit_url %}
+            <a class="dash-btn ghost" href="{{ section_edit_url }}">Section</a>
+            {% endif %}
+            {% for action in related_actions %}
+            <a class="dash-btn ghost" href="{{ action.url }}">{{ action.label }}</a>
+            {% endfor %}
+            {% if form.instance.pk %}
+            <a class="dash-btn ghost" href="{{ request.path }}?view=1">View</a>
+            {% endif %}
+        </div>
     </div>
     <form method="post" enctype="multipart/form-data" class="dash-form">
         {% csrf_token %}
@@ -116,6 +145,9 @@
             <div class="form-row">
                 <label>{{ field.label }}</label>
                 {{ field }}
+                {% if field.help_text %}
+                    <div class="panel-meta">{{ field.help_text }}</div>
+                {% endif %}
                 {% if field.errors %}
                     <div class="field-error">{{ field.errors }}</div>
                 {% endif %}
@@ -123,6 +155,9 @@
         {% endfor %}
         <div class="form-actions">
             <a class="dash-btn ghost" href="{% url back_url %}">Back</a>
+            {% if preview_url %}
+            <a class="dash-btn ghost" href="{{ preview_url }}" target="_blank" rel="noopener">Open</a>
+            {% endif %}
             <button type="submit" class="dash-btn primary">Save</button>
         </div>
     </form>
@@ -157,5 +192,89 @@
     </div>
     {% endif %}
 </section>
+{% endif %}
+{% if form.service_page_parent_pairs %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const categorySelect = document.getElementById("id_parent_category_filter");
+  const pageSelect = document.getElementById("id_page");
+  if (!categorySelect || !pageSelect) return;
+
+  const parentMap = {{ form.service_page_parent_pairs|safe }};
+  const originalOptions = Array.from(pageSelect.options).map((option) => ({
+    value: option.value,
+    text: option.text,
+    selected: option.selected,
+  }));
+
+  function rebuildPageOptions() {
+    const selectedParent = categorySelect.value;
+    const currentValue = pageSelect.value;
+    pageSelect.innerHTML = "";
+
+    originalOptions.forEach((optionData) => {
+      if (!optionData.value || !selectedParent || parentMap[optionData.value] === selectedParent) {
+        const option = document.createElement("option");
+        option.value = optionData.value;
+        option.textContent = optionData.text;
+        pageSelect.appendChild(option);
+      }
+    });
+
+    if (currentValue) {
+      pageSelect.value = currentValue;
+    }
+
+    if (currentValue && pageSelect.value !== currentValue) {
+      pageSelect.selectedIndex = 0;
+    }
+  }
+
+  categorySelect.addEventListener("change", rebuildPageOptions);
+  rebuildPageOptions();
+});
+</script>
+{% endif %}
+{% if form.category_service_page_pairs %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const categorySelect = document.getElementById("id_page");
+  const servicePageSelect = document.getElementById("id_target_service_page");
+  if (!categorySelect || !servicePageSelect) return;
+
+  const parentMap = {{ form.category_service_page_pairs|safe }};
+  const originalOptions = Array.from(servicePageSelect.options).map((option) => ({
+    value: option.value,
+    text: option.text,
+    selected: option.selected,
+  }));
+
+  function rebuildServicePageOptions() {
+    const selectedParent = categorySelect.value;
+    const currentValue = servicePageSelect.value;
+    servicePageSelect.innerHTML = "";
+
+    originalOptions.forEach((optionData) => {
+      if (!optionData.value || !selectedParent || parentMap[optionData.value] === selectedParent) {
+        const option = document.createElement("option");
+        option.value = optionData.value;
+        option.textContent = optionData.text;
+        servicePageSelect.appendChild(option);
+      }
+    });
+
+    if (currentValue) {
+      servicePageSelect.value = currentValue;
+    }
+
+    if (currentValue && servicePageSelect.value !== currentValue) {
+      servicePageSelect.selectedIndex = 0;
+    }
+  }
+
+  categorySelect.addEventListener("change", rebuildServicePageOptions);
+  rebuildServicePageOptions();
+});
+</script>
 {% endif %}
 {% endblock %}

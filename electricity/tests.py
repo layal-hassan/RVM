@@ -9,7 +9,7 @@ from django.core import mail
 from django.contrib.auth.models import User
 
 from .forms import ElectricalServiceForm, OnCallBookingForm, ServiceBookingForm
-from .models import ElectricianBooking, ElectricalService, OnCallBooking, ProviderProfile, ProviderShift, ServiceBooking, ServicePricing
+from .models import CustomerFeedback, ElectricianBooking, ElectricalService, OnCallBooking, ProviderProfile, ProviderShift, ServiceBooking, ServicePricing
 from .templatetags.electricity_extras import _service_title_map, display_value, file_display_name
 
 
@@ -217,7 +217,6 @@ class ElectricianBookingReceiptTests(TestCase):
         session.save()
 
         response = self.client.get(reverse("electricity:electrician_booking_thank_you"), secure=True)
-
         self.assertContains(response, "Commercial Maintenance")
         self.assertContains(response, "Business / Organization")
         self.assertContains(response, "Sveavagen 10, 111 57 Stockholm")
@@ -226,6 +225,45 @@ class ElectricianBookingReceiptTests(TestCase):
         self.assertContains(response, "SEK 2559.00")
         self.assertNotContains(response, "1248 Oakwood Ave")
         self.assertNotContains(response, "Residential Property")
+
+
+class CustomerFeedbackTests(TestCase):
+    def test_feedback_submission_creates_pending_record(self):
+        response = self.client.post(
+            reverse("electricity:feedback"),
+            {
+                "full_name": "Jamie Parker",
+                "email": "jamie@example.com",
+                "location": "Stockholm",
+                "rating": "5",
+                "message": "Very clean work and good communication.",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(CustomerFeedback.objects.filter(full_name="Jamie Parker", is_approved=False).exists())
+        self.assertContains(response, "waiting for admin approval", html=False)
+
+    def test_home_shows_only_approved_feedback(self):
+        CustomerFeedback.objects.create(
+            full_name="Approved Customer",
+            location="Stockholm",
+            rating=5,
+            message="Approved testimonial",
+            is_approved=True,
+        )
+        CustomerFeedback.objects.create(
+            full_name="Pending Customer",
+            location="Uppsala",
+            rating=4,
+            message="Pending testimonial",
+            is_approved=False,
+        )
+
+        response = self.client.get(reverse("electricity:home"))
+
+        self.assertContains(response, "Approved testimonial")
+        self.assertNotContains(response, "Pending testimonial")
 
     def test_pricing_breakdown_adds_transport_fee_to_total(self):
         pricing = ServicePricing.objects.create(

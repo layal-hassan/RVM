@@ -1,0 +1,283 @@
+{% extends "electricity/base.html" %}
+{% load electricity_extras i18n %}
+
+{% block title %}{{ page.name }} | Hembla experten{% endblock %}
+{% block body_class %}service-category-page service-category-theme-{{ page.theme }}{% endblock %}
+
+{% block content %}
+<section class="category-hero">
+  <div class="category-hero-shell container">
+    <div class="category-hero-copy">
+      {% if page.hero_eyebrow %}
+      <div class="category-kicker">{{ page.hero_eyebrow }}</div>
+      {% endif %}
+      <h1>
+        {{ page.hero_title }}
+        {% if page.hero_highlight %}
+        <span>{{ page.hero_highlight }}</span>
+        {% endif %}
+      </h1>
+      {% if page.hero_description %}
+      <p class="category-hero-description">{{ page.hero_description }}</p>
+      {% endif %}
+      <div class="category-hero-actions">
+        {% if page.primary_cta_label and page.primary_cta_url %}
+        <a class="btn btn-primary" href="{{ page.primary_cta_url }}">{{ page.primary_cta_label }}</a>
+        {% endif %}
+        {% if page.secondary_cta_label and page.secondary_cta_url %}
+        <a class="btn btn-secondary" href="{{ page.secondary_cta_url }}">{{ page.secondary_cta_label }}</a>
+        {% endif %}
+      </div>
+      {% if page.notice_text %}
+      <div class="category-notice">{{ page.notice_text }}</div>
+      {% endif %}
+    </div>
+    <div class="category-hero-media">
+      {% if page.hero_image %}
+      <img src="{{ page.hero_image.url }}" alt="{{ page.name }}">
+      {% endif %}
+      {% if page.hero_card_title or page.hero_card_lines %}
+      <div class="category-hero-card">
+        {% if page.hero_card_title %}
+        <h3>{{ page.hero_card_title }}</h3>
+        {% endif %}
+        {% if page.hero_card_lines %}
+        <ul>
+          {% for line in page.hero_card_lines|split_lines %}
+          <li>{{ line }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% for block in content_blocks %}
+<section class="category-content-block category-content-block-{{ block.layout }}">
+  <div class="container">
+    {% if block.layout == "text" %}
+    <div class="category-content-panel category-content-panel-text">
+      {% include "electricity/partials/category_content_block_copy.html" with block=block %}
+    </div>
+    {% elif block.layout == "split_image_left" or block.layout == "split_image_right" %}
+    <div class="category-content-split{% if block.layout == "split_image_left" %} is-reversed{% endif %}">
+      {% if block.image %}
+      <div class="category-content-media">
+        <img src="{{ block.image.url }}" alt="{{ block.image_alt|default:block.title }}">
+      </div>
+      {% endif %}
+      <div class="category-content-panel">
+        {% include "electricity/partials/category_content_block_copy.html" with block=block %}
+      </div>
+    </div>
+    {% elif block.layout == "emphasis" %}
+    <div class="category-content-panel category-content-panel-emphasis">
+      <div class="category-content-copy">
+        {% include "electricity/partials/category_content_block_copy.html" with block=block %}
+      </div>
+      {% if block.stat_value or block.stat_label %}
+      <div class="category-content-stat">
+        {% if block.stat_value %}<strong>{{ block.stat_value }}</strong>{% endif %}
+        {% if block.stat_label %}<span>{{ block.stat_label }}</span>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+    {% elif block.layout == "checklist" %}
+    <div class="category-content-panel category-content-panel-checklist">
+      <div class="category-content-copy">
+        {% include "electricity/partials/category_content_block_copy.html" with block=block %}
+      </div>
+      {% if block.list_title or block.list_lines %}
+      <div class="category-content-checklist">
+        {% if block.list_title %}<h3>{{ block.list_title }}</h3>{% endif %}
+        <ul class="category-line-list">
+          {% for line in block.list_lines|split_lines %}
+          <li>{{ line }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endfor %}
+
+{% for section in sections %}
+<section class="category-section category-section-{{ section.kind }}" id="section-{{ section.title|slugify }}">
+  <div class="container">
+    <div class="category-section-header">
+      <div>
+        <h2>{{ section.title }}</h2>
+        {% if section.subtitle %}
+        <div class="category-section-subtitle">{{ section.subtitle }}</div>
+        {% endif %}
+      </div>
+      {% if section.description %}
+      <p>{{ section.description }}</p>
+      {% endif %}
+    </div>
+
+    <div class="category-card-grid category-card-grid-{{ section.kind }}">
+      {% for item in section.items.all %}
+      <article class="category-card{% if item.is_featured %} is-featured{% endif %}">
+        {% if item.badge %}
+        <div class="category-card-badge">{{ item.badge }}</div>
+        {% endif %}
+        {% if item.image %}
+        <div class="category-card-media">
+          <img src="{{ item.image.url }}" alt="{{ item.title }}">
+        </div>
+        {% endif %}
+        <div class="category-card-body">
+          <h3>{{ item.title }}</h3>
+          {% if item.subtitle %}
+          <div class="category-card-subtitle">{{ item.subtitle }}</div>
+          {% endif %}
+          {% if item.description %}
+          <p>{{ item.description }}</p>
+          {% endif %}
+
+          {% if item.meta_lines %}
+          <ul class="category-line-list">
+            {% for line in item.meta_lines|split_lines %}
+            <li>{{ line }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+
+          {% if item.included_title or item.included_lines %}
+          <div class="category-block">
+            {% if item.included_title %}
+            <strong>{{ item.included_title }}</strong>
+            {% endif %}
+            <ul class="category-line-list">
+              {% for line in item.included_lines|split_lines %}
+              <li>{{ line }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          {% if item.excluded_title or item.excluded_lines %}
+          <div class="category-block category-block-muted">
+            {% if item.excluded_title %}
+            <strong>{{ item.excluded_title }}</strong>
+            {% endif %}
+            <ul class="category-line-list">
+              {% for line in item.excluded_lines|split_lines %}
+              <li>{{ line }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+        <div class="category-card-footer">
+          {% if item.price_text %}
+          <div class="category-price">
+            <span>{{ item.price_text }}</span>
+            {% if item.price_note %}
+            <small>{{ item.price_note }}</small>
+            {% endif %}
+          </div>
+          {% endif %}
+          {% if item.cta_label and item.cta_url %}
+          <a class="category-card-cta" href="{{ item.cta_url }}">{{ item.cta_label }}</a>
+          {% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endfor %}
+
+{% if spec_rows %}
+<section class="category-section category-section-specs">
+  <div class="container">
+    <div class="category-section-header category-section-header-center">
+      <div>
+        <h2>{% if page.specs_title %}{{ page.specs_title }}{% else %}{% trans "Technical Specifications" %}{% endif %}</h2>
+        {% if page.specs_subtitle %}
+        <div class="category-section-subtitle">{{ page.specs_subtitle }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="category-spec-table-wrap">
+      <table class="category-spec-table">
+        <thead>
+          <tr>
+            <th>{% if page.spec_col_1 %}{{ page.spec_col_1 }}{% else %}{% trans "Feature" %}{% endif %}</th>
+            <th>{% if page.spec_col_2 %}{{ page.spec_col_2 }}{% else %}{% trans "Option 1" %}{% endif %}</th>
+            <th>{% if page.spec_col_3 %}{{ page.spec_col_3 }}{% else %}{% trans "Option 2" %}{% endif %}</th>
+            <th>{% if page.spec_col_4 %}{{ page.spec_col_4 }}{% else %}{% trans "Option 3" %}{% endif %}</th>
+            <th>{% trans "Option 4" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in spec_rows %}
+          <tr>
+            <th>{{ row.label }}</th>
+            <td>{{ row.value_1|default:"-" }}</td>
+            <td>{{ row.value_2|default:"-" }}</td>
+            <td>{{ row.value_3|default:"-" }}</td>
+            <td>{{ row.value_4|default:"-" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if faq_items %}
+<section class="category-section category-section-faq">
+  <div class="container faq-shell">
+    <div class="category-section-header category-section-header-center">
+      <div>
+        <h2>{% if page.faq_title %}{{ page.faq_title }}{% else %}{% trans "Common Inquiries" %}{% endif %}</h2>
+        {% if page.faq_subtitle %}
+        <div class="category-section-subtitle">{{ page.faq_subtitle }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="category-faq-list">
+      {% for faq in faq_items %}
+      <details class="category-faq-item"{% if forloop.first %} open{% endif %}>
+        <summary>{{ faq.question }}</summary>
+        <div class="category-faq-answer">{{ faq.answer|linebreaksbr }}</div>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if page.cta_title or page.cta_description %}
+<section class="category-bottom-cta">
+  <div class="container">
+    <div class="category-bottom-cta-panel"{% if page.cta_image %} style="background-image: linear-gradient(180deg, rgba(10, 11, 14, 0.4), rgba(10, 11, 14, 0.82)), url('{{ page.cta_image.url }}');"{% endif %}>
+      <div class="category-bottom-cta-copy">
+        {% if page.cta_title %}
+        <h2>{{ page.cta_title }}</h2>
+        {% endif %}
+        {% if page.cta_description %}
+        <p>{{ page.cta_description }}</p>
+        {% endif %}
+      </div>
+      <div class="category-hero-actions">
+        {% if page.cta_primary_label and page.cta_primary_url %}
+        <a class="btn btn-primary" href="{{ page.cta_primary_url }}">{{ page.cta_primary_label }}</a>
+        {% endif %}
+        {% if page.cta_secondary_label and page.cta_secondary_url %}
+        <a class="btn btn-secondary" href="{{ page.cta_secondary_url }}">{{ page.cta_secondary_label }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

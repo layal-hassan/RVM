@@ -1,0 +1,146 @@
+.feedback-page {
+  background:
+    radial-gradient(circle at top, rgba(199, 164, 91, 0.12), transparent 24%),
+    linear-gradient(180deg, #0b0d07 0%, #11140b 100%);
+  color: #f5f1e6;
+}
+
+.feedback-hero {
+  padding: 140px 0 100px;
+}
+
+.feedback-shell {
+  width: min(1160px, 92vw);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 36px;
+  align-items: start;
+}
+
+.feedback-kicker {
+  color: #f2ca63;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.feedback-copy h1 {
+  margin: 0 0 16px;
+  font-size: clamp(36px, 5vw, 62px);
+  line-height: 0.96;
+  text-transform: uppercase;
+}
+
+.feedback-copy p {
+  max-width: 48ch;
+  color: rgba(245, 241, 230, 0.74);
+  line-height: 1.8;
+}
+
+.feedback-card {
+  background: linear-gradient(180deg, rgba(24, 27, 14, 0.96), rgba(16, 18, 10, 0.96));
+  border: 1px solid rgba(199, 164, 91, 0.16);
+  border-radius: 14px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
+  padding: 28px;
+}
+
+.feedback-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.feedback-field {
+  display: grid;
+  gap: 8px;
+}
+
+.feedback-field-wide {
+  grid-column: 1 / -1;
+}
+
+.feedback-field label {
+  color: #f3e4bb;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.feedback-field .form-control {
+  width: 100%;
+  border: 1px solid rgba(199, 164, 91, 0.18);
+  background: rgba(255, 255, 255, 0.03);
+  color: #f5f1e6;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font: inherit;
+}
+
+.feedback-field textarea.form-control {
+  resize: vertical;
+  min-height: 160px;
+}
+
+.feedback-field .form-control:focus {
+  outline: none;
+  border-color: rgba(242, 202, 99, 0.46);
+  box-shadow: 0 0 0 3px rgba(242, 202, 99, 0.08);
+}
+
+.feedback-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  padding: 15px 24px;
+  margin-top: 22px;
+  border: 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 11px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.feedback-btn-primary {
+  background: #d7b656;
+  color: #101307;
+  box-shadow: 0 14px 34px rgba(215, 182, 86, 0.2);
+}
+
+.feedback-success h2 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  text-transform: uppercase;
+}
+
+.feedback-success p,
+.feedback-error {
+  color: rgba(245, 241, 230, 0.74);
+}
+
+.feedback-error {
+  font-size: 13px;
+  color: #ffb4a7;
+}
+
+@media (max-width: 900px) {
+  .feedback-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .feedback-hero {
+    padding: 124px 0 84px;
+  }
+
+  .feedback-grid {
+    grid-template-columns: 1fr;
+  }
+}

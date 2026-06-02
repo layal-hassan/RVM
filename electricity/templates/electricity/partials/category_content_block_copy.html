@@ -1,0 +1,23 @@
+{% load electricity_extras %}
+
+{% if block.eyebrow %}
+<div class="category-kicker">{{ block.eyebrow }}</div>
+{% endif %}
+<h2>{{ block.title }}</h2>
+{% if block.subtitle %}
+<div class="category-section-subtitle">{{ block.subtitle }}</div>
+{% endif %}
+{% if block.badge %}
+<div class="category-card-badge">{{ block.badge }}</div>
+{% endif %}
+{% if block.body %}
+<p>{{ block.body }}</p>
+{% endif %}
+{% if block.secondary_body %}
+<p class="category-content-secondary">{{ block.secondary_body }}</p>
+{% endif %}
+{% if block.cta_label and block.cta_url %}
+<div class="category-hero-actions">
+  <a class="btn btn-secondary" href="{{ block.cta_url }}">{{ block.cta_label }}</a>
+</div>
+{% endif %}

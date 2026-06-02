@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.core.files import File
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import Http404, HttpResponse, JsonResponse
 from django.urls import reverse
 from django.core.mail import EmailMessage, send_mail
@@ -24,6 +24,8 @@ from .forms import (
     ConsultationBookingForm,
     ConsultationRequestForm,
     CustomerProfileForm,
+    CustomerFeedbackAdminForm,
+    CustomerFeedbackForm,
     ElectricalServiceForm,
     ProviderAssignForm,
     ServiceBookingAssignForm,
@@ -33,6 +35,18 @@ from .forms import (
     FAQEntryForm,
     ProviderProfileForm,
     ProviderShiftForm,
+    ServiceCategoryFAQForm,
+    ServiceCategoryContentBlockForm,
+    ServiceCategoryItemForm,
+    ServiceCategoryPageForm,
+    ServiceCategorySectionForm,
+    ServiceCategorySpecRowForm,
+    ServiceDetailFAQForm,
+    ServiceDetailContentBlockForm,
+    ServiceDetailItemForm,
+    ServiceDetailPageForm,
+    ServiceDetailSectionForm,
+    ServiceDetailSpecRowForm,
     ServiceBookingForm,
     ServicePricingForm,
     OnCallBookingForm,
@@ -60,12 +74,25 @@ from .models import (
     ConsultationBooking,
     ConsultationBookingAttachment,
     ConsultationRequest,
+    CustomerFeedback,
     ElectricalService,
     ContactInquiry,
     CustomerProfile,
     ProviderProfile,
     ProviderShift,
     ServiceBooking,
+    ServiceCategoryFAQ,
+    ServiceCategoryContentBlock,
+    ServiceCategoryItem,
+    ServiceCategoryPage,
+    ServiceCategorySection,
+    ServiceCategorySpecRow,
+    ServiceDetailFAQ,
+    ServiceDetailContentBlock,
+    ServiceDetailItem,
+    ServiceDetailPage,
+    ServiceDetailSection,
+    ServiceDetailSpecRow,
     ElectricianBooking,
     FAQEntry,
     ServicePricing,
@@ -221,11 +248,33 @@ def _send_custom_booking_confirmation_email(
 
 
 def home(request):
-    return render(request, "electricity/landing.html")
+    testimonials = CustomerFeedback.objects.filter(is_approved=True).order_by("-created_at")[:4]
+    return render(request, "electricity/landing.html", {"testimonials": testimonials})
+
+
+def feedback(request):
+    form = CustomerFeedbackForm(request.POST or None)
+    submitted = False
+    if request.method == "POST" and form.is_valid():
+        item = form.save()
+        AdminNotification.objects.create(
+            message=f"New customer feedback from {item.full_name}.",
+        )
+        submitted = True
+        form = CustomerFeedbackForm()
+    return render(
+        request,
+        "electricity/feedback.html",
+        {
+            "form": form,
+            "submitted": submitted,
+        },
+    )
 
 
 def services(request):
     services_qs = ElectricalService.objects.filter(is_active=True).order_by("order", "title")
+    category_pages = ServiceCategoryPage.objects.filter(is_active=True).order_by("order", "name")
     pricing = ServicePricing.objects.filter(is_active=True).order_by("-created_at").first()
     pricing_context = {}
     if pricing:
@@ -242,7 +291,61 @@ def services(request):
     return render(
         request,
         "electricity/services.html",
-        {"services": services_qs, **pricing_context},
+        {"services": services_qs, "category_pages": category_pages, **pricing_context},
+    )
+
+
+def service_category_detail(request, slug):
+    page = get_object_or_404(
+        ServiceCategoryPage.objects.prefetch_related(
+            "content_blocks",
+            "sections__items",
+            "spec_rows",
+            "faqs",
+        ).filter(is_active=True),
+        slug=slug,
+    )
+    faq_items = page.faqs.filter(is_active=True)
+    return render(
+        request,
+        "electricity/service_category_detail.html",
+        {
+            "page": page,
+            "content_blocks": page.content_blocks.filter(is_active=True, target_service_page__isnull=True),
+            "sections": page.sections.all(),
+            "spec_rows": page.spec_rows.all(),
+            "faq_items": faq_items,
+        },
+    )
+
+
+def service_detail(request, slug):
+    page = get_object_or_404(
+        ServiceDetailPage.objects.prefetch_related(
+            "content_blocks",
+            "sections__items",
+            "spec_rows",
+            "faqs",
+        ).filter(is_active=True),
+        slug=slug,
+    )
+    faq_items = page.faqs.filter(is_active=True)
+    category_blocks = page.parent_category.content_blocks.filter(is_active=True, target_service_page=page)
+    detail_blocks = page.content_blocks.filter(is_active=True)
+    content_blocks = sorted(
+        list(category_blocks) + list(detail_blocks),
+        key=lambda block: (getattr(block, "order", 0), getattr(block, "id", 0)),
+    )
+    return render(
+        request,
+        "electricity/service_category_detail.html",
+        {
+            "page": page,
+            "content_blocks": content_blocks,
+            "sections": page.sections.all(),
+            "spec_rows": page.spec_rows.all(),
+            "faq_items": faq_items,
+        },
     )
 
 
@@ -2662,6 +2765,8 @@ def external_dashboard(request):
             manage_url = "electricity:dashboard_pricing"
         elif model_name == "supportticket":
             manage_url = "electricity:dashboard_support_tickets"
+        elif model_name == "customerfeedback":
+            manage_url = "electricity:dashboard_feedback"
         elif model_name == "acceptedzipcode":
             manage_url = "electricity:dashboard_zip_codes"
         elif model_name == "servicerequestoutsidearea":
@@ -2703,6 +2808,7 @@ def external_dashboard(request):
         "service_bookings": ServiceBooking.objects.count(),
         "electrician_bookings": ElectricianBooking.objects.count(),
         "on_call_bookings": OnCallBooking.objects.count(),
+        "feedback": CustomerFeedback.objects.count(),
         "support_tickets": SupportTicket.objects.count(),
         "zip_codes": AcceptedZipCode.objects.count(),
         "outside_area": ServiceRequestOutsideArea.objects.count(),
@@ -3544,6 +3650,75 @@ def dashboard_support_tickets_delete(request, pk):
 
 
 @login_required
+def dashboard_feedback(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = CustomerFeedback.objects.all().order_by("-created_at")
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Customer Feedback",
+            "items": items,
+            "fields": ["full_name", "location", "rating", "is_approved", "created_at"],
+            "create_url": "electricity:dashboard_feedback_add",
+            "edit_url": "electricity:dashboard_feedback_edit",
+            "delete_url": "electricity:dashboard_feedback_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_feedback_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    form = CustomerFeedbackAdminForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_feedback")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Customer Feedback", "form": form, "back_url": "electricity:dashboard_feedback"},
+    )
+
+
+@login_required
+def dashboard_feedback_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = CustomerFeedback.objects.get(pk=pk)
+    form = CustomerFeedbackAdminForm(request.POST or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_feedback")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Customer Feedback", "form": form, "back_url": "electricity:dashboard_feedback"},
+    )
+
+
+@login_required
+def dashboard_feedback_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = CustomerFeedback.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_feedback")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Customer Feedback", "item": item, "back_url": "electricity:dashboard_feedback"},
+    )
+
+
+@login_required
 def dashboard_faq(request):
     guard = _dashboard_access_or_redirect(request)
     if guard:
@@ -3609,6 +3784,859 @@ def dashboard_faq_delete(request, pk):
         request,
         "electricity/dashboard/delete.html",
         {"title": "Delete FAQ", "item": item, "back_url": "electricity:dashboard_faq"},
+    )
+
+
+@login_required
+def dashboard_service_category_pages(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = ServiceCategoryPage.objects.all().order_by("order", "name")
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Service Categories",
+            "items": items,
+            "fields": ["name", "theme", "slug", "is_active", "order"],
+            "create_url": "electricity:dashboard_service_category_pages_add",
+            "edit_url": "electricity:dashboard_service_category_pages_edit",
+            "delete_url": "electricity:dashboard_service_category_pages_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_service_category_pages_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    form = ServiceCategoryPageForm(request.POST or None, request.FILES or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_category_pages")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Service Category", "form": form, "back_url": "electricity:dashboard_service_category_pages"},
+    )
+
+
+@login_required
+def dashboard_service_category_pages_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceCategoryPage.objects.get(pk=pk)
+    form = ServiceCategoryPageForm(request.POST or None, request.FILES or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_category_pages")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Service Category", "form": form, "back_url": "electricity:dashboard_service_category_pages"},
+    )
+
+
+@login_required
+def dashboard_service_category_pages_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceCategoryPage.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_service_category_pages")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Service Category", "item": item, "back_url": "electricity:dashboard_service_category_pages"},
+    )
+
+
+@login_required
+def dashboard_service_category_sections(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = ServiceCategorySection.objects.select_related("page").all().order_by("page__order", "order", "id")
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Category Groups",
+            "items": items,
+            "fields": ["page", "title", "kind", "order"],
+            "create_url": "electricity:dashboard_service_category_sections_add",
+            "edit_url": "electricity:dashboard_service_category_sections_edit",
+            "delete_url": "electricity:dashboard_service_category_sections_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_service_category_content_blocks(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = ServiceCategoryContentBlock.objects.select_related("page").all().order_by("page__order", "order", "id")
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Category Content Blocks",
+            "items": items,
+            "fields": ["page", "title", "layout", "is_active", "order"],
+            "create_url": "electricity:dashboard_service_category_content_blocks_add",
+            "edit_url": "electricity:dashboard_service_category_content_blocks_edit",
+            "delete_url": "electricity:dashboard_service_category_content_blocks_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_service_category_content_blocks_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    initial = {"page": request.GET.get("page")} if request.GET.get("page") else None
+    form = ServiceCategoryContentBlockForm(request.POST or None, request.FILES or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_category_content_blocks")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Category Content Block", "form": form, "back_url": "electricity:dashboard_service_category_content_blocks"},
+    )
+
+
+@login_required
+def dashboard_service_category_content_blocks_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceCategoryContentBlock.objects.get(pk=pk)
+    form = ServiceCategoryContentBlockForm(request.POST or None, request.FILES or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_category_content_blocks")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Category Content Block", "form": form, "back_url": "electricity:dashboard_service_category_content_blocks"},
+    )
+
+
+@login_required
+def dashboard_service_category_content_blocks_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceCategoryContentBlock.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_service_category_content_blocks")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Category Content Block", "item": item, "back_url": "electricity:dashboard_service_category_content_blocks"},
+    )
+
+
+@login_required
+def dashboard_service_category_sections_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    initial = {"page": request.GET.get("page")} if request.GET.get("page") else None
+    form = ServiceCategorySectionForm(request.POST or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_category_sections")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Category Group", "form": form, "back_url": "electricity:dashboard_service_category_sections"},
+    )
+
+
+@login_required
+def dashboard_service_category_sections_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceCategorySection.objects.get(pk=pk)
+    form = ServiceCategorySectionForm(request.POST or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_category_sections")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Category Group", "form": form, "back_url": "electricity:dashboard_service_category_sections"},
+    )
+
+
+@login_required
+def dashboard_service_category_sections_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceCategorySection.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_service_category_sections")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Category Group", "item": item, "back_url": "electricity:dashboard_service_category_sections"},
+    )
+
+
+@login_required
+def dashboard_service_category_items(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = ServiceCategoryItem.objects.select_related("section", "section__page").all().order_by(
+        "section__page__order", "section__order", "order", "id"
+    )
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Service Links",
+            "items": items,
+            "fields": ["section", "title", "price_text", "is_featured", "order"],
+            "create_url": "electricity:dashboard_service_category_items_add",
+            "edit_url": "electricity:dashboard_service_category_items_edit",
+            "delete_url": "electricity:dashboard_service_category_items_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_service_category_items_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    initial = {"section": request.GET.get("section")} if request.GET.get("section") else None
+    form = ServiceCategoryItemForm(request.POST or None, request.FILES or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_category_items")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Service Link", "form": form, "back_url": "electricity:dashboard_service_category_items"},
+    )
+
+
+@login_required
+def dashboard_service_category_items_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceCategoryItem.objects.get(pk=pk)
+    form = ServiceCategoryItemForm(request.POST or None, request.FILES or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_category_items")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Service Link", "form": form, "back_url": "electricity:dashboard_service_category_items"},
+    )
+
+
+@login_required
+def dashboard_service_category_items_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceCategoryItem.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_service_category_items")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Service Link", "item": item, "back_url": "electricity:dashboard_service_category_items"},
+    )
+
+
+@login_required
+def dashboard_service_category_specs(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = ServiceCategorySpecRow.objects.select_related("page").all().order_by("page__order", "order", "id")
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Category Spec Rows",
+            "items": items,
+            "fields": ["page", "label", "value_1", "value_2", "order"],
+            "create_url": "electricity:dashboard_service_category_specs_add",
+            "edit_url": "electricity:dashboard_service_category_specs_edit",
+            "delete_url": "electricity:dashboard_service_category_specs_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_service_category_specs_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    initial = {"page": request.GET.get("page")} if request.GET.get("page") else None
+    form = ServiceCategorySpecRowForm(request.POST or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_category_specs")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Category Spec Row", "form": form, "back_url": "electricity:dashboard_service_category_specs"},
+    )
+
+
+@login_required
+def dashboard_service_category_specs_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceCategorySpecRow.objects.get(pk=pk)
+    form = ServiceCategorySpecRowForm(request.POST or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_category_specs")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Category Spec Row", "form": form, "back_url": "electricity:dashboard_service_category_specs"},
+    )
+
+
+@login_required
+def dashboard_service_category_specs_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceCategorySpecRow.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_service_category_specs")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Category Spec Row", "item": item, "back_url": "electricity:dashboard_service_category_specs"},
+    )
+
+
+@login_required
+def dashboard_service_category_faq(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = ServiceCategoryFAQ.objects.select_related("page").all().order_by("page__order", "order", "id")
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Category FAQs",
+            "items": items,
+            "fields": ["page", "question", "is_active", "order"],
+            "create_url": "electricity:dashboard_service_category_faq_add",
+            "edit_url": "electricity:dashboard_service_category_faq_edit",
+            "delete_url": "electricity:dashboard_service_category_faq_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_service_category_faq_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    initial = {"page": request.GET.get("page")} if request.GET.get("page") else None
+    form = ServiceCategoryFAQForm(request.POST or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_category_faq")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Category FAQ", "form": form, "back_url": "electricity:dashboard_service_category_faq"},
+    )
+
+
+@login_required
+def dashboard_service_category_faq_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceCategoryFAQ.objects.get(pk=pk)
+    form = ServiceCategoryFAQForm(request.POST or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_category_faq")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Category FAQ", "form": form, "back_url": "electricity:dashboard_service_category_faq"},
+    )
+
+
+@login_required
+def dashboard_service_category_faq_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceCategoryFAQ.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_service_category_faq")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Category FAQ", "item": item, "back_url": "electricity:dashboard_service_category_faq"},
+    )
+
+
+@login_required
+def dashboard_service_pages(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = ServiceDetailPage.objects.select_related("parent_category").all().order_by(
+        "parent_category__order", "menu_group", "order", "name"
+    )
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Service Pages",
+            "items": items,
+            "fields": ["parent_category", "menu_group", "name", "slug", "is_active", "order"],
+            "create_url": "electricity:dashboard_service_pages_add",
+            "edit_url": "electricity:dashboard_service_pages_edit",
+            "delete_url": "electricity:dashboard_service_pages_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_service_pages_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    initial = {"parent_category": request.GET.get("parent_category")} if request.GET.get("parent_category") else None
+    form = ServiceDetailPageForm(request.POST or None, request.FILES or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_pages")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Service Page", "form": form, "back_url": "electricity:dashboard_service_pages"},
+    )
+
+
+@login_required
+def dashboard_service_pages_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceDetailPage.objects.get(pk=pk)
+    form = ServiceDetailPageForm(request.POST or None, request.FILES or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_pages")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Service Page", "form": form, "back_url": "electricity:dashboard_service_pages"},
+    )
+
+
+@login_required
+def dashboard_service_pages_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceDetailPage.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_service_pages")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Service Page", "item": item, "back_url": "electricity:dashboard_service_pages"},
+    )
+
+
+@login_required
+def dashboard_service_page_sections(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = ServiceDetailSection.objects.select_related("page", "page__parent_category").all().order_by(
+        "page__parent_category__order", "page__menu_group", "page__order", "order", "id"
+    )
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Service Page Sections",
+            "items": items,
+            "fields": ["page", "title", "kind", "order"],
+            "create_url": "electricity:dashboard_service_page_sections_add",
+            "edit_url": "electricity:dashboard_service_page_sections_edit",
+            "delete_url": "electricity:dashboard_service_page_sections_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_service_page_content_blocks(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = ServiceDetailContentBlock.objects.select_related("page", "page__parent_category").all().order_by(
+        "page__parent_category__order", "page__menu_group", "page__order", "order", "id"
+    )
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Service Page Blocks",
+            "items": items,
+            "fields": ["page", "title", "layout", "is_active", "order"],
+            "create_url": "electricity:dashboard_service_page_content_blocks_add",
+            "edit_url": "electricity:dashboard_service_page_content_blocks_edit",
+            "delete_url": "electricity:dashboard_service_page_content_blocks_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_service_page_content_blocks_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    initial = {"page": request.GET.get("page")} if request.GET.get("page") else None
+    form = ServiceDetailContentBlockForm(request.POST or None, request.FILES or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_page_content_blocks")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Service Page Block", "form": form, "back_url": "electricity:dashboard_service_page_content_blocks"},
+    )
+
+
+@login_required
+def dashboard_service_page_content_blocks_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceDetailContentBlock.objects.get(pk=pk)
+    form = ServiceDetailContentBlockForm(request.POST or None, request.FILES or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_page_content_blocks")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Service Page Block", "form": form, "back_url": "electricity:dashboard_service_page_content_blocks"},
+    )
+
+
+@login_required
+def dashboard_service_page_content_blocks_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceDetailContentBlock.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_service_page_content_blocks")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Service Page Block", "item": item, "back_url": "electricity:dashboard_service_page_content_blocks"},
+    )
+
+
+@login_required
+def dashboard_service_page_sections_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    initial = {"page": request.GET.get("page")} if request.GET.get("page") else None
+    form = ServiceDetailSectionForm(request.POST or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_page_sections")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Service Page Section", "form": form, "back_url": "electricity:dashboard_service_page_sections"},
+    )
+
+
+@login_required
+def dashboard_service_page_sections_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceDetailSection.objects.get(pk=pk)
+    form = ServiceDetailSectionForm(request.POST or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_page_sections")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Service Page Section", "form": form, "back_url": "electricity:dashboard_service_page_sections"},
+    )
+
+
+@login_required
+def dashboard_service_page_sections_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceDetailSection.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_service_page_sections")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Service Page Section", "item": item, "back_url": "electricity:dashboard_service_page_sections"},
+    )
+
+
+@login_required
+def dashboard_service_page_items(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = ServiceDetailItem.objects.select_related("section", "section__page").all().order_by(
+        "section__page__parent_category__order", "section__page__menu_group", "section__page__order", "section__order", "order", "id"
+    )
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Service Page Items",
+            "items": items,
+            "fields": ["section", "title", "price_text", "is_featured", "order"],
+            "create_url": "electricity:dashboard_service_page_items_add",
+            "edit_url": "electricity:dashboard_service_page_items_edit",
+            "delete_url": "electricity:dashboard_service_page_items_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_service_page_items_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    initial = {"section": request.GET.get("section")} if request.GET.get("section") else None
+    form = ServiceDetailItemForm(request.POST or None, request.FILES or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_page_items")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Service Page Item", "form": form, "back_url": "electricity:dashboard_service_page_items"},
+    )
+
+
+@login_required
+def dashboard_service_page_items_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceDetailItem.objects.get(pk=pk)
+    form = ServiceDetailItemForm(request.POST or None, request.FILES or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_page_items")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Service Page Item", "form": form, "back_url": "electricity:dashboard_service_page_items"},
+    )
+
+
+@login_required
+def dashboard_service_page_items_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceDetailItem.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_service_page_items")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Service Page Item", "item": item, "back_url": "electricity:dashboard_service_page_items"},
+    )
+
+
+@login_required
+def dashboard_service_page_specs(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = ServiceDetailSpecRow.objects.select_related("page", "page__parent_category").all().order_by(
+        "page__parent_category__order", "page__menu_group", "page__order", "order", "id"
+    )
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Service Page Specs",
+            "items": items,
+            "fields": ["page", "label", "value_1", "value_2", "order"],
+            "create_url": "electricity:dashboard_service_page_specs_add",
+            "edit_url": "electricity:dashboard_service_page_specs_edit",
+            "delete_url": "electricity:dashboard_service_page_specs_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_service_page_specs_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    initial = {"page": request.GET.get("page")} if request.GET.get("page") else None
+    form = ServiceDetailSpecRowForm(request.POST or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_page_specs")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Service Page Spec Row", "form": form, "back_url": "electricity:dashboard_service_page_specs"},
+    )
+
+
+@login_required
+def dashboard_service_page_specs_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceDetailSpecRow.objects.get(pk=pk)
+    form = ServiceDetailSpecRowForm(request.POST or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_page_specs")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Service Page Spec Row", "form": form, "back_url": "electricity:dashboard_service_page_specs"},
+    )
+
+
+@login_required
+def dashboard_service_page_specs_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceDetailSpecRow.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_service_page_specs")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Service Page Spec Row", "item": item, "back_url": "electricity:dashboard_service_page_specs"},
+    )
+
+
+@login_required
+def dashboard_service_page_faq(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    items = ServiceDetailFAQ.objects.select_related("page", "page__parent_category").all().order_by(
+        "page__parent_category__order", "page__menu_group", "page__order", "order", "id"
+    )
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Service Page FAQ",
+            "items": items,
+            "fields": ["page", "question", "is_active", "order"],
+            "create_url": "electricity:dashboard_service_page_faq_add",
+            "edit_url": "electricity:dashboard_service_page_faq_edit",
+            "delete_url": "electricity:dashboard_service_page_faq_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_service_page_faq_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    initial = {"page": request.GET.get("page")} if request.GET.get("page") else None
+    form = ServiceDetailFAQForm(request.POST or None, initial=initial)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_page_faq")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Add Service Page FAQ", "form": form, "back_url": "electricity:dashboard_service_page_faq"},
+    )
+
+
+@login_required
+def dashboard_service_page_faq_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceDetailFAQ.objects.get(pk=pk)
+    form = ServiceDetailFAQForm(request.POST or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_service_page_faq")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {"title": "Edit Service Page FAQ", "form": form, "back_url": "electricity:dashboard_service_page_faq"},
+    )
+
+
+@login_required
+def dashboard_service_page_faq_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = ServiceDetailFAQ.objects.get(pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_service_page_faq")
+    return render(
+        request,
+        "electricity/dashboard/delete.html",
+        {"title": "Delete Service Page FAQ", "item": item, "back_url": "electricity:dashboard_service_page_faq"},
     )
 
 

@@ -3,7 +3,7 @@ import re
 from django import forms
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import PasswordResetForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from .models import (
@@ -20,10 +20,23 @@ from .models import (
     OnCallBooking,
     ProviderProfile,
     ProviderShift,
+    ServiceCategoryFAQ,
+    ServiceCategoryContentBlock,
+    ServiceCategoryItem,
+    ServiceCategoryPage,
+    ServiceCategorySection,
+    ServiceCategorySpecRow,
+    ServiceDetailFAQ,
+    ServiceDetailContentBlock,
+    ServiceDetailItem,
+    ServiceDetailPage,
+    ServiceDetailSection,
+    ServiceDetailSpecRow,
     ServiceRequestOutsideArea,
     ServiceBooking,
     ServicePricing,
     SupportTicket,
+    CustomerFeedback,
 )
 from . import translation  # noqa: F401
 
@@ -37,6 +50,22 @@ def _translated_fields(*base_fields):
         for lang in languages:
             fields.append(f"{base}_{lang}")
     return fields
+
+
+class UsernameOrEmailPasswordResetForm(PasswordResetForm):
+    email = forms.CharField(label=_("Email or username"))
+
+    def clean_email(self):
+        value = self.cleaned_data["email"].strip()
+        if not value or "@" in value:
+            return value
+
+        user = User.objects.filter(username__iexact=value).first()
+        if not user:
+            return value
+        if not user.email:
+            raise ValidationError(_("This account does not have an email address configured for password reset."))
+        return user.email
 
 
 class HumanizedJSONModelForm(forms.ModelForm):
@@ -513,6 +542,29 @@ class SupportTicketForm(HumanizedJSONModelForm):
         exclude = ("created_at",)
 
 
+class CustomerFeedbackForm(HumanizedJSONModelForm):
+    class Meta:
+        model = CustomerFeedback
+        fields = ("full_name", "email", "location", "rating", "message")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["full_name"].widget.attrs.update({"class": "form-control"})
+        self.fields["email"].widget.attrs.update({"class": "form-control"})
+        self.fields["location"].widget.attrs.update({"class": "form-control"})
+        self.fields["rating"].widget = forms.Select(
+            choices=[(5, "5 / 5"), (4, "4 / 5"), (3, "3 / 5"), (2, "2 / 5"), (1, "1 / 5")],
+            attrs={"class": "form-control"},
+        )
+        self.fields["message"].widget.attrs.update({"class": "form-control", "rows": 6})
+
+
+class CustomerFeedbackAdminForm(HumanizedJSONModelForm):
+    class Meta:
+        model = CustomerFeedback
+        fields = ("full_name", "email", "location", "rating", "message", "is_approved")
+
+
 class CustomerProfileForm(HumanizedJSONModelForm):
     class Meta:
         model = CustomerProfile
@@ -584,6 +636,285 @@ class FAQEntryForm(HumanizedJSONModelForm):
     class Meta:
         model = FAQEntry
         fields = _translated_fields("question", "answer") + ["is_active", "order"]
+
+
+class ServiceCategoryPageForm(HumanizedJSONModelForm):
+    class Meta:
+        model = ServiceCategoryPage
+        fields = _translated_fields(
+            "name",
+            "nav_label",
+            "teaser",
+            "hero_eyebrow",
+            "hero_title",
+            "hero_highlight",
+            "hero_description",
+            "hero_card_title",
+            "hero_card_lines",
+            "notice_text",
+            "primary_cta_label",
+            "secondary_cta_label",
+            "specs_title",
+            "specs_subtitle",
+            "spec_col_1",
+            "spec_col_2",
+            "spec_col_3",
+            "spec_col_4",
+            "faq_title",
+            "faq_subtitle",
+            "cta_title",
+            "cta_description",
+            "cta_primary_label",
+            "cta_secondary_label",
+        ) + [
+            "theme",
+            "slug",
+            "hero_image",
+            "primary_cta_url",
+            "secondary_cta_url",
+            "cta_image",
+            "cta_primary_url",
+            "cta_secondary_url",
+            "is_active",
+            "order",
+        ]
+
+
+class ServiceCategorySectionForm(HumanizedJSONModelForm):
+    class Meta:
+        model = ServiceCategorySection
+        fields = ["page", "kind"] + _translated_fields("title", "subtitle", "description") + ["order"]
+
+
+class ServiceCategoryContentBlockForm(HumanizedJSONModelForm):
+    class Meta:
+        model = ServiceCategoryContentBlock
+        fields = ["page", "target_service_page", "layout"] + _translated_fields(
+            "eyebrow",
+            "title",
+            "subtitle",
+            "body",
+            "secondary_body",
+            "image_alt",
+            "badge",
+            "list_title",
+            "list_lines",
+            "stat_label",
+            "stat_value",
+            "cta_label",
+        ) + [
+            "image",
+            "cta_url",
+            "is_active",
+            "order",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["page"].label = "Parent Category"
+        self.fields["page"].help_text = "Choose the main parent section first."
+        self.fields["target_service_page"].label = "Target Service Page"
+        self.fields["target_service_page"].help_text = "Optional. If selected, this block appears only on that inner service page. If left empty, it appears on the main category page."
+        pages_qs = ServiceDetailPage.objects.select_related("parent_category").order_by(
+            "parent_category__order", "menu_group", "order", "name"
+        )
+        self.fields["target_service_page"].queryset = pages_qs
+
+        selected_parent_id = ""
+        if self.is_bound:
+            selected_parent_id = str(self.data.get("page") or "")
+        elif getattr(self.instance, "pk", None):
+            selected_parent_id = str(getattr(self.instance, "page_id", "") or "")
+        elif self.initial.get("page"):
+            selected_parent_id = str(self.initial.get("page") or "")
+
+        self.category_service_page_pairs = json.dumps(
+            {str(page.pk): str(page.parent_category_id) for page in pages_qs}
+        )
+        self.selected_parent_category_id = selected_parent_id
+
+
+class ServiceCategoryItemForm(HumanizedJSONModelForm):
+    class Meta:
+        model = ServiceCategoryItem
+        fields = ["section"] + _translated_fields(
+            "badge",
+            "title",
+            "subtitle",
+            "description",
+            "price_text",
+            "price_note",
+            "meta_lines",
+            "included_title",
+            "included_lines",
+            "excluded_title",
+            "excluded_lines",
+            "cta_label",
+        ) + [
+            "image",
+            "cta_url",
+            "is_featured",
+            "order",
+        ]
+
+
+class ServiceCategorySpecRowForm(HumanizedJSONModelForm):
+    class Meta:
+        model = ServiceCategorySpecRow
+        fields = ["page"] + _translated_fields("label", "value_1", "value_2", "value_3", "value_4") + ["order"]
+
+
+class ServiceCategoryFAQForm(HumanizedJSONModelForm):
+    class Meta:
+        model = ServiceCategoryFAQ
+        fields = ["page"] + _translated_fields("question", "answer") + ["is_active", "order"]
+
+
+class ServiceDetailPageForm(HumanizedJSONModelForm):
+    class Meta:
+        model = ServiceDetailPage
+        fields = ["parent_category"] + _translated_fields(
+            "menu_group",
+            "name",
+            "nav_label",
+            "teaser",
+            "hero_eyebrow",
+            "hero_title",
+            "hero_highlight",
+            "hero_description",
+            "hero_card_title",
+            "hero_card_lines",
+            "notice_text",
+            "primary_cta_label",
+            "secondary_cta_label",
+            "specs_title",
+            "specs_subtitle",
+            "spec_col_1",
+            "spec_col_2",
+            "spec_col_3",
+            "spec_col_4",
+            "faq_title",
+            "faq_subtitle",
+            "cta_title",
+            "cta_description",
+            "cta_primary_label",
+            "cta_secondary_label",
+        ) + [
+            "slug",
+            "hero_image",
+            "primary_cta_url",
+            "secondary_cta_url",
+            "cta_image",
+            "cta_primary_url",
+            "cta_secondary_url",
+            "is_active",
+            "order",
+        ]
+
+
+class ServiceDetailSectionForm(HumanizedJSONModelForm):
+    class Meta:
+        model = ServiceDetailSection
+        fields = ["page", "kind"] + _translated_fields("title", "subtitle", "description") + ["order"]
+
+
+class ServiceDetailContentBlockForm(HumanizedJSONModelForm):
+    parent_category_filter = forms.ModelChoiceField(
+        queryset=ServiceCategoryPage.objects.all().order_by("order", "name"),
+        required=False,
+        label="Parent Category",
+        help_text="Choose the parent category first, then select one of its inner service pages below.",
+    )
+
+    class Meta:
+        model = ServiceDetailContentBlock
+        fields = ["page", "layout"] + _translated_fields(
+            "eyebrow",
+            "title",
+            "subtitle",
+            "body",
+            "secondary_body",
+            "image_alt",
+            "badge",
+            "list_title",
+            "list_lines",
+            "stat_label",
+            "stat_value",
+            "cta_label",
+        ) + [
+            "image",
+            "cta_url",
+            "is_active",
+            "order",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.order_fields(
+            ["parent_category_filter", "page", "layout"]
+            + [name for name in self.fields.keys() if name not in {"parent_category_filter", "page", "layout"}]
+        )
+        pages_qs = ServiceDetailPage.objects.select_related("parent_category").order_by(
+            "parent_category__order", "menu_group", "order", "name"
+        )
+        self.fields["page"].queryset = pages_qs
+        self.fields["page"].label = "Service Page"
+        self.fields["page"].help_text = "This block appears only on the selected inner service page."
+
+        selected_parent_id = ""
+        if self.is_bound:
+            selected_parent_id = str(self.data.get("parent_category_filter") or "")
+        elif getattr(self.instance, "pk", None):
+            selected_parent_id = str(getattr(self.instance.page, "parent_category_id", "") or "")
+            self.fields["parent_category_filter"].initial = selected_parent_id or None
+        elif self.initial.get("page"):
+            try:
+                selected_page = pages_qs.get(pk=self.initial["page"])
+                selected_parent_id = str(selected_page.parent_category_id or "")
+                self.fields["parent_category_filter"].initial = selected_parent_id or None
+            except ServiceDetailPage.DoesNotExist:
+                selected_parent_id = ""
+
+        self.service_page_parent_pairs = json.dumps(
+            {str(page.pk): str(page.parent_category_id) for page in pages_qs}
+        )
+        self.selected_parent_category_id = selected_parent_id
+
+
+class ServiceDetailItemForm(HumanizedJSONModelForm):
+    class Meta:
+        model = ServiceDetailItem
+        fields = ["section"] + _translated_fields(
+            "badge",
+            "title",
+            "subtitle",
+            "description",
+            "price_text",
+            "price_note",
+            "meta_lines",
+            "included_title",
+            "included_lines",
+            "excluded_title",
+            "excluded_lines",
+            "cta_label",
+        ) + [
+            "image",
+            "cta_url",
+            "is_featured",
+            "order",
+        ]
+
+
+class ServiceDetailSpecRowForm(HumanizedJSONModelForm):
+    class Meta:
+        model = ServiceDetailSpecRow
+        fields = ["page"] + _translated_fields("label", "value_1", "value_2", "value_3", "value_4") + ["order"]
+
+
+class ServiceDetailFAQForm(HumanizedJSONModelForm):
+    class Meta:
+        model = ServiceDetailFAQ
+        fields = ["page"] + _translated_fields("question", "answer") + ["is_active", "order"]
 
 
 class BookingStatusUpdateForm(HumanizedJSONModelForm):

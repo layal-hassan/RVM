@@ -203,30 +203,94 @@ body.dash-body {
   position: absolute;
   top: calc(100% + 14px);
   left: 0;
-  min-width: 240px;
-  padding: 10px;
+  min-width: 980px;
+  max-width: min(1160px, calc(100vw - 48px));
+  max-height: calc(100vh - var(--rwmh-height) - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px 18px 12px;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: linear-gradient(180deg, rgba(18, 20, 24, 0.98), rgba(12, 14, 17, 0.98));
   box-shadow: 0 22px 40px rgba(0, 0, 0, 0.35);
   display: none;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
   z-index: 6;
+}
+
+.rwm-electricity-global-header .rwm-egh-dropdown-menu::-webkit-scrollbar {
+  width: 10px;
+}
+
+.rwm-electricity-global-header .rwm-egh-dropdown-menu::-webkit-scrollbar-thumb {
+  background: rgba(199, 164, 91, 0.38);
+  border-radius: 999px;
+  border: 2px solid rgba(12, 14, 17, 0.98);
+}
+
+.rwm-electricity-global-header .rwm-egh-dropdown-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.rwm-electricity-global-header .rwm-egh-mega-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.rwm-electricity-global-header .rwm-egh-mega-col {
+  min-width: 0;
+  padding: 2px 2px 6px;
+}
+
+.rwm-electricity-global-header .rwm-egh-mega-col + .rwm-egh-mega-col {
+  border-inline-start: 1px solid rgba(255, 255, 255, 0.08);
+  padding-inline-start: 22px;
+}
+
+.rwm-electricity-global-header .rwm-egh-mega-heading {
+  display: block;
+  margin-bottom: 14px;
+  color: #efc96f;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.rwm-electricity-global-header .rwm-egh-mega-groups {
+  display: grid;
+  gap: 12px;
+}
+
+.rwm-electricity-global-header .rwm-egh-mega-subhead {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  padding: 4px 0 2px;
+}
+
+.rwm-electricity-global-header .rwm-egh-mega-links {
+  display: grid;
+  gap: 2px;
 }
 
 .rwm-electricity-global-header .rwm-egh-dropdown-link {
   display: flex;
   align-items: center;
-  min-height: 44px;
-  padding: 10px 14px;
-  border-radius: 12px;
+  min-height: 34px;
+  padding: 6px 10px;
+  border-radius: 10px;
   color: rgba(255, 255, 255, 0.92);
   text-decoration: none;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  line-height: 1.45;
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
@@ -235,6 +299,25 @@ body.dash-body {
   background: rgba(199, 164, 91, 0.14);
   color: #f0d490;
   transform: translateX(2px);
+}
+
+.rwm-electricity-global-header .rwm-egh-dropdown-link-muted {
+  color: rgba(255, 255, 255, 0.42);
+  pointer-events: none;
+}
+
+.rwm-electricity-global-header .rwm-egh-mega-footer {
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rwm-electricity-global-header .rwm-egh-dropdown-link-footer {
+  min-height: 40px;
+  padding-inline: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
 }
 
 .rwm-electricity-global-header .rwm-egh-dropdown:hover .rwm-egh-dropdown-menu,
@@ -467,6 +550,13 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
   text-align: right;
 }
 
+[dir="rtl"] .rwm-electricity-global-header .rwm-egh-mega-col + .rwm-egh-mega-col {
+  border-inline-start: 0;
+  border-inline-end: 1px solid rgba(255, 255, 255, 0.08);
+  padding-inline-start: 0;
+  padding-inline-end: 22px;
+}
+
 [dir="rtl"] .rwm-electricity-global-header .rwm-egh-navwrap,
 [dir="rtl"] .rwm-electricity-global-header .rwm-egh-nav,
 [dir="rtl"] .rwm-electricity-global-header .rwm-egh-left,
@@ -578,6 +668,9 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
   .rwm-electricity-global-header .rwm-egh-dropdown-menu {
     position: static;
     min-width: 0;
+    max-width: none;
+    max-height: none;
+    overflow-y: visible;
     margin-top: 8px;
     padding: 8px;
     border-radius: 14px;
@@ -585,10 +678,22 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
     background: rgba(255, 255, 255, 0.03);
   }
 
+  .rwm-electricity-global-header .rwm-egh-mega-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-mega-col + .rwm-egh-mega-col {
+    border-inline-start: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-inline-start: 2px;
+    padding-top: 14px;
+  }
+
   .rwm-electricity-global-header .rwm-egh-dropdown-link {
     min-height: 42px;
     padding: 10px 12px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.02em;
   }
 
   .rwm-electricity-global-header .rwm-egh-lang {

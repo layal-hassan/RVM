@@ -1,0 +1,47 @@
+{% extends "electricity/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Customer Feedback" %}{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'electricity/css/feedback.css' %}">
+{% endblock %}
+
+{% block body_class %}feedback-page{% endblock %}
+
+{% block content %}
+<section class="feedback-hero">
+  <div class="feedback-shell">
+    <div class="feedback-copy">
+      <div class="feedback-kicker">{% trans "Customer Feedback" %}</div>
+      <h1>{% trans "Tell Us How The Job Went" %}</h1>
+      <p>{% trans "Send your opinion directly to our team. Your review stays pending until the admin approves it, then it can appear on the website." %}</p>
+    </div>
+    <div class="feedback-card">
+      {% if submitted %}
+        <div class="feedback-success">
+          <h2>{% trans "Thank You" %}</h2>
+          <p>{% trans "Your feedback was submitted successfully and is now waiting for admin approval." %}</p>
+          <a class="feedback-btn feedback-btn-primary" href="{% url 'electricity:feedback' %}">{% trans "Send Another Review" %}</a>
+        </div>
+      {% else %}
+        <form method="post" class="feedback-form">
+          {% csrf_token %}
+          <div class="feedback-grid">
+            {% for field in form %}
+              <div class="feedback-field{% if field.name == 'message' %} feedback-field-wide{% endif %}">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                  <div class="feedback-error">{{ field.errors|striptags }}</div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          <button class="feedback-btn feedback-btn-primary" type="submit">{% trans "Submit Feedback" %}</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

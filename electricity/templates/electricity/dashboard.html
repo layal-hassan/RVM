@@ -78,6 +78,18 @@
             <div class="stat-value">{{ stats.on_call_bookings }}</div>
         </div>
     </a>
+    <a class="stat-card stat-card-link" href="{% url 'electricity:dashboard_feedback' %}">
+        <div class="stat-icon stat-icon-requests" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M7 12h10M7 8h6M7 16h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-4 3V6a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Customer Feedback</div>
+            <div class="stat-value">{{ stats.feedback }}</div>
+        </div>
+    </a>
     <a class="stat-card stat-card-link" href="{% url 'electricity:dashboard_zip_codes' %}">
         <div class="stat-icon stat-icon-zip" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
@@ -205,6 +217,7 @@
         <a class="dash-btn primary" href="{% url 'electricity:dashboard_service_bookings_add' %}">Add Service Booking</a>
         <a class="dash-btn primary" href="{% url 'electricity:dashboard_electrician_bookings_add' %}">Add Electrician Booking</a>
         <a class="dash-btn primary" href="{% url 'electricity:dashboard_on_call_bookings_add' %}">Add On-Call Booking</a>
+        <a class="dash-btn primary" href="{% url 'electricity:dashboard_feedback_add' %}">Add Feedback</a>
         <a class="dash-btn primary" href="{% url 'electricity:dashboard_users_add' %}">Add User</a>
         <a class="dash-btn primary" href="{% url 'electricity:dashboard_support_tickets_add' %}">Add Support Ticket</a>
     </div>

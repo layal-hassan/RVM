@@ -285,6 +285,369 @@ class FAQEntry(models.Model):
         return self.question
 
 
+class ServiceCategoryPage(models.Model):
+    class Theme(models.TextChoices):
+        ELECTRICAL = "electrical", "Electrical Installations"
+        SMART = "smart", "Smart Home & EV Charging"
+        LIGHTING = "lighting", "Lighting & Appliances"
+
+    theme = models.CharField(max_length=20, choices=Theme.choices, unique=True)
+    slug = models.SlugField(unique=True)
+    name = models.CharField(max_length=140)
+    nav_label = models.CharField(max_length=80, blank=True)
+    teaser = models.TextField(blank=True)
+    hero_eyebrow = models.CharField(max_length=120, blank=True)
+    hero_title = models.CharField(max_length=160)
+    hero_highlight = models.CharField(max_length=160, blank=True)
+    hero_description = models.TextField(blank=True)
+    hero_image = models.ImageField(upload_to="electricity/category_pages/heroes/", blank=True, null=True)
+    hero_card_title = models.CharField(max_length=120, blank=True)
+    hero_card_lines = models.TextField(blank=True, default="")
+    notice_text = models.CharField(max_length=255, blank=True)
+    primary_cta_label = models.CharField(max_length=80, blank=True)
+    primary_cta_url = models.CharField(max_length=240, blank=True)
+    secondary_cta_label = models.CharField(max_length=80, blank=True)
+    secondary_cta_url = models.CharField(max_length=240, blank=True)
+    specs_title = models.CharField(max_length=160, blank=True)
+    specs_subtitle = models.CharField(max_length=200, blank=True)
+    spec_col_1 = models.CharField(max_length=80, blank=True)
+    spec_col_2 = models.CharField(max_length=80, blank=True)
+    spec_col_3 = models.CharField(max_length=80, blank=True)
+    spec_col_4 = models.CharField(max_length=80, blank=True)
+    faq_title = models.CharField(max_length=160, blank=True)
+    faq_subtitle = models.CharField(max_length=200, blank=True)
+    cta_title = models.CharField(max_length=160, blank=True)
+    cta_description = models.TextField(blank=True)
+    cta_image = models.ImageField(upload_to="electricity/category_pages/cta/", blank=True, null=True)
+    cta_primary_label = models.CharField(max_length=80, blank=True)
+    cta_primary_url = models.CharField(max_length=240, blank=True)
+    cta_secondary_label = models.CharField(max_length=80, blank=True)
+    cta_secondary_url = models.CharField(max_length=240, blank=True)
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "name"]
+
+    def __str__(self):
+        return self.name
+
+
+class ServiceCategorySection(models.Model):
+    class Kind(models.TextChoices):
+        PRODUCTS = "products", "Products"
+        FEATURES = "features", "Feature Cards"
+        ACCESSORIES = "accessories", "Accessories"
+
+    page = models.ForeignKey(
+        ServiceCategoryPage,
+        on_delete=models.CASCADE,
+        related_name="sections",
+    )
+    kind = models.CharField(max_length=20, choices=Kind.choices, default=Kind.PRODUCTS)
+    title = models.CharField(max_length=160)
+    subtitle = models.CharField(max_length=200, blank=True)
+    description = models.TextField(blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.page.name} - {self.title}"
+
+
+class ServiceCategoryContentBlock(models.Model):
+    class Layout(models.TextChoices):
+        TEXT = "text", "Text only"
+        SPLIT_IMAGE_RIGHT = "split_image_right", "Text with image right"
+        SPLIT_IMAGE_LEFT = "split_image_left", "Text with image left"
+        EMPHASIS = "emphasis", "Emphasis band"
+        CHECKLIST = "checklist", "Checklist panel"
+
+    page = models.ForeignKey(
+        ServiceCategoryPage,
+        on_delete=models.CASCADE,
+        related_name="content_blocks",
+    )
+    target_service_page = models.ForeignKey(
+        "ServiceDetailPage",
+        on_delete=models.CASCADE,
+        related_name="category_content_blocks",
+        blank=True,
+        null=True,
+    )
+    layout = models.CharField(max_length=24, choices=Layout.choices, default=Layout.TEXT)
+    eyebrow = models.CharField(max_length=120, blank=True)
+    title = models.CharField(max_length=160)
+    subtitle = models.CharField(max_length=200, blank=True)
+    body = models.TextField(blank=True)
+    secondary_body = models.TextField(blank=True)
+    image = models.ImageField(upload_to="electricity/category_pages/blocks/", blank=True, null=True)
+    image_alt = models.CharField(max_length=160, blank=True)
+    badge = models.CharField(max_length=80, blank=True)
+    list_title = models.CharField(max_length=80, blank=True)
+    list_lines = models.TextField(blank=True, default="")
+    stat_label = models.CharField(max_length=80, blank=True)
+    stat_value = models.CharField(max_length=80, blank=True)
+    cta_label = models.CharField(max_length=80, blank=True)
+    cta_url = models.CharField(max_length=240, blank=True)
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.page.name} - {self.title}"
+
+
+class ServiceCategoryItem(models.Model):
+    section = models.ForeignKey(
+        ServiceCategorySection,
+        on_delete=models.CASCADE,
+        related_name="items",
+    )
+    badge = models.CharField(max_length=80, blank=True)
+    title = models.CharField(max_length=160)
+    subtitle = models.CharField(max_length=160, blank=True)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to="electricity/category_pages/items/", blank=True, null=True)
+    price_text = models.CharField(max_length=80, blank=True)
+    price_note = models.CharField(max_length=80, blank=True)
+    meta_lines = models.TextField(blank=True, default="")
+    included_title = models.CharField(max_length=80, blank=True)
+    included_lines = models.TextField(blank=True, default="")
+    excluded_title = models.CharField(max_length=80, blank=True)
+    excluded_lines = models.TextField(blank=True, default="")
+    cta_label = models.CharField(max_length=80, blank=True)
+    cta_url = models.CharField(max_length=240, blank=True)
+    is_featured = models.BooleanField(default=False)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return self.title
+
+
+class ServiceCategorySpecRow(models.Model):
+    page = models.ForeignKey(
+        ServiceCategoryPage,
+        on_delete=models.CASCADE,
+        related_name="spec_rows",
+    )
+    label = models.CharField(max_length=120)
+    value_1 = models.CharField(max_length=160, blank=True)
+    value_2 = models.CharField(max_length=160, blank=True)
+    value_3 = models.CharField(max_length=160, blank=True)
+    value_4 = models.CharField(max_length=160, blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.page.name} - {self.label}"
+
+
+class ServiceCategoryFAQ(models.Model):
+    page = models.ForeignKey(
+        ServiceCategoryPage,
+        on_delete=models.CASCADE,
+        related_name="faqs",
+    )
+    question = models.CharField(max_length=240)
+    answer = models.TextField()
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return self.question
+
+
+class ServiceDetailPage(models.Model):
+    parent_category = models.ForeignKey(
+        ServiceCategoryPage,
+        on_delete=models.CASCADE,
+        related_name="service_pages",
+    )
+    menu_group = models.CharField(max_length=120, blank=True)
+    slug = models.SlugField(unique=True)
+    name = models.CharField(max_length=140)
+    nav_label = models.CharField(max_length=80, blank=True)
+    teaser = models.TextField(blank=True)
+    hero_eyebrow = models.CharField(max_length=120, blank=True)
+    hero_title = models.CharField(max_length=160)
+    hero_highlight = models.CharField(max_length=160, blank=True)
+    hero_description = models.TextField(blank=True)
+    hero_image = models.ImageField(upload_to="electricity/service_pages/heroes/", blank=True, null=True)
+    hero_card_title = models.CharField(max_length=120, blank=True)
+    hero_card_lines = models.TextField(blank=True, default="")
+    notice_text = models.CharField(max_length=255, blank=True)
+    primary_cta_label = models.CharField(max_length=80, blank=True)
+    primary_cta_url = models.CharField(max_length=240, blank=True)
+    secondary_cta_label = models.CharField(max_length=80, blank=True)
+    secondary_cta_url = models.CharField(max_length=240, blank=True)
+    specs_title = models.CharField(max_length=160, blank=True)
+    specs_subtitle = models.CharField(max_length=200, blank=True)
+    spec_col_1 = models.CharField(max_length=80, blank=True)
+    spec_col_2 = models.CharField(max_length=80, blank=True)
+    spec_col_3 = models.CharField(max_length=80, blank=True)
+    spec_col_4 = models.CharField(max_length=80, blank=True)
+    faq_title = models.CharField(max_length=160, blank=True)
+    faq_subtitle = models.CharField(max_length=200, blank=True)
+    cta_title = models.CharField(max_length=160, blank=True)
+    cta_description = models.TextField(blank=True)
+    cta_image = models.ImageField(upload_to="electricity/service_pages/cta/", blank=True, null=True)
+    cta_primary_label = models.CharField(max_length=80, blank=True)
+    cta_primary_url = models.CharField(max_length=240, blank=True)
+    cta_secondary_label = models.CharField(max_length=80, blank=True)
+    cta_secondary_url = models.CharField(max_length=240, blank=True)
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["parent_category", "menu_group", "order", "name"]
+
+    def __str__(self):
+        return self.name
+
+
+class ServiceDetailSection(models.Model):
+    class Kind(models.TextChoices):
+        PRODUCTS = "products", "Products"
+        FEATURES = "features", "Feature Cards"
+        ACCESSORIES = "accessories", "Accessories"
+
+    page = models.ForeignKey(
+        ServiceDetailPage,
+        on_delete=models.CASCADE,
+        related_name="sections",
+    )
+    kind = models.CharField(max_length=20, choices=Kind.choices, default=Kind.PRODUCTS)
+    title = models.CharField(max_length=160)
+    subtitle = models.CharField(max_length=200, blank=True)
+    description = models.TextField(blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.page.name} - {self.title}"
+
+
+class ServiceDetailContentBlock(models.Model):
+    class Layout(models.TextChoices):
+        TEXT = "text", "Text only"
+        SPLIT_IMAGE_RIGHT = "split_image_right", "Text with image right"
+        SPLIT_IMAGE_LEFT = "split_image_left", "Text with image left"
+        EMPHASIS = "emphasis", "Emphasis band"
+        CHECKLIST = "checklist", "Checklist panel"
+
+    page = models.ForeignKey(
+        ServiceDetailPage,
+        on_delete=models.CASCADE,
+        related_name="content_blocks",
+    )
+    layout = models.CharField(max_length=24, choices=Layout.choices, default=Layout.TEXT)
+    eyebrow = models.CharField(max_length=120, blank=True)
+    title = models.CharField(max_length=160)
+    subtitle = models.CharField(max_length=200, blank=True)
+    body = models.TextField(blank=True)
+    secondary_body = models.TextField(blank=True)
+    image = models.ImageField(upload_to="electricity/service_pages/blocks/", blank=True, null=True)
+    image_alt = models.CharField(max_length=160, blank=True)
+    badge = models.CharField(max_length=80, blank=True)
+    list_title = models.CharField(max_length=80, blank=True)
+    list_lines = models.TextField(blank=True, default="")
+    stat_label = models.CharField(max_length=80, blank=True)
+    stat_value = models.CharField(max_length=80, blank=True)
+    cta_label = models.CharField(max_length=80, blank=True)
+    cta_url = models.CharField(max_length=240, blank=True)
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.page.name} - {self.title}"
+
+
+class ServiceDetailItem(models.Model):
+    section = models.ForeignKey(
+        ServiceDetailSection,
+        on_delete=models.CASCADE,
+        related_name="items",
+    )
+    badge = models.CharField(max_length=80, blank=True)
+    title = models.CharField(max_length=160)
+    subtitle = models.CharField(max_length=160, blank=True)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to="electricity/service_pages/items/", blank=True, null=True)
+    price_text = models.CharField(max_length=80, blank=True)
+    price_note = models.CharField(max_length=80, blank=True)
+    meta_lines = models.TextField(blank=True, default="")
+    included_title = models.CharField(max_length=80, blank=True)
+    included_lines = models.TextField(blank=True, default="")
+    excluded_title = models.CharField(max_length=80, blank=True)
+    excluded_lines = models.TextField(blank=True, default="")
+    cta_label = models.CharField(max_length=80, blank=True)
+    cta_url = models.CharField(max_length=240, blank=True)
+    is_featured = models.BooleanField(default=False)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return self.title
+
+
+class ServiceDetailSpecRow(models.Model):
+    page = models.ForeignKey(
+        ServiceDetailPage,
+        on_delete=models.CASCADE,
+        related_name="spec_rows",
+    )
+    label = models.CharField(max_length=120)
+    value_1 = models.CharField(max_length=160, blank=True)
+    value_2 = models.CharField(max_length=160, blank=True)
+    value_3 = models.CharField(max_length=160, blank=True)
+    value_4 = models.CharField(max_length=160, blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.page.name} - {self.label}"
+
+
+class ServiceDetailFAQ(models.Model):
+    page = models.ForeignKey(
+        ServiceDetailPage,
+        on_delete=models.CASCADE,
+        related_name="faqs",
+    )
+    question = models.CharField(max_length=240)
+    answer = models.TextField()
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return self.question
+
+
 class ServiceBookingStatusUpdate(models.Model):
     booking = models.ForeignKey(
         ServiceBooking, on_delete=models.CASCADE, related_name="status_updates"
@@ -755,3 +1118,26 @@ class CustomerProfile(models.Model):
 
     def __str__(self):
         return f"{self.full_name} ({self.account_type})"
+
+
+class CustomerFeedback(models.Model):
+    full_name = models.CharField(max_length=160)
+    email = models.EmailField(blank=True)
+    location = models.CharField(max_length=120, blank=True)
+    rating = models.PositiveSmallIntegerField(default=5)
+    message = models.TextField()
+    is_approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        constraints = [
+            models.CheckConstraint(
+                check=Q(rating__gte=1) & Q(rating__lte=5),
+                name="customer_feedback_rating_range",
+            ),
+        ]
+
+    def __str__(self):
+        state = "approved" if self.is_approved else "pending"
+        return f"{self.full_name} ({state})"

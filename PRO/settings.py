@@ -92,6 +92,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 #     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 # ]
 
+# AUTHENTICATION_BACKENDS = [
+#     'electricity.backends.UsernameOrEmailBackend',
+#     'django.contrib.auth.backends.ModelBackend',
+# ]
+
 # ROOT_URLCONF = 'PRO.urls'
 
 # TEMPLATES = [

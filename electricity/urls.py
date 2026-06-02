@@ -1,12 +1,16 @@
 ﻿from django.contrib.auth import views as auth_views
 from django.urls import path
 from . import views
+from django.urls import reverse_lazy
+from .forms import UsernameOrEmailPasswordResetForm
 
 app_name = "electricity"
 
 urlpatterns = [
     path("", views.home, name="home"),
     path("services/", views.services, name="services"),
+    path("services/page/<slug:slug>/", views.service_detail, name="service_detail"),
+    path("services/<slug:slug>/", views.service_category_detail, name="service_category_detail"),
     path("terms/", views.terms, name="terms"),
     path("privacy/", views.privacy, name="privacy"),
     path("cookies/", views.cookies, name="cookies"),
@@ -14,11 +18,41 @@ urlpatterns = [
     path("on-call/", views.on_call, name="on_call"),
     path("support/", views.support, name="support"),
     path("contact/", views.contact, name="contact"),
+    path("feedback/", views.feedback, name="feedback"),
     path("faq/", views.faq, name="faq"),
     path("zip-check/<str:flow>/", views.zip_check, name="zip_check"),
     path("outside-area/<str:flow>/<str:zip_code>/", views.outside_area, name="outside_area"),
     path("accounts/login/", auth_views.LoginView.as_view(template_name="registration/login.html"), name="login"),
     path("accounts/logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path(
+        "accounts/password-reset/",
+        auth_views.PasswordResetView.as_view(
+            form_class=UsernameOrEmailPasswordResetForm,
+            template_name="electricity/auth/password_reset_form.html",
+            email_template_name="electricity/auth/password_reset_email.html",
+            subject_template_name="electricity/auth/password_reset_subject.txt",
+            success_url=reverse_lazy("electricity:password_reset_done"),
+        ),
+        name="password_reset",
+    ),
+    path(
+        "accounts/password-reset/done/",
+        auth_views.PasswordResetDoneView.as_view(template_name="electricity/auth/password_reset_done.html"),
+        name="password_reset_done",
+    ),
+    path(
+        "accounts/reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name="electricity/auth/password_reset_confirm.html",
+            success_url=reverse_lazy("electricity:password_reset_complete"),
+        ),
+        name="password_reset_confirm",
+    ),
+    path(
+        "accounts/reset/done/",
+        auth_views.PasswordResetCompleteView.as_view(template_name="electricity/auth/password_reset_complete.html"),
+        name="password_reset_complete",
+    ),
     path("accounts/signup/", views.signup, name="signup"),
     path("accounts/profile/", views.login_redirect, name="login_redirect"),
     path("dashboard/", views.external_dashboard, name="dashboard"),
@@ -116,6 +150,10 @@ urlpatterns = [
     path("dashboard/providers/add/", views.dashboard_providers_add, name="dashboard_providers_add"),
     path("dashboard/providers/<int:pk>/edit/", views.dashboard_providers_edit, name="dashboard_providers_edit"),
     path("dashboard/providers/<int:pk>/delete/", views.dashboard_providers_delete, name="dashboard_providers_delete"),
+    path("dashboard/feedback/", views.dashboard_feedback, name="dashboard_feedback"),
+    path("dashboard/feedback/add/", views.dashboard_feedback_add, name="dashboard_feedback_add"),
+    path("dashboard/feedback/<int:pk>/edit/", views.dashboard_feedback_edit, name="dashboard_feedback_edit"),
+    path("dashboard/feedback/<int:pk>/delete/", views.dashboard_feedback_delete, name="dashboard_feedback_delete"),
     path("dashboard/users/", views.dashboard_users, name="dashboard_users"),
     path("dashboard/users/add/", views.dashboard_users_add, name="dashboard_users_add"),
     path("dashboard/users/<int:pk>/edit/", views.dashboard_users_edit, name="dashboard_users_edit"),
@@ -136,6 +174,238 @@ urlpatterns = [
     path("dashboard/faq/add/", views.dashboard_faq_add, name="dashboard_faq_add"),
     path("dashboard/faq/<int:pk>/edit/", views.dashboard_faq_edit, name="dashboard_faq_edit"),
     path("dashboard/faq/<int:pk>/delete/", views.dashboard_faq_delete, name="dashboard_faq_delete"),
+    path(
+        "dashboard/category-pages/",
+        views.dashboard_service_category_pages,
+        name="dashboard_service_category_pages",
+    ),
+    path(
+        "dashboard/category-pages/add/",
+        views.dashboard_service_category_pages_add,
+        name="dashboard_service_category_pages_add",
+    ),
+    path(
+        "dashboard/category-pages/<int:pk>/edit/",
+        views.dashboard_service_category_pages_edit,
+        name="dashboard_service_category_pages_edit",
+    ),
+    path(
+        "dashboard/category-pages/<int:pk>/delete/",
+        views.dashboard_service_category_pages_delete,
+        name="dashboard_service_category_pages_delete",
+    ),
+    path(
+        "dashboard/category-content-blocks/",
+        views.dashboard_service_category_content_blocks,
+        name="dashboard_service_category_content_blocks",
+    ),
+    path(
+        "dashboard/category-content-blocks/add/",
+        views.dashboard_service_category_content_blocks_add,
+        name="dashboard_service_category_content_blocks_add",
+    ),
+    path(
+        "dashboard/category-content-blocks/<int:pk>/edit/",
+        views.dashboard_service_category_content_blocks_edit,
+        name="dashboard_service_category_content_blocks_edit",
+    ),
+    path(
+        "dashboard/category-content-blocks/<int:pk>/delete/",
+        views.dashboard_service_category_content_blocks_delete,
+        name="dashboard_service_category_content_blocks_delete",
+    ),
+    path(
+        "dashboard/category-sections/",
+        views.dashboard_service_category_sections,
+        name="dashboard_service_category_sections",
+    ),
+    path(
+        "dashboard/category-sections/add/",
+        views.dashboard_service_category_sections_add,
+        name="dashboard_service_category_sections_add",
+    ),
+    path(
+        "dashboard/category-sections/<int:pk>/edit/",
+        views.dashboard_service_category_sections_edit,
+        name="dashboard_service_category_sections_edit",
+    ),
+    path(
+        "dashboard/category-sections/<int:pk>/delete/",
+        views.dashboard_service_category_sections_delete,
+        name="dashboard_service_category_sections_delete",
+    ),
+    path(
+        "dashboard/category-items/",
+        views.dashboard_service_category_items,
+        name="dashboard_service_category_items",
+    ),
+    path(
+        "dashboard/category-items/add/",
+        views.dashboard_service_category_items_add,
+        name="dashboard_service_category_items_add",
+    ),
+    path(
+        "dashboard/category-items/<int:pk>/edit/",
+        views.dashboard_service_category_items_edit,
+        name="dashboard_service_category_items_edit",
+    ),
+    path(
+        "dashboard/category-items/<int:pk>/delete/",
+        views.dashboard_service_category_items_delete,
+        name="dashboard_service_category_items_delete",
+    ),
+    path(
+        "dashboard/category-specs/",
+        views.dashboard_service_category_specs,
+        name="dashboard_service_category_specs",
+    ),
+    path(
+        "dashboard/category-specs/add/",
+        views.dashboard_service_category_specs_add,
+        name="dashboard_service_category_specs_add",
+    ),
+    path(
+        "dashboard/category-specs/<int:pk>/edit/",
+        views.dashboard_service_category_specs_edit,
+        name="dashboard_service_category_specs_edit",
+    ),
+    path(
+        "dashboard/category-specs/<int:pk>/delete/",
+        views.dashboard_service_category_specs_delete,
+        name="dashboard_service_category_specs_delete",
+    ),
+    path(
+        "dashboard/category-faq/",
+        views.dashboard_service_category_faq,
+        name="dashboard_service_category_faq",
+    ),
+    path(
+        "dashboard/category-faq/add/",
+        views.dashboard_service_category_faq_add,
+        name="dashboard_service_category_faq_add",
+    ),
+    path(
+        "dashboard/category-faq/<int:pk>/edit/",
+        views.dashboard_service_category_faq_edit,
+        name="dashboard_service_category_faq_edit",
+    ),
+    path(
+        "dashboard/category-faq/<int:pk>/delete/",
+        views.dashboard_service_category_faq_delete,
+        name="dashboard_service_category_faq_delete",
+    ),
+    path("dashboard/service-pages/", views.dashboard_service_pages, name="dashboard_service_pages"),
+    path("dashboard/service-pages/add/", views.dashboard_service_pages_add, name="dashboard_service_pages_add"),
+    path(
+        "dashboard/service-pages/<int:pk>/edit/",
+        views.dashboard_service_pages_edit,
+        name="dashboard_service_pages_edit",
+    ),
+    path(
+        "dashboard/service-pages/<int:pk>/delete/",
+        views.dashboard_service_pages_delete,
+        name="dashboard_service_pages_delete",
+    ),
+    path(
+        "dashboard/service-page-blocks/",
+        views.dashboard_service_page_content_blocks,
+        name="dashboard_service_page_content_blocks",
+    ),
+    path(
+        "dashboard/service-page-blocks/add/",
+        views.dashboard_service_page_content_blocks_add,
+        name="dashboard_service_page_content_blocks_add",
+    ),
+    path(
+        "dashboard/service-page-blocks/<int:pk>/edit/",
+        views.dashboard_service_page_content_blocks_edit,
+        name="dashboard_service_page_content_blocks_edit",
+    ),
+    path(
+        "dashboard/service-page-blocks/<int:pk>/delete/",
+        views.dashboard_service_page_content_blocks_delete,
+        name="dashboard_service_page_content_blocks_delete",
+    ),
+    path(
+        "dashboard/service-page-sections/",
+        views.dashboard_service_page_sections,
+        name="dashboard_service_page_sections",
+    ),
+    path(
+        "dashboard/service-page-sections/add/",
+        views.dashboard_service_page_sections_add,
+        name="dashboard_service_page_sections_add",
+    ),
+    path(
+        "dashboard/service-page-sections/<int:pk>/edit/",
+        views.dashboard_service_page_sections_edit,
+        name="dashboard_service_page_sections_edit",
+    ),
+    path(
+        "dashboard/service-page-sections/<int:pk>/delete/",
+        views.dashboard_service_page_sections_delete,
+        name="dashboard_service_page_sections_delete",
+    ),
+    path(
+        "dashboard/service-page-items/",
+        views.dashboard_service_page_items,
+        name="dashboard_service_page_items",
+    ),
+    path(
+        "dashboard/service-page-items/add/",
+        views.dashboard_service_page_items_add,
+        name="dashboard_service_page_items_add",
+    ),
+    path(
+        "dashboard/service-page-items/<int:pk>/edit/",
+        views.dashboard_service_page_items_edit,
+        name="dashboard_service_page_items_edit",
+    ),
+    path(
+        "dashboard/service-page-items/<int:pk>/delete/",
+        views.dashboard_service_page_items_delete,
+        name="dashboard_service_page_items_delete",
+    ),
+    path(
+        "dashboard/service-page-specs/",
+        views.dashboard_service_page_specs,
+        name="dashboard_service_page_specs",
+    ),
+    path(
+        "dashboard/service-page-specs/add/",
+        views.dashboard_service_page_specs_add,
+        name="dashboard_service_page_specs_add",
+    ),
+    path(
+        "dashboard/service-page-specs/<int:pk>/edit/",
+        views.dashboard_service_page_specs_edit,
+        name="dashboard_service_page_specs_edit",
+    ),
+    path(
+        "dashboard/service-page-specs/<int:pk>/delete/",
+        views.dashboard_service_page_specs_delete,
+        name="dashboard_service_page_specs_delete",
+    ),
+    path(
+        "dashboard/service-page-faq/",
+        views.dashboard_service_page_faq,
+        name="dashboard_service_page_faq",
+    ),
+    path(
+        "dashboard/service-page-faq/add/",
+        views.dashboard_service_page_faq_add,
+        name="dashboard_service_page_faq_add",
+    ),
+    path(
+        "dashboard/service-page-faq/<int:pk>/edit/",
+        views.dashboard_service_page_faq_edit,
+        name="dashboard_service_page_faq_edit",
+    ),
+    path(
+        "dashboard/service-page-faq/<int:pk>/delete/",
+        views.dashboard_service_page_faq_delete,
+        name="dashboard_service_page_faq_delete",
+    ),
     path("dashboard/zip-codes/", views.dashboard_zip_codes, name="dashboard_zip_codes"),
     path("dashboard/zip-codes/add/", views.dashboard_zip_codes_add, name="dashboard_zip_codes_add"),
     path(

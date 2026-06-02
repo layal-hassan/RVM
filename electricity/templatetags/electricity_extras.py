@@ -1,10 +1,26 @@
 from functools import lru_cache
 from pathlib import Path
+from collections import OrderedDict
 
 from django import template
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from electricity.admin_site import electricity_admin_site
-from electricity.models import ElectricalService
+from electricity.models import (
+    ElectricalService,
+    ServiceCategoryContentBlock,
+    ServiceCategoryFAQ,
+    ServiceCategoryItem,
+    ServiceCategoryPage,
+    ServiceCategorySection,
+    ServiceCategorySpecRow,
+    ServiceDetailFAQ,
+    ServiceDetailContentBlock,
+    ServiceDetailItem,
+    ServiceDetailPage,
+    ServiceDetailSection,
+    ServiceDetailSpecRow,
+)
 
 register = template.Library()
 
@@ -133,3 +149,205 @@ def is_electricity_admin(context):
     if user.is_superuser or user.is_staff:
         return True
     return electricity_admin_site.has_permission(request)
+
+
+@register.simple_tag
+def service_category_pages():
+    return ServiceCategoryPage.objects.filter(is_active=True).prefetch_related("service_pages").order_by("order", "name")
+
+
+@register.simple_tag
+def service_menu_groups(category_page):
+    grouped = OrderedDict()
+    for service_page in category_page.service_pages.filter(is_active=True).order_by("order", "name"):
+        key = (service_page.menu_group or "").strip()
+        grouped.setdefault(key, [])
+        grouped[key].append(service_page)
+    return list(grouped.items())
+
+
+def _category_page_for_object(obj):
+    if not obj:
+        return None
+    if isinstance(obj, ServiceCategoryPage):
+        return obj
+    if isinstance(obj, (ServiceCategorySection, ServiceCategorySpecRow, ServiceCategoryFAQ, ServiceCategoryContentBlock)):
+        try:
+            return obj.page
+        except Exception:
+            return None
+    if isinstance(obj, ServiceCategoryItem):
+        try:
+            return obj.section.page
+        except Exception:
+            return None
+    return None
+
+
+def _service_page_for_object(obj):
+    if not obj:
+        return None
+    if isinstance(obj, ServiceDetailPage):
+        return obj
+    if isinstance(obj, (ServiceDetailSection, ServiceDetailSpecRow, ServiceDetailFAQ, ServiceDetailContentBlock)):
+        try:
+            return obj.page
+        except Exception:
+            return None
+    if isinstance(obj, ServiceDetailItem):
+        try:
+            return obj.section.page
+        except Exception:
+            return None
+    return None
+
+
+@register.simple_tag
+def record_preview_url(obj):
+    category_page = _category_page_for_object(obj)
+    if category_page and getattr(category_page, "slug", ""):
+        return reverse("electricity:service_category_detail", kwargs={"slug": category_page.slug})
+    service_page = _service_page_for_object(obj)
+    if service_page and getattr(service_page, "slug", ""):
+        return reverse("electricity:service_detail", kwargs={"slug": service_page.slug})
+    return ""
+
+
+@register.simple_tag
+def record_dashboard_page_edit_url(obj):
+    category_page = _category_page_for_object(obj)
+    if category_page and getattr(category_page, "pk", None):
+        return reverse("electricity:dashboard_service_category_pages_edit", kwargs={"pk": category_page.pk})
+    service_page = _service_page_for_object(obj)
+    if service_page and getattr(service_page, "pk", None):
+        return reverse("electricity:dashboard_service_pages_edit", kwargs={"pk": service_page.pk})
+    return ""
+
+
+@register.simple_tag
+def record_dashboard_section_edit_url(obj):
+    if isinstance(obj, ServiceCategoryItem):
+        try:
+            if getattr(obj.section, "pk", None):
+                return reverse("electricity:dashboard_service_category_sections_edit", kwargs={"pk": obj.section.pk})
+        except Exception:
+            return ""
+    if isinstance(obj, ServiceDetailItem):
+        try:
+            if getattr(obj.section, "pk", None):
+                return reverse("electricity:dashboard_service_page_sections_edit", kwargs={"pk": obj.section.pk})
+        except Exception:
+            return ""
+    return ""
+
+
+@register.simple_tag
+def dashboard_related_actions(obj):
+    actions = []
+
+    def add(label, url):
+        if url:
+            actions.append({"label": label, "url": url})
+
+    if isinstance(obj, ServiceCategoryPage) and getattr(obj, "pk", None):
+        add("Add Block", f"{reverse('electricity:dashboard_service_category_content_blocks_add')}?page={obj.pk}")
+        add("Add Section", f"{reverse('electricity:dashboard_service_category_sections_add')}?page={obj.pk}")
+        add("Add Spec", f"{reverse('electricity:dashboard_service_category_specs_add')}?page={obj.pk}")
+        add("Add FAQ", f"{reverse('electricity:dashboard_service_category_faq_add')}?page={obj.pk}")
+        add("Add Service", f"{reverse('electricity:dashboard_service_pages_add')}?parent_category={obj.pk}")
+        return actions
+
+    if isinstance(obj, ServiceCategoryContentBlock):
+        page = _category_page_for_object(obj)
+        if page and getattr(page, "pk", None):
+            add("Add Block", f"{reverse('electricity:dashboard_service_category_content_blocks_add')}?page={page.pk}")
+            add("Add Section", f"{reverse('electricity:dashboard_service_category_sections_add')}?page={page.pk}")
+            add("Add Spec", f"{reverse('electricity:dashboard_service_category_specs_add')}?page={page.pk}")
+            add("Add FAQ", f"{reverse('electricity:dashboard_service_category_faq_add')}?page={page.pk}")
+        return actions
+
+    if isinstance(obj, ServiceCategorySection):
+        page = _category_page_for_object(obj)
+        if page and getattr(page, "pk", None):
+            add("Add Item", f"{reverse('electricity:dashboard_service_category_items_add')}?section={obj.pk}")
+            add("Add Block", f"{reverse('electricity:dashboard_service_category_content_blocks_add')}?page={page.pk}")
+            add("Add Spec", f"{reverse('electricity:dashboard_service_category_specs_add')}?page={page.pk}")
+            add("Add FAQ", f"{reverse('electricity:dashboard_service_category_faq_add')}?page={page.pk}")
+        return actions
+
+    if isinstance(obj, ServiceCategoryItem):
+        try:
+            if getattr(obj.section, "pk", None):
+                add("Add Item", f"{reverse('electricity:dashboard_service_category_items_add')}?section={obj.section.pk}")
+        except Exception:
+            pass
+        return actions
+
+    if isinstance(obj, ServiceCategorySpecRow):
+        page = _category_page_for_object(obj)
+        if page and getattr(page, "pk", None):
+            add("Add Section", f"{reverse('electricity:dashboard_service_category_sections_add')}?page={page.pk}")
+            add("Add Spec", f"{reverse('electricity:dashboard_service_category_specs_add')}?page={page.pk}")
+            add("Add FAQ", f"{reverse('electricity:dashboard_service_category_faq_add')}?page={page.pk}")
+        return actions
+
+    if isinstance(obj, ServiceCategoryFAQ):
+        page = _category_page_for_object(obj)
+        if page and getattr(page, "pk", None):
+            add("Add Section", f"{reverse('electricity:dashboard_service_category_sections_add')}?page={page.pk}")
+            add("Add Spec", f"{reverse('electricity:dashboard_service_category_specs_add')}?page={page.pk}")
+            add("Add FAQ", f"{reverse('electricity:dashboard_service_category_faq_add')}?page={page.pk}")
+        return actions
+
+    if isinstance(obj, ServiceDetailPage) and getattr(obj, "pk", None):
+        add("Add Block", f"{reverse('electricity:dashboard_service_page_content_blocks_add')}?page={obj.pk}")
+        add("Add Section", f"{reverse('electricity:dashboard_service_page_sections_add')}?page={obj.pk}")
+        add("Add Spec", f"{reverse('electricity:dashboard_service_page_specs_add')}?page={obj.pk}")
+        add("Add FAQ", f"{reverse('electricity:dashboard_service_page_faq_add')}?page={obj.pk}")
+        return actions
+
+    if isinstance(obj, ServiceDetailContentBlock):
+        page = _service_page_for_object(obj)
+        if page and getattr(page, "pk", None):
+            add("Add Block", f"{reverse('electricity:dashboard_service_page_content_blocks_add')}?page={page.pk}")
+            add("Add Section", f"{reverse('electricity:dashboard_service_page_sections_add')}?page={page.pk}")
+            add("Add Spec", f"{reverse('electricity:dashboard_service_page_specs_add')}?page={page.pk}")
+            add("Add FAQ", f"{reverse('electricity:dashboard_service_page_faq_add')}?page={page.pk}")
+        return actions
+
+    if isinstance(obj, ServiceDetailSection):
+        page = _service_page_for_object(obj)
+        if page and getattr(page, "pk", None):
+            add("Add Item", f"{reverse('electricity:dashboard_service_page_items_add')}?section={obj.pk}")
+            add("Add Block", f"{reverse('electricity:dashboard_service_page_content_blocks_add')}?page={page.pk}")
+            add("Add Spec", f"{reverse('electricity:dashboard_service_page_specs_add')}?page={page.pk}")
+            add("Add FAQ", f"{reverse('electricity:dashboard_service_page_faq_add')}?page={page.pk}")
+        return actions
+
+    if isinstance(obj, ServiceDetailItem):
+        try:
+            if getattr(obj.section, "pk", None):
+                add("Add Item", f"{reverse('electricity:dashboard_service_page_items_add')}?section={obj.section.pk}")
+        except Exception:
+            pass
+        return actions
+
+    if isinstance(obj, ServiceDetailSpecRow):
+        page = _service_page_for_object(obj)
+        if page and getattr(page, "pk", None):
+            add("Add Block", f"{reverse('electricity:dashboard_service_page_content_blocks_add')}?page={page.pk}")
+            add("Add Section", f"{reverse('electricity:dashboard_service_page_sections_add')}?page={page.pk}")
+            add("Add Spec", f"{reverse('electricity:dashboard_service_page_specs_add')}?page={page.pk}")
+            add("Add FAQ", f"{reverse('electricity:dashboard_service_page_faq_add')}?page={page.pk}")
+        return actions
+
+    if isinstance(obj, ServiceDetailFAQ):
+        page = _service_page_for_object(obj)
+        if page and getattr(page, "pk", None):
+            add("Add Block", f"{reverse('electricity:dashboard_service_page_content_blocks_add')}?page={page.pk}")
+            add("Add Section", f"{reverse('electricity:dashboard_service_page_sections_add')}?page={page.pk}")
+            add("Add Spec", f"{reverse('electricity:dashboard_service_page_specs_add')}?page={page.pk}")
+            add("Add FAQ", f"{reverse('electricity:dashboard_service_page_faq_add')}?page={page.pk}")
+        return actions
+
+    return actions

@@ -66,6 +66,42 @@
   </div>
 </section>
 
+{% if category_pages %}
+<section class="section section-light category-showcase" id="service-ecosystem">
+  <div class="container">
+    <div class="section-header ecosystem-header">
+      <div>
+        <h2>{% trans "Specialized Service Categories" %}</h2>
+      </div>
+      <p class="section-copy">{% trans "Each premium category now has its own dedicated presentation page, while remaining fully manageable from the admin panel." %}</p>
+    </div>
+    <div class="category-showcase-grid">
+      {% for category_page in category_pages %}
+      <article class="category-showcase-card category-showcase-card-{{ category_page.theme }}">
+        <a class="category-showcase-media" href="{% url 'electricity:service_category_detail' category_page.slug %}">
+          {% if category_page.hero_image %}
+          <img src="{{ category_page.hero_image.url }}" alt="{{ category_page.name }}">
+          {% else %}
+          <span>{{ category_page.name }}</span>
+          {% endif %}
+        </a>
+        <div class="category-showcase-body">
+          <div class="eyebrow">{{ category_page.nav_label|default:category_page.name }}</div>
+          <h3>{{ category_page.hero_title|default:category_page.name }}</h3>
+          {% if category_page.teaser %}
+          <p>{{ category_page.teaser }}</p>
+          {% elif category_page.hero_description %}
+          <p>{{ category_page.hero_description|truncatechars:170 }}</p>
+          {% endif %}
+          <a class="mini-cta" href="{% url 'electricity:service_category_detail' category_page.slug %}">{% trans "Open category page" %}</a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
 <section class="catalog-section">
   <div class="container">
     <div class="catalog-panel">
@@ -99,7 +135,7 @@
   </div>
 </section>
 
-<section class="section section-light" id="service-ecosystem">
+<section class="section section-light"{% if not category_pages %} id="service-ecosystem"{% endif %}>
   <div class="container">
     <div class="section-header ecosystem-header">
       <div>

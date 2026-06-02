@@ -165,6 +165,47 @@ body {
   margin-bottom: 18px;
 }
 
+.password-input-wrap {
+  position: relative;
+}
+
+.password-input-wrap input {
+  padding-inline-end: 52px;
+}
+
+.password-toggle {
+  position: absolute;
+  inset-inline-end: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: #e0bb67;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.password-toggle:hover,
+.password-toggle.is-active {
+  color: #f0cd7c;
+}
+
+.password-toggle:focus-visible {
+  outline: 2px solid rgba(211, 178, 106, 0.65);
+  outline-offset: 2px;
+  border-radius: 999px;
+}
+
+.password-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
 .admin-field label {
   display: block;
   font-size: 0.9rem;
@@ -276,6 +317,11 @@ body {
   color: var(--muted);
 }
 
+.admin-login-note-inline {
+  margin: -2px 0 12px;
+  text-align: right;
+}
+
 .admin-login-note a {
   color: var(--navy);
   font-weight: 600;
@@ -283,6 +329,10 @@ body {
 
 .admin-login-card-dark .admin-login-note {
   color: rgba(243, 239, 230, 0.66);
+}
+
+.admin-login-card-dark .admin-login-note-inline {
+  margin-top: -4px;
 }
 
 .admin-login-card-dark .admin-login-note a {

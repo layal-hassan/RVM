@@ -1,5 +1,6 @@
 ﻿{% load static electricity_extras i18n %}
 {% get_current_language as CURRENT_LANGUAGE %}
+{% service_category_pages as category_pages %}
 <header class="rwm-electricity-global-header rwm-egh-root" data-rwmh>
   <div class="rwm-electricity-global-header__inner">
     <a class="rwm-egh-logo" href="{% url 'electricity:home' %}" aria-label="{% trans 'RWM EL Home' %}">
@@ -24,15 +25,45 @@
               <span>{% trans "Services" %}</span>
             </button>
             <div class="rwm-egh-dropdown-menu">
-              <a class="rwm-egh-dropdown-link" href="{% url 'electricity:services' %}#service-ecosystem">
-                {% trans "Electrical Services" %}
-              </a>
-              <a class="rwm-egh-dropdown-link" href="{% url 'electricity:on_call' %}">
-                {% trans "Emergency Services" %}
-              </a>
+              <div class="rwm-egh-mega-grid">
+                {% for category_page in category_pages %}
+                <div class="rwm-egh-mega-col">
+                  <div class="rwm-egh-mega-heading">
+                    {{ category_page.nav_label|default:category_page.name }}
+                  </div>
+                  <div class="rwm-egh-mega-groups">
+                    {% service_menu_groups category_page as menu_groups %}
+                    {% for menu_group, service_pages in menu_groups %}
+                      {% if category_page.theme != "electrical" and menu_group %}
+                      <div class="rwm-egh-mega-subhead">
+                        {{ menu_group }}
+                      </div>
+                      {% endif %}
+                      <div class="rwm-egh-mega-links">
+                        {% for service_page in service_pages %}
+                        <a class="rwm-egh-dropdown-link" href="{% url 'electricity:service_detail' service_page.slug %}">
+                          {{ service_page.nav_label|default:service_page.name }}
+                        </a>
+                        {% endfor %}
+                      </div>
+                    {% empty %}
+                      <div class="rwm-egh-mega-links">
+                        <span class="rwm-egh-dropdown-link rwm-egh-dropdown-link-muted">{% trans "No service pages yet" %}</span>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              <div class="rwm-egh-mega-footer">
+                <a class="rwm-egh-dropdown-link rwm-egh-dropdown-link-footer" href="{% url 'electricity:on_call' %}">
+                  {% trans "Emergency Services" %}
+                </a>
+              </div>
             </div>
           </div>
           <a class="rwm-egh-link" href="{% url 'electricity:services' %}#pricing">{% trans "Pricing" %}</a>
+          <a class="rwm-egh-link" href="{% url 'electricity:feedback' %}">{% trans "Feedback" %}</a>
           <a class="rwm-egh-link" href="{% url 'electricity:contact' %}">{% trans "Contact" %}</a>
         </nav>
       </div>

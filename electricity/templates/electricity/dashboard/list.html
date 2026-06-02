@@ -23,6 +23,8 @@
             <span>Actions</span>
         </div>
         {% for row in items %}
+            {% record_preview_url row as preview_url %}
+            {% record_dashboard_section_edit_url row as section_edit_url %}
             <div class="panel-row">
                 {% for field in fields %}
                     <span>{{ row|display_value:field }}</span>
@@ -30,6 +32,12 @@
                 <span class="row-actions">
                     {% if assign_url %}
                       <a href="{% url assign_url row.id %}">Assign</a>
+                    {% endif %}
+                    {% if preview_url %}
+                      <a href="{{ preview_url }}" target="_blank" rel="noopener">Open</a>
+                    {% endif %}
+                    {% if section_edit_url %}
+                      <a href="{{ section_edit_url }}">Section</a>
                     {% endif %}
                     <a href="{% url edit_url row.id %}?view=1">View</a>
                     <a class="danger" href="{% url delete_url row.id %}">Delete</a>
