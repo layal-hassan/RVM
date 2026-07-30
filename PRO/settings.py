@@ -317,7 +317,7 @@ if not DEBUG:
 
 
 
-Application definition
+# Application definition
 
 INSTALLED_APPS = [
     'modeltranslation',
