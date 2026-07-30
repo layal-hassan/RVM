@@ -1,0 +1,201 @@
+{% extends "electricity/dashboard/base.html" %}
+{% load static %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/invoice.css' %}">{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block page_subtitle %}Invoice and customer numbers are generated automatically but remain editable by administrators.{% endblock %}
+{% block content %}
+<form method="post" class="invoice-editor" id="invoice-editor">
+  {% csrf_token %}
+  {% if form.errors or formset.errors %}
+  <div class="invoice-form-errors" role="alert">
+    <strong>The invoice was not saved. Please correct the highlighted fields.</strong>
+    {% if form.errors %}
+    <ul>
+      {% for field in form %}
+        {% for error in field.errors %}<li><strong>{{ field.label }}:</strong> {{ error }}</li>{% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+    {% if formset.errors or formset.non_form_errors %}
+    <ul>
+      {% for error in formset.non_form_errors %}<li><strong>Products &amp; services:</strong> {{ error }}</li>{% endfor %}
+      {% for line_form in formset %}
+        {% for field in line_form %}
+          {% for error in field.errors %}<li><strong>Product row {{ forloop.parentloop.parentloop.counter }} — {{ field.label }}:</strong> {{ error }}</li>{% endfor %}
+        {% endfor %}
+        {% for error in line_form.non_field_errors %}<li><strong>Product row {{ forloop.parentloop.counter }}:</strong> {{ error }}</li>{% endfor %}
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+  <nav class="invoice-tabs" aria-label="Invoice sections">
+    <button type="button" data-tab="customer" class="is-active">1 Customer</button>
+    <button type="button" data-tab="details">2 Invoice details</button>
+    <button type="button" data-tab="rows">3 Products & services</button>
+    <button type="button" data-tab="discount">4 Discount</button>
+    <button type="button" data-tab="rot">5 ROT</button>
+    <button type="button" data-tab="notes">6 Notes</button>
+  </nav>
+
+  <section class="invoice-edit-section is-active" data-panel="customer">
+    <div class="invoice-section-head"><h2>Customer</h2><a class="dash-btn ghost" target="_blank" href="{% url 'electricity:dashboard_profiles_add' %}">Add new customer</a></div>
+    <p>Selecting a customer automatically uses the saved name, customer number, email, phone, and address.</p>
+    <div class="invoice-field-grid">
+      <label>Customer {{ form.customer }}{{ form.customer.errors }}</label>
+      <label>Invoice recipient email {{ form.recipient_email }}{{ form.recipient_email.errors }}
+        <small>This is the exact address that will receive the PDF invoice.</small>
+      </label>
+    </div>
+    {{ customer_emails|json_script:"invoice-customer-emails" }}
+  </section>
+
+  <section class="invoice-edit-section" data-panel="details">
+    <h2>Invoice details</h2>
+    <div class="invoice-field-grid">
+      <label>Invoice title {{ form.title }}{{ form.title.errors }}</label>
+      <label>Invoice number {{ form.invoice_number }}{{ form.invoice_number.errors }}</label>
+      <label>Invoice date {{ form.invoice_date }}{{ form.invoice_date.errors }}</label>
+      <label>Due date {{ form.due_date }}{{ form.due_date.errors }}</label>
+      <label>Payment terms (days) {{ form.payment_terms_days }}{{ form.payment_terms_days.errors }}</label>
+      <label>Invoice type {{ form.invoice_type }}{{ form.invoice_type.errors }}</label>
+      <label>Part number {{ form.part_number }}{{ form.part_number.errors }}</label>
+      <label>Total parts {{ form.part_total }}{{ form.part_total.errors }}</label>
+      <div class="invoice-status-help">
+        <strong>Delivery status is automatic</strong>
+        <span>Save as draft, preview and download the PDF, or send it directly to the selected customer's email.</span>
+      </div>
+      <label>Reference {{ form.reference }}{{ form.reference.errors }}</label>
+      <label class="wide">Project/work address {{ form.work_address }}{{ form.work_address.errors }}</label>
+      <label>Currency {{ form.currency }}{{ form.currency.errors }}</label>
+    </div>
+  </section>
+
+  <section class="invoice-edit-section" data-panel="rows">
+    <h2>Products and services</h2>
+    {{ formset.management_form }}
+    {% if formset.non_form_errors %}<div class="form-errors">{{ formset.non_form_errors }}</div>{% endif %}
+    <div class="invoice-lines">
+      {% for line_form in formset %}
+      <div class="invoice-line-form" data-invoice-line>
+        {{ line_form.id }}
+        {% if line_form.non_field_errors %}<div class="form-errors wide">{{ line_form.non_field_errors }}</div>{% endif %}
+        <label>Category {{ line_form.category }}{{ line_form.category.errors }}</label>
+        <label class="wide">Description {{ line_form.description }}{{ line_form.description.errors }}</label>
+        <label>Quantity {{ line_form.quantity }}{{ line_form.quantity.errors }}</label>
+        <label>Unit {{ line_form.unit }}{{ line_form.unit.errors }}</label>
+        <label>Price excl. VAT {{ line_form.unit_price_ex_vat }}{{ line_form.unit_price_ex_vat.errors }}</label>
+        <label>Row discount type {{ line_form.discount_type }}{{ line_form.discount_type.errors }}</label>
+        <label>Row discount {{ line_form.discount_value }}{{ line_form.discount_value.errors }}</label>
+        <label>VAT % {{ line_form.vat_percent }}{{ line_form.vat_percent.errors }}</label>
+        <label class="check">{{ line_form.rot_eligible }} ROT eligible {{ line_form.rot_eligible.errors }}</label>
+        {% if line_form.instance.pk %}<label class="check danger">{{ line_form.DELETE }} Delete row</label>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    <template id="empty-invoice-line">
+      <div class="invoice-line-form" data-invoice-line>
+        {{ formset.empty_form.id }}
+        <span hidden>{{ formset.empty_form.DELETE }}</span>
+        <label>Category {{ formset.empty_form.category }}</label>
+        <label class="wide">Description {{ formset.empty_form.description }}</label>
+        <label>Quantity {{ formset.empty_form.quantity }}</label>
+        <label>Unit {{ formset.empty_form.unit }}</label>
+        <label>Price excl. VAT {{ formset.empty_form.unit_price_ex_vat }}</label>
+        <label>Row discount type {{ formset.empty_form.discount_type }}</label>
+        <label>Row discount {{ formset.empty_form.discount_value }}</label>
+        <label>VAT % {{ formset.empty_form.vat_percent }}</label>
+        <label class="check">{{ formset.empty_form.rot_eligible }} ROT eligible</label>
+        <button class="dash-btn ghost remove-invoice-line" type="button">Remove row</button>
+      </div>
+    </template>
+    <button class="dash-btn ghost" id="add-invoice-line" type="button">+ Add product/service</button>
+    <p class="panel-meta">Only completed rows are saved. Empty additional rows are ignored.</p>
+  </section>
+
+  <section class="invoice-edit-section" data-panel="discount">
+    <h2>Invoice discount</h2>
+    <div class="invoice-field-grid">
+      <label>Discount type {{ form.discount_type }}</label>
+      <label>Discount value {{ form.discount_value }}</label>
+      <label>Rounding {{ form.rounding }}</label>
+      <label>Amount already paid {{ form.amount_paid }}</label>
+    </div>
+  </section>
+
+  <section class="invoice-edit-section" data-panel="rot">
+    <h2>ROT deduction</h2>
+    <div class="invoice-field-grid">
+      <label class="check">{{ form.rot_enabled }} Enable ROT</label>
+      <label>ROT percentage {{ form.rot_percent }}</label>
+      <label>Personal number {{ form.rot_personal_number }}{{ form.rot_personal_number.errors }}</label>
+      <label>Property designation {{ form.rot_property_designation }}{{ form.rot_property_designation.errors }}</label>
+      <label>BRF organisation number {{ form.rot_brf_org_number }}</label>
+      <label>Apartment number {{ form.rot_apartment_number }}</label>
+    </div>
+  </section>
+
+  <section class="invoice-edit-section" data-panel="notes">
+    <h2>Notes and payment</h2>
+    <div class="invoice-field-grid">
+      <label>Customer message {{ form.customer_message }}</label>
+      <label>Payment instructions {{ form.payment_instructions }}</label>
+      <label>Additional terms {{ form.additional_terms }}</label>
+      <label>Internal notes (not shown to customer) {{ form.internal_notes }}</label>
+    </div>
+  </section>
+
+  <div class="invoice-editor-actions">
+    <a class="dash-btn ghost" href="{% url 'electricity:dashboard_invoices' %}">Cancel</a>
+    <button class="dash-btn ghost" type="submit" name="action" value="draft">Save draft</button>
+    <button class="dash-btn ghost" type="submit" name="action" value="preview">Save & preview PDF</button>
+    <button class="dash-btn primary" type="submit" name="action" value="send">Save & send to customer</button>
+  </div>
+</form>
+<script>
+document.querySelectorAll("[data-tab]").forEach(button => button.addEventListener("click", () => {
+  document.querySelectorAll("[data-tab], [data-panel]").forEach(el => el.classList.remove("is-active"));
+  button.classList.add("is-active");
+  document.querySelector(`[data-panel="${button.dataset.tab}"]`).classList.add("is-active");
+}));
+const firstInvalidPanel = document.querySelector("[data-panel] .errorlist");
+if (firstInvalidPanel) {
+  const panel = firstInvalidPanel.closest("[data-panel]");
+  const button = document.querySelector(`[data-tab="${panel.dataset.panel}"]`);
+  if (button) button.click();
+  firstInvalidPanel.scrollIntoView({behavior: "smooth", block: "center"});
+}
+const addLineButton = document.getElementById("add-invoice-line");
+const emptyLineTemplate = document.getElementById("empty-invoice-line");
+const totalFormsInput = document.getElementById("id_lines-TOTAL_FORMS");
+if (addLineButton && emptyLineTemplate && totalFormsInput) {
+  addLineButton.addEventListener("click", () => {
+    const index = Number(totalFormsInput.value);
+    const html = emptyLineTemplate.innerHTML.replaceAll("__prefix__", index);
+    document.querySelector(".invoice-lines").insertAdjacentHTML("beforeend", html);
+    totalFormsInput.value = index + 1;
+  });
+}
+document.getElementById("invoice-editor").addEventListener("click", event => {
+  const removeButton = event.target.closest(".remove-invoice-line");
+  if (!removeButton) return;
+  const row = removeButton.closest("[data-invoice-line]");
+  const deleteInput = row.querySelector('input[name$="-DELETE"]');
+  if (deleteInput) deleteInput.checked = true;
+  row.hidden = true;
+});
+const customerSelect = document.getElementById("id_customer");
+const recipientInput = document.getElementById("id_recipient_email");
+const customerEmailsElement = document.getElementById("invoice-customer-emails");
+if (customerSelect && recipientInput && customerEmailsElement) {
+  const customerEmails = JSON.parse(customerEmailsElement.textContent);
+  const updateRecipient = () => {
+    recipientInput.value = customerEmails[customerSelect.value] || "";
+  };
+  customerSelect.addEventListener("change", updateRecipient);
+  if (!recipientInput.value) updateRecipient();
+}
+</script>
+{% endblock %}

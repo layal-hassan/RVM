@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 from unittest.mock import patch
 
 from django.test import TestCase
@@ -9,7 +10,7 @@ from django.core import mail
 from django.contrib.auth.models import User
 
 from .forms import ElectricalServiceForm, OnCallBookingForm, ServiceBookingForm
-from .models import CustomerFeedback, ElectricianBooking, ElectricalService, OnCallBooking, ProviderProfile, ProviderShift, ServiceBooking, ServicePricing
+from .models import CustomerFeedback, CustomerProfile, ElectricianBooking, ElectricalService, Invoice, InvoiceLine, OnCallBooking, ProviderProfile, ProviderShift, ServiceBooking, ServicePricing
 from .templatetags.electricity_extras import _service_title_map, display_value, file_display_name
 
 
@@ -386,6 +387,90 @@ class SupportFormTests(TestCase):
         self.assertEqual(mail.outbox[0].to, ["support@rwmel.se"])
         self.assertEqual(mail.outbox[0].from_email, "support@rwmel.se")
         self.assertEqual(mail.outbox[0].reply_to, ["customer@example.com"])
+
+
+class InvoiceSystemTests(TestCase):
+    def test_numbers_start_at_requested_values_and_calculations_follow_vat_then_rot(self):
+        customer = CustomerProfile.objects.create(full_name="Invoice Customer", email="invoice@example.com")
+        self.assertEqual(customer.customer_number, 2500)
+        invoice = Invoice.objects.create(
+            customer=customer,
+            title="Project Invoice",
+            rot_enabled=True,
+            rot_personal_number="19900101-1234",
+            rot_property_designation="Property 1",
+        )
+        self.assertEqual(invoice.invoice_number, 100)
+        InvoiceLine.objects.create(
+            invoice=invoice,
+            category=InvoiceLine.Category.LABOUR,
+            description="Electrical labour",
+            quantity=1,
+            unit_price_ex_vat="1000.00",
+            vat_percent="25.00",
+            rot_eligible=True,
+        )
+        InvoiceLine.objects.create(
+            invoice=invoice,
+            category=InvoiceLine.Category.MATERIAL,
+            description="Material",
+            quantity=1,
+            unit_price_ex_vat="500.00",
+            vat_percent="25.00",
+        )
+        invoice.recalculate()
+        self.assertEqual(invoice.vat_total, Decimal("375.00"))
+        self.assertEqual(invoice.rot_total, Decimal("375.00"))
+        self.assertEqual(invoice.amount_due, Decimal("1500.00"))
+
+    def test_invoice_pdf_is_generated(self):
+        from .invoicing import invoice_pdf_bytes
+        customer = CustomerProfile.objects.create(full_name="PDF Customer")
+        invoice = Invoice.objects.create(customer=customer)
+        InvoiceLine.objects.create(
+            invoice=invoice, description="Inspection", quantity=1, unit_price_ex_vat="800.00"
+        )
+        invoice.recalculate()
+        pdf = invoice_pdf_bytes(invoice)
+        self.assertTrue(pdf.startswith(b"%PDF"))
+        self.assertGreater(len(pdf), 1000)
+
+    @override_settings(
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+        INVOICE_FROM_EMAIL="Faktura@rwmel.se",
+    )
+    def test_invoice_email_is_sent_and_marked_sent(self):
+        from .invoicing import send_invoice_email
+
+        customer = CustomerProfile.objects.create(
+            full_name="Email Customer", email="invoice@example.com"
+        )
+        invoice = Invoice.objects.create(
+            customer=customer, recipient_email=customer.email
+        )
+        InvoiceLine.objects.create(
+            invoice=invoice, description="Inspection",
+            quantity=1, unit_price_ex_vat="800.00"
+        )
+        invoice.recalculate()
+
+        self.assertTrue(send_invoice_email(invoice))
+        invoice.refresh_from_db()
+        self.assertEqual(invoice.status, Invoice.Status.SENT)
+        self.assertIsNotNone(invoice.sent_at)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["invoice@example.com"])
+        self.assertEqual(mail.outbox[0].from_email, "Faktura@rwmel.se")
+        self.assertEqual(len(mail.outbox[0].attachments), 1)
+
+    def test_invoice_email_requires_recipient(self):
+        from .invoicing import send_invoice_email
+
+        customer = CustomerProfile.objects.create(full_name="No Email Customer")
+        invoice = Invoice.objects.create(customer=customer)
+
+        with self.assertRaisesMessage(ValueError, "recipient email"):
+            send_invoice_email(invoice)
 
 
 class BookingEmailTests(TestCase):

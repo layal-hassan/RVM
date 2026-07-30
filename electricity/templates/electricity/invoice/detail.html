@@ -1,0 +1,78 @@
+{% extends "electricity/dashboard/base.html" %}
+{% load static %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/invoice.css' %}">{% endblock %}
+{% block page_title %}{{ invoice.title }} {{ invoice.invoice_number }}{% endblock %}
+{% block page_subtitle %}Customer invoice preview{% endblock %}
+{% block content %}
+<div class="invoice-toolbar">
+  <a class="dash-btn ghost" href="{% url 'electricity:dashboard_invoices' %}">Back</a>
+  <a class="dash-btn ghost" href="{% url 'electricity:dashboard_invoice_edit' invoice.pk %}">Edit</a>
+  <a class="dash-btn primary" href="{% url 'electricity:dashboard_invoice_pdf' invoice.pk %}">Download PDF</a>
+  <form method="post" action="{% url 'electricity:dashboard_invoice_send' invoice.pk %}">{% csrf_token %}<button class="dash-btn primary" type="submit">Send by email</button></form>
+  {% if invoice.status != "paid" %}<form method="post" action="{% url 'electricity:dashboard_invoice_paid' invoice.pk %}">{% csrf_token %}<button class="dash-btn ghost" type="submit">Mark as paid</button></form>{% endif %}
+  <form method="post" action="{% url 'electricity:dashboard_invoice_duplicate' invoice.pk %}">{% csrf_token %}<button class="dash-btn ghost" type="submit">Duplicate</button></form>
+  {% if invoice.invoice_type != "credit" %}<form method="post" action="{% url 'electricity:dashboard_invoice_credit' invoice.pk %}">{% csrf_token %}<button class="dash-btn ghost" type="submit">Create credit invoice</button></form>{% endif %}
+</div>
+<article class="invoice-paper">
+  <header class="invoice-paper-title">
+    <h1>{{ invoice.title|upper }} {{ invoice.invoice_number }}</h1>
+    <i></i>
+    {% if invoice.invoice_type == "part" and invoice.part_number and invoice.part_total %}
+    <span>DEL {{ invoice.part_number }} AV {{ invoice.part_total }}</span>
+    {% endif %}
+  </header>
+  <div class="invoice-party-grid">
+    <section class="invoice-company">
+      <img src="{% static 'electricity/img/electricity_logo.jpg' %}" alt="RWM EL">
+      <h3>FÖRETAGSINFORMATION</h3>
+      <strong>RWM Helservice AB</strong>
+      <span>Faktura@rwmel.se</span>
+      <dl><dt>Org.nr</dt><dd>559545-1351</dd><dt>Bankgiro</dt><dd>5192-1302</dd><dt>Kontonummer</dt><dd>6184-556026438</dd></dl>
+    </section>
+    <section class="invoice-customer-box">
+      <h3>KUNDINFORMATION</h3>
+      <dl class="invoice-customer-facts">
+        <dt>Förfallodatum</dt><dd>{{ invoice.due_date|date:"Y-m-d" }}</dd>
+        <dt>Summa att betala</dt><dd class="invoice-customer-amount"><strong>{{ invoice.amount_due|floatformat:2 }} {% if invoice.currency == "SEK" %}kr{% else %}{{ invoice.currency }}{% endif %}</strong></dd>
+        <dt>Fakturanummer</dt><dd>{{ invoice.invoice_number }}</dd>
+        <dt>Bankgiro</dt><dd>5192-1302</dd>
+      </dl>
+      <div class="invoice-address">
+        <strong>{{ invoice.customer.full_name }}</strong>
+        <span>Kundnr {{ invoice.customer.customer_number }}</span>
+        <span>{{ invoice.customer.street_address }}</span>
+        <span>{{ invoice.customer.postal_code }} {{ invoice.customer.city }}</span>
+      </div>
+    </section>
+  </div>
+  <div class="invoice-meta-grid">
+    <dl><dt>Fakturanummer</dt><dd>{{ invoice.invoice_number }}</dd><dt>Kundnummer</dt><dd>{{ invoice.customer.customer_number }}</dd><dt>Er referens</dt><dd>{{ invoice.reference|default:"—" }}</dd></dl>
+    <dl><dt>Fakturadatum</dt><dd>{{ invoice.invoice_date }}</dd><dt>Betalningsvillkor</dt><dd>{{ invoice.payment_terms_days }} dagar</dd><dt>Dröjsmålsränta</dt><dd>12%</dd></dl>
+  </div>
+  <table class="invoice-items">
+    <thead><tr><th>Beskrivning</th><th>Moms</th><th>Antal</th><th>À-pris</th><th>Summa</th></tr></thead>
+    <tbody>{% for line in invoice.lines.all %}<tr><td>{{ line.description|linebreaksbr }}</td><td>{{ line.vat_percent|floatformat:-2 }}%</td><td>{{ line.quantity|floatformat:-2 }}</td><td>{{ line.unit_price_ex_vat|floatformat:2 }}</td><td>{{ line.total_ex_vat|floatformat:2 }}</td></tr>{% endfor %}</tbody>
+  </table>
+  <div class="invoice-summary">
+    <dl>
+      <dt>Summa ex moms</dt><dd>{{ invoice.subtotal_ex_vat|floatformat:2 }} {{ invoice.currency }}</dd>
+      <dt>Rabatt</dt><dd>−{{ invoice.discount_total|floatformat:2 }} {{ invoice.currency }}</dd>
+      <dt>Moms 25%</dt><dd>{{ invoice.vat_total|floatformat:2 }} {{ invoice.currency }}</dd>
+      <dt>ROT 30%</dt><dd>−{{ invoice.rot_total|floatformat:2 }} {{ invoice.currency }}</dd>
+    </dl>
+    <div class="invoice-pay-total"><strong>SUMMA ATT BETALA</strong><strong>{{ invoice.amount_due|floatformat:2 }} {{ invoice.currency }}</strong></div>
+  </div>
+  <footer class="invoice-footer">
+    <div><b class="invoice-signature">RWMEL</b><br><strong>RWM Helservice AB</strong><br>Kikarvägen 18<br>175 46 JÄRFÄLLA</div>
+    <div><strong>BETALNINGSINFORMATION</strong><br>Referens {{ invoice.invoice_number }}<br>Bankgiro 5192-1302<br>Kontonummer 6184-556026438</div>
+    <div class="invoice-thanks">
+      <span aria-hidden="true">
+        <svg viewBox="0 0 40 40" role="img">
+          <path d="M8 17 20 8l12 9M10 18h20M13 18v12m5-12v12m5-12v12m5-12v12M9 31h22"/>
+        </svg>
+      </span>
+      <p><strong>Tack för ditt förtroende!</strong><br>Betala gärna i tid.<br>Vid frågor, kontakta oss<br>på Faktura@rwmel.se.</p>
+    </div>
+  </footer>
+</article>
+{% endblock %}

@@ -6,6 +6,9 @@ from .models import (
     ConsultationBooking,
     ConsultationRequest,
     CustomerFeedback,
+    CustomerProfile,
+    Invoice,
+    InvoiceLine,
     ElectricalService,
     OnCallBooking,
     ServiceCategoryFAQ,
@@ -26,6 +29,18 @@ from .models import (
     ServiceRequestOutsideArea,
     SupportTicket,
 )
+
+
+class InvoiceLineInline(admin.TabularInline):
+    model = InvoiceLine
+    extra = 1
+
+
+class InvoiceAdmin(admin.ModelAdmin):
+    list_display = ("invoice_number", "title", "customer", "invoice_date", "due_date", "amount_due", "status")
+    list_filter = ("status", "invoice_type", "invoice_date")
+    search_fields = ("invoice_number", "title", "customer__full_name", "customer__customer_number")
+    inlines = [InvoiceLineInline]
 
 
 class ElectricalServiceAdmin(TranslationAdmin):
@@ -229,6 +244,8 @@ admin.site.register(CustomerFeedback, CustomerFeedbackAdmin)
 admin.site.register(AcceptedZipCode, AcceptedZipCodeAdmin)
 admin.site.register(ServiceRequestOutsideArea, ServiceRequestOutsideAreaAdmin)
 admin.site.register(ProviderShift, ProviderShiftAdmin)
+admin.site.register(Invoice, InvoiceAdmin)
+admin.site.register(CustomerProfile)
 
 electricity_admin_site.register(ElectricalService, ElectricalServiceAdmin)
 electricity_admin_site.register(ConsultationRequest, ConsultationRequestAdmin)
@@ -247,3 +264,5 @@ electricity_admin_site.register(CustomerFeedback, CustomerFeedbackAdmin)
 electricity_admin_site.register(AcceptedZipCode, AcceptedZipCodeAdmin)
 electricity_admin_site.register(ServiceRequestOutsideArea, ServiceRequestOutsideAreaAdmin)
 electricity_admin_site.register(ProviderShift, ProviderShiftAdmin)
+electricity_admin_site.register(Invoice, InvoiceAdmin)
+electricity_admin_site.register(CustomerProfile)

@@ -217,6 +217,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 # EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
 # EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 # EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+# INVOICE_FROM_EMAIL = os.getenv(
+#     "INVOICE_FROM_EMAIL",
+#     "Faktura@rwmel.se",
+# )
 # EMAIL_USE_TLS = _env_bool("EMAIL_USE_TLS", True)
 # EMAIL_USE_SSL = _env_bool("EMAIL_USE_SSL", False)
 # EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "20"))
@@ -313,7 +317,7 @@ if not DEBUG:
 
 
 
-# Application definition
+Application definition
 
 INSTALLED_APPS = [
     'modeltranslation',

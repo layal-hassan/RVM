@@ -1,5 +1,6 @@
 ﻿import datetime
 import re
+from decimal import Decimal
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Q
@@ -1103,7 +1104,10 @@ class CustomerProfile(models.Model):
         PRIVATE = "private", "Private"
         BUSINESS = "business", "Business"
 
-    user = models.OneToOneField("auth.User", on_delete=models.CASCADE, related_name="customer_profile")
+    user = models.OneToOneField(
+        "auth.User", on_delete=models.SET_NULL, related_name="customer_profile", null=True, blank=True
+    )
+    customer_number = models.PositiveIntegerField(unique=True, null=True, blank=True)
     account_type = models.CharField(max_length=20, choices=AccountType.choices, default=AccountType.PRIVATE)
     full_name = models.CharField(max_length=160)
     email = models.EmailField(blank=True)
@@ -1113,6 +1117,7 @@ class CustomerProfile(models.Model):
     postal_code = models.CharField(max_length=20, blank=True)
     country = models.CharField(max_length=60, default="Germany")
     property_type = models.CharField(max_length=40, blank=True)
+    property_designation = models.CharField(max_length=120, blank=True)
     interests = models.JSONField(default=list, blank=True)
     personal_id = models.CharField(max_length=40, blank=True)
     company_name = models.CharField(max_length=160, blank=True)
@@ -1126,8 +1131,190 @@ class CustomerProfile(models.Model):
     class Meta:
         ordering = ["-created_at"]
 
+    def save(self, *args, **kwargs):
+        if not self.customer_number:
+            last_number = (
+                CustomerProfile.objects.exclude(customer_number__isnull=True)
+                .order_by("-customer_number")
+                .values_list("customer_number", flat=True)
+                .first()
+            )
+            self.customer_number = max(2500, (last_number or 2499) + 1)
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.full_name} ({self.account_type})"
+        return f"{self.customer_number} - {self.full_name}"
+
+
+class Invoice(models.Model):
+    class InvoiceType(models.TextChoices):
+        STANDARD = "standard", "Standard invoice"
+        ROT = "rot", "ROT invoice"
+        MATERIAL = "material", "Material invoice"
+        LABOUR = "labour", "Labour invoice"
+        PART = "part", "Part invoice"
+        CREDIT = "credit", "Credit invoice"
+
+    class Status(models.TextChoices):
+        DRAFT = "draft", "Draft"
+        READY = "ready", "Ready to send"
+        SENT = "sent", "Sent"
+        VIEWED = "viewed", "Viewed"
+        PARTIALLY_PAID = "partially_paid", "Partially paid"
+        PAID = "paid", "Paid"
+        OVERDUE = "overdue", "Overdue"
+        CANCELLED = "cancelled", "Cancelled"
+        CREDITED = "credited", "Credited"
+
+    customer = models.ForeignKey(CustomerProfile, on_delete=models.PROTECT, related_name="invoices")
+    recipient_email = models.EmailField(blank=True)
+    invoice_number = models.PositiveIntegerField(unique=True, null=True, blank=True)
+    title = models.CharField(max_length=160, default="Faktura")
+    invoice_date = models.DateField(default=timezone.localdate)
+    due_date = models.DateField(null=True, blank=True)
+    payment_terms_days = models.PositiveSmallIntegerField(default=20)
+    invoice_type = models.CharField(max_length=20, choices=InvoiceType.choices, default=InvoiceType.STANDARD)
+    part_number = models.PositiveSmallIntegerField(null=True, blank=True)
+    part_total = models.PositiveSmallIntegerField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.DRAFT)
+    reference = models.CharField(max_length=120, blank=True)
+    work_address = models.CharField(max_length=240, blank=True)
+    currency = models.CharField(max_length=10, default="SEK")
+    discount_type = models.CharField(
+        max_length=12, choices=(("none", "None"), ("fixed", "Fixed amount"), ("percent", "Percentage")), default="none"
+    )
+    discount_value = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    rot_enabled = models.BooleanField(default=False)
+    rot_percent = models.DecimalField(max_digits=5, decimal_places=2, default=30)
+    rot_personal_number = models.CharField(max_length=40, blank=True)
+    rot_property_designation = models.CharField(max_length=120, blank=True)
+    rot_brf_org_number = models.CharField(max_length=40, blank=True)
+    rot_apartment_number = models.CharField(max_length=40, blank=True)
+    customer_message = models.TextField(blank=True)
+    payment_instructions = models.TextField(blank=True, default="Pay to Bankgiro 5192-1302 and state the invoice number.")
+    internal_notes = models.TextField(blank=True)
+    additional_terms = models.TextField(blank=True)
+    rounding = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    amount_paid = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    subtotal_ex_vat = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    discount_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    vat_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    rot_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    total_inc_vat = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    amount_due = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    consultation_booking = models.OneToOneField(
+        "ConsultationBooking", null=True, blank=True, on_delete=models.SET_NULL, related_name="invoice"
+    )
+    service_booking = models.OneToOneField(
+        "ServiceBooking", null=True, blank=True, on_delete=models.SET_NULL, related_name="invoice"
+    )
+    electrician_booking = models.OneToOneField(
+        "ElectricianBooking", null=True, blank=True, on_delete=models.SET_NULL, related_name="invoice"
+    )
+    on_call_booking = models.OneToOneField(
+        "OnCallBooking", null=True, blank=True, on_delete=models.SET_NULL, related_name="invoice"
+    )
+    sent_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-invoice_number"]
+
+    def save(self, *args, **kwargs):
+        if not self.invoice_number:
+            last_number = (
+                Invoice.objects.exclude(invoice_number__isnull=True)
+                .order_by("-invoice_number")
+                .values_list("invoice_number", flat=True)
+                .first()
+            )
+            self.invoice_number = max(100, (last_number or 99) + 1)
+        if not self.due_date:
+            self.due_date = self.invoice_date + datetime.timedelta(days=self.payment_terms_days)
+        super().save(*args, **kwargs)
+
+    def recalculate(self, save=True):
+        from decimal import Decimal, ROUND_HALF_UP
+        rows = list(self.lines.all())
+        subtotal = sum((row.total_ex_vat for row in rows), Decimal("0"))
+        row_discounts = sum((row.discount_amount for row in rows), Decimal("0"))
+        invoice_discount = Decimal("0")
+        base_after_rows = subtotal - row_discounts
+        if self.discount_type == "fixed":
+            invoice_discount = min(self.discount_value, base_after_rows)
+        elif self.discount_type == "percent":
+            invoice_discount = base_after_rows * self.discount_value / Decimal("100")
+        ratio = (base_after_rows - invoice_discount) / base_after_rows if base_after_rows else Decimal("1")
+        vat = sum(((row.total_ex_vat - row.discount_amount) * ratio * row.vat_percent / Decimal("100") for row in rows), Decimal("0"))
+        total_inc = base_after_rows - invoice_discount + vat
+        rot_eligible_inc = sum(
+            ((row.total_ex_vat - row.discount_amount) * ratio * (Decimal("1") + row.vat_percent / Decimal("100"))
+             for row in rows if row.category == InvoiceLine.Category.LABOUR and row.rot_eligible),
+            Decimal("0"),
+        )
+        rot = rot_eligible_inc * self.rot_percent / Decimal("100") if self.rot_enabled else Decimal("0")
+        q = Decimal("0.01")
+        self.subtotal_ex_vat = subtotal.quantize(q, ROUND_HALF_UP)
+        self.discount_total = (row_discounts + invoice_discount).quantize(q, ROUND_HALF_UP)
+        self.vat_total = vat.quantize(q, ROUND_HALF_UP)
+        self.total_inc_vat = total_inc.quantize(q, ROUND_HALF_UP)
+        self.rot_total = rot.quantize(q, ROUND_HALF_UP)
+        self.amount_due = (total_inc - rot + self.rounding - self.amount_paid).quantize(q, ROUND_HALF_UP)
+        if save:
+            super().save(update_fields=[
+                "subtotal_ex_vat", "discount_total", "vat_total", "total_inc_vat",
+                "rot_total", "amount_due", "updated_at"
+            ])
+
+    def __str__(self):
+        return f"{self.title} {self.invoice_number}"
+
+
+class InvoiceLine(models.Model):
+    class Category(models.TextChoices):
+        LABOUR = "labour", "Labour"
+        MATERIAL = "material", "Material"
+        TRANSPORT = "transport", "Transport"
+        OTHER = "other", "Other"
+
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="lines")
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.LABOUR)
+    description = models.TextField()
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=1)
+    unit = models.CharField(max_length=30, default="fixed price")
+    unit_price_ex_vat = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    discount_type = models.CharField(
+        max_length=12, choices=(("none", "None"), ("fixed", "Fixed amount"), ("percent", "Percentage")), default="none"
+    )
+    discount_value = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    vat_percent = models.DecimalField(max_digits=5, decimal_places=2, default=25)
+    rot_eligible = models.BooleanField(default=False)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    @property
+    def total_ex_vat(self):
+        return self.quantity * self.unit_price_ex_vat
+
+    @property
+    def discount_amount(self):
+        if self.discount_type == "fixed":
+            return min(self.discount_value, self.total_ex_vat)
+        if self.discount_type == "percent":
+            return self.total_ex_vat * self.discount_value / Decimal("100")
+        return Decimal("0")
+
+    @property
+    def total_inc_vat(self):
+        net = self.total_ex_vat - self.discount_amount
+        return net * (Decimal("1") + self.vat_percent / Decimal("100"))
+
+    def clean(self):
+        if self.rot_eligible and self.category != self.Category.LABOUR:
+            raise ValidationError({"rot_eligible": "Only labour rows can be ROT eligible."})
 
 
 class CustomerFeedback(models.Model):

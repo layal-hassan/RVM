@@ -7,6 +7,7 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.contrib import messages
 from django.core.files import File
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404, redirect, render
@@ -18,12 +19,15 @@ from django.core.validators import validate_email
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.db.models import Q
+from django.db import transaction
 from .forms import (
     BookingStatusUpdateForm,
     ServiceBookingStatusUpdateForm,
     ConsultationBookingForm,
     ConsultationRequestForm,
     CustomerProfileForm,
+    InvoiceForm,
+    InvoiceLineFormSet,
     CustomerFeedbackAdminForm,
     CustomerFeedbackForm,
     ElectricalServiceForm,
@@ -78,6 +82,8 @@ from .models import (
     ElectricalService,
     ContactInquiry,
     CustomerProfile,
+    Invoice,
+    InvoiceLine,
     ProviderProfile,
     ProviderShift,
     ServiceBooking,
@@ -102,8 +108,33 @@ from .models import (
     ServiceRequestOutsideArea,
 )
 from django.contrib.auth.models import User
+from .invoicing import create_invoice_for_booking, invoice_pdf_bytes, send_invoice_email
 
 logger = logging.getLogger(__name__)
+
+
+def _invoice_email_error_message(exc):
+    detail = str(exc).strip()
+    if detail:
+        return f"Invoice was saved, but email delivery failed: {detail}"
+    return "Invoice was saved, but email delivery failed. Check the SMTP settings."
+
+
+def _create_and_queue_invoice(booking):
+    try:
+        invoice = create_invoice_for_booking(booking)
+    except Exception:
+        logger.exception("Could not create invoice for %s #%s", type(booking).__name__, booking.pk)
+        return None
+
+    def _send():
+        try:
+            send_invoice_email(invoice)
+        except Exception:
+            logger.exception("Could not email invoice %s", invoice.invoice_number)
+
+    transaction.on_commit(_send)
+    return invoice
 
 
 def _build_spec_table(page, spec_rows):
@@ -1428,6 +1459,7 @@ def booking_step_7(request):
                 "If we need more project details, our team will contact you using the information you submitted.",
             ],
         )
+        _create_and_queue_invoice(booking)
         request.session.pop(BOOKING_SESSION_KEY, None)
         return redirect("electricity:booking_thank_you")
 
@@ -1800,6 +1832,7 @@ def electrician_booking_step(request, step):
                         "You will be contacted if we need access details or scheduling adjustments.",
                     ],
                 )
+                _create_and_queue_invoice(booking)
                 request.session.pop(ELECTRICIAN_BOOKING_SESSION_KEY, None)
                 request.session["electrician_booking_id"] = booking.id
                 request.session["electrician_booking_reference"] = f"RWM-{booking.id:06d}"
@@ -1920,6 +1953,13 @@ def service_booking_slots(request):
 
 
 def service_booking_step(request, step):
+    requested_account_type = request.GET.get("account_type", "").strip()
+    valid_account_types = {choice.value for choice in ServiceBooking.AccountType}
+    if requested_account_type in valid_account_types:
+        booking_data = _get_service_booking_data(request)
+        booking_data["account_type"] = requested_account_type
+        _set_service_booking_data(request, booking_data)
+
     if not _ensure_zip_verified(request, "service"):
         return redirect("electricity:zip_check", flow="service")
     if step < 1 or step > 12:
@@ -2231,6 +2271,7 @@ def service_booking_step(request, step):
                     "Your assigned team will contact you if any change is needed before arrival.",
                 ],
             )
+            _create_and_queue_invoice(booking)
             request.session["service_booking_id"] = f"SB-{booking.id:06d}"
             request.session["service_booking_pk"] = booking.id
             request.session.pop(SERVICE_BOOKING_SESSION_KEY, None)
@@ -2499,6 +2540,7 @@ def on_call_booking_step(request, step):
                         "We will contact you to finalize activation details if needed.",
                     ],
                 )
+                _create_and_queue_invoice(booking)
                 request.session["on_call_booking_id"] = booking_id
                 request.session["on_call_booking_success"] = {
                     "booking_id": booking_id,
@@ -2798,6 +2840,8 @@ def external_dashboard(request):
             manage_url = "electricity:dashboard_on_call_bookings"
         elif model_name == "servicepricing":
             manage_url = "electricity:dashboard_pricing"
+        elif model_name == "invoice":
+            manage_url = "electricity:dashboard_invoices"
         elif model_name == "supportticket":
             manage_url = "electricity:dashboard_support_tickets"
         elif model_name == "customerfeedback":
@@ -2847,6 +2891,7 @@ def external_dashboard(request):
         "support_tickets": SupportTicket.objects.count(),
         "zip_codes": AcceptedZipCode.objects.count(),
         "outside_area": ServiceRequestOutsideArea.objects.count(),
+        "invoices": Invoice.objects.count(),
         "total_models": len(model_cards),
     }
     notifications = AdminNotification.objects.order_by("-created_at")[:6]
@@ -4942,6 +4987,209 @@ def dashboard_bookings_assign(request, pk):
 
 
 @login_required
+def dashboard_invoices(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    invoices = Invoice.objects.select_related("customer").prefetch_related("lines")
+    return render(request, "electricity/dashboard/invoices.html", {"invoices": invoices})
+
+
+@login_required
+def dashboard_invoice_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    invoice = Invoice()
+    form = InvoiceForm(request.POST or None, instance=invoice)
+    formset = InvoiceLineFormSet(request.POST or None, instance=invoice)
+    if request.method == "POST" and form.is_valid() and formset.is_valid():
+        invoice = form.save(commit=False)
+        action = request.POST.get("action", "preview")
+        invoice.status = Invoice.Status.DRAFT if action == "draft" else Invoice.Status.READY
+        invoice.save()
+        formset.instance = invoice
+        formset.save()
+        invoice.recalculate()
+        if action == "send":
+            try:
+                send_invoice_email(invoice)
+                messages.success(request, f"Invoice sent to {invoice.recipient_email}.")
+            except Exception as exc:
+                logger.exception("Could not send invoice %s", invoice.invoice_number)
+                messages.error(request, _invoice_email_error_message(exc))
+        return redirect("electricity:dashboard_invoice_detail", pk=invoice.pk)
+    customers = CustomerProfile.objects.all().order_by("customer_number")
+    customer_emails = {str(customer.pk): customer.email for customer in customers}
+    return render(request, "electricity/dashboard/invoice_form.html", {
+        "title": "Create Invoice", "form": form, "formset": formset,
+        "customers": customers, "customer_emails": customer_emails,
+    })
+
+
+@login_required
+def dashboard_invoice_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    invoice = get_object_or_404(Invoice, pk=pk)
+    form = InvoiceForm(request.POST or None, instance=invoice)
+    formset = InvoiceLineFormSet(request.POST or None, instance=invoice)
+    if request.method == "POST" and form.is_valid() and formset.is_valid():
+        invoice = form.save(commit=False)
+        action = request.POST.get("action", "preview")
+        if action == "draft":
+            invoice.status = Invoice.Status.DRAFT
+        elif action in {"preview", "send"} and invoice.status == Invoice.Status.DRAFT:
+            invoice.status = Invoice.Status.READY
+        invoice.save()
+        formset.save()
+        invoice.recalculate()
+        if action == "send":
+            try:
+                send_invoice_email(invoice)
+                messages.success(request, f"Invoice sent to {invoice.recipient_email}.")
+            except Exception as exc:
+                logger.exception("Could not send invoice %s", invoice.invoice_number)
+                messages.error(request, _invoice_email_error_message(exc))
+        return redirect("electricity:dashboard_invoice_detail", pk=invoice.pk)
+    customers = CustomerProfile.objects.all().order_by("customer_number")
+    customer_emails = {str(customer.pk): customer.email for customer in customers}
+    return render(request, "electricity/dashboard/invoice_form.html", {
+        "title": f"Edit Invoice {invoice.invoice_number}", "form": form,
+        "formset": formset, "invoice": invoice, "customers": customers,
+        "customer_emails": customer_emails,
+    })
+
+
+@login_required
+def dashboard_invoice_detail(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    invoice = get_object_or_404(Invoice.objects.select_related("customer").prefetch_related("lines"), pk=pk)
+    invoice.recalculate()
+    return render(request, "electricity/invoice/detail.html", {"invoice": invoice})
+
+
+@login_required
+def dashboard_invoice_pdf(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    invoice = get_object_or_404(Invoice, pk=pk)
+    response = HttpResponse(invoice_pdf_bytes(invoice), content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="invoice-{invoice.invoice_number}.pdf"'
+    return response
+
+
+@login_required
+def dashboard_invoice_send(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    if request.method == "POST":
+        invoice = get_object_or_404(Invoice, pk=pk)
+        try:
+            send_invoice_email(invoice)
+            messages.success(request, f"Invoice sent to {invoice.recipient_email}.")
+        except Exception as exc:
+            logger.exception("Could not send invoice %s", invoice.invoice_number)
+            messages.error(request, _invoice_email_error_message(exc))
+        return redirect("electricity:dashboard_invoice_detail", pk=pk)
+    raise Http404
+
+
+@login_required
+def dashboard_invoice_paid(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    if request.method == "POST":
+        invoice = get_object_or_404(Invoice, pk=pk)
+        invoice.amount_paid = invoice.total_inc_vat - invoice.rot_total + invoice.rounding
+        invoice.status = Invoice.Status.PAID
+        invoice.save(update_fields=["amount_paid", "status", "updated_at"])
+        invoice.recalculate()
+        return redirect("electricity:dashboard_invoice_detail", pk=pk)
+    raise Http404
+
+
+@login_required
+def dashboard_invoice_duplicate(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    if request.method == "POST":
+        source = get_object_or_404(Invoice.objects.prefetch_related("lines"), pk=pk)
+        copy = Invoice.objects.create(
+            customer=source.customer,
+            recipient_email=source.recipient_email,
+            title=source.title,
+            payment_terms_days=source.payment_terms_days,
+            invoice_type=source.invoice_type,
+            part_number=source.part_number,
+            part_total=source.part_total,
+            status=Invoice.Status.DRAFT,
+            reference=source.reference,
+            work_address=source.work_address,
+            currency=source.currency,
+            discount_type=source.discount_type,
+            discount_value=source.discount_value,
+            rot_enabled=source.rot_enabled,
+            rot_percent=source.rot_percent,
+            rot_personal_number=source.rot_personal_number,
+            rot_property_designation=source.rot_property_designation,
+            rot_brf_org_number=source.rot_brf_org_number,
+            rot_apartment_number=source.rot_apartment_number,
+            customer_message=source.customer_message,
+            payment_instructions=source.payment_instructions,
+            additional_terms=source.additional_terms,
+        )
+        for line in source.lines.all():
+            InvoiceLine.objects.create(
+                invoice=copy, category=line.category, description=line.description,
+                quantity=line.quantity, unit=line.unit, unit_price_ex_vat=line.unit_price_ex_vat,
+                discount_type=line.discount_type, discount_value=line.discount_value,
+                vat_percent=line.vat_percent, rot_eligible=line.rot_eligible, order=line.order,
+            )
+        copy.recalculate()
+        return redirect("electricity:dashboard_invoice_edit", pk=copy.pk)
+    raise Http404
+
+
+@login_required
+def dashboard_invoice_credit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    if request.method == "POST":
+        source = get_object_or_404(Invoice.objects.prefetch_related("lines"), pk=pk)
+        credit = Invoice.objects.create(
+            customer=source.customer,
+            recipient_email=source.recipient_email,
+            title="Credit Invoice",
+            invoice_type=Invoice.InvoiceType.CREDIT,
+            status=Invoice.Status.READY,
+            reference=f"Credit for invoice {source.invoice_number}",
+            work_address=source.work_address,
+            currency=source.currency,
+            payment_terms_days=source.payment_terms_days,
+        )
+        for line in source.lines.all():
+            InvoiceLine.objects.create(
+                invoice=credit, category=line.category, description=f"Credit: {line.description}",
+                quantity=line.quantity, unit=line.unit, unit_price_ex_vat=-line.unit_price_ex_vat,
+                vat_percent=line.vat_percent, order=line.order,
+            )
+        credit.recalculate()
+        source.status = Invoice.Status.CREDITED
+        source.save(update_fields=["status", "updated_at"])
+        return redirect("electricity:dashboard_invoice_detail", pk=credit.pk)
+    raise Http404
+
+
+@login_required
 def dashboard_profiles(request):
     guard = _dashboard_access_or_redirect(request)
     if guard:
@@ -4953,7 +5201,7 @@ def dashboard_profiles(request):
         {
             "title": "Customer Profiles",
             "items": items,
-            "fields": ["full_name", "account_type", "email", "phone", "city"],
+            "fields": ["customer_number", "full_name", "account_type", "email", "phone", "city"],
             "create_url": "electricity:dashboard_profiles_add",
             "edit_url": "electricity:dashboard_profiles_edit",
             "delete_url": "electricity:dashboard_profiles_delete",

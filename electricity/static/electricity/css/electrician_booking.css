@@ -1542,6 +1542,20 @@ body.electricity-body.electrician-booking-page {
   border-top: 1px solid rgba(202, 161, 61, 0.14);
 }
 
+.electrician-booking-page .eb-receipt-total {
+  color: #f4edda;
+}
+
+.electrician-booking-page .eb-receipt-total span {
+  color: #f4edda;
+}
+
+.electrician-booking-page .eb-receipt-total strong {
+  color: #f2c54f;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
 .electrician-booking-page .eb-help-card {
   background: linear-gradient(180deg, rgba(24, 28, 16, 0.98), rgba(15, 18, 10, 0.98));
   border: 1px solid rgba(202, 161, 61, 0.16);

@@ -149,44 +149,97 @@
           {% endif %}
 
           {% if item.included_title or item.included_lines %}
-          <div class="category-block">
-            {% if item.included_title %}
-            <strong>{{ item.included_title }}</strong>
+          <details class="category-package-accordion is-included" open>
+            <summary>
+              {% if item.included_title %}{{ item.included_title }}{% else %}{% trans "Included in package" %}{% endif %}
+              <span class="category-package-chevron" aria-hidden="true"></span>
+            </summary>
+            {% if item.included_lines %}
+            <div class="category-package-content">
+              <ul class="category-line-list">
+                {% for line in item.included_lines|split_lines %}
+                <li>{{ line }}</li>
+                {% endfor %}
+              </ul>
+            </div>
             {% endif %}
-            <ul class="category-line-list">
-              {% for line in item.included_lines|split_lines %}
-              <li>{{ line }}</li>
-              {% endfor %}
-            </ul>
-          </div>
+          </details>
           {% endif %}
 
           {% if item.excluded_title or item.excluded_lines %}
-          <div class="category-block category-block-muted">
-            {% if item.excluded_title %}
-            <strong>{{ item.excluded_title }}</strong>
+          <details class="category-package-accordion is-excluded">
+            <summary>
+              {% if item.excluded_title %}{{ item.excluded_title }}{% else %}{% trans "Not included in package" %}{% endif %}
+              <span class="category-package-chevron" aria-hidden="true"></span>
+            </summary>
+            {% if item.excluded_lines %}
+            <div class="category-package-content">
+              <ul class="category-line-list">
+                {% for line in item.excluded_lines|split_lines %}
+                <li>{{ line }}</li>
+                {% endfor %}
+              </ul>
+            </div>
             {% endif %}
-            <ul class="category-line-list">
-              {% for line in item.excluded_lines|split_lines %}
-              <li>{{ line }}</li>
-              {% endfor %}
-            </ul>
-          </div>
+          </details>
           {% endif %}
         </div>
-        <div class="category-card-footer">
+        {% if item.price_text or item.cta_label %}
+        <div class="category-project-config"
+             data-project-config
+             data-price-text="{{ item.price_text|default:'' }}">
+          <div class="category-project-options">
+            <label class="category-project-option">
+              <input type="radio" name="installation-{{ item.id }}" value="install" checked>
+              <span class="category-option-dot"></span>
+              <span>{% trans "With install" %}</span>
+            </label>
+            <label class="category-project-option">
+              <input type="radio" name="installation-{{ item.id }}" value="panel">
+              <span class="category-option-dot"></span>
+              <span>{% trans "Panel only" %}</span>
+            </label>
+            <label class="category-project-option">
+              <input type="radio" name="rot-{{ item.id }}" value="rot" checked>
+              <span class="category-option-dot"></span>
+              <span>{% trans "With ROT" %}</span>
+            </label>
+            <label class="category-project-option">
+              <input type="radio" name="rot-{{ item.id }}" value="no-rot">
+              <span class="category-option-dot"></span>
+              <span>{% trans "No ROT" %}</span>
+            </label>
+          </div>
+
           {% if item.price_text %}
-          <div class="category-price">
-            <span>{{ item.price_text }}</span>
-            {% if item.price_note %}
-            <small>{{ item.price_note }}</small>
-            {% endif %}
+          <div class="category-project-total">
+            <div>
+              <strong>{% trans "Total investment" %}</strong>
+              <small>
+                {% if item.price_note %}{{ item.price_note }}{% else %}{% trans "Panel + install (with ROT)" %}{% endif %}
+              </small>
+            </div>
+            <div class="category-project-price">
+              <span data-project-total>{{ item.price_text }}</span>
+              <small data-project-currency></small>
+            </div>
           </div>
           {% endif %}
-          {% if item.cta_label and item.cta_url %}
-          <a class="category-card-cta" href="{{ item.cta_url }}">{{ item.cta_label }}</a>
-          {% endif %}
+
+          <div class="category-card-footer">
+            <div class="category-quantity" aria-label="{% trans 'Quantity' %}">
+              <button type="button" data-quantity-minus aria-label="{% trans 'Decrease quantity' %}">−</button>
+              <output data-quantity>1</output>
+              <button type="button" data-quantity-plus aria-label="{% trans 'Increase quantity' %}">+</button>
+            </div>
+            {% if item.cta_label and item.cta_url %}
+            <a class="category-card-cta js-booking-choice" href="{{ item.cta_url }}">
+              {% trans "Add to project" %}
+            </a>
+            {% endif %}
+          </div>
         </div>
+        {% endif %}
       </article>
       {% endfor %}
     </div>
@@ -280,4 +333,79 @@
   </div>
 </section>
 {% endif %}
+
+<dialog class="booking-type-dialog" id="booking-type-dialog" aria-labelledby="booking-type-title">
+  <button class="booking-type-close" type="button" aria-label="{% trans 'Close' %}">&times;</button>
+  <div class="booking-type-kicker">{% trans "Before you begin" %}</div>
+  <h2 id="booking-type-title">{% trans "Who is this booking for?" %}</h2>
+  <p>{% trans "Choose the customer type to continue with the correct booking options." %}</p>
+  <div class="booking-type-options">
+    <a class="booking-type-option"
+       href="{% url 'electricity:service_booking_step' 1 %}?account_type=private">
+      <span class="booking-type-icon" aria-hidden="true">👤</span>
+      <strong>{% trans "Private" %}</strong>
+      <small>{% trans "Home and personal electrical services" %}</small>
+    </a>
+    <a class="booking-type-option"
+       href="{% url 'electricity:service_booking_step' 1 %}?account_type=business">
+      <span class="booking-type-icon" aria-hidden="true">🏢</span>
+      <strong>{% trans "Business" %}</strong>
+      <small>{% trans "Companies, organizations, and BRF" %}</small>
+    </a>
+  </div>
+</dialog>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  (() => {
+    const dialog = document.getElementById("booking-type-dialog");
+    if (!dialog || typeof dialog.showModal !== "function") return;
+
+    document.querySelectorAll(".js-booking-choice").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        dialog.showModal();
+      });
+    });
+
+    document.querySelectorAll("[data-project-config]").forEach((config) => {
+      const priceText = config.dataset.priceText || "";
+      const priceMatch = priceText.match(/([\d\s,.]+)/);
+      const basePrice = priceMatch
+        ? Number(priceMatch[1].replace(/\s/g, "").replace(",", "."))
+        : 0;
+      const prefix = priceMatch ? priceText.slice(0, priceMatch.index).trim() : "";
+      const suffix = priceMatch
+        ? priceText.slice(priceMatch.index + priceMatch[0].length).trim()
+        : "";
+      const quantityOutput = config.querySelector("[data-quantity]");
+      const totalOutput = config.querySelector("[data-project-total]");
+      let quantity = 1;
+
+      const updateTotal = () => {
+        quantityOutput.value = quantity;
+        quantityOutput.textContent = quantity;
+        if (totalOutput && basePrice) {
+          const formatted = new Intl.NumberFormat(document.documentElement.lang || "en").format(basePrice * quantity);
+          totalOutput.textContent = [prefix, formatted, suffix].filter(Boolean).join(" ");
+        }
+      };
+
+      config.querySelector("[data-quantity-minus]").addEventListener("click", () => {
+        quantity = Math.max(1, quantity - 1);
+        updateTotal();
+      });
+      config.querySelector("[data-quantity-plus]").addEventListener("click", () => {
+        quantity += 1;
+        updateTotal();
+      });
+    });
+
+    dialog.querySelector(".booking-type-close").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  })();
+</script>
 {% endblock %}

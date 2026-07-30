@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{% static 'electricity/css/dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'electricity/css/global_header.css' %}">
     <link rel="stylesheet" href="{% static 'electricity/css/typography.css' %}">
+    {% block extra_head %}{% endblock %}
 </head>
 <body class="dash-body">
 
@@ -30,34 +31,49 @@
             </div>
             <nav class="dash-nav">
                 <a href="{% url 'electricity:dashboard' %}">Overview</a>
+
+                <div class="dash-nav-section">Website Content</div>
                 <a href="{% url 'electricity:dashboard_services' %}">Services</a>
                 <a href="{% url 'electricity:dashboard_pricing' %}">Pricing</a>
-                <a href="{% url 'electricity:dashboard_requests' %}">Requests</a>
-                <a href="{% url 'electricity:dashboard_bookings' %}">Bookings</a>
-                <a href="{% url 'electricity:dashboard_service_bookings' %}">Service Bookings</a>
-                <a href="{% url 'electricity:dashboard_electrician_bookings' %}">Electrician Bookings</a>
-                <a href="{% url 'electricity:dashboard_on_call_bookings' %}">On-Call Bookings</a>
-                <a href="{% url 'electricity:dashboard_profiles' %}">Customers</a>
-                <a href="{% url 'electricity:dashboard_providers' %}">Providers</a>
-                <a href="{% url 'electricity:dashboard_provider_shifts' %}">Provider Shifts</a>
-                <a href="{% url 'electricity:dashboard_users' %}">Users</a>
+                <a href="{% url 'electricity:dashboard_invoices' %}">Invoices</a>
                 <a href="{% url 'electricity:dashboard_faq' %}">FAQ</a>
+
+                <div class="dash-nav-section">Category Pages</div>
                 <a href="{% url 'electricity:dashboard_service_category_pages' %}">Service Categories</a>
                 <a href="{% url 'electricity:dashboard_service_category_content_blocks' %}">Category Blocks (Main Pages)</a>
                 <a href="{% url 'electricity:dashboard_service_category_sections' %}">Category Groups</a>
                 <a href="{% url 'electricity:dashboard_service_category_items' %}">Category Content Items</a>
                 <a href="{% url 'electricity:dashboard_service_category_specs' %}">Category Specs (Main Pages)</a>
                 <a href="{% url 'electricity:dashboard_service_category_faq' %}">Category FAQ</a>
+
+                <div class="dash-nav-section">Service Pages</div>
                 <a href="{% url 'electricity:dashboard_service_pages' %}">Service Pages</a>
                 <a href="{% url 'electricity:dashboard_service_page_content_blocks' %}">Service Blocks (Inner Pages)</a>
                 <a href="{% url 'electricity:dashboard_service_page_sections' %}">Service Page Sections</a>
                 <a href="{% url 'electricity:dashboard_service_page_items' %}">Service Page Items</a>
                 <a href="{% url 'electricity:dashboard_service_page_specs' %}">Service Page Specs (Inner Pages)</a>
                 <a href="{% url 'electricity:dashboard_service_page_faq' %}">Service Page FAQ</a>
+
+                <div class="dash-nav-section">Bookings & Requests</div>
+                <a href="{% url 'electricity:dashboard_requests' %}">Requests</a>
+                <a href="{% url 'electricity:dashboard_bookings' %}">Bookings</a>
+                <a href="{% url 'electricity:dashboard_service_bookings' %}">Service Bookings</a>
+                <a href="{% url 'electricity:dashboard_electrician_bookings' %}">Electrician Bookings</a>
+                <a href="{% url 'electricity:dashboard_on_call_bookings' %}">On-Call Bookings</a>
+
+                <div class="dash-nav-section">People & Scheduling</div>
+                <a href="{% url 'electricity:dashboard_profiles' %}">Customers</a>
+                <a href="{% url 'electricity:dashboard_providers' %}">Providers</a>
+                <a href="{% url 'electricity:dashboard_provider_shifts' %}">Provider Shifts</a>
+                <a href="{% url 'electricity:dashboard_users' %}">Users</a>
+
+                <div class="dash-nav-section">Support & Coverage</div>
                 <a href="{% url 'electricity:dashboard_support_tickets' %}">Support Tickets</a>
                 <a href="{% url 'electricity:dashboard_feedback' %}">Customer Feedback</a>
                 <a href="{% url 'electricity:dashboard_zip_codes' %}">ZIP Codes</a>
                 <a href="{% url 'electricity:dashboard_outside_area_requests' %}">Outside Area Requests</a>
+
+                <div class="dash-nav-section">Website</div>
                 <a href="{% url 'electricity:services' %}">View Website</a>
             </nav>
             <div class="dash-card" id="notifications">
@@ -121,6 +137,14 @@
                 </div>
             </div>
 
+            {% if messages %}
+            <div class="dash-messages">
+                {% for message in messages %}
+                <div class="dash-message dash-message-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
             {% block content %}{% endblock %}
         </main>
     </div>
@@ -128,5 +152,19 @@
     <script defer src="{% static 'electricity/vendor/tom-select/tom-select.complete.min.js' %}"></script>
     <script defer src="{% static 'electricity/js/global.js' %}"></script>
     <script defer src="{% static 'electricity/js/global_header.js' %}"></script>
+    <script>
+        (() => {
+            const currentPath = window.location.pathname;
+            const dashboardLinks = [...document.querySelectorAll(".dash-nav a")]
+                .map((link) => ({ link, path: new URL(link.href, window.location.origin).pathname }))
+                .filter((item) => currentPath === item.path || currentPath.startsWith(item.path))
+                .sort((a, b) => b.path.length - a.path.length);
+
+            if (dashboardLinks.length) {
+                dashboardLinks[0].link.classList.add("is-active");
+                dashboardLinks[0].link.setAttribute("aria-current", "page");
+            }
+        })();
+    </script>
 </body>
 </html>

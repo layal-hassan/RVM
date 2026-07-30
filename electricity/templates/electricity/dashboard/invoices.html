@@ -1,0 +1,31 @@
+{% extends "electricity/dashboard/base.html" %}
+{% block page_title %}Invoices{% endblock %}
+{% block page_subtitle %}Create, send, and track customer invoices.{% endblock %}
+{% block content %}
+<section class="panel">
+  <div class="panel-header">
+    <div><h2>Invoices</h2><div class="panel-meta">{{ invoices|length }} invoice(s)</div></div>
+    <a class="dash-btn primary" href="{% url 'electricity:dashboard_invoice_add' %}">Create Invoice</a>
+  </div>
+  <div class="panel-table">
+    <div class="panel-row panel-row-head">
+      <span>Number</span><span>Customer</span><span>Email</span><span>Title</span><span>Due</span><span>Amount</span><span>Status</span><span>Actions</span>
+    </div>
+    {% for invoice in invoices %}
+    <div class="panel-row">
+      <span>#{{ invoice.invoice_number }}</span>
+      <span>{{ invoice.customer.customer_number }} – {{ invoice.customer.full_name }}</span>
+      <span>{{ invoice.recipient_email|default:"No email" }}</span>
+      <span>{{ invoice.title }}</span>
+      <span>{{ invoice.due_date }}</span>
+      <span>{{ invoice.amount_due|floatformat:2 }} {{ invoice.currency }}</span>
+      <span>{{ invoice.get_status_display }}</span>
+      <span>
+        <a class="panel-link" href="{% url 'electricity:dashboard_invoice_detail' invoice.pk %}">Open</a>
+        <a class="panel-link" href="{% url 'electricity:dashboard_invoice_edit' invoice.pk %}">Edit</a>
+      </span>
+    </div>
+    {% empty %}<div class="panel-empty">No invoices yet.</div>{% endfor %}
+  </div>
+</section>
+{% endblock %}

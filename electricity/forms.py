@@ -1,5 +1,7 @@
 import json
 import re
+from decimal import Decimal, InvalidOperation
+
 from django import forms
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
@@ -14,6 +16,8 @@ from .models import (
     ConsultationBooking,
     ConsultationRequest,
     CustomerProfile,
+    Invoice,
+    InvoiceLine,
     ElectricalService,
     ElectricianBooking,
     FAQEntry,
@@ -569,6 +573,92 @@ class CustomerProfileForm(HumanizedJSONModelForm):
     class Meta:
         model = CustomerProfile
         exclude = ("created_at",)
+
+
+class InvoiceForm(HumanizedJSONModelForm):
+    class Meta:
+        model = Invoice
+        exclude = (
+            "subtotal_ex_vat", "discount_total", "vat_total", "rot_total",
+            "total_inc_vat", "amount_due", "sent_at", "created_at", "updated_at",
+            "consultation_booking", "service_booking", "electrician_booking", "on_call_booking",
+            "status",
+        )
+        widgets = {
+            "invoice_date": forms.DateInput(attrs={"type": "date"}),
+            "due_date": forms.DateInput(attrs={"type": "date"}),
+            "customer_message": forms.Textarea(attrs={"rows": 3}),
+            "payment_instructions": forms.Textarea(attrs={"rows": 3}),
+            "internal_notes": forms.Textarea(attrs={"rows": 3}),
+            "additional_terms": forms.Textarea(attrs={"rows": 3}),
+        }
+
+    def clean(self):
+        cleaned = super().clean()
+        if not cleaned.get("recipient_email"):
+            self.add_error("recipient_email", "A recipient email is required to send the invoice.")
+        if cleaned.get("due_date") and cleaned.get("invoice_date") and cleaned["due_date"] < cleaned["invoice_date"]:
+            self.add_error("due_date", "Due date cannot be earlier than invoice date.")
+        if cleaned.get("rot_enabled"):
+            if not cleaned.get("rot_personal_number"):
+                self.add_error("rot_personal_number", "Personal number is required for ROT.")
+            if not cleaned.get("rot_property_designation"):
+                self.add_error("rot_property_designation", "Property designation is required for ROT.")
+        if cleaned.get("invoice_type") == Invoice.InvoiceType.PART:
+            if not cleaned.get("part_number"):
+                self.add_error("part_number", "Part number is required for a part invoice.")
+            if not cleaned.get("part_total"):
+                self.add_error("part_total", "Total number of parts is required for a part invoice.")
+            if cleaned.get("part_number") and cleaned.get("part_total") and cleaned["part_number"] > cleaned["part_total"]:
+                self.add_error("part_number", "Part number cannot be greater than total parts.")
+        return cleaned
+
+
+class InvoiceLineForm(HumanizedJSONModelForm):
+    def has_changed(self):
+        """Do not treat the defaults in a blank extra row as user input."""
+        if not self.is_bound or self.instance.pk:
+            return super().has_changed()
+
+        value = lambda name: str(self.data.get(self.add_prefix(name), "")).strip()
+        blank_defaults = {
+            "description": "",
+            "category": InvoiceLine.Category.LABOUR,
+            "quantity": "1",
+            "unit": "fixed price",
+            "unit_price_ex_vat": "0",
+            "discount_type": "none",
+            "discount_value": "0",
+            "vat_percent": "25",
+            "rot_eligible": "",
+        }
+        for name, default in blank_defaults.items():
+            submitted = value(name)
+            if name in {"quantity", "unit_price_ex_vat", "discount_value", "vat_percent"}:
+                try:
+                    if Decimal(submitted or "0") != Decimal(default):
+                        return True
+                except InvalidOperation:
+                    return True
+            elif submitted != default:
+                return True
+        return False
+
+    class Meta:
+        model = InvoiceLine
+        exclude = ("invoice", "order")
+        widgets = {"description": forms.Textarea(attrs={"rows": 3})}
+
+
+InvoiceLineFormSet = forms.inlineformset_factory(
+    Invoice,
+    InvoiceLine,
+    form=InvoiceLineForm,
+    extra=1,
+    can_delete=True,
+    min_num=1,
+    validate_min=True,
+)
 
 
 
