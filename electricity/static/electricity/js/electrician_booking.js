@@ -223,5 +223,79 @@
   }
 
   attachReceiptActions();
+
+  function attachBusinessUploads() {
+    var input = document.getElementById("business-attachments");
+    var dropZone = document.querySelector("label[for='business-attachments']");
+    var list = document.getElementById("business-attachment-list");
+    var chips = document.getElementById("business-attachment-chips");
+    var removals = document.getElementById("business-attachment-removals");
+    if (!input || !list || !chips) return;
+
+    var selectedFiles = [];
+
+    function syncInput() {
+      var transfer = new DataTransfer();
+      selectedFiles.forEach(function (file) { transfer.items.add(file); });
+      input.files = transfer.files;
+    }
+
+    function makeChip(name, onRemove) {
+      var chip = document.createElement("span");
+      chip.className = "eb-upload-chip";
+      chip.innerHTML = "<i>●</i><b></b><button type='button' class='eb-upload-remove' aria-label='Remove file'>×</button>";
+      chip.querySelector("b").textContent = name;
+      chip.querySelector("button").addEventListener("click", function () { onRemove(chip); });
+      return chip;
+    }
+
+    function renderNewFiles() {
+      chips.querySelectorAll("[data-new-file]").forEach(function (node) { node.remove(); });
+      selectedFiles.forEach(function (file, index) {
+        var chip = makeChip(file.name, function () {
+          selectedFiles.splice(index, 1);
+          syncInput();
+          renderNewFiles();
+        });
+        chip.setAttribute("data-new-file", "true");
+        chips.appendChild(chip);
+      });
+      list.hidden = chips.children.length === 0;
+    }
+
+    input.addEventListener("change", function () {
+      selectedFiles = selectedFiles.concat(Array.from(input.files));
+      syncInput();
+      renderNewFiles();
+    });
+
+    chips.querySelectorAll(".eb-upload-remove[data-existing-index]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var hidden = document.createElement("input");
+        hidden.type = "hidden";
+        hidden.name = "remove_business_attachments";
+        hidden.value = button.getAttribute("data-existing-index");
+        removals.appendChild(hidden);
+        button.closest(".eb-upload-chip").remove();
+        list.hidden = chips.children.length === 0;
+      });
+    });
+
+    if (dropZone) {
+      ["dragenter", "dragover"].forEach(function (eventName) {
+        dropZone.addEventListener(eventName, function (event) { event.preventDefault(); dropZone.classList.add("is-dragging"); });
+      });
+      ["dragleave", "drop"].forEach(function (eventName) {
+        dropZone.addEventListener(eventName, function (event) { event.preventDefault(); dropZone.classList.remove("is-dragging"); });
+      });
+      dropZone.addEventListener("drop", function (event) {
+        selectedFiles = selectedFiles.concat(Array.from(event.dataTransfer.files));
+        syncInput();
+        renderNewFiles();
+      });
+    }
+  }
+
+  attachBusinessUploads();
 })();
 

@@ -1,37 +1,12 @@
-﻿{% extends "electricity/electrician_booking/base.html" %}
-{% load i18n %}
-
-{% block booking_content %}
-<form method="post" class="eb-form">
-  {% csrf_token %}
-
-  <section class="eb-card">
-    <div class="eb-card-header">
-      <span class="eb-step-badge">5</span>
-      <div>
-        <h1>{% trans "Additional notes" %}</h1>
-        <p>{% trans "Optional details that may help the electrician prepare." %}</p>
-      </div>
-    </div>
-
-    <label class="eb-label">{% trans "Notes" %}</label>
-
-    <textarea class="form-control eb-textarea"
-              name="additional_notes"
-              rows="5"
-              placeholder="{% trans 'Any extra details, preferences, or constraints...' %}">
-        {{ data.additional_notes|default:'' }}
-    </textarea>
-  </section>
-
-  <div class="eb-actions">
-    <a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 4 %}">
-        {% trans "Back" %}
-    </a>
-
-    <button class="btn btn-primary" type="submit">
-        {% trans "Continue to Step 6" %}
-    </button>
-  </div>
-</form>
-{% endblock %}
+{% extends "electricity/electrician_booking/base.html" %}{% load i18n %}
+{% block booking_content %}<form method="post" class="eb-form">{% csrf_token %}
+<section class="eb-card"><div class="eb-card-header"><span class="eb-step-badge">5</span><div><h1>{% if data.customer_type == "business" %}{% trans "Preferred schedule" %}{% else %}{% trans "Choose date & time" %}{% endif %}</h1><p>{% trans "Select a preferred date and time window for your visit." %}</p></div></div>
+<div class="eb-schedule-grid"><div><label class="eb-label">{% trans "Select date" %}</label><div class="eb-calendar" data-selected="{{ data.preferred_date|default:'' }}"></div><input type="hidden" name="preferred_date" id="preferred_date" value="{{ data.preferred_date|default:'' }}"></div>
+<div><label class="eb-label">{% trans "Select time window" %}</label><div class="eb-arrival">
+<label class="eb-arrival-card"><input type="radio" name="arrival_window" value="Morning (08:00 AM - 12:00 PM)" {% if "Morning" in data.arrival_window %}checked{% endif %}><div><div class="eb-service-title">{% trans "Morning" %}</div><div class="eb-service-sub">08:00 – 12:00</div></div></label>
+<label class="eb-arrival-card"><input type="radio" name="arrival_window" value="Afternoon (12:00 PM - 05:00 PM)" {% if "Afternoon" in data.arrival_window %}checked{% endif %}><div><div class="eb-service-title">{% trans "Afternoon" %}</div><div class="eb-service-sub">12:00 – 17:00</div></div></label>
+<label class="eb-arrival-card"><input type="radio" name="arrival_window" value="Evening (05:00 PM - 10:00 PM)" {% if "Evening" in data.arrival_window %}checked{% endif %}><div><div class="eb-service-title">{% trans "Evening" %}</div><div class="eb-service-sub">17:00 – 21:00</div></div></label>
+<label class="eb-arrival-card"><input type="radio" name="arrival_window" value="Any time (08:00 AM - 09:00 PM)" {% if "Any time" in data.arrival_window %}checked{% endif %}><div><div class="eb-service-title">{% trans "Any time" %}</div><div class="eb-service-sub">08:00 – 21:00</div></div></label></div>
+<label class="eb-label">{% trans "Notes (optional)" %}</label><textarea class="form-control" name="timing_notes" rows="3">{{ data.timing_notes|default:'' }}</textarea></div></div>
+</section><div class="eb-actions"><a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 4 %}">{% trans "Back" %}</a><button class="btn btn-primary" type="submit">{% trans "Continue to contact & ROT" %}</button></div>
+</form>{% endblock %}

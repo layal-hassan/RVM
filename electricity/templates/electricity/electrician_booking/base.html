@@ -26,21 +26,37 @@
           <span style="width: {{ progress_percent }}%"></span>
         </div>
         <div class="eb-stepper">
-          <div class="eb-step {% if step == 1 %}is-active{% endif %}">
+          <div class="eb-step {% if step >= 1 %}is-active{% endif %}">
             <span>1</span>
+            <div>{% trans "Customer type" %}</div>
+          </div>
+          <div class="eb-step {% if step >= 2 %}is-active{% endif %}">
+            <span>2</span>
             <div>{% trans "Service" %}</div>
           </div>
-          <div class="eb-step {% if step == 2 or step == 6 %}is-active{% endif %}">
-            <span>2</span>
-            <div>{% trans "Date & Time" %}</div>
-          </div>
-          <div class="eb-step {% if step == 3 %}is-active{% endif %}">
+          <div class="eb-step {% if step >= 3 %}is-active{% endif %}">
             <span>3</span>
-            <div>{% trans "Location" %}</div>
+            <div>{% if data.customer_type == "business" %}{% trans "Project details" %}{% else %}{% trans "Work details" %}{% endif %}</div>
           </div>
           <div class="eb-step {% if step >= 4 %}is-active{% endif %}">
             <span>4</span>
-            <div>{% trans "Details" %}</div>
+            <div>{% if data.customer_type == "business" %}{% trans "Site location" %}{% else %}{% trans "Location" %}{% endif %}</div>
+          </div>
+          <div class="eb-step {% if step >= 5 %}is-active{% endif %}">
+            <span>5</span>
+            <div>{% if data.customer_type == "business" %}{% trans "Preferred schedule" %}{% else %}{% trans "Date & time" %}{% endif %}</div>
+          </div>
+          <div class="eb-step {% if step >= 6 %}is-active{% endif %}">
+            <span>6</span>
+            <div>{% if data.customer_type == "business" %}{% trans "Company & invoice details" %}{% else %}{% trans "Contact & ROT" %}{% endif %}</div>
+          </div>
+          <div class="eb-step {% if step >= 7 %}is-active{% endif %}">
+            <span>7</span>
+            <div>{% if data.customer_type == "business" %}{% trans "Access & commercial information" %}{% else %}{% trans "Access details" %}{% endif %}</div>
+          </div>
+          <div class="eb-step {% if step >= 8 %}is-active{% endif %}">
+            <span>8</span>
+            <div>{% trans "Review & confirm" %}</div>
           </div>
         </div>
       </div>

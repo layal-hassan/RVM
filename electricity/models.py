@@ -272,6 +272,24 @@ class ElectricianBooking(models.Model):
         return f"{self.full_name} ({self.get_status_display()})"
 
 
+class ElectricianBookingAttachment(models.Model):
+    booking = models.ForeignKey(
+        ElectricianBooking,
+        on_delete=models.CASCADE,
+        related_name="attachments",
+    )
+    file = models.FileField(upload_to="electricity/electrician_booking/attachments/")
+    original_name = models.CharField(max_length=255)
+    content_type = models.CharField(max_length=120, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at", "id"]
+
+    def __str__(self):
+        return self.original_name
+
+
 class FAQEntry(models.Model):
     question = models.CharField(max_length=240)
     answer = models.TextField()
@@ -1131,15 +1149,19 @@ class CustomerProfile(models.Model):
     class Meta:
         ordering = ["-created_at"]
 
+    @classmethod
+    def next_customer_number(cls):
+        last_number = (
+            cls.objects.exclude(customer_number__isnull=True)
+            .order_by("-customer_number")
+            .values_list("customer_number", flat=True)
+            .first()
+        )
+        return max(2500, (last_number or 2499) + 1)
+
     def save(self, *args, **kwargs):
         if not self.customer_number:
-            last_number = (
-                CustomerProfile.objects.exclude(customer_number__isnull=True)
-                .order_by("-customer_number")
-                .values_list("customer_number", flat=True)
-                .first()
-            )
-            self.customer_number = max(2500, (last_number or 2499) + 1)
+            self.customer_number = type(self).next_customer_number()
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -1221,15 +1243,19 @@ class Invoice(models.Model):
     class Meta:
         ordering = ["-invoice_number"]
 
+    @classmethod
+    def next_invoice_number(cls):
+        last_number = (
+            cls.objects.exclude(invoice_number__isnull=True)
+            .order_by("-invoice_number")
+            .values_list("invoice_number", flat=True)
+            .first()
+        )
+        return max(100, (last_number or 99) + 1)
+
     def save(self, *args, **kwargs):
         if not self.invoice_number:
-            last_number = (
-                Invoice.objects.exclude(invoice_number__isnull=True)
-                .order_by("-invoice_number")
-                .values_list("invoice_number", flat=True)
-                .first()
-            )
-            self.invoice_number = max(100, (last_number or 99) + 1)
+            self.invoice_number = type(self).next_invoice_number()
         if not self.due_date:
             self.due_date = self.invoice_date + datetime.timedelta(days=self.payment_terms_days)
         super().save(*args, **kwargs)

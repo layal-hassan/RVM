@@ -1,99 +1,39 @@
-﻿{% extends "electricity/electrician_booking/base.html" %}
-{% load i18n %}
+{% extends "electricity/electrician_booking/base.html" %}{% load i18n %}
+{% block booking_content %}<form method="post" class="eb-form eb-contact-rot-form">{% csrf_token %}
+<section class="eb-card"><div class="eb-card-header"><span class="eb-step-badge">6</span><div><h1>{% if data.customer_type == "business" %}{% trans "Company & invoice details" %}{% else %}{% trans "Contact & ROT information" %}{% endif %}</h1><p>{% if data.customer_type == "business" %}{% trans "Add your company details and invoice preferences." %}{% else %}{% trans "Add your contact details and confirm your ROT eligibility." %}{% endif %}</p></div></div>
 
-{% block booking_content %}
-<form method="post" class="eb-form">
-  {% csrf_token %}
-
-  <section class="eb-card">
-    <div class="eb-card-header">
-      <span class="eb-step-badge">6</span>
-      <div>
-        <h1>{% trans "Preferred Date & Time" %}</h1>
-        <p>{% trans "Select the best time for your visit." %}</p>
-      </div>
-    </div>
-
-    <div class="eb-schedule-grid">
-      <div>
-        <div class="eb-label">{% trans "Select Date" %}</div>
-        <div class="eb-alert">
-          {% trans "Please choose a date from today onward. Past dates are not available for booking." %}
-        </div>
-        <div class="eb-calendar"
-             data-selected="{{ data.preferred_date|default:'' }}"
-             data-alert-message="{% trans 'Please choose a date from today onward.' %}"></div>
-        <input type="hidden" name="preferred_date" id="preferred_date" value="{{ data.preferred_date|default:'' }}">
-      </div>
-
-      <div>
-        <div class="eb-label">{% trans "Arrival Window" %}</div>
-
-        <div class="eb-arrival">
-          <label class="eb-arrival-card">
-            <input type="radio"
-                   name="arrival_window"
-                   value="Morning (08:00 AM - 12:00 PM)"
-                   {% if data.arrival_window == "Morning (08:00 AM - 12:00 PM)" %}checked{% endif %}>
-            <div class="eb-arrival-icon">AM</div>
-            <div>
-              <div class="eb-service-title">{% trans "Morning" %}</div>
-              <div class="eb-service-sub">{% trans "08:00 AM - 12:00 PM" %}</div>
-            </div>
-          </label>
-
-          <label class="eb-arrival-card">
-            <input type="radio"
-                   name="arrival_window"
-                   value="Afternoon (12:00 PM - 05:00 PM)"
-                   {% if data.arrival_window == "Afternoon (12:00 PM - 05:00 PM)" %}checked{% endif %}>
-            <div class="eb-arrival-icon">PM</div>
-            <div>
-              <div class="eb-service-title">{% trans "Afternoon" %}</div>
-              <div class="eb-service-sub">{% trans "12:00 PM - 05:00 PM" %}</div>
-            </div>
-          </label>
-
-          <label class="eb-arrival-card">
-            <input type="radio"
-                   name="arrival_window"
-                   value="Evening (05:00 PM - 10:00 PM)"
-                   {% if data.arrival_window == "Evening (05:00 PM - 10:00 PM)" %}checked{% endif %}>
-            <div class="eb-arrival-icon">EV</div>
-            <div>
-              <div class="eb-service-title">{% trans "Evening" %}</div>
-              <div class="eb-service-sub">{% trans "05:00 PM - 10:00 PM" %}</div>
-            </div>
-          </label>
-
-          <label class="eb-arrival-card">
-            <input type="radio"
-                   name="arrival_window"
-                   value="Night (10:00 PM - 06:00 AM)"
-                   {% if data.arrival_window == "Night (10:00 PM - 06:00 AM)" %}checked{% endif %}>
-            <div class="eb-arrival-icon">NG</div>
-            <div>
-              <div class="eb-service-title">{% trans "Night" %}</div>
-              <div class="eb-service-sub">{% trans "10:00 PM - 06:00 AM" %}</div>
-            </div>
-          </label>
-        </div>
-        <div class="eb-inline-note">
-          {% trans "Evening and Night bookings are billed at double the standard hourly rate." %}
-        </div>
-      </div>
-    </div>
+{% if data.customer_type == "business" %}
+<div class="eb-business-details-grid">
+  <section class="eb-business-panel"><h2>♙ {% trans "Contact details" %}</h2>
+    <label class="eb-label">{% trans "Contact person" %}</label><input class="form-control" name="full_name" value="{{ data.full_name|default:'' }}" required>
+    <label class="eb-label">{% trans "Phone number" %}</label><input class="form-control" name="phone" value="{{ data.phone|default:'' }}" required>
+    <label class="eb-label">{% trans "Email address" %}</label><input type="email" class="form-control" name="email" value="{{ data.email|default:'' }}" required>
+    <p class="eb-review-info">ⓘ {% trans "We'll use these details for booking updates, site access and the day of the visit." %}</p>
   </section>
-
-  <div class="eb-actions">
-    <a class="btn btn-light"
-       href="{% url 'electricity:electrician_booking_step' 5 %}">
-        {% trans "Back" %}
-    </a>
-
-    <button class="btn btn-primary" type="submit">
-        {% trans "Continue to Step 7" %}
-    </button>
-  </div>
-</form>
-{% endblock %}
+  <section class="eb-business-panel"><h2>▥ {% trans "Company details" %}</h2>
+    <label class="eb-label">{% trans "Company name" %}</label><input class="form-control" name="company_name" value="{{ data.company_name|default:'' }}" required>
+    <label class="eb-label">{% trans "Organisation number" %}</label><input class="form-control" name="organization_number" value="{{ data.organization_number|default:'' }}" required>
+    <label class="eb-label">{% trans "Billing email" %}</label><input type="email" class="form-control" name="billing_email" value="{{ data.billing_email|default:'' }}" required>
+    <label class="eb-label">{% trans "Invoice reference" %}</label><input class="form-control" name="invoice_reference" value="{{ data.invoice_reference|default:'' }}">
+    <label class="eb-label">{% trans "Purchase order number (optional)" %}</label><input class="form-control" name="purchase_order_number" value="{{ data.purchase_order_number|default:'' }}">
+  </section>
+  <section class="eb-business-panel eb-payment-info"><h2>▤ {% trans "Payment information" %}</h2>
+    <div><span>{% trans "Payment method" %}</span><strong>{% trans "Invoice" %}</strong></div><div><span>{% trans "Payment terms" %}</span><strong>{% trans "Will be confirmed by email" %}</strong></div>
+    <p class="eb-review-info">ⓘ {% trans "The invoice will be issued after the work has been completed. The applicable payment terms will be confirmed with you by email." %}</p>
+  </section>
+</div>
+<div class="eb-business-secure">♢ <strong>{% trans "Your information is secure" %}</strong><span>{% trans "We only use your details to manage this booking and for invoicing." %}</span></div>
+{% else %}
+<div class="eb-form-grid"><div><label class="eb-label">{% trans "Full name" %}</label><input class="form-control" name="full_name" value="{{ data.full_name|default:'' }}"></div><div><label class="eb-label">{% trans "Phone number" %}</label><input class="form-control" name="phone" value="{{ data.phone|default:'' }}"></div><div class="eb-full"><label class="eb-label">{% trans "Email address" %}</label><input type="email" class="form-control" name="email" value="{{ data.email|default:'' }}"></div></div>
+<h2 class="mt-4">{% trans "ROT information" %}</h2><div class="eb-customer-grid">
+<label class="eb-customer-card"><input type="radio" name="use_rot" value="yes" {% if data.use_rot %}checked{% endif %}><div><div class="eb-service-title">{% trans "Yes, apply ROT" %}</div><div class="eb-service-sub">{% trans "I am the homeowner and eligible for ROT." %}</div></div></label>
+<label class="eb-customer-card"><input type="radio" name="use_rot" value="no" {% if data.use_rot == False %}checked{% endif %}><div><div class="eb-service-title">{% trans "No, do not apply ROT" %}</div></div></label></div>
+<div class="eb-form-grid"><div><label class="eb-label">{% trans "Personal identity number (YYYYMMDD-XXXX)" %}</label><input class="form-control" name="personal_id" value="{{ data.personal_id|default:'' }}"></div>
+<div><label class="eb-label">{% trans "Type of housing" %}</label><select class="form-control" name="housing_type"><option value="">—</option><option value="house" {% if data.housing_type == "house" %}selected{% endif %}>{% trans "Villa / House" %}</option><option value="apartment" {% if data.housing_type == "apartment" %}selected{% endif %}>{% trans "Apartment" %}</option></select></div>
+<div><label class="eb-label">{% trans "Property designation" %}</label><input class="form-control" name="property_designation" value="{{ data.property_designation|default:'' }}"></div><div><label class="eb-label">{% trans "Housing association organisation number" %}</label><input class="form-control" name="housing_association_number" value="{{ data.housing_association_number|default:'' }}"></div>
+<div><label class="eb-label">{% trans "Apartment number" %}</label><input class="form-control" name="apartment_number" value="{{ data.apartment_number|default:'' }}"></div></div>
+<label class="eb-checkbox"><input type="checkbox" name="rot_owner_confirm" value="yes" {% if data.rot_owner_confirm %}checked{% endif %}><span>{% trans "I confirm that I own the property where the work will be carried out." %}</span></label>
+<label class="eb-checkbox"><input type="checkbox" name="electronic_invoice_confirm" value="yes" {% if data.electronic_invoice_confirm %}checked{% endif %}><span>{% trans "I confirm that I will pay the invoice electronically." %}</span></label>
+{% endif %}
+</section><div class="eb-actions"><a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 5 %}">{% trans "Back" %}</a><button class="btn btn-primary" type="submit">{% if data.customer_type == "business" %}{% trans "Continue to access & commercial information" %}{% else %}{% trans "Continue to access details" %}{% endif %}</button></div>
+</form>{% endblock %}

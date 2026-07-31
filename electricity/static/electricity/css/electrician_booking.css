@@ -147,7 +147,7 @@ body.electricity-body.electrician-booking-page {
 
 .eb-stepper {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 12px;
   margin-top: 14px;
 }
@@ -1121,7 +1121,6 @@ body.electricity-body.electrician-booking-page {
 }
 
 @media (max-width: 992px) {
-  .eb-stepper,
   .eb-hours,
   .eb-split,
   .eb-radio-grid,
@@ -1133,6 +1132,10 @@ body.electricity-body.electrician-booking-page {
   .eb-complete-grid,
   .eb-next-grid {
     grid-template-columns: 1fr;
+  }
+
+  .eb-stepper {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .eb-receipt-details {
@@ -1147,6 +1150,62 @@ body.electricity-body.electrician-booking-page {
     flex-direction: column;
     align-items: stretch;
   }
+}
+
+/* Final review layout */
+.electrician-booking-page .eb-review-card { padding: 18px; }
+.electrician-booking-page .eb-review-card .eb-card-header { margin-bottom: 14px; }
+.electrician-booking-page .eb-review-card .eb-card-header h1 { font-size: clamp(24px, 3vw, 34px); margin: 0; }
+.electrician-booking-page .eb-review-grid { display: grid; grid-template-columns: 1.05fr .85fr 1.05fr; gap: 12px; align-items: start; }
+.electrician-booking-page .eb-review-column { display: grid; gap: 12px; }
+.electrician-booking-page .eb-review-panel { padding: 14px 16px; border: 1px solid rgba(202,161,61,.24); border-radius: 7px; background: rgba(7,14,18,.48); color: rgba(236,230,214,.78); }
+.electrician-booking-page .eb-review-panel header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.electrician-booking-page .eb-review-panel header h2 { margin: 0; color: #e2b744; font: 600 15px/1.3 Manrope, sans-serif; letter-spacing: .02em; }
+.electrician-booking-page .eb-review-panel header a { color: #66a9d7; font: 500 12px Manrope, sans-serif; text-decoration: none; white-space: nowrap; }
+.electrician-booking-page .eb-review-list { margin: 0; }
+.electrician-booking-page .eb-review-list > div { display: grid; grid-template-columns: minmax(145px,.85fr) 1.25fr; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.055); }
+.electrician-booking-page .eb-review-list > div:last-child { border-bottom: 0; }
+.electrician-booking-page .eb-review-list dt,.electrician-booking-page .eb-review-list dd { margin: 0; font: 400 12px/1.5 Manrope,sans-serif; }
+.electrician-booking-page .eb-review-list dt { color: #f2ead9; }
+.electrician-booking-page .eb-review-list dd { color: rgba(236,230,214,.72); overflow-wrap: anywhere; }
+.electrician-booking-page .eb-review-list-compact > div { grid-template-columns: 1fr 1.2fr; padding: 6px 0; }
+.electrician-booking-page .eb-review-yes { color: #79be66 !important; }
+.electrician-booking-page .eb-review-notes { margin: 0; font: 400 12px/1.6 Manrope,sans-serif; }
+.electrician-booking-page .eb-review-info { margin: 9px 0 0; padding: 9px; border: 1px solid rgba(74,142,185,.3); border-radius: 5px; background: rgba(28,73,101,.16); color: #a9c7da !important; font: 400 10px/1.55 Manrope,sans-serif; }
+.electrician-booking-page .eb-review-price { min-height: 100%; }
+.electrician-booking-page .eb-price-detail { display: flex; justify-content: space-between; gap: 16px; padding: 7px 0; font: 400 12px/1.4 Manrope,sans-serif; }
+.electrician-booking-page .eb-price-detail strong { white-space: nowrap; color: #e7dfcf; }
+.electrician-booking-page .eb-review-price hr { border-color: rgba(255,255,255,.1); margin: 7px 0; }
+.electrician-booking-page .eb-review-total { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; padding: 12px; border: 1px solid rgba(238,185,44,.55); border-radius: 5px; color: #e8bc45; font: 700 13px Manrope,sans-serif; text-transform: uppercase; }
+.electrician-booking-page .eb-review-total span { display: grid; gap: 3px; }
+.electrician-booking-page .eb-review-total small { color: rgba(236,230,214,.6); font-size: 9px; text-transform: none; font-weight: 400; }
+.electrician-booking-page .eb-review-total strong { font-size: 17px; white-space: nowrap; }
+.electrician-booking-page .eb-payment-panel { margin-top: 12px; }
+.electrician-booking-page .eb-payment-grid { display: grid; grid-template-columns: repeat(3,1fr) 1.25fr; align-items: center; }
+.electrician-booking-page .eb-payment-grid > div { display: flex; gap: 12px; padding: 4px 18px; border-right: 1px solid rgba(202,161,61,.2); font: 400 11px Manrope,sans-serif; }
+.electrician-booking-page .eb-payment-grid b { color: #e2b744; font-size: 22px; }
+.electrician-booking-page .eb-payment-grid span { display: grid; gap: 4px; }
+.electrician-booking-page .eb-payment-grid strong { color: #e7dfcf; font-weight: 400; }
+.electrician-booking-page .eb-payment-grid p { margin: 0 0 0 14px; padding: 8px 10px; border: 1px solid rgba(74,142,185,.3); border-radius: 5px; color: #b7c8d2; font: 400 10px/1.5 Manrope,sans-serif; }
+.electrician-booking-page .eb-review-consent { display: flex; gap: 14px; margin-top: 12px; padding: 10px 14px; border: 1px solid rgba(202,161,61,.2); border-radius: 6px; font: 400 12px/1.4 Manrope,sans-serif; color: #eee7d8; }
+.electrician-booking-page .eb-review-consent input { width: 19px; height: 19px; flex: 0 0 auto; accent-color: #e2b744; }
+.electrician-booking-page .eb-review-consent span { display: grid; gap: 3px; }
+.electrician-booking-page .eb-review-consent a { color: #e2b744; }
+.electrician-booking-page .eb-review-consent small { color: rgba(236,230,214,.55); }
+.electrician-booking-page .eb-review-actions { margin-top: 8px; }
+.electrician-booking-page .eb-review-actions .btn-primary { min-width: 265px; }
+
+@media (max-width: 1050px) {
+  .electrician-booking-page .eb-review-grid { grid-template-columns: 1fr 1fr; }
+  .electrician-booking-page .eb-review-price { grid-column: 1 / -1; }
+  .electrician-booking-page .eb-payment-grid { grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .electrician-booking-page .eb-payment-grid p { grid-column: 1 / -1; margin: 0; }
+}
+@media (max-width: 700px) {
+  .electrician-booking-page .eb-review-grid,.electrician-booking-page .eb-payment-grid { grid-template-columns: 1fr; }
+  .electrician-booking-page .eb-review-price,.electrician-booking-page .eb-payment-grid p { grid-column: auto; }
+  .electrician-booking-page .eb-payment-grid > div { border-right: 0; border-bottom: 1px solid rgba(202,161,61,.15); padding: 8px 0; }
+  .electrician-booking-page .eb-review-list > div { grid-template-columns: 1fr; gap: 2px; }
 }
 
 @media (max-width: 600px) {
@@ -1604,6 +1663,252 @@ body.electricity-body.electrician-booking-page {
 
 .electrician-booking-page .eb-footer {
   color: rgba(236, 230, 214, 0.5);
+}
+
+.electrician-booking-page .eb-work-details-form .eb-note {
+  margin-bottom: 22px;
+}
+
+.electrician-booking-page .eb-work-details-form .eb-note + .eb-label {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.electrician-booking-page .eb-work-details-form .eb-textarea + .eb-label {
+  margin-top: 22px;
+}
+
+/* Business booking panels */
+.electrician-booking-page .eb-business-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr .95fr;
+  gap: 16px;
+}
+
+.electrician-booking-page .eb-business-panel {
+  padding: 20px;
+  border: 1px solid rgba(202, 161, 61, .2);
+  border-radius: 10px;
+  background: rgba(8, 15, 18, .38);
+}
+
+.electrician-booking-page .eb-business-panel h2 {
+  margin: 0 0 18px;
+  color: #e2b744;
+  font-size: 18px;
+}
+
+.electrician-booking-page .eb-business-panel .eb-label {
+  margin-top: 16px;
+}
+
+.electrician-booking-page .eb-business-panel .eb-label:first-of-type {
+  margin-top: 0;
+}
+
+.electrician-booking-page .eb-payment-info > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  font: 400 13px Manrope, sans-serif;
+}
+
+.electrician-booking-page .eb-payment-info strong { color: #f1e8d6; }
+.electrician-booking-page .eb-business-secure,
+.electrician-booking-page .eb-business-good {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 16px 20px;
+  border: 1px solid rgba(72, 190, 119, .25);
+  border-radius: 9px;
+  color: #77cf91;
+}
+.electrician-booking-page .eb-business-secure span { color: rgba(236,230,214,.65); }
+.electrician-booking-page .eb-business-access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.electrician-booking-page .eb-business-panel > p { color: rgba(236,230,214,.65); font: 400 13px Manrope,sans-serif; }
+.electrician-booking-page .eb-business-access-grid .eb-business-panel > p {
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+.electrician-booking-page .eb-business-access-grid textarea[name="commercial_notes"] {
+  display: block;
+  min-height: 175px;
+  margin: 0 0 24px;
+  padding: 14px 16px;
+  line-height: 1.6;
+  resize: vertical;
+}
+.electrician-booking-page .eb-business-access-grid textarea[name="commercial_notes"] + .eb-label {
+  display: block;
+  margin: 0 0 10px;
+}
+.electrician-booking-page .eb-business-access-grid textarea[name="special_requirements"] {
+  display: block;
+  min-height: 92px;
+  margin: 0;
+  padding: 14px 16px;
+  line-height: 1.6;
+  resize: vertical;
+}
+.electrician-booking-page .eb-access-options { display: grid; gap: 10px; margin: 18px 0 22px; }
+.electrician-booking-page .eb-access-options .eb-radio-card { min-height: 72px; }
+.electrician-booking-page .eb-access-options span { display: grid; gap: 5px; }
+.electrician-booking-page .eb-access-options strong { color: #f1e8d6; }
+.electrician-booking-page .eb-access-options small { color: rgba(236,230,214,.58); }
+.electrician-booking-page .eb-upload-placeholder { display: grid; justify-items: center; gap: 7px; margin-top: 20px; padding: 28px; border: 1px dashed rgba(202,161,61,.4); border-radius: 8px; color: #e2b744; text-align: center; }
+.electrician-booking-page .eb-upload-placeholder small { color: rgba(236,230,214,.55); }
+.electrician-booking-page .eb-upload-placeholder { cursor: pointer; transition: background .2s ease, border-color .2s ease; }
+.electrician-booking-page .eb-upload-placeholder:hover { background: rgba(202,161,61,.07); border-color: #d5b14d; }
+.electrician-booking-page .eb-upload-placeholder.is-dragging { background: rgba(202,161,61,.14); border-color: #f2ca63; box-shadow: 0 0 0 4px rgba(202,161,61,.08); }
+.electrician-booking-page .eb-upload-placeholder input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.electrician-booking-page .eb-upload-list,.electrician-booking-page .eb-review-attachments { display: grid; gap: 7px; margin-top: 14px; padding: 12px 14px; border: 1px solid rgba(202,161,61,.18); border-radius: 7px; color: rgba(236,230,214,.75); font: 400 12px Manrope,sans-serif; }
+.electrician-booking-page .eb-upload-list strong,.electrician-booking-page .eb-review-attachments strong { color: #e2b744; }
+.electrician-booking-page .eb-upload-chips { display: flex; flex-wrap: wrap; gap: 9px; }
+.electrician-booking-page .eb-upload-chip { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; padding: 7px 8px 7px 11px; border: 1px solid rgba(202,161,61,.28); border-radius: 999px; background: rgba(202,161,61,.08); color: #eee7d8; }
+.electrician-booking-page .eb-upload-chip i { color: #d5b14d; font-size: 8px; font-style: normal; }
+.electrician-booking-page .eb-upload-chip b { max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.electrician-booking-page .eb-upload-remove { display: grid; place-items: center; width: 23px; height: 23px; padding: 0; border: 1px solid rgba(239,120,120,.35); border-radius: 50%; background: rgba(126,35,35,.22); color: #f3b1b1; font: 600 17px/1 Arial,sans-serif; cursor: pointer; }
+.electrician-booking-page .eb-upload-remove:hover { background: rgba(170,45,45,.4); color: #fff; }
+.electrician-booking-page .eb-business-good { border-color: rgba(202,161,61,.45); color: #e2b744; }
+.electrician-booking-page .eb-business-good span { display: grid; gap: 5px; }
+.electrician-booking-page .eb-business-good small { color: rgba(236,230,214,.7); line-height: 1.8; }
+
+@media (max-width: 1050px) {
+  .electrician-booking-page .eb-business-details-grid { grid-template-columns: 1fr 1fr; }
+  .electrician-booking-page .eb-payment-info { grid-column: 1 / -1; }
+}
+@media (max-width: 700px) {
+  .electrician-booking-page .eb-business-details-grid,
+  .electrician-booking-page .eb-business-access-grid { grid-template-columns: 1fr; }
+  .electrician-booking-page .eb-payment-info { grid-column: auto; }
+}
+
+/* Contact and ROT form spacing and consistent controls */
+.electrician-booking-page .eb-contact-rot-form .eb-card > h2.mt-4 {
+  margin: 32px 0 14px !important;
+}
+
+.electrician-booking-page .eb-contact-rot-form .eb-card > h2.mt-4 + .eb-customer-grid {
+  margin-bottom: 24px;
+}
+
+.electrician-booking-page .eb-contact-rot-form .eb-card > h2.mt-4 + .eb-customer-grid .eb-customer-card {
+  min-height: 94px;
+  padding: 18px 20px;
+}
+
+.electrician-booking-page .eb-contact-rot-form .eb-card > .eb-customer-grid + .eb-form-grid {
+  column-gap: 18px;
+  row-gap: 22px;
+  align-items: start;
+}
+
+.electrician-booking-page .eb-contact-rot-form .eb-card > .eb-customer-grid + .eb-form-grid > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.electrician-booking-page .eb-contact-rot-form .eb-card > .eb-customer-grid + .eb-form-grid .eb-label {
+  min-height: 20px;
+  margin: 0 0 8px;
+  line-height: 1.35;
+}
+
+.electrician-booking-page .eb-contact-rot-form .eb-card > .eb-customer-grid + .eb-form-grid input.form-control,
+.electrician-booking-page .eb-contact-rot-form .eb-card > .eb-customer-grid + .eb-form-grid select.form-control {
+  display: block;
+  width: 100%;
+  height: 44px;
+  min-height: 44px;
+  margin: 0;
+  padding: 9px 14px;
+  border-radius: 9px;
+  font: 400 14px/1.4 Manrope, sans-serif;
+}
+
+.electrician-booking-page .eb-contact-rot-form .eb-card > .eb-customer-grid + .eb-form-grid select.form-control {
+  padding-right: 40px;
+  appearance: auto;
+}
+
+.electrician-booking-page .eb-contact-rot-form .ts-wrapper.form-control {
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.electrician-booking-page .eb-contact-rot-form .ts-wrapper .ts-control,
+.electrician-booking-page .eb-contact-rot-form .ts-wrapper.single .ts-control {
+  height: 44px;
+  min-height: 44px;
+  padding: 10px 42px 10px 14px !important;
+  border: 1px solid rgba(202, 161, 61, 0.22);
+  border-radius: 9px;
+  background: rgba(247, 244, 237, 0.05);
+  background-image: none;
+  box-shadow: none;
+  color: #f5f1e6;
+  font: 400 14px/1.4 Manrope, sans-serif;
+}
+
+.electrician-booking-page .eb-contact-rot-form .ts-wrapper.focus .ts-control {
+  border-color: rgba(202, 161, 61, 0.55);
+  box-shadow: 0 0 0 3px rgba(202, 161, 61, 0.1);
+}
+
+.electrician-booking-page .eb-contact-rot-form .ts-wrapper.single .ts-control::after {
+  right: 15px;
+  border-width: 6px 5px 0;
+  border-color: #d5b14d transparent transparent;
+}
+
+.electrician-booking-page .eb-contact-rot-form .ts-wrapper.single.dropdown-active .ts-control::after {
+  border-width: 0 5px 6px;
+  border-color: transparent transparent #d5b14d;
+}
+
+body.electrician-booking-page .ts-dropdown {
+  margin-top: 5px;
+  overflow: hidden;
+  border: 1px solid rgba(202, 161, 61, 0.32);
+  border-radius: 9px;
+  background: #151910;
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.45);
+  color: #eee7d8;
+  font: 400 14px/1.4 Manrope, sans-serif;
+}
+
+body.electrician-booking-page .ts-dropdown .option {
+  padding: 11px 14px;
+  background: #151910;
+  color: #eee7d8;
+}
+
+body.electrician-booking-page .ts-dropdown .option:hover,
+body.electrician-booking-page .ts-dropdown .option.active {
+  background: #292817;
+  color: #f2ca63;
+}
+
+body.electrician-booking-page .ts-dropdown .option.selected {
+  background: rgba(202, 161, 61, 0.18);
+  color: #f2ca63;
+}
+
+@media (max-width: 700px) {
+  .electrician-booking-page .eb-contact-rot-form .eb-card > h2.mt-4 + .eb-customer-grid,
+  .electrician-booking-page .eb-contact-rot-form .eb-card > .eb-customer-grid + .eb-form-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 600px) {

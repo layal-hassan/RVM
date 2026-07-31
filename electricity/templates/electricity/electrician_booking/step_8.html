@@ -1,231 +1,111 @@
-﻿{% extends "electricity/electrician_booking/base.html" %}
+{% extends "electricity/electrician_booking/base.html" %}
 {% load i18n %}
 
 {% block booking_content %}
-<form method="post" class="eb-form">
+<form method="post" class="eb-form eb-review-form">
   {% csrf_token %}
-
-  <div class="eb-complete-header">
-    <div>
-      <h1>{% trans "Complete Your Booking" %}</h1>
-      <p>{% trans "Finalize your schedule and confirm the details below." %}</p>
+  {% if data.customer_type == "business" %}
+  <section class="eb-card eb-review-card">
+    <div class="eb-card-header"><span class="eb-step-badge">8</span><div><h1>{% trans "Final review & confirmation" %}</h1><p>{% trans "Please review all details below before confirming your booking." %}</p></div></div>
+    <div class="eb-review-grid">
+      <div class="eb-review-column">
+       <section class="eb-review-panel"><header><h2>▣ {% trans "Booking summary" %}</h2><a href="{% url 'electricity:electrician_booking_step' 3 %}">✎ {% trans "Edit" %}</a></header><dl class="eb-review-list">
+        <div><dt>{% trans "Customer type" %}</dt><dd>{% trans "Business" %}</dd></div><div><dt>{% trans "Service" %}</dt><dd>{{ data.service_type|title }}</dd></div><div><dt>{% trans "Project details" %}</dt><dd>{{ data.work_description }}</dd></div><div><dt>{% trans "Site location" %}</dt><dd>{{ data.street_address }}, {{ data.zip_code }} {{ data.city }}</dd></div><div><dt>{% trans "Preferred schedule" %}</dt><dd>{{ data.preferred_date }} · {{ data.arrival_window }}</dd></div><div><dt>{% trans "Estimated duration" %}</dt><dd>{{ pricing.hours }} {% trans "hours" %}</dd></div>
+       </dl></section>
+       <section class="eb-review-panel"><header><h2>⚿ {% trans "Site access" %}</h2><a href="{% url 'electricity:electrician_booking_step' 7 %}">✎ {% trans "Edit" %}</a></header><dl class="eb-review-list eb-review-list-compact"><div><dt>{% trans "Access method" %}</dt><dd>{{ data.access_method|title }}</dd></div><div><dt>{% trans "Site contact" %}</dt><dd>{{ data.site_contact|default:"—" }}</dd></div><div><dt>{% trans "Phone" %}</dt><dd>{{ data.site_contact_phone|default:"—" }}</dd></div><div><dt>{% trans "Instructions" %}</dt><dd>{{ data.access_notes|default:"—" }}</dd></div></dl></section>
+      </div>
+      <div class="eb-review-column">
+       <section class="eb-review-panel"><header><h2>♙ {% trans "Contact details" %}</h2><a href="{% url 'electricity:electrician_booking_step' 6 %}">✎ {% trans "Edit" %}</a></header><dl class="eb-review-list eb-review-list-compact"><div><dt>{% trans "Contact person" %}</dt><dd>{{ data.full_name }}</dd></div><div><dt>{% trans "Phone" %}</dt><dd>{{ data.phone }}</dd></div><div><dt>{% trans "Email" %}</dt><dd>{{ data.email }}</dd></div></dl></section>
+       <section class="eb-review-panel"><header><h2>▥ {% trans "Company details" %}</h2><a href="{% url 'electricity:electrician_booking_step' 6 %}">✎ {% trans "Edit" %}</a></header><dl class="eb-review-list eb-review-list-compact"><div><dt>{% trans "Company name" %}</dt><dd>{{ data.company_name }}</dd></div><div><dt>{% trans "Organisation number" %}</dt><dd>{{ data.organization_number }}</dd></div><div><dt>{% trans "Billing email" %}</dt><dd>{{ data.billing_email }}</dd></div><div><dt>{% trans "Invoice reference" %}</dt><dd>{{ data.invoice_reference|default:"—" }}</dd></div><div><dt>{% trans "Purchase order number" %}</dt><dd>{{ data.purchase_order_number|default:"—" }}</dd></div></dl><p class="eb-review-info">ⓘ {% trans "The invoice will be issued after the work has been completed." %}</p></section>
+       <section class="eb-review-panel"><header><h2>▤ {% trans "Commercial information" %}</h2><a href="{% url 'electricity:electrician_booking_step' 7 %}">✎ {% trans "Edit" %}</a></header><p class="eb-review-notes">{{ data.commercial_notes|default:"—" }}</p>{% if data.business_attachments %}<div class="eb-review-attachments"><strong>{% trans "Attachments" %}</strong>{% for attachment in data.business_attachments %}<span>✓ {{ attachment.name }}</span>{% endfor %}</div>{% endif %}</section>
+      </div>
+      <aside class="eb-review-panel eb-review-price"><header><h2>▦ {% trans "Estimated price summary" %}</h2><a href="{% url 'electricity:electrician_booking_step' 3 %}">✎ {% trans "Edit" %}</a></header>
+       <div class="eb-price-detail"><span>{% trans "Hourly rate (excl. VAT)" %}</span><strong>{{ pricing.effective_hourly_rate|floatformat:2 }} {{ pricing.currency }}</strong></div><div class="eb-price-detail"><span>{% trans "Estimated duration" %}</span><strong>{{ pricing.hours }} {% trans "hours" %}</strong></div><hr><div class="eb-price-detail"><span>{% trans "Labour cost (excl. VAT)" %}</span><strong>{{ pricing.labor_total|floatformat:2 }} {{ pricing.currency }}</strong></div><div class="eb-price-detail"><span>{% trans "Transport fee" %}</span><strong>{{ pricing.transport_fee|floatformat:2 }} {{ pricing.currency }}</strong></div><div class="eb-price-detail"><span>{% trans "Subtotal (excl. VAT)" %}</span><strong>{{ pricing.total_before_rot|floatformat:2 }} {{ pricing.currency }}</strong></div><div class="eb-price-detail"><span>{% trans "VAT" %} ({{ pricing.vat_percent|floatformat:0 }}%)</span><strong>{{ pricing.vat_amount|floatformat:2 }} {{ pricing.currency }}</strong></div><div class="eb-review-total"><span>{% trans "Estimated invoice total" %}<small>{% trans "including VAT" %}</small></span><strong>{{ pricing.total|floatformat:2 }} {{ pricing.currency }}</strong></div><p class="eb-review-info">ⓘ {% trans "Final price may vary based on actual time on site and any material costs incurred." %}</p>
+      </aside>
     </div>
-    <div class="eb-complete-step">{% trans "Step 6-8 of 8" %}</div>
-  </div>
-
-  <div class="eb-complete-grid">
-    <div class="eb-complete-main">
-
-      <section class="eb-card">
-        <div class="eb-card-header">
-          <span class="eb-step-badge">6</span>
-          <div>
-            <h2>{% trans "Preferred Date & Time" %}</h2>
-            <p>{% trans "Select date and arrival window." %}</p>
-          </div>
-        </div>
-
-        <div class="eb-schedule-grid">
-          <div>
-            <div class="eb-label">{% trans "Select Date" %}</div>
-            <div class="eb-calendar" data-selected="{{ data.preferred_date|default:'' }}"></div>
-            <input type="hidden" name="preferred_date" id="preferred_date"
-                   value="{{ data.preferred_date|default:'' }}">
-          </div>
-
-          <div>
-            <div class="eb-label">{% trans "Arrival Window" %}</div>
-
-            <div class="eb-arrival">
-              <label class="eb-arrival-card">
-                <input type="radio"
-                       name="arrival_window"
-                       value="Morning (08:00 AM - 12:00 PM)"
-                       {% if data.arrival_window == "Morning (08:00 AM - 12:00 PM)" %}checked{% endif %}>
-                <div class="eb-arrival-icon">AM</div>
-                <div>
-                  <div class="eb-service-title">{% trans "Morning" %}</div>
-                  <div class="eb-service-sub">08:00 AM - 12:00 PM</div>
-                </div>
-              </label>
-
-              <label class="eb-arrival-card">
-                <input type="radio"
-                       name="arrival_window"
-                       value="Afternoon (12:00 PM - 05:00 PM)"
-                       {% if data.arrival_window == "Afternoon (12:00 PM - 05:00 PM)" %}checked{% endif %}>
-                <div class="eb-arrival-icon">PM</div>
-                <div>
-                  <div class="eb-service-title">{% trans "Afternoon" %}</div>
-                  <div class="eb-service-sub">12:00 PM - 05:00 PM</div>
-                </div>
-              </label>
-
-              <label class="eb-arrival-card">
-                <input type="radio"
-                       name="arrival_window"
-                       value="Evening (05:00 PM - 10:00 PM)"
-                       {% if data.arrival_window == "Evening (05:00 PM - 10:00 PM)" %}checked{% endif %}>
-                <div class="eb-arrival-icon">EV</div>
-                <div>
-                  <div class="eb-service-title">{% trans "Evening" %}</div>
-                  <div class="eb-service-sub">05:00 PM - 10:00 PM</div>
-                </div>
-              </label>
-
-              <label class="eb-arrival-card">
-                <input type="radio"
-                       name="arrival_window"
-                       value="Night (10:00 PM - 06:00 AM)"
-                       {% if data.arrival_window == "Night (10:00 PM - 06:00 AM)" %}checked{% endif %}>
-                <div class="eb-arrival-icon">NG</div>
-                <div>
-                  <div class="eb-service-title">{% trans "Night" %}</div>
-                  <div class="eb-service-sub">10:00 PM - 06:00 AM</div>
-                </div>
-              </label>
-            </div>
-            <div class="eb-inline-note">
-              {% trans "Evening and Night bookings are billed at double the standard hourly rate." %}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="eb-card">
-        <div class="eb-card-header">
-          <span class="eb-step-badge">7</span>
-          <div>
-            <h2>{% trans "Pricing Transparency" %}</h2>
-            <p>{% trans "Estimated cost calculation." %}</p>
-          </div>
-        </div>
-
-        <div class="eb-pricing-box">
-          <div class="eb-price-row">
-            <span>{% trans "Minimum Callout Fee (1st hr)" %}</span>
-            <strong>{{ pricing.currency }} {{ pricing.minimum_callout|floatformat:2 }}</strong>
-          </div>
-
-          {% if pricing.arrival_multiplier > 1 %}
-          <div class="eb-price-row">
-            <span>{% trans "Evening / Night rate multiplier" %}</span>
-            <strong>{{ pricing.arrival_multiplier }}x</strong>
-          </div>
-          {% endif %}
-
-          <div class="eb-price-row">
-            <span>{% trans "Transport Fee" %}</span>
-            <strong>{{ pricing.currency }} {{ pricing.transport_fee|floatformat:2 }}</strong>
-          </div>
-
-          <div class="eb-price-row">
-            <span>
-              {% blocktrans with hours=pricing.additional_hours rate=pricing.effective_hourly_rate currency=pricing.currency %}
-              Estimated Additional Time ({{ hours }} hrs x {{ currency }} {{ rate }}/hr)
-              {% endblocktrans %}
-            </span>
-            <strong>{{ pricing.currency }} {{ pricing.additional_total|floatformat:2 }}</strong>
-          </div>
-
-          {% if pricing.rot_requested %}
-          <div class="eb-price-row eb-price-row-discount">
-            <span>{% blocktrans with percent=pricing.rot_percent %}ROT deduction ({{ percent }}% of labor cost){% endblocktrans %}</span>
-            <strong>-{{ pricing.currency }} {{ pricing.rot_discount|floatformat:2 }}</strong>
-          </div>
-          {% endif %}
-
-          <div class="eb-price-total">
-            <span>{% trans "Total Estimated Booking (incl. VAT and ROT, if applied)" %}</span>
-            <strong>{{ pricing.currency }} {{ pricing.total|floatformat:2 }}</strong>
-          </div>
-        </div>
-
-        <label class="eb-checkbox eb-pricing-check">
-          <input type="checkbox"
-                 name="pricing_ack"
-                 value="yes"
-                 {% if data.pricing_ack %}checked{% endif %}>
-          <span>
-            {% trans "I understand this is an estimate. Final pricing is based on actual time spent on site and any material costs incurred." %}
-          </span>
-        </label>
-      </section>
+    <label class="eb-review-consent"><input type="checkbox" name="accept_terms" value="yes" {% if data.accept_terms %}checked{% endif %}><span>{% trans "I have read and agree to the" %} <a href="{% url 'electricity:terms' %}">{% trans "Terms & Conditions" %}</a>.<small>{% trans "I confirm that the information provided is correct and agree to the Privacy Policy." %}</small></span></label>
+  </section>
+  {% else %}
+  <section class="eb-card eb-review-card">
+    <div class="eb-card-header">
+      <span class="eb-step-badge">8</span>
+      <div>
+        <h1>{% trans "Final review & confirmation" %}</h1>
+        <p>{% trans "Please review all details below before confirming your booking." %}</p>
+      </div>
     </div>
 
-    <aside class="eb-summary">
-      <div class="eb-summary-card">
-        <div class="eb-summary-header">
-          <div>
-            <div class="eb-summary-title">{% trans "Review & Confirm" %}</div>
-            <div class="eb-summary-step">8</div>
-          </div>
-        </div>
+    <div class="eb-review-grid">
+      <div class="eb-review-column">
+        <section class="eb-review-panel">
+          <header><h2>▣ {% trans "Booking summary" %}</h2><a href="{% url 'electricity:electrician_booking_step' 1 %}">✎ {% trans "Edit" %}</a></header>
+          <dl class="eb-review-list">
+            <div><dt>♙ {% trans "Customer type" %}</dt><dd>{{ data.customer_type|title }}</dd></div>
+            <div><dt>♨ {% trans "Service" %}</dt><dd>{{ data.service_type|title }}</dd></div>
+            <div><dt>▤ {% trans "Work details" %}</dt><dd>{{ data.work_description }}</dd></div>
+            <div><dt>⌖ {% trans "Location" %}</dt><dd>{{ data.street_address }}, {{ data.zip_code }} {{ data.city }}</dd></div>
+            <div><dt>◷ {% trans "Date & time" %}</dt><dd>{{ data.preferred_date }} · {{ data.arrival_window }}</dd></div>
+            <div><dt>◴ {% trans "Estimated duration" %}</dt><dd>{{ pricing.hours }} {% trans "hours" %}</dd></div>
+          </dl>
+        </section>
 
-        <div class="eb-summary-row">
-          <span class="eb-summary-label">{% trans "Service type" %}</span>
-          <strong>{{ data.service_type|default:"Residential Electrical Repair"|title }}</strong>
-        </div>
-
-        <div class="eb-summary-row">
-          <span class="eb-summary-label">{% trans "Location" %}</span>
-          <strong>{{ data.street_address|default:"1248 Oakwood Ave" }}, {{ data.city|default:"Silver Springs" }}</strong>
-        </div>
-
-        <div class="eb-summary-row">
-          <span class="eb-summary-label">{% trans "Appointment" %}</span>
-          <strong>
-            <span data-summary-date data-default="Thursday, Oct 5">
-              {% if data.preferred_date %}{{ data.preferred_date }}{% else %}Thursday, Oct 5{% endif %}
-            </span>
-            <span data-summary-time data-default="8 AM - 12 PM">
-              {% if data.arrival_window %} | {{ data.arrival_window }}{% else %} | 8 AM - 12 PM{% endif %}
-            </span>
-          </strong>
-        </div>
-
-        <label class="eb-checkbox">
-          <input type="checkbox" name="confirm_info" value="yes">
-          <span>{% trans "I confirm all the provided information above is correct." %}</span>
-        </label>
-
-        <label class="eb-checkbox">
-          <input type="checkbox" name="accept_terms" value="yes">
-          <span>
-            {% trans "I accept the" %}
-            <a href="{% url 'electricity:privacy' %}">{% trans "Privacy Policy" %}</a>
-            {% trans "and" %}
-            <a href="{% url 'electricity:terms' %}">{% trans "Terms and Conditions" %}</a>.
-          </span>
-        </label>
-
-        <button class="btn btn-primary eb-confirm-btn" type="submit">
-          {% trans "Confirm Booking" %}
-        </button>
-
-        <div class="eb-disclaimer">
-        </div>
+        <section class="eb-review-panel">
+          <header><h2>⚿ {% trans "Access instructions" %}</h2><a href="{% url 'electricity:electrician_booking_step' 7 %}">✎ {% trans "Edit" %}</a></header>
+          <p class="eb-review-notes">{{ data.access_notes|default:"—"|linebreaksbr }}</p>
+        </section>
       </div>
 
-      <div class="eb-help-card">
-        <div class="eb-help-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" role="img" focusable="false">
-            <path d="M22 16.9v3a2 2 0 0 1-2.2 2c-3.3-.2-6.5-1.4-9.2-3.5a19.6 19.6 0 0 1-6-6C2.5 9.7 1.3 6.5 1.1 3.2A2 2 0 0 1 3.1 1h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.5 2.1L7.1 8.7a16 16 0 0 0 6 6l1.1-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z" />
-          </svg>
-        </div>
-        <div>
-          <div class="eb-help-title">{% trans "Need help with your booking?" %}</div>
-          <div class="eb-help-phone">{% trans "Call" %} 0046760355633</div>
-        </div>
-      </div>
-    </aside>
-  </div>
+      <div class="eb-review-column">
+        <section class="eb-review-panel">
+          <header><h2>♙ {% trans "Contact details" %}</h2><a href="{% url 'electricity:electrician_booking_step' 6 %}">✎ {% trans "Edit" %}</a></header>
+          <dl class="eb-review-list eb-review-list-compact">
+            <div><dt>{% trans "Name" %}</dt><dd>{{ data.full_name }}</dd></div>
+            <div><dt>{% trans "Phone" %}</dt><dd>{{ data.phone }}</dd></div>
+            <div><dt>{% trans "Email" %}</dt><dd>{{ data.email }}</dd></div>
+          </dl>
+        </section>
 
-  <div class="eb-actions eb-actions-center">
-    <a class="btn btn-light"
-       href="{% url 'electricity:electrician_booking_step' 7 %}">
-       {% trans "Back" %}
-    </a>
-  </div>
+        <section class="eb-review-panel">
+          <header><h2>⌂ {% trans "ROT information" %}</h2><a href="{% url 'electricity:electrician_booking_step' 6 %}">✎ {% trans "Edit" %}</a></header>
+          <dl class="eb-review-list eb-review-list-compact">
+            <div><dt>{% trans "ROT" %}</dt><dd>{% if pricing.rot_requested %}{% trans "Yes, apply ROT" %} ({{ pricing.rot_percent|floatformat:0 }}%){% else %}{% trans "No" %}{% endif %}</dd></div>
+            {% if pricing.rot_requested %}
+              <div><dt>{% trans "Personal identity number" %}</dt><dd>{{ data.personal_id }}</dd></div>
+              <div><dt>{% trans "I own the property" %}</dt><dd class="eb-review-yes">✓ {% trans "Yes" %}</dd></div>
+              <div><dt>{% trans "I will pay electronically" %}</dt><dd class="eb-review-yes">✓ {% trans "Yes" %}</dd></div>
+            {% endif %}
+          </dl>
+          <p class="eb-review-info">ⓘ {% trans "ROT may reduce eligible labour costs by up to 30%. Approval depends on your eligibility and available tax deduction. Materials, transport and other costs are not included." %}</p>
+        </section>
+      </div>
+
+      <aside class="eb-review-panel eb-review-price">
+        <header><h2>▦ {% trans "Estimated price summary" %}</h2><a href="{% url 'electricity:electrician_booking_step' 3 %}">✎ {% trans "Edit" %}</a></header>
+        <div class="eb-price-detail"><span>{% trans "Hourly rate after ROT" %}</span><strong>{{ pricing.effective_hourly_rate|floatformat:2 }} {{ pricing.currency }}</strong></div>
+        <div class="eb-price-detail"><span>{% trans "Estimated duration" %}</span><strong>{{ pricing.hours }} {% trans "hours" %}</strong></div>
+        <hr>
+        <div class="eb-price-detail"><span>{% trans "Minimum callout fee (1st hr)" %}</span><strong>{{ pricing.minimum_callout|floatformat:2 }} {{ pricing.currency }}</strong></div>
+        {% if pricing.additional_hours %}<div class="eb-price-detail"><span>{% trans "Estimated additional time" %}</span><strong>{{ pricing.additional_total|floatformat:2 }} {{ pricing.currency }}</strong></div>{% endif %}
+        <div class="eb-price-detail"><span>{% trans "Labour cost" %}</span><strong>{{ pricing.labor_total|floatformat:2 }} {{ pricing.currency }}</strong></div>
+        <div class="eb-price-detail"><span>{% trans "Transport fee" %}</span><strong>{{ pricing.transport_fee|floatformat:2 }} {{ pricing.currency }}</strong></div>
+        {% if pricing.rot_requested %}<div class="eb-price-detail eb-price-row-discount"><span>{% trans "ROT deduction" %} ({{ pricing.rot_percent|floatformat:0 }}%)</span><strong>-{{ pricing.rot_discount|floatformat:2 }} {{ pricing.currency }}</strong></div>{% endif %}
+        <div class="eb-review-total"><span>{% trans "Total estimated booking" %}<small>{% trans "including ROT, if applied" %}</small></span><strong>{{ pricing.total|floatformat:2 }} {{ pricing.currency }}</strong></div>
+      </aside>
+    </div>
+
+    <section class="eb-review-panel eb-payment-panel">
+      <header><h2>▤ {% trans "Payment details" %}</h2></header>
+      <div class="eb-payment-grid">
+        <div><b>▧</b><span>{% trans "Payment method" %}<strong>{% trans "Invoice" %}</strong></span></div>
+        <div><b>▣</b><span>{% trans "Payment terms" %}<strong>{% trans "Will be confirmed by email" %}</strong></span></div>
+        <div><b>✉</b><span>{% trans "Invoice sent to" %}<strong>{{ data.email }}</strong></span></div>
+        <p>ⓘ {% trans "The invoice will be issued after the work has been completed. The applicable payment terms will be confirmed with you by email." %}</p>
+      </div>
+    </section>
+
+    <label class="eb-review-consent"><input type="checkbox" name="accept_terms" value="yes" {% if data.accept_terms %}checked{% endif %}><span>{% trans "I have read and agree to the" %} <a href="{% url 'electricity:terms' %}">{% trans "Terms & Conditions" %}</a>.<small>{% trans "By checking this box and confirming your booking, you agree to our Terms & Conditions and Privacy Policy." %}</small></span></label>
+  </section>
+  {% endif %}
+  <div class="eb-actions eb-review-actions"><a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 7 %}">← {% trans "Back" %}</a><button class="btn btn-primary" type="submit">{% trans "Confirm booking" %} →</button></div>
 </form>
 {% endblock %}

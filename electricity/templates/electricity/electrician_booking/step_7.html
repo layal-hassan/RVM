@@ -1,139 +1,31 @@
-﻿{% extends "electricity/electrician_booking/base.html" %}
-{% load i18n %}
-
-{% block booking_content %}
-<form method="post" class="eb-form">
-  {% csrf_token %}
-
-  <section class="eb-card">
-    <div class="eb-card-header">
-      <span class="eb-step-badge">7</span>
-      <div>
-        <h1>{% trans "Pricing Transparency" %}</h1>
-        <p>{% trans "Review the estimated cost calculation." %}</p>
-      </div>
-    </div>
-
-    <div class="eb-pricing-box">
-      <div class="eb-price-row">
-        <span>{% trans "Minimum Callout Fee (1st hr)" %}</span>
-        <strong data-pricing-minimum>{{ pricing.currency }} {{ pricing.minimum_callout|floatformat:2 }}</strong>
-      </div>
-
-      <div class="eb-price-row">
-        <span>{% trans "Transport Fee" %}</span>
-        <strong data-pricing-transport>{{ pricing.currency }} {{ pricing.transport_fee|floatformat:2 }}</strong>
-      </div>
-
-      <div class="eb-price-row">
-        <span data-pricing-additional-label
-              data-hours="{{ pricing.additional_hours }}"
-              data-rate="{{ pricing.effective_hourly_rate|floatformat:2 }}"
-              data-currency="{{ pricing.currency }}">
-          {% blocktrans with hours=pricing.additional_hours rate=pricing.effective_hourly_rate currency=pricing.currency %}
-          Estimated Additional Time ({{ hours }} hrs x {{ currency }} {{ rate }}/hr)
-          {% endblocktrans %}
-        </span>
-        <strong data-pricing-additional>{{ pricing.currency }} {{ pricing.additional_total|floatformat:2 }}</strong>
-      </div>
-
-      {% if data.customer_type == "private" %}
-      <div class="eb-rot-box">
-        <label class="eb-checkbox eb-checkbox-strong">
-          <input type="checkbox"
-                 name="use_rot"
-                 value="yes"
-                 data-rot-toggle
-                 {% if data.use_rot %}checked{% endif %}>
-          <span>{% trans "I want to use preliminary ROT deduction for this booking." %}</span>
-        </label>
-        <div class="eb-inline-note">
-          {% trans "ROT currently applies to private individuals only and only to labor cost, not transport or materials. Final approval depends on your eligibility with Skatteverket." %}
-        </div>
-      </div>
-      {% endif %}
-
-      <div class="eb-price-row eb-price-row-discount{% if not pricing.rot_requested %} d-none{% endif %}" data-rot-row>
-        <span>{% blocktrans with percent=pricing.rot_percent %}ROT deduction ({{ percent }}% of labor cost){% endblocktrans %}</span>
-        <strong data-pricing-rot>-{{ pricing.currency }} {{ pricing.rot_discount|floatformat:2 }}</strong>
-      </div>
-
-      <div class="eb-price-total">
-        <span>{% trans "Total Estimated Booking (incl. VAT and ROT, if applied)" %}</span>
-        <strong data-pricing-total>{{ pricing.currency }} {{ pricing.total|floatformat:2 }}</strong>
-      </div>
-    </div>
-
-    <div hidden
-         data-pricing-config
-         data-currency="{{ pricing.currency }}"
-         data-labor-total="{{ pricing.labor_total|floatformat:2 }}"
-         data-transport-fee="{{ pricing.transport_fee|floatformat:2 }}"
-         data-rot-percent="{{ pricing.rot_percent|floatformat:2 }}">
-    </div>
-
-    <label class="eb-checkbox eb-pricing-check">
-      <input type="checkbox"
-             name="pricing_ack"
-             value="yes"
-             {% if data.pricing_ack %}checked{% endif %}>
-      <span>
-        {% trans "I understand this is an estimate. Final pricing is based on actual time spent on site and any material costs incurred." %}
-      </span>
-    </label>
-  </section>
-
-  <div class="eb-actions">
-    <a class="btn btn-light"
-       href="{% url 'electricity:electrician_booking_step' 6 %}">
-       {% trans "Back" %}
-    </a>
-
-    <button class="btn btn-primary" type="submit">
-        {% trans "Continue to Step 8" %}
-    </button>
+{% extends "electricity/electrician_booking/base.html" %}{% load i18n %}
+{% block booking_content %}<form method="post" class="eb-form" enctype="multipart/form-data">{% csrf_token %}
+<section class="eb-card"><div class="eb-card-header"><span class="eb-step-badge">7</span><div><h1>{% if data.customer_type == "business" %}{% trans "Access & commercial information" %}{% else %}{% trans "Access details" %}{% endif %}</h1><p>{% trans "Help us prepare the visit and give you the best possible service." %}</p></div></div>
+{% if data.customer_type == "business" %}
+<div class="eb-business-access-grid">
+ <section class="eb-business-panel"><h2>⚿ {% trans "Site access" %}</h2><p>{% trans "Let us know how we can access the property when the work starts." %}</p>
+  <div class="eb-access-options">
+   <label class="eb-radio-card"><input type="radio" name="access_method" value="someone_on_site" {% if data.access_method == "someone_on_site" %}checked{% endif %}><span><strong>{% trans "Someone will be on site" %}</strong><small>{% trans "A contact person will be available to open and guide." %}</small></span></label>
+   <label class="eb-radio-card"><input type="radio" name="access_method" value="key_code" {% if data.access_method == "key_code" %}checked{% endif %}><span><strong>{% trans "Key / code access" %}</strong><small>{% trans "We will receive a code or key." %}</small></span></label>
+   <label class="eb-radio-card"><input type="radio" name="access_method" value="arrange_later" {% if data.access_method == "arrange_later" %}checked{% endif %}><span><strong>{% trans "Access to be arranged later" %}</strong><small>{% trans "We will confirm access closer to the visit." %}</small></span></label>
   </div>
-</form>
-{% endblock %}
-
-{% block extra_js %}
-  {{ block.super }}
-  <script>
-    (function () {
-      const toggle = document.querySelector("[data-rot-toggle]");
-      const config = document.querySelector("[data-pricing-config]");
-      if (!toggle || !config) return;
-
-      const currency = config.dataset.currency || "SEK";
-      const laborTotal = Number(config.dataset.laborTotal || 0);
-      const transportFee = Number(config.dataset.transportFee || 0);
-      const rotPercent = Number(config.dataset.rotPercent || 0);
-
-      const rotRow = document.querySelector("[data-rot-row]");
-      const rotValue = document.querySelector("[data-pricing-rot]");
-      const totalValue = document.querySelector("[data-pricing-total]");
-
-      function formatMoney(value) {
-        return currency + " " + value.toFixed(2);
-      }
-
-      function renderPricing() {
-        const rotDiscount = toggle.checked ? laborTotal * (rotPercent / 100) : 0;
-        const total = laborTotal + transportFee - rotDiscount;
-
-        if (rotRow) {
-          rotRow.classList.toggle("d-none", !toggle.checked);
-        }
-        if (rotValue) {
-          rotValue.textContent = "-" + formatMoney(rotDiscount);
-        }
-        if (totalValue) {
-          totalValue.textContent = formatMoney(total);
-        }
-      }
-
-      toggle.addEventListener("change", renderPricing);
-      renderPricing();
-    })();
-  </script>
-{% endblock %}
+  <label class="eb-label">{% trans "Site contact on arrival (optional)" %}</label><input class="form-control" name="site_contact" value="{{ data.site_contact|default:'' }}">
+  <label class="eb-label">{% trans "Site contact phone (optional)" %}</label><input class="form-control" name="site_contact_phone" value="{{ data.site_contact_phone|default:'' }}">
+  <label class="eb-label">{% trans "Access instructions" %}</label><textarea class="form-control" name="access_notes" rows="4">{{ data.access_notes|default:'' }}</textarea>
+ </section>
+ <section class="eb-business-panel"><h2>▤ {% trans "Additional information (optional)" %}</h2><p>{% trans "Share anything else that can help us plan the work." %}</p>
+  <textarea class="form-control" name="commercial_notes" rows="7" maxlength="500" placeholder="{% trans 'Site rules, security requirements, special equipment, previous installations or other important details.' %}">{{ data.commercial_notes|default:'' }}</textarea>
+  <label class="eb-label">{% trans "Special requirements" %}</label><textarea class="form-control" name="special_requirements" rows="3">{{ data.special_requirements|default:'' }}</textarea>
+  <label class="eb-upload-placeholder" for="business-attachments">⇧ <strong>{% trans "Drag and drop files here or click to browse" %}</strong><small>{% trans "Images, PDFs or Word documents (max 100 MB per file)" %}</small><input id="business-attachments" type="file" name="attachments" multiple accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx"></label>
+  <div class="eb-upload-list" id="business-attachment-list" {% if not data.business_attachments %}hidden{% endif %}><strong>{% trans "Selected attachments" %}</strong><div class="eb-upload-chips" id="business-attachment-chips">{% for attachment in data.business_attachments %}<span class="eb-upload-chip"><i>●</i><b>{{ attachment.name }}</b><button type="button" class="eb-upload-remove" data-existing-index="{{ forloop.counter0 }}" aria-label="{% trans 'Remove file' %}">×</button></span>{% endfor %}</div></div>
+  <div id="business-attachment-removals"></div>
+ </section>
+</div>
+<div class="eb-business-good">◉ <span><strong>{% trans "Good to know" %}</strong><small>✓ {% trans "We prepare everything in advance to work efficiently and safely on site." %}<br>✓ {% trans "Final details and payment terms will be confirmed by email." %}</small></span></div>
+{% else %}
+<label class="eb-label">{% trans "Access instructions" %}</label><textarea class="form-control eb-textarea" name="access_notes" maxlength="1000" rows="8" placeholder="{% trans 'Door code, key location, parking, floor, elevator or anything else the electrician should know.' %}">{{ data.access_notes|default:'' }}</textarea>
+<label class="eb-checkbox mt-4"><input type="checkbox" name="access_confirm" value="yes" {% if data.access_confirm %}checked{% endif %}><span>{% trans "I confirm that the electrician will have access to the property at the scheduled time." %}</span></label>
+<div class="eb-pricing-box mt-4"><div class="eb-price-row"><span>{% trans "Estimated total" %}</span><strong>{{ pricing.total|floatformat:2 }} {{ pricing.currency }}</strong></div><div class="eb-inline-note">{% trans "This is an estimate. Final pricing is based on actual time and material costs." %}</div></div>
+{% endif %}
+</section><div class="eb-actions"><a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 6 %}">{% trans "Back" %}</a><button class="btn btn-primary" type="submit">{% trans "Continue to final review" %}</button></div>
+</form>{% endblock %}

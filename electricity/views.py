@@ -77,6 +77,7 @@ from .models import (
     ServiceBookingStatusUpdate,
     ConsultationBooking,
     ConsultationBookingAttachment,
+    ElectricianBookingAttachment,
     ConsultationRequest,
     CustomerFeedback,
     ElectricalService,
@@ -1011,6 +1012,50 @@ def _save_temp_uploads(request, field_name):
     return saved_paths
 
 
+def _save_electrician_attachments(request):
+    allowed_extensions = {".jpg", ".jpeg", ".png", ".webp", ".pdf", ".doc", ".docx"}
+    accepted = []
+    errors = []
+    for upload in request.FILES.getlist("attachments"):
+        extension = os.path.splitext(upload.name)[1].lower()
+        if extension not in allowed_extensions:
+            errors.append(f"{upload.name}: unsupported file type.")
+            continue
+        if upload.size > 100 * 1024 * 1024:
+            errors.append(f"{upload.name}: file size must not exceed 100 MB.")
+            continue
+        saved = _save_temp_uploads_from_list([upload])
+        if saved:
+            saved[0]["content_type"] = upload.content_type or ""
+            accepted.extend(saved)
+    return accepted, errors
+
+
+def _save_temp_uploads_from_list(uploads):
+    temp_dir = os.path.join(settings.MEDIA_ROOT, "temp_uploads")
+    os.makedirs(temp_dir, exist_ok=True)
+    fs = FileSystemStorage(location=temp_dir)
+    saved_paths = []
+    for upload in uploads:
+        stored_name = fs.save(f"{uuid.uuid4().hex}_{upload.name}", upload)
+        saved_paths.append({"path": os.path.join("temp_uploads", stored_name), "name": upload.name, "size": upload.size})
+    return saved_paths
+
+
+def _create_electrician_attachments(booking, uploads):
+    for item in uploads or []:
+        full_path = os.path.join(settings.MEDIA_ROOT, item.get("path", ""))
+        if not os.path.isfile(full_path):
+            continue
+        with open(full_path, "rb") as handle:
+            attachment = ElectricianBookingAttachment(
+                booking=booking,
+                original_name=item.get("name") or os.path.basename(full_path),
+                content_type=item.get("content_type", ""),
+            )
+            attachment.file.save(os.path.basename(full_path), File(handle), save=True)
+
+
 def _remove_temp_uploads(temp_uploads, removal_values):
     normalized = _normalize_temp_uploads(temp_uploads)
     removals = {"photo": set(), "video": set(), "document": set()}
@@ -1525,7 +1570,10 @@ def _electrician_pricing_breakdown(data):
     total_before_rot = labor_total + transport_fee
     use_rot = bool(data.get("use_rot")) and data.get("customer_type") == ElectricianBooking.CustomerType.PRIVATE
     rot_discount = labor_total * (rot_percent / 100) if use_rot else 0
-    total = total_before_rot - rot_discount
+    is_business = data.get("customer_type") == ElectricianBooking.CustomerType.BUSINESS
+    vat_percent = 25.0 if is_business else 0.0
+    vat_amount = total_before_rot * (vat_percent / 100)
+    total = total_before_rot + vat_amount - rot_discount
     return {
         "hours": hours,
         "hourly_rate": hourly_rate,
@@ -1540,6 +1588,9 @@ def _electrician_pricing_breakdown(data):
         "additional_total": additional_total,
         "labor_total": labor_total,
         "total_before_rot": total_before_rot,
+        "vat_percent": vat_percent,
+        "vat_amount": vat_amount,
+        "is_business": is_business,
         "total": total,
         "currency": currency,
     }
@@ -1624,22 +1675,10 @@ def electrician_booking_step(request, step):
 
     if request.method == "POST":
         if step == 1:
-            hours = request.POST.get("hours")
-            work_description = request.POST.get("work_description", "").strip()
-            access_confirm = request.POST.get("access_confirm")
-            data.update(
-                {
-                    "hours": hours,
-                    "work_description": work_description,
-                    "access_confirm": access_confirm == "yes",
-                }
-            )
-            if not hours:
-                errors.append("Please select the number of hours.")
-            if not work_description:
-                errors.append("Please describe the work.")
-            if access_confirm != "yes":
-                errors.append("Please confirm access to the work area.")
+            customer_type = request.POST.get("customer_type")
+            data["customer_type"] = customer_type
+            if customer_type not in dict(ElectricianBooking.CustomerType.choices):
+                errors.append("Please choose Private or Business.")
             if not errors:
                 _set_electrician_booking_data(request, data)
                 return redirect("electricity:electrician_booking_step", step=2)
@@ -1652,30 +1691,27 @@ def electrician_booking_step(request, step):
                 _set_electrician_booking_data(request, data)
                 return redirect("electricity:electrician_booking_step", step=3)
         elif step == 3:
+            hours = request.POST.get("hours")
+            work_description = request.POST.get("work_description", "").strip()
+            data.update({"hours": hours, "work_description": work_description})
+            if not hours:
+                errors.append("Please select the number of hours.")
+            if not work_description:
+                errors.append("Please describe the work.")
+            if not errors:
+                _set_electrician_booking_data(request, data)
+                return redirect("electricity:electrician_booking_step", step=4)
+        elif step == 4:
             street_address = request.POST.get("street_address", "").strip()
             zip_code = request.POST.get("zip_code", "").strip()
             city = request.POST.get("city", "").strip()
-            customer_type = request.POST.get("customer_type")
-            personal_id = request.POST.get("personal_id", "").strip()
-            full_name = request.POST.get("full_name", "").strip()
-            phone = request.POST.get("phone", "").strip()
-            email = request.POST.get("email", "").strip()
-            company_name = request.POST.get("company_name", "").strip()
-            organization_number = request.POST.get("organization_number", "").strip()
-            contact_confirm = request.POST.get("contact_confirm")
+            location_details = request.POST.get("location_details", "").strip()
             data.update(
                 {
                     "street_address": street_address,
                     "zip_code": zip_code,
                     "city": city,
-                    "customer_type": customer_type,
-                    "personal_id": personal_id,
-                    "full_name": full_name,
-                    "phone": phone,
-                    "email": email,
-                    "company_name": company_name,
-                    "organization_number": organization_number,
-                    "contact_confirm": contact_confirm == "yes",
+                    "location_details": location_details,
                 }
             )
             if not street_address:
@@ -1684,49 +1720,18 @@ def electrician_booking_step(request, step):
                 errors.append("Postal code is required.")
             if not city:
                 errors.append("City is required.")
-            if not customer_type:
-                errors.append("Please choose a customer type.")
-            if customer_type == "business":
-                if not company_name:
-                    errors.append("Company name is required.")
-                if not organization_number:
-                    errors.append("Organization number is required.")
-                if not email:
-                    errors.append("Email address is required.")
-            else:
-                if not personal_id:
-                    errors.append("Personal ID number is required.")
-                elif not re.fullmatch(r"\d{8}-\d{4}", personal_id):
-                    errors.append("Please enter your personal ID in the format yyyymmdd-xxxx.")
-                if not full_name:
-                    errors.append("Full name is required.")
-                if not phone:
-                    errors.append("Phone number is required.")
-                if not email:
-                    errors.append("Email address is required.")
-            if contact_confirm != "yes":
-                errors.append("Please confirm your contact details.")
             if not errors:
                 _set_electrician_booking_data(request, data)
-                return redirect("electricity:electrician_booking_step", step=4)
-        elif step == 4:
-            access_notes = request.POST.get("access_notes", "").strip()
-            parking_info = request.POST.get("parking_info", "").strip()
-            data.update({"access_notes": access_notes, "parking_info": parking_info})
-            _set_electrician_booking_data(request, data)
-            return redirect("electricity:electrician_booking_step", step=5)
+                return redirect("electricity:electrician_booking_step", step=5)
         elif step == 5:
-            additional_notes = request.POST.get("additional_notes", "").strip()
-            data["additional_notes"] = additional_notes
-            _set_electrician_booking_data(request, data)
-            return redirect("electricity:electrician_booking_step", step=6)
-        elif step == 6:
             preferred_date = request.POST.get("preferred_date", "")
             arrival_window = request.POST.get("arrival_window")
+            timing_notes = request.POST.get("timing_notes", "").strip()
             data.update(
                 {
                     "preferred_date": preferred_date,
                     "arrival_window": arrival_window,
+                    "timing_notes": timing_notes,
                 }
             )
             parsed_preferred_date = _parse_date(preferred_date)
@@ -1740,49 +1745,144 @@ def electrician_booking_step(request, step):
                 errors.append("Please select an arrival window.")
             if not errors:
                 _set_electrician_booking_data(request, data)
+                return redirect("electricity:electrician_booking_step", step=6)
+        elif step == 6:
+            full_name = request.POST.get("full_name", "").strip()
+            phone = request.POST.get("phone", "").strip()
+            email = request.POST.get("email", "").strip()
+            use_rot = request.POST.get("use_rot")
+            personal_id = request.POST.get("personal_id", "").strip()
+            housing_type = request.POST.get("housing_type", "").strip()
+            property_designation = request.POST.get("property_designation", "").strip()
+            housing_association_number = request.POST.get("housing_association_number", "").strip()
+            apartment_number = request.POST.get("apartment_number", "").strip()
+            rot_owner_confirm = request.POST.get("rot_owner_confirm") == "yes"
+            electronic_invoice_confirm = request.POST.get("electronic_invoice_confirm") == "yes"
+            data.update({
+                "full_name": full_name, "phone": phone, "email": email,
+                "use_rot": use_rot == "yes",
+                "personal_id": personal_id, "housing_type": housing_type,
+                "property_designation": property_designation,
+                "housing_association_number": housing_association_number,
+                "apartment_number": apartment_number,
+                "rot_owner_confirm": rot_owner_confirm,
+                "electronic_invoice_confirm": electronic_invoice_confirm,
+            })
+            if data.get("customer_type") == ElectricianBooking.CustomerType.BUSINESS:
+                company_name = request.POST.get("company_name", "").strip()
+                organization_number = request.POST.get("organization_number", "").strip()
+                billing_email = request.POST.get("billing_email", "").strip()
+                invoice_reference = request.POST.get("invoice_reference", "").strip()
+                purchase_order_number = request.POST.get("purchase_order_number", "").strip()
+                data.update({
+                    "company_name": company_name,
+                    "organization_number": organization_number,
+                    "billing_email": billing_email,
+                    "invoice_reference": invoice_reference,
+                    "purchase_order_number": purchase_order_number,
+                })
+            if not full_name:
+                errors.append("Full name is required.")
+            if not phone:
+                errors.append("Phone number is required.")
+            if not email:
+                errors.append("Email address is required.")
+            if data.get("customer_type") == ElectricianBooking.CustomerType.BUSINESS:
+                if not company_name:
+                    errors.append("Company name is required.")
+                if not organization_number:
+                    errors.append("Organisation number is required.")
+                if not billing_email:
+                    errors.append("Billing email is required.")
+            if use_rot == "yes":
+                if not re.fullmatch(r"\d{8}-\d{4}", personal_id):
+                    errors.append("Enter the personal identity number as YYYYMMDD-XXXX.")
+                if housing_type not in {"house", "apartment"}:
+                    errors.append("Please select the type of housing.")
+                if not rot_owner_confirm or not electronic_invoice_confirm:
+                    errors.append("Please confirm the ROT eligibility statements.")
+            if not errors:
+                _set_electrician_booking_data(request, data)
                 return redirect("electricity:electrician_booking_step", step=7)
         elif step == 7:
-            pricing_ack = request.POST.get("pricing_ack")
-            use_rot = request.POST.get("use_rot")
-            data["pricing_ack"] = pricing_ack == "yes"
-            data["use_rot"] = use_rot == "yes" and data.get("customer_type") == ElectricianBooking.CustomerType.PRIVATE
-            if pricing_ack != "yes":
-                errors.append("Please acknowledge the pricing estimate.")
+            access_notes = request.POST.get("access_notes", "").strip()
+            access_confirm = request.POST.get("access_confirm")
+            data.update({"access_notes": access_notes, "access_confirm": access_confirm == "yes"})
+            if data.get("customer_type") == ElectricianBooking.CustomerType.BUSINESS:
+                existing_attachments = data.get("business_attachments") or []
+                removal_indexes = {
+                    int(value) for value in request.POST.getlist("remove_business_attachments")
+                    if str(value).isdigit()
+                }
+                kept_attachments = []
+                for index, item in enumerate(existing_attachments):
+                    if index in removal_indexes:
+                        temp_path = item.get("path", "")
+                        full_path = os.path.join(settings.MEDIA_ROOT, temp_path)
+                        if temp_path and os.path.isfile(full_path):
+                            os.remove(full_path)
+                    else:
+                        kept_attachments.append(item)
+                saved_attachments, upload_errors = _save_electrician_attachments(request)
+                data["business_attachments"] = kept_attachments + saved_attachments
+                errors.extend(upload_errors)
+                data.update({
+                    "access_method": request.POST.get("access_method", "").strip(),
+                    "site_contact": request.POST.get("site_contact", "").strip(),
+                    "site_contact_phone": request.POST.get("site_contact_phone", "").strip(),
+                    "commercial_notes": request.POST.get("commercial_notes", "").strip(),
+                    "special_requirements": request.POST.get("special_requirements", "").strip(),
+                })
+                if not data.get("access_method"):
+                    errors.append("Please select how the electrician will access the site.")
+            elif access_confirm != "yes":
+                errors.append("Please confirm that the electrician will have access.")
             if not errors:
                 _set_electrician_booking_data(request, data)
                 return redirect("electricity:electrician_booking_step", step=8)
         elif step == 8:
             preferred_date = _parse_date(data.get("preferred_date"))
-            confirm_info = request.POST.get("confirm_info")
             accept_terms = request.POST.get("accept_terms")
-            data.update(
-                {
-                    "confirm_info": confirm_info == "yes",
-                    "accept_terms": accept_terms == "yes",
-                }
-            )
+            data["accept_terms"] = accept_terms == "yes"
             if not preferred_date:
                 errors.append("Please select a valid date.")
             elif preferred_date < timezone.localdate():
                 errors.append("Please choose a date from today onward.")
-            if confirm_info != "yes":
-                errors.append("Please confirm the booking information.")
             if accept_terms != "yes":
-                errors.append("Please accept the Terms of Service.")
+                errors.append("Please accept the Terms and Conditions.")
             if not errors:
                 pricing = _electrician_pricing_breakdown(data)
                 additional_notes = data.get("additional_notes", "")
                 identity_notes = []
                 if data.get("customer_type") == ElectricianBooking.CustomerType.BUSINESS:
-                    if data.get("company_name"):
-                        identity_notes.append(f"Company name: {data.get('company_name')}")
-                    if data.get("organization_number"):
-                        identity_notes.append(
-                            f"Organization number: {data.get('organization_number')}"
-                        )
+                    business_note_fields = (
+                        ("Company name", "company_name"),
+                        ("Organization number", "organization_number"),
+                        ("Billing email", "billing_email"),
+                        ("Invoice reference", "invoice_reference"),
+                        ("Purchase order number", "purchase_order_number"),
+                        ("Access method", "access_method"),
+                        ("Site contact", "site_contact"),
+                        ("Site contact phone", "site_contact_phone"),
+                        ("Commercial notes", "commercial_notes"),
+                        ("Special requirements", "special_requirements"),
+                    )
+                    for label, field_name in business_note_fields:
+                        if data.get(field_name):
+                            identity_notes.append(f"{label}: {data.get(field_name)}")
                 else:
                     if data.get("personal_id"):
                         identity_notes.append(f"Personal ID: {data.get('personal_id')}")
+                    if data.get("housing_type"):
+                        identity_notes.append(f"Housing type: {data.get('housing_type')}")
+                    if data.get("property_designation"):
+                        identity_notes.append(f"Property designation: {data.get('property_designation')}")
+                    if data.get("housing_association_number"):
+                        identity_notes.append(
+                            f"Housing association number: {data.get('housing_association_number')}"
+                        )
+                    if data.get("apartment_number"):
+                        identity_notes.append(f"Apartment number: {data.get('apartment_number')}")
                 if identity_notes:
                     additional_notes = "\n".join(
                         part for part in [additional_notes, *identity_notes] if part
@@ -1797,9 +1897,9 @@ def electrician_booking_step(request, step):
                     zip_code=data.get("zip_code", ""),
                     property_type=data.get("property_type") or data.get("service_type", ""),
                     work_description=data.get("work_description", ""),
-                    access_notes=data.get("access_notes", ""),
+                    access_notes="\n".join(filter(None, [data.get("location_details", ""), data.get("access_notes", "")])),
                     parking_info=data.get("parking_info", ""),
-                    additional_notes=additional_notes,
+                    additional_notes="\n".join(filter(None, [additional_notes, data.get("timing_notes", "")])),
                     hours=pricing["hours"],
                     hourly_rate_snapshot=pricing["hourly_rate"],
                     transport_fee_snapshot=pricing["transport_fee"],
@@ -1810,6 +1910,7 @@ def electrician_booking_step(request, step):
                     arrival_window=data.get("arrival_window", ""),
                     currency=pricing["currency"],
                 )
+                _create_electrician_attachments(booking, data.get("business_attachments", []))
                 AdminNotification.objects.create(
                     message=f"New electrician booking from {booking.full_name}.",
                 )
@@ -5001,7 +5102,11 @@ def dashboard_invoice_add(request):
     if guard:
         return guard
     invoice = Invoice()
-    form = InvoiceForm(request.POST or None, instance=invoice)
+    form = InvoiceForm(
+        request.POST or None,
+        instance=invoice,
+        initial={"invoice_number": Invoice.next_invoice_number()},
+    )
     formset = InvoiceLineFormSet(request.POST or None, instance=invoice)
     if request.method == "POST" and form.is_valid() and formset.is_valid():
         invoice = form.save(commit=False)
@@ -5214,7 +5319,10 @@ def dashboard_profiles_add(request):
     guard = _dashboard_access_or_redirect(request)
     if guard:
         return guard
-    form = CustomerProfileForm(request.POST or None)
+    form = CustomerProfileForm(
+        request.POST or None,
+        initial={"customer_number": CustomerProfile.next_customer_number()},
+    )
     if request.method == "POST" and form.is_valid():
         form.save()
         return redirect("electricity:dashboard_profiles")
