@@ -506,7 +506,7 @@ LOGGING = {
 # source venv/bin/activate
 # pip install -r requirements.txt
 # python manage.py migrate
-# python manage.py collectstatic --noinput
+# c
 # sudo systemctl restart rwmel
 #sudo nano /etc/nginx/sites-available/rwmel
 # cd /var/www/rwmel

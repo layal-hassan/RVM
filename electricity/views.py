@@ -2926,6 +2926,11 @@ def external_dashboard(request):
 
     for model in app_config.get_models():
         model_name = model._meta.model_name
+        # Attachment rows are implementation details, not standalone dashboard
+        # resources. Excluding them also keeps the dashboard available during
+        # rolling deployments while a new attachment migration is being applied.
+        if model_name in {"consultationbookingattachment", "electricianbookingattachment"}:
+            continue
         manage_url = None
         if model_name == "electricalservice":
             manage_url = "electricity:dashboard_services"
