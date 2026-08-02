@@ -582,6 +582,88 @@ a {
   font-size: 11px;
 }
 
+.home-booking-dialog {
+  width: min(620px, calc(100% - 32px));
+  padding: 38px;
+  color: #f7f2e8;
+  background: #111318;
+  border: 1px solid rgba(210, 166, 73, 0.55);
+  border-radius: 24px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.65);
+}
+
+.home-booking-dialog::backdrop {
+  background: rgba(3, 5, 8, 0.82);
+  backdrop-filter: blur(5px);
+}
+
+.home-booking-dialog h2 {
+  margin: 8px 0 10px;
+  color: #fff;
+  font-size: clamp(1.65rem, 4vw, 2.25rem);
+}
+
+.home-booking-dialog > p {
+  margin: 0 0 26px;
+  color: #bfc1c7;
+}
+
+.home-booking-kicker {
+  color: #d9ad4d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.home-booking-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  color: #d8d8d8;
+  background: transparent;
+  border: 1px solid #393c43;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.home-booking-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.home-booking-option {
+  display: grid;
+  gap: 7px;
+  width: 100%;
+  min-height: 160px;
+  padding: 24px;
+  color: #fff;
+  text-align: left;
+  font: inherit;
+  background: #191b21;
+  border: 1px solid #343740;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.home-booking-option:hover,
+.home-booking-option:focus-visible {
+  background: #202229;
+  border-color: #d9ad4d;
+  transform: translateY(-2px);
+}
+
+.home-booking-option strong { font-size: 1.2rem; }
+.home-booking-option small { color: #bfc1c7; line-height: 1.5; }
+.home-booking-icon { font-size: 2rem; }
+
 @media (max-width: 1100px) {
   .home-service-grid,
   .home-project-grid,
@@ -659,5 +741,17 @@ a {
 
   .home-footer-links {
     flex-wrap: wrap;
+  }
+
+  .home-booking-dialog {
+    padding: 32px 20px 22px;
+  }
+
+  .home-booking-options {
+    grid-template-columns: 1fr;
+  }
+
+  .home-booking-option {
+    min-height: 0;
   }
 }

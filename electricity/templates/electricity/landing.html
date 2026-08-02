@@ -32,7 +32,7 @@
         {% trans "Experienced electricians delivering safe, lasting solutions, so you never have to call twice." %}
       </p>
       <div class="home-hero-actions">
-        <a class="home-btn home-btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">
+        <a class="home-btn home-btn-primary js-electrician-booking-choice" href="{% url 'electricity:electrician_booking_step' 1 %}">
           {% trans "Book a Licensed Electrician" %}
         </a>
         <a class="home-btn home-btn-secondary" href="{% url 'electricity:booking_step_1' %}">
@@ -118,7 +118,7 @@
   <section class="home-strip-cta">
     <div class="home-strip-copy">{% trans "Need Help Fast? Book a Licensed Electrician Today." %}</div>
     <div class="home-strip-actions">
-      <a class="home-btn home-btn-dark" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an Electrician" %}</a>
+      <a class="home-btn home-btn-dark js-electrician-booking-choice" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an Electrician" %}</a>
       <a class="home-btn home-btn-outline-dark" href="{% url 'electricity:contact' %}">{% trans "Schedule a Call" %}</a>
     </div>
   </section>
@@ -254,7 +254,7 @@
       <h2>{% trans "Ready To Get Start?" %}</h2>
       <p>{% trans "Book an electrician today or request a free, no-obligation quote. We're here to help light up your world." %}</p>
       <div class="home-final-actions">
-        <a class="home-btn home-btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an Electrician Today" %}</a>
+        <a class="home-btn home-btn-primary js-electrician-booking-choice" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an Electrician Today" %}</a>
         <a class="home-btn home-btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Get a Free Quote" %}</a>
       </div>
     </div>
@@ -310,6 +310,50 @@
     <div class="home-footer-lang">{% trans "Sweden (EN)" %}</div>
   </div>
 </footer>
+<dialog class="home-booking-dialog" id="home-booking-dialog" aria-labelledby="home-booking-title">
+  <button class="home-booking-close" type="button" aria-label="{% trans 'Close' %}">&times;</button>
+  <div class="home-booking-kicker">{% trans "Before you begin" %}</div>
+  <h2 id="home-booking-title">{% trans "Who is this booking for?" %}</h2>
+  <p>{% trans "Choose the customer type to continue with the correct booking options." %}</p>
+  <div class="home-booking-options">
+    <form method="post" action="{% url 'electricity:electrician_booking_step' 1 %}">
+      {% csrf_token %}
+      <input type="hidden" name="customer_type" value="private">
+      <button class="home-booking-option" type="submit">
+        <span class="home-booking-icon" aria-hidden="true">👤</span>
+        <strong>{% trans "Private customer" %}</strong>
+        <small>{% trans "Electrical work for your home or private property." %}</small>
+      </button>
+    </form>
+    <form method="post" action="{% url 'electricity:electrician_booking_step' 1 %}">
+      {% csrf_token %}
+      <input type="hidden" name="customer_type" value="business">
+      <button class="home-booking-option" type="submit">
+        <span class="home-booking-icon" aria-hidden="true">🏢</span>
+        <strong>{% trans "Business" %}</strong>
+        <small>{% trans "Electrical work for a company or organization." %}</small>
+      </button>
+    </form>
+  </div>
+</dialog>
 <script defer src="{% static 'electricity/js/global_header.js' %}"></script>
+<script>
+  (() => {
+    const dialog = document.getElementById("home-booking-dialog");
+    if (!dialog || typeof dialog.showModal !== "function") return;
+
+    document.querySelectorAll(".js-electrician-booking-choice").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        dialog.showModal();
+      });
+    });
+
+    dialog.querySelector(".home-booking-close").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  })();
+</script>
 </body>
 </html>

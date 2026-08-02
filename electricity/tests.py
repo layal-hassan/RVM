@@ -154,6 +154,27 @@ class HumanizedJSONModelFormTests(TestCase):
 
 
 class ElectricianBookingReceiptTests(TestCase):
+    def test_home_booking_choice_posts_customer_type_and_continues_to_step_two(self):
+        home_response = self.client.get(reverse("electricity:home"), secure=True)
+
+        self.assertContains(home_response, 'id="home-booking-dialog"')
+        self.assertContains(home_response, 'name="customer_type" value="private"')
+        response = self.client.post(
+            reverse("electricity:electrician_booking_step", args=[1]),
+            {"customer_type": ElectricianBooking.CustomerType.PRIVATE},
+            secure=True,
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("electricity:electrician_booking_step", args=[2]),
+            fetch_redirect_response=False,
+        )
+        self.assertEqual(
+            self.client.session["electricity_electrician_booking"]["customer_type"],
+            ElectricianBooking.CustomerType.PRIVATE,
+        )
+
     def test_confirm_booking_step_creates_booking_without_server_error(self):
         session = self.client.session
         session["electricity_electrician_booking"] = {
