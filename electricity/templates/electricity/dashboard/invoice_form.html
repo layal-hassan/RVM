@@ -189,6 +189,7 @@ document.getElementById("invoice-editor").addEventListener("click", event => {
 const customerSelect = document.getElementById("id_customer");
 const recipientInput = document.getElementById("id_recipient_email");
 const customerEmailsElement = document.getElementById("invoice-customer-emails");
+if (customerSelect) customerSelect.classList.add("searchable-select");
 if (customerSelect && recipientInput && customerEmailsElement) {
   const customerEmails = JSON.parse(customerEmailsElement.textContent);
   const updateRecipient = () => {

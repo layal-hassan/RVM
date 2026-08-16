@@ -29,6 +29,15 @@
                     <div class="brand-sub">Operations Console</div>
                 </div>
             </div>
+            <div class="dash-nav-search">
+                <input id="dash-nav-search" type="search" placeholder="Search menu..." aria-label="Search dashboard menu" autocomplete="off">
+                <button type="button" aria-label="Search menu" onclick="document.getElementById('dash-nav-search').focus()">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+                        <path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
             <nav class="dash-nav">
                 <a href="{% url 'electricity:dashboard' %}">Overview</a>
 
@@ -163,6 +172,30 @@
             if (dashboardLinks.length) {
                 dashboardLinks[0].link.classList.add("is-active");
                 dashboardLinks[0].link.setAttribute("aria-current", "page");
+            }
+
+            const searchInput = document.getElementById("dash-nav-search");
+            const nav = document.querySelector(".dash-nav");
+            if (searchInput && nav) {
+                const links = [...nav.querySelectorAll("a")];
+                const sections = [...nav.querySelectorAll(".dash-nav-section")];
+
+                searchInput.addEventListener("input", () => {
+                    const query = searchInput.value.trim().toLocaleLowerCase();
+                    links.forEach((link) => {
+                        link.hidden = Boolean(query) && !link.textContent.trim().toLocaleLowerCase().includes(query);
+                    });
+
+                    sections.forEach((section) => {
+                        let next = section.nextElementSibling;
+                        let hasVisibleLink = false;
+                        while (next && !next.classList.contains("dash-nav-section")) {
+                            if (next.matches("a") && !next.hidden) hasVisibleLink = true;
+                            next = next.nextElementSibling;
+                        }
+                        section.hidden = Boolean(query) && !hasVisibleLink;
+                    });
+                });
             }
         })();
     </script>

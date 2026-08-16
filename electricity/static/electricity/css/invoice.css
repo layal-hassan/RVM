@@ -113,6 +113,18 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+/* Keep the totals and payment footer together at the bottom of the invoice. */
+.invoice-paper {
+  display: flex;
+  flex-direction: column;
+}
+
+.invoice-bottom {
+  margin-top: auto;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
 .invoice-footer > div {
   display: grid;
   justify-items: center;
@@ -182,4 +194,16 @@
   font-weight: 500;
   line-height: 1;
   transform: rotate(-4deg);
+}
+
+@media (max-width: 760px) {
+  .invoice-summary {
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .invoice-pay-total {
+    width: 100%;
+  }
 }

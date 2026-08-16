@@ -226,7 +226,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 # EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "20"))
 # EMAIL_BACKEND = os.getenv(
 #     "EMAIL_BACKEND",
-#     "django.core.mail.backends.smtp.EmailBackend"
+#     "electricity.email_backend.EmailBackend"
 #     if EMAIL_HOST
 #     else "django.core.mail.backends.console.EmailBackend",
 # )

@@ -85,6 +85,16 @@
     color: #1f2937;
 }
 
+.searchable-select .ts-control input {
+    min-width: 150px;
+    color: #1f2937;
+    font: inherit;
+}
+
+.searchable-select .ts-control input::placeholder {
+    color: #7b8492;
+}
+
 .ts-hidden-accessible {
     clip: rect(0 0 0 0);
     clip-path: inset(50%);

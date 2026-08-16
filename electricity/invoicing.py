@@ -143,7 +143,7 @@ def invoice_pdf_bytes(invoice):
     from reportlab.lib.units import mm
     from reportlab.pdfbase import pdfmetrics
     from reportlab.pdfbase.ttfonts import TTFont
-    from reportlab.platypus import Flowable, Image, KeepTogether, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+    from reportlab.platypus import CondPageBreak, Flowable, Image, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(
@@ -294,7 +294,7 @@ def invoice_pdf_bytes(invoice):
         ["Rabatt", f"-{invoice.discount_total:,.2f} {invoice.currency}"],
         ["Moms 25%", f"{invoice.vat_total:,.2f} {invoice.currency}"],
         ["ROT 30%", f"-{invoice.rot_total:,.2f} {invoice.currency}"],
-    ], colWidths=[125 * mm, 55 * mm])
+    ], colWidths=[65 * mm, 43 * mm])
     summary.setStyle(TableStyle([
         ("ALIGN", (1, 0), (1, -1), "RIGHT"),
         ("TEXTCOLOR", (0, 0), (-1, -1), ink),
@@ -302,7 +302,6 @@ def invoice_pdf_bytes(invoice):
         ("FONTSIZE", (0, 0), (-1, -1), 8),
         ("PADDING", (0, 0), (-1, -1), 4),
     ]))
-    story.append(summary)
 
     def draw_invoice_footer(pdf, _document):
         page_width, _ = A4
@@ -434,16 +433,18 @@ def invoice_pdf_bytes(invoice):
             width, height = self.width, self.height
             total_height = 8 * mm
             footer_top = height - total_height - 2 * mm
+            total_width = 108 * mm
+            total_x = width - total_width
             first_divider = 62 * mm
             second_divider = 124 * mm
 
             # Amount due bar.
             pdf.setStrokeColor(gold)
             pdf.setLineWidth(1.2)
-            pdf.rect(0, height - total_height, width, total_height)
+            pdf.rect(total_x, height - total_height, total_width, total_height)
             pdf.setFillColor(navy)
             pdf.setFont("Helvetica-Bold", 8)
-            pdf.drawString(3 * mm, height - 5.3 * mm, "SUMMA ATT BETALA")
+            pdf.drawString(total_x + 3 * mm, height - 5.3 * mm, "SUMMA ATT BETALA")
             pdf.setFont("Helvetica-Bold", 13)
             pdf.drawRightString(width - 3 * mm, height - 5.7 * mm, f"{display_total} {display_currency}")
 
@@ -577,7 +578,26 @@ def invoice_pdf_bytes(invoice):
         ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
     ]))
 
-    story.append(KeepTogether([Spacer(1, 2 * mm), InvoiceFooterBlock()]))
+    class BottomInvoiceBlock(Flowable):
+        """Draw the summary and footer against the bottom edge of the page."""
+
+        def wrap(self, available_width, available_height):
+            self.width = available_width
+            self.height = available_height
+            return available_width, available_height
+
+        def draw(self):
+            footer_block = InvoiceFooterBlock()
+            footer_width, footer_height = footer_block.wrap(self.width, self.height)
+            summary_width, summary_height = summary.wrap(self.width, self.height - footer_height)
+            footer_x = max(0, (self.width - footer_width) / 2)
+            # Align both elements to the exact same footer right edge.
+            summary_x = footer_x + footer_width - summary_width
+            footer_block.drawOn(self.canv, footer_x, 0)
+            summary.drawOn(self.canv, summary_x, footer_height + 2 * mm)
+
+    bottom_block_height = 58 * mm
+    story.extend([CondPageBreak(bottom_block_height), BottomInvoiceBlock()])
     doc.build(story)
     return buffer.getvalue()
 
@@ -585,6 +605,10 @@ def invoice_pdf_bytes(invoice):
 def send_invoice_email(invoice):
     if not invoice.recipient_email:
         raise ValueError("The invoice does not have a recipient email address.")
+    from_email = (
+        getattr(settings, "EMAIL_HOST_USER", "")
+        or getattr(settings, "INVOICE_FROM_EMAIL", "Faktura@rwmel.se")
+    )
     message = EmailMessage(
         subject=f"Faktura {invoice.invoice_number} från RWM EL",
         body=(
@@ -595,7 +619,7 @@ def send_invoice_email(invoice):
             "Vänliga hälsningar,\n"
             "RWM EL"
         ),
-        from_email=getattr(settings, "INVOICE_FROM_EMAIL", "Faktura@rwmel.se"),
+        from_email=from_email,
         to=[invoice.recipient_email],
     )
     message.attach(f"invoice-{invoice.invoice_number}.pdf", invoice_pdf_bytes(invoice), "application/pdf")

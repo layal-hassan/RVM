@@ -458,6 +458,7 @@ class InvoiceSystemTests(TestCase):
 
     @override_settings(
         EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+        EMAIL_HOST_USER="services@rwmel.se",
         INVOICE_FROM_EMAIL="Faktura@rwmel.se",
     )
     def test_invoice_email_is_sent_and_marked_sent(self):
@@ -481,8 +482,26 @@ class InvoiceSystemTests(TestCase):
         self.assertIsNotNone(invoice.sent_at)
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to, ["invoice@example.com"])
-        self.assertEqual(mail.outbox[0].from_email, "Faktura@rwmel.se")
+        self.assertEqual(mail.outbox[0].from_email, "services@rwmel.se")
         self.assertEqual(len(mail.outbox[0].attachments), 1)
+
+    @override_settings(
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+        EMAIL_HOST_USER="",
+        INVOICE_FROM_EMAIL="Faktura@rwmel.se",
+    )
+    def test_invoice_email_uses_invoice_sender_without_smtp_username(self):
+        from .invoicing import send_invoice_email
+
+        customer = CustomerProfile.objects.create(
+            full_name="Fallback Sender Customer", email="fallback@example.com"
+        )
+        invoice = Invoice.objects.create(
+            customer=customer, recipient_email=customer.email
+        )
+
+        self.assertTrue(send_invoice_email(invoice))
+        self.assertEqual(mail.outbox[0].from_email, "Faktura@rwmel.se")
 
     def test_invoice_email_requires_recipient(self):
         from .invoicing import send_invoice_email

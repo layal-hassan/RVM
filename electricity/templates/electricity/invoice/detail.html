@@ -53,6 +53,7 @@
     <thead><tr><th>Beskrivning</th><th>Moms</th><th>Antal</th><th>À-pris</th><th>Summa</th></tr></thead>
     <tbody>{% for line in invoice.lines.all %}<tr><td>{{ line.description|linebreaksbr }}</td><td>{{ line.vat_percent|floatformat:-2 }}%</td><td>{{ line.quantity|floatformat:-2 }}</td><td>{{ line.unit_price_ex_vat|floatformat:2 }}</td><td>{{ line.total_ex_vat|floatformat:2 }}</td></tr>{% endfor %}</tbody>
   </table>
+  <div class="invoice-bottom">
   <div class="invoice-summary">
     <dl>
       <dt>Summa ex moms</dt><dd>{{ invoice.subtotal_ex_vat|floatformat:2 }} {{ invoice.currency }}</dd>
@@ -74,5 +75,6 @@
       <p><strong>Tack för ditt förtroende!</strong><br>Betala gärna i tid.<br>Vid frågor, kontakta oss<br>på Faktura@rwmel.se.</p>
     </div>
   </footer>
+  </div>
 </article>
 {% endblock %}
