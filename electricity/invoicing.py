@@ -206,7 +206,8 @@ def invoice_pdf_bytes(invoice):
             width, height = self.width, self.height
             padding = 5 * mm
             amount_currency = "kr" if invoice.currency.upper() == "SEK" else invoice.currency
-            amount = f"{invoice.amount_due:,.2f}".replace(",", " ").replace(".", ",")
+            amount = f"{invoice.invoice_total:,.2f}".replace(",", " ").replace(".", ",")
+            amount_label = "Fakturabelopp" if invoice.status == Invoice.Status.PAID else "Summa att betala"
 
             pdf.setStrokeColor(navy)
             pdf.setLineWidth(1.2)
@@ -221,7 +222,7 @@ def invoice_pdf_bytes(invoice):
 
             rows = [
                 ("Förfallodatum", invoice.due_date.isoformat(), "Helvetica", 7),
-                ("Summa att betala", f"{amount} {amount_currency}", "Helvetica-Bold", 11),
+                (amount_label, f"{amount} {amount_currency}", "Helvetica-Bold", 11),
                 ("Fakturanummer", str(invoice.invoice_number), "Helvetica", 7),
                 ("Bankgiro", "5192-1302", "Helvetica", 7),
             ]
@@ -319,13 +320,14 @@ def invoice_pdf_bytes(invoice):
         total_bottom = top + 2 * mm
         total_height = 8 * mm
         total_currency = "kr" if invoice.currency.upper() == "SEK" else invoice.currency
-        total_value = f"{invoice.amount_due:,.2f}".replace(",", " ").replace(".", ",")
+        total_value = f"{invoice.invoice_total:,.2f}".replace(",", " ").replace(".", ",")
+        total_label = "FAKTURABELOPP" if invoice.status == Invoice.Status.PAID else "SUMMA ATT BETALA"
         pdf.setStrokeColor(colors.HexColor("#D5AC3E"))
         pdf.setLineWidth(1.2)
         pdf.rect(left, total_bottom, right - left, total_height)
         pdf.setFillColor(navy_value)
         pdf.setFont("Helvetica-Bold", 8)
-        pdf.drawString(left + 3 * mm, total_bottom + 2.5 * mm, "SUMMA ATT BETALA")
+        pdf.drawString(left + 3 * mm, total_bottom + 2.5 * mm, total_label)
         pdf.setFont("Helvetica-Bold", 13)
         pdf.drawRightString(right - 3 * mm, total_bottom + 2 * mm, f"{total_value} {total_currency}")
 
@@ -387,9 +389,10 @@ def invoice_pdf_bytes(invoice):
     # large empty area on short invoices while still moving them down naturally
     # when an invoice contains more product rows.
     display_currency = "kr" if invoice.currency.upper() == "SEK" else invoice.currency
-    display_total = f"{invoice.amount_due:,.2f}".replace(",", " ").replace(".", ",")
+    display_total = f"{invoice.invoice_total:,.2f}".replace(",", " ").replace(".", ",")
+    display_total_label = "FAKTURABELOPP" if invoice.status == Invoice.Status.PAID else "SUMMA ATT BETALA"
     total_bar = Table(
-        [["SUMMA ATT BETALA", f"{display_total} {display_currency}"]],
+        [[display_total_label, f"{display_total} {display_currency}"]],
         colWidths=[125 * mm, 61 * mm],
     )
     total_bar.setStyle(TableStyle([
@@ -444,7 +447,7 @@ def invoice_pdf_bytes(invoice):
             pdf.rect(total_x, height - total_height, total_width, total_height)
             pdf.setFillColor(navy)
             pdf.setFont("Helvetica-Bold", 8)
-            pdf.drawString(total_x + 3 * mm, height - 5.3 * mm, "SUMMA ATT BETALA")
+            pdf.drawString(total_x + 3 * mm, height - 5.3 * mm, display_total_label)
             pdf.setFont("Helvetica-Bold", 13)
             pdf.drawRightString(width - 3 * mm, height - 5.7 * mm, f"{display_total} {display_currency}")
 

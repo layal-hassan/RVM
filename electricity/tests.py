@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.core import mail
 from django.contrib.auth.models import User
 
-from .forms import ElectricalServiceForm, OnCallBookingForm, ServiceBookingForm
+from .forms import CustomerProfileForm, ElectricalServiceForm, OnCallBookingForm, ServiceBookingForm
 from .models import CustomerFeedback, CustomerProfile, ElectricianBooking, ElectricalService, Invoice, InvoiceLine, OnCallBooking, ProviderProfile, ProviderShift, ServiceBooking, ServicePricing
 from .templatetags.electricity_extras import _service_title_map, display_value, file_display_name
 
@@ -67,6 +67,11 @@ class DisplayValueTests(TestCase):
 class HumanizedJSONModelFormTests(TestCase):
     def setUp(self):
         _service_title_map.cache_clear()
+
+    def test_customer_profile_form_does_not_offer_user_selection(self):
+        form = CustomerProfileForm()
+
+        self.assertNotIn("user", form.fields)
 
     def test_on_call_form_formats_json_initial_as_human_readable_lines(self):
         booking = OnCallBooking(
@@ -411,6 +416,37 @@ class SupportFormTests(TestCase):
 
 
 class InvoiceSystemTests(TestCase):
+    def test_mark_paid_keeps_original_invoice_total_visible(self):
+        admin = User.objects.create_superuser(
+            username="invoice-admin",
+            email="admin@example.com",
+            password="test-password",
+        )
+        self.client.force_login(admin)
+        customer = CustomerProfile.objects.create(full_name="Paid Customer")
+        invoice = Invoice.objects.create(customer=customer)
+        InvoiceLine.objects.create(
+            invoice=invoice,
+            description="Completed electrical work",
+            quantity=1,
+            unit_price_ex_vat="1000.00",
+            vat_percent="25.00",
+        )
+        invoice.recalculate()
+
+        response = self.client.post(
+            reverse("electricity:dashboard_invoice_paid", args=[invoice.pk]),
+            follow=True,
+        )
+
+        invoice.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(invoice.status, Invoice.Status.PAID)
+        self.assertEqual(invoice.amount_paid, Decimal("1250.00"))
+        self.assertEqual(invoice.amount_due, Decimal("0.00"))
+        self.assertEqual(invoice.invoice_total, Decimal("1250.00"))
+        self.assertContains(response, "1250.00 SEK")
+
     def test_numbers_start_at_requested_values_and_calculations_follow_vat_then_rot(self):
         customer = CustomerProfile.objects.create(full_name="Invoice Customer", email="invoice@example.com")
         self.assertEqual(customer.customer_number, 2500)

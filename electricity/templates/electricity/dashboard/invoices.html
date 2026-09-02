@@ -18,7 +18,7 @@
       <span>{{ invoice.recipient_email|default:"No email" }}</span>
       <span>{{ invoice.title }}</span>
       <span>{{ invoice.due_date }}</span>
-      <span>{{ invoice.amount_due|floatformat:2 }} {{ invoice.currency }}</span>
+      <span>{{ invoice.invoice_total|floatformat:2 }} {{ invoice.currency }}</span>
       <span>{{ invoice.get_status_display }}</span>
       <span>
         <a class="panel-link" href="{% url 'electricity:dashboard_invoice_detail' invoice.pk %}">Open</a>

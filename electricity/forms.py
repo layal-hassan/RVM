@@ -572,7 +572,7 @@ class CustomerFeedbackAdminForm(HumanizedJSONModelForm):
 class CustomerProfileForm(HumanizedJSONModelForm):
     class Meta:
         model = CustomerProfile
-        exclude = ("created_at",)
+        exclude = ("user", "created_at")
 
 
 class InvoiceForm(HumanizedJSONModelForm):

@@ -1260,6 +1260,11 @@ class Invoice(models.Model):
             self.due_date = self.invoice_date + datetime.timedelta(days=self.payment_terms_days)
         super().save(*args, **kwargs)
 
+    @property
+    def invoice_total(self):
+        """The original customer total, before subtracting recorded payments."""
+        return self.total_inc_vat - self.rot_total + self.rounding
+
     def recalculate(self, save=True):
         from decimal import Decimal, ROUND_HALF_UP
         rows = list(self.lines.all())
@@ -1286,7 +1291,7 @@ class Invoice(models.Model):
         self.vat_total = vat.quantize(q, ROUND_HALF_UP)
         self.total_inc_vat = total_inc.quantize(q, ROUND_HALF_UP)
         self.rot_total = rot.quantize(q, ROUND_HALF_UP)
-        self.amount_due = (total_inc - rot + self.rounding - self.amount_paid).quantize(q, ROUND_HALF_UP)
+        self.amount_due = (self.invoice_total - self.amount_paid).quantize(q, ROUND_HALF_UP)
         if save:
             super().save(update_fields=[
                 "subtotal_ex_vat", "discount_total", "vat_total", "total_inc_vat",

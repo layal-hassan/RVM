@@ -33,7 +33,7 @@
       <h3>KUNDINFORMATION</h3>
       <dl class="invoice-customer-facts">
         <dt>Förfallodatum</dt><dd>{{ invoice.due_date|date:"Y-m-d" }}</dd>
-        <dt>Summa att betala</dt><dd class="invoice-customer-amount"><strong>{{ invoice.amount_due|floatformat:2 }} {% if invoice.currency == "SEK" %}kr{% else %}{{ invoice.currency }}{% endif %}</strong></dd>
+        <dt>{% if invoice.status == "paid" %}Fakturabelopp{% else %}Summa att betala{% endif %}</dt><dd class="invoice-customer-amount"><strong>{{ invoice.invoice_total|floatformat:2 }} {% if invoice.currency == "SEK" %}kr{% else %}{{ invoice.currency }}{% endif %}</strong></dd>
         <dt>Fakturanummer</dt><dd>{{ invoice.invoice_number }}</dd>
         <dt>Bankgiro</dt><dd>5192-1302</dd>
       </dl>
@@ -61,7 +61,7 @@
       <dt>Moms 25%</dt><dd>{{ invoice.vat_total|floatformat:2 }} {{ invoice.currency }}</dd>
       <dt>ROT 30%</dt><dd>−{{ invoice.rot_total|floatformat:2 }} {{ invoice.currency }}</dd>
     </dl>
-    <div class="invoice-pay-total"><strong>SUMMA ATT BETALA</strong><strong>{{ invoice.amount_due|floatformat:2 }} {{ invoice.currency }}</strong></div>
+    <div class="invoice-pay-total"><strong>{% if invoice.status == "paid" %}FAKTURABELOPP{% else %}SUMMA ATT BETALA{% endif %}</strong><strong>{{ invoice.invoice_total|floatformat:2 }} {{ invoice.currency }}</strong></div>
   </div>
   <footer class="invoice-footer">
     <div><b class="invoice-signature">RWMEL</b><br><strong>RWM Helservice AB</strong><br>Kikarvägen 18<br>175 46 JÄRFÄLLA</div>
