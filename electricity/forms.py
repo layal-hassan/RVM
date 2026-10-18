@@ -16,6 +16,7 @@ from .models import (
     ConsultationBooking,
     ConsultationRequest,
     CustomerProfile,
+    HomeHeroPricing,
     Invoice,
     InvoiceLine,
     ElectricalService,
@@ -41,6 +42,8 @@ from .models import (
     ServicePricing,
     SupportTicket,
     CustomerFeedback,
+    CareerApplication,
+    JobOpening,
 )
 from . import translation  # noqa: F401
 
@@ -491,10 +494,20 @@ class ServicePricingForm(HumanizedJSONModelForm):
         ]
 
 
+class HomeHeroPricingForm(forms.ModelForm):
+    class Meta:
+        model = HomeHeroPricing
+        fields = ("hourly_rate", "first_hour_visit", "eligible_rot_price")
+        widgets = {
+            field: forms.NumberInput(attrs={"min": "0", "step": "0.01"})
+            for field in fields
+        }
+
+
 class ElectricalServiceForm(HumanizedJSONModelForm):
     class Meta:
         model = ElectricalService
-        fields = _translated_fields("title", "bullet_points") + [
+        fields = _translated_fields("title", "short_description", "bullet_points") + [
             "icon",
             "price",
             "duration_minutes",
@@ -514,6 +527,12 @@ class ConsultationRequestForm(HumanizedJSONModelForm):
     class Meta:
         model = ConsultationRequest
         exclude = ("created_at",)
+
+
+class QuickQuoteForm(forms.ModelForm):
+    class Meta:
+        model = ConsultationRequest
+        fields = ("full_name", "email", "phone", "message")
 
 
 class ConsultationBookingForm(HumanizedJSONModelForm):
@@ -553,20 +572,84 @@ class CustomerFeedbackForm(HumanizedJSONModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["full_name"].widget.attrs.update({"class": "form-control"})
-        self.fields["email"].widget.attrs.update({"class": "form-control"})
-        self.fields["location"].widget.attrs.update({"class": "form-control"})
+        self.fields["full_name"].widget.attrs.update({"class": "form-control", "placeholder": _("Your full name"), "autocomplete": "name"})
+        self.fields["email"].required = True
+        self.fields["email"].widget.attrs.update({"class": "form-control", "placeholder": "you@example.com", "autocomplete": "email"})
+        self.fields["location"].widget.attrs.update({"class": "form-control", "placeholder": _("e.g. Stockholm, Solna, Järfälla")})
         self.fields["rating"].widget = forms.Select(
             choices=[(5, "5 / 5"), (4, "4 / 5"), (3, "3 / 5"), (2, "2 / 5"), (1, "1 / 5")],
             attrs={"class": "form-control"},
         )
-        self.fields["message"].widget.attrs.update({"class": "form-control", "rows": 6})
+        self.fields["message"].widget.attrs.update({"class": "form-control", "rows": 6, "maxlength": 500, "placeholder": _("Tell us about your experience. What went well, and is there anything we could improve?")})
 
 
 class CustomerFeedbackAdminForm(HumanizedJSONModelForm):
     class Meta:
         model = CustomerFeedback
         fields = ("full_name", "email", "location", "rating", "message", "is_approved")
+
+
+class CareerApplicationForm(forms.ModelForm):
+    class Meta:
+        model = CareerApplication
+        fields = ("full_name", "email", "phone", "job", "position", "years_of_experience", "cv", "message")
+        widgets = {
+            "full_name": forms.TextInput(attrs={"id": "career-name", "autocomplete": "name"}),
+            "email": forms.EmailInput(attrs={"id": "career-email", "autocomplete": "email"}),
+            "phone": forms.TextInput(attrs={"id": "career-phone", "type": "tel", "autocomplete": "tel"}),
+            "position": forms.Select(attrs={"id": "career-role"}),
+            "years_of_experience": forms.NumberInput(attrs={"id": "career-experience", "min": 0, "max": 80}),
+            "cv": forms.FileInput(attrs={"id": "career-cv", "accept": ".pdf,.doc,.docx"}),
+            "message": forms.Textarea(attrs={"id": "career-message", "rows": 4}),
+            "job": forms.HiddenInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["job"].queryset = JobOpening.objects.filter(is_active=True)
+
+    def clean_cv(self):
+        cv = self.cleaned_data.get("cv")
+        if not cv:
+            return cv
+        extension = cv.name.rsplit(".", 1)[-1].lower() if "." in cv.name else ""
+        if extension not in {"pdf", "doc", "docx"}:
+            raise ValidationError(_("Please upload a PDF, DOC, or DOCX file."))
+        if cv.size > 10 * 1024 * 1024:
+            raise ValidationError(_("The CV file must be 10 MB or smaller."))
+        return cv
+
+
+class CareerApplicationAdminForm(HumanizedJSONModelForm):
+    class Meta:
+        model = CareerApplication
+        fields = (
+            "full_name", "email", "phone", "job", "position", "years_of_experience", "cv",
+            "message", "status", "internal_notes", "confirmation_email_sent", "company_email_sent",
+        )
+
+
+class JobOpeningForm(HumanizedJSONModelForm):
+    class Meta:
+        model = JobOpening
+        fields = (
+            "title", "slug", "location", "employment_type", "hero_image", "tagline", "summary",
+            "description", "about_role", "responsibilities", "requirements",
+            "offer_1_title", "offer_1_description", "offer_2_title", "offer_2_description",
+            "offer_3_title", "offer_3_description", "offer_4_title", "offer_4_description",
+            "is_active", "order",
+        )
+        widgets = {
+            "summary": forms.Textarea(attrs={"rows": 3}),
+            "description": forms.Textarea(attrs={"rows": 8}),
+            "about_role": forms.Textarea(attrs={"rows": 5}),
+            "responsibilities": forms.Textarea(attrs={"rows": 7}),
+            "requirements": forms.Textarea(attrs={"rows": 7}),
+            "offer_1_description": forms.Textarea(attrs={"rows": 3}),
+            "offer_2_description": forms.Textarea(attrs={"rows": 3}),
+            "offer_3_description": forms.Textarea(attrs={"rows": 3}),
+            "offer_4_description": forms.Textarea(attrs={"rows": 3}),
+        }
 
 
 class CustomerProfileForm(HumanizedJSONModelForm):
@@ -725,7 +808,7 @@ class ElectricianBookingAssignForm(HumanizedJSONModelForm):
 class FAQEntryForm(HumanizedJSONModelForm):
     class Meta:
         model = FAQEntry
-        fields = _translated_fields("question", "answer") + ["is_active", "order"]
+        fields = ["audience"] + _translated_fields("question", "answer") + ["is_active", "order"]
 
 
 class ServiceCategoryPageForm(HumanizedJSONModelForm):
@@ -830,7 +913,7 @@ class ServiceCategoryContentBlockForm(HumanizedJSONModelForm):
 class ServiceCategoryItemForm(HumanizedJSONModelForm):
     class Meta:
         model = ServiceCategoryItem
-        fields = ["section"] + _translated_fields(
+        fields = ["section", "pricing_mode"] + _translated_fields(
             "badge",
             "title",
             "subtitle",
@@ -980,7 +1063,7 @@ class ServiceDetailContentBlockForm(HumanizedJSONModelForm):
 class ServiceDetailItemForm(HumanizedJSONModelForm):
     class Meta:
         model = ServiceDetailItem
-        fields = ["section"] + _translated_fields(
+        fields = ["section", "pricing_mode"] + _translated_fields(
             "badge",
             "title",
             "subtitle",

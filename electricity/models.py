@@ -2,9 +2,11 @@
 import re
 from decimal import Decimal
 from django.db import models
+from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 class ElectricalService(models.Model):
@@ -291,8 +293,13 @@ class ElectricianBookingAttachment(models.Model):
 
 
 class FAQEntry(models.Model):
+    class Audience(models.TextChoices):
+        GENERAL = "general", "General FAQ page"
+        BRF = "brf", "For BRF page"
+
     question = models.CharField(max_length=240)
     answer = models.TextField()
+    audience = models.CharField(max_length=20, choices=Audience.choices, default=Audience.GENERAL)
     is_active = models.BooleanField(default=True)
     order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -425,6 +432,10 @@ class ServiceCategoryContentBlock(models.Model):
 
 
 class ServiceCategoryItem(models.Model):
+    class PricingMode(models.TextChoices):
+        FIXED = "fixed", _("Fixed price")
+        QUOTE = "quote", _("Request a quote")
+
     section = models.ForeignKey(
         ServiceCategorySection,
         on_delete=models.CASCADE,
@@ -435,6 +446,12 @@ class ServiceCategoryItem(models.Model):
     subtitle = models.CharField(max_length=160, blank=True)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to="electricity/category_pages/items/", blank=True, null=True)
+    pricing_mode = models.CharField(
+        max_length=12,
+        choices=PricingMode.choices,
+        default=PricingMode.FIXED,
+        help_text=_("Choose whether this card shows a price or asks the customer to request a quote."),
+    )
     price_text = models.CharField(max_length=80, blank=True)
     price_note = models.CharField(max_length=80, blank=True)
     meta_lines = models.TextField(blank=True, default="")
@@ -608,6 +625,10 @@ class ServiceDetailContentBlock(models.Model):
 
 
 class ServiceDetailItem(models.Model):
+    class PricingMode(models.TextChoices):
+        FIXED = "fixed", _("Fixed price")
+        QUOTE = "quote", _("Request a quote")
+
     section = models.ForeignKey(
         ServiceDetailSection,
         on_delete=models.CASCADE,
@@ -618,6 +639,12 @@ class ServiceDetailItem(models.Model):
     subtitle = models.CharField(max_length=160, blank=True)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to="electricity/service_pages/items/", blank=True, null=True)
+    pricing_mode = models.CharField(
+        max_length=12,
+        choices=PricingMode.choices,
+        default=PricingMode.FIXED,
+        help_text=_("Choose whether this card shows a price or asks the customer to request a quote."),
+    )
     price_text = models.CharField(max_length=80, blank=True)
     price_note = models.CharField(max_length=80, blank=True)
     meta_lines = models.TextField(blank=True, default="")
@@ -635,6 +662,52 @@ class ServiceDetailItem(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class QuoteRequest(models.Model):
+    class CustomerType(models.TextChoices):
+        PRIVATE = "private", "Private individual"
+        BUSINESS = "business", "Business"
+
+    class MaterialsChoice(models.TextChoices):
+        YES = "yes", "Yes, please include materials"
+        NO = "no", "No, I have the materials"
+        UNSURE = "unsure", "Not sure"
+
+    class Status(models.TextChoices):
+        NEW = "new", "New"
+        REVIEWING = "reviewing", "Reviewing"
+        QUOTED = "quoted", "Quoted"
+        CLOSED = "closed", "Closed"
+
+    service_title = models.CharField(max_length=160)
+    service_description = models.TextField(blank=True)
+    service_image = models.CharField(max_length=500, blank=True)
+    customer_type = models.CharField(max_length=20, choices=CustomerType.choices)
+    project_details = models.TextField()
+    materials = models.CharField(max_length=20, choices=MaterialsChoice.choices)
+    full_name = models.CharField(max_length=160)
+    email = models.EmailField()
+    phone = models.CharField(max_length=40)
+    street_address = models.CharField(max_length=240)
+    postcode = models.CharField(max_length=20)
+    city = models.CharField(max_length=100)
+    additional_information = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.NEW)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"QR-{self.pk or 'new'} — {self.full_name}"
+
+
+class QuoteRequestAttachment(models.Model):
+    quote_request = models.ForeignKey(QuoteRequest, on_delete=models.CASCADE, related_name="attachments")
+    file = models.FileField(upload_to="electricity/quote_requests/attachments/")
+    original_name = models.CharField(max_length=255)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
 
 
 class ServiceDetailSpecRow(models.Model):
@@ -835,6 +908,20 @@ class ServicePricing(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.currency})"
+
+
+class HomeHeroPricing(models.Model):
+    hourly_rate = models.DecimalField("Hourly rate", max_digits=10, decimal_places=2, default=688)
+    first_hour_visit = models.DecimalField("First-hour visit", max_digits=10, decimal_places=2, default=1188)
+    eligible_rot_price = models.DecimalField("With eligible ROT", max_digits=10, decimal_places=2, default=981.60)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Hero pricing"
+        verbose_name_plural = "Hero pricing"
+
+    def __str__(self):
+        return "Homepage hero pricing"
 
 
 class ConsultationBooking(models.Model):
@@ -1106,6 +1193,9 @@ class AdminNotification(models.Model):
     on_call_booking = models.ForeignKey(
         "OnCallBooking", on_delete=models.CASCADE, related_name="admin_notifications", null=True, blank=True
     )
+    quote_request = models.ForeignKey(
+        "QuoteRequest", on_delete=models.CASCADE, related_name="admin_notifications", null=True, blank=True
+    )
     message = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
@@ -1369,3 +1459,106 @@ class CustomerFeedback(models.Model):
     def __str__(self):
         state = "approved" if self.is_approved else "pending"
         return f"{self.full_name} ({state})"
+
+
+class JobOpening(models.Model):
+    class EmploymentType(models.TextChoices):
+        FULL_TIME = "full_time", "Full-time"
+        PART_TIME = "part_time", "Part-time"
+        CONTRACT = "contract", "Contract"
+        INTERNSHIP = "internship", "Internship"
+
+    title = models.CharField(max_length=160)
+    slug = models.SlugField(max_length=180, unique=True, blank=True)
+    location = models.CharField(max_length=120, default="Stockholm")
+    employment_type = models.CharField(max_length=20, choices=EmploymentType.choices, default=EmploymentType.FULL_TIME)
+    hero_image = models.ImageField(upload_to="electricity/careers/jobs/", blank=True)
+    tagline = models.CharField(max_length=220, blank=True, default="Skilled people. Stronger tomorrow.")
+    summary = models.TextField(help_text="Short description displayed on the Careers page.")
+    description = models.TextField(blank=True, help_text="Full job description shown when the role is expanded.")
+    about_role = models.TextField(blank=True)
+    responsibilities = models.TextField(blank=True, help_text="Enter one responsibility per line.")
+    requirements = models.TextField(blank=True, help_text="Enter one requirement per line.")
+    offer_1_title = models.CharField(max_length=120, blank=True)
+    offer_1_description = models.TextField(blank=True)
+    offer_2_title = models.CharField(max_length=120, blank=True)
+    offer_2_description = models.TextField(blank=True)
+    offer_3_title = models.CharField(max_length=120, blank=True)
+    offer_3_description = models.TextField(blank=True)
+    offer_4_title = models.CharField(max_length=120, blank=True)
+    offer_4_description = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["order", "-created_at"]
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.title) or "job"
+            candidate = base
+            counter = 2
+            while type(self).objects.exclude(pk=self.pk).filter(slug=candidate).exists():
+                candidate = f"{base}-{counter}"
+                counter += 1
+            self.slug = candidate
+        super().save(*args, **kwargs)
+
+    @property
+    def responsibility_items(self):
+        return [item.strip() for item in self.responsibilities.splitlines() if item.strip()]
+
+    @property
+    def requirement_items(self):
+        return [item.strip() for item in self.requirements.splitlines() if item.strip()]
+
+    @property
+    def offer_items(self):
+        items = []
+        for index in range(1, 5):
+            title = getattr(self, f"offer_{index}_title")
+            description = getattr(self, f"offer_{index}_description")
+            if title or description:
+                items.append({"title": title, "description": description})
+        return items
+
+
+class CareerApplication(models.Model):
+    class Status(models.TextChoices):
+        NEW = "new", "New"
+        REVIEWING = "reviewing", "Reviewing"
+        CONTACTED = "contacted", "Contacted"
+        REJECTED = "rejected", "Rejected"
+        ARCHIVED = "archived", "Archived"
+
+    class Position(models.TextChoices):
+        ELECTRICIAN = "electrician", "Electrician"
+        ELECTRICAL_TECHNICIAN = "electrical_technician", "Electrical technician"
+        PROJECT_COORDINATOR = "project_coordinator", "Project coordinator"
+        OTHER = "other", "Other"
+
+    full_name = models.CharField(max_length=160)
+    job = models.ForeignKey(JobOpening, on_delete=models.SET_NULL, null=True, blank=True, related_name="applications")
+    email = models.EmailField()
+    phone = models.CharField(max_length=40, blank=True)
+    position = models.CharField(max_length=40, choices=Position.choices, blank=True)
+    years_of_experience = models.PositiveSmallIntegerField(null=True, blank=True)
+    cv = models.FileField(upload_to="electricity/careers/cvs/%Y/%m/", blank=True)
+    message = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.NEW)
+    internal_notes = models.TextField(blank=True)
+    confirmation_email_sent = models.BooleanField(default=False)
+    company_email_sent = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.full_name} ({self.get_status_display()})"

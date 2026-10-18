@@ -26,6 +26,15 @@ register = template.Library()
 
 
 @register.filter
+def hero_price(value):
+    if value is None:
+        return ""
+    number = float(value)
+    decimals = 0 if number.is_integer() else 2
+    return f"{number:,.{decimals}f}"
+
+
+@register.filter
 def split_lines(value):
     if not value:
         return []

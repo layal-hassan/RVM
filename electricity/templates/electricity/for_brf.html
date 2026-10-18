@@ -1,0 +1,230 @@
+{% extends "electricity/base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Electrical Services for BRF" %} | RWM EL{% endblock %}
+{% block body_class %}for-brf-page{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'electricity/css/for_brf.css' %}">
+{% endblock %}
+
+{% block content %}
+<main>
+  <section class="brf-hero" aria-labelledby="brf-hero-title">
+    <div class="container brf-hero-inner">
+      <div class="brf-hero-copy">
+        <div class="brf-eyebrow"><i aria-hidden="true"></i>{% trans "Electrical services for BRF" %}</div>
+        <h1 id="brf-hero-title">{% trans "Reliable Electrical" %}<br>{% trans "Solutions" %} <span>{% trans "for Your BRF." %}</span></h1>
+        <p>{% trans "We help housing associations (BRF) in Stockholm with safe, efficient and future-ready electrical solutions — from maintenance and fault finding to lighting upgrades and EV charging." %}</p>
+        <div class="brf-hero-actions">
+          <a class="btn brf-btn-primary" href="{% url 'electricity:contact' %}">{% trans "Request a free quote" %}<span aria-hidden="true">→</span></a>
+          <a class="btn brf-btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a consultation" %}</a>
+        </div>
+        <div class="brf-benefits" aria-label="{% trans 'BRF service benefits' %}">
+          <div>
+            <span class="brf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 20 5v6c0 5-3.4 9.2-8 11-4.6-1.8-8-6-8-11V5l8-3Zm-3 10 2 2 4-5"/></svg></span>
+            <strong>{% trans "Electrical Safety" %}<br>{% trans "& Compliance" %}</strong>
+          </div>
+          <div>
+            <span class="brf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8 13 3 3 5-5m-9-1-3 3 4 4 3-3m6-4 3 3-4 4-3-3"/></svg></span>
+            <strong>{% trans "Flexible Service" %}<br>{% trans "Agreements" %}</strong>
+          </div>
+          <div>
+            <span class="brf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Zm-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg></span>
+            <strong>{% trans "Stockholm-Based" %}<br>{% trans "Support" %}</strong>
+          </div>
+        </div>
+      </div>
+      <aside class="brf-hero-note" aria-label="{% trans 'BRF promise' %}">
+        <span>{% trans "A safer," %}<br>{% trans "brighter everyday" %}</span>
+        <small>{% trans "Trusted by housing associations in Stockholm" %}</small>
+      </aside>
+    </div>
+  </section>
+
+  <section class="brf-services" aria-labelledby="brf-services-title">
+    <div class="container">
+      <header class="brf-services-header">
+        <div class="brf-eyebrow"><i aria-hidden="true"></i>{% trans "Our services for BRF" %}</div>
+        <h2 id="brf-services-title">{% trans "Everything your BRF needs — under one partner." %}</h2>
+      </header>
+
+      <div class="brf-services-grid">
+        <a class="brf-service-card" href="{% url 'electricity:service_booking_step' 1 %}">
+          <img src="{% static 'electricity/img/brf-electrical-maintenance.png' %}" alt="{% trans 'Electrical panel maintenance in an apartment building' %}">
+          <div class="brf-service-body">
+            <span class="brf-service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 5 14h6l-1 8 9-13h-6z"/></svg></span>
+            <h3>{% trans "Electrical Maintenance" %}</h3>
+            <p>{% trans "Ongoing maintenance to ensure safe, reliable and efficient electrical systems in common areas." %}</p>
+          </div>
+        </a>
+
+        <a class="brf-service-card" href="{% url 'electricity:service_booking_step' 1 %}">
+          <img src="{% static 'electricity/img/brf-lighting-solutions.png' %}" alt="{% trans 'Energy-efficient lighting in a residential stairwell' %}">
+          <div class="brf-service-body">
+            <span class="brf-service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18h6m-5 3h4M8 14c-1.6-1.2-2.5-3-2.5-5A6.5 6.5 0 0 1 12 2.5 6.5 6.5 0 0 1 18.5 9c0 2-.9 3.8-2.5 5-.7.5-1 1.2-1 2H9c0-.8-.3-1.5-1-2z"/></svg></span>
+            <h3>{% trans "Lighting Solutions" %}</h3>
+            <p>{% trans "Energy-efficient lighting for stairwells, corridors, cellars, outdoor areas and more." %}</p>
+          </div>
+        </a>
+
+        <a class="brf-service-card" href="{% url 'electricity:service_booking_step' 1 %}">
+          <img src="{% static 'electricity/img/brf-ev-charging.png' %}" alt="{% trans 'EV charging station at a housing association' %}">
+          <div class="brf-service-body">
+            <span class="brf-service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 16h14l-1.5-5h-11L5 16Zm2-5 1.5-4h7L17 11M7 16v3m10-3v3M3 13h3m12 0h3"/></svg></span>
+            <h3>{% trans "EV Charging for BRF" %}</h3>
+            <p>{% trans "Installation and support for charging solutions in garages and parking areas." %}</p>
+          </div>
+        </a>
+
+        <a class="brf-service-card" href="{% url 'electricity:service_booking_step' 1 %}">
+          <img src="{% static 'electricity/img/brf-fault-finding.png' %}" alt="{% trans 'Electrician diagnosing an electrical fault' %}">
+          <div class="brf-service-body">
+            <span class="brf-service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 6 4-4 4 4-4 4-2-2-5 5 2 2-5 5-4-4 5-5 2 2 5-5zM3 3l5 1 1 3-2 2-3-1z"/></svg></span>
+            <h3>{% trans "Fault Finding & Repairs" %}</h3>
+            <p>{% trans "Fast response and effective troubleshooting to minimise downtime." %}</p>
+          </div>
+        </a>
+
+        <a class="brf-service-card" href="{% url 'electricity:service_booking_step' 1 %}">
+          <img src="{% static 'electricity/img/brf-electrical-upgrades.png' %}" alt="{% trans 'Modern upgraded electrical distribution board' %}">
+          <div class="brf-service-body">
+            <span class="brf-service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 3h16v18H4zM8 7h2v2H8zm6 0h2v2h-2zM8 13h2v4H8zm6 0h2v4h-2z"/></svg></span>
+            <h3>{% trans "Electrical Upgrades" %}</h3>
+            <p>{% trans "Modernisation of distribution boards, electrical panels and systems to meet today's and tomorrow's needs." %}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="brf-partner" aria-labelledby="brf-partner-title">
+    <div class="container brf-partner-grid">
+      <figure class="brf-partner-photo">
+        <img src="{% static 'electricity/img/rwm-electrician-jacket.png' %}" alt="{% trans 'RWM EL electrician working on an electrical panel' %}">
+      </figure>
+
+      <div class="brf-partner-copy">
+        <div class="brf-eyebrow"><i aria-hidden="true"></i>{% trans "Why BRFs choose RWM EL" %}</div>
+        <h2 id="brf-partner-title">{% trans "A long-term partner you can rely on." %}</h2>
+        <p>{% trans "We understand the needs of housing associations and work closely with boards and property managers to deliver safe, efficient and cost-effective electrical solutions." %}</p>
+        <ul class="brf-partner-list">
+          <li>{% trans "Experienced and licensed electricians" %}</li>
+          <li>{% trans "Clear communication and transparent quotations" %}</li>
+          <li>{% trans "Minimal disruption for residents" %}</li>
+          <li>{% trans "Flexible service agreements" %}</li>
+          <li>{% trans "Focus on safety, sustainability and long-term value" %}</li>
+        </ul>
+      </div>
+
+      <form class="brf-quote-form" method="post" action="{% url 'electricity:for_brf' %}#brf-quote" id="brf-quote">
+        {% csrf_token %}
+        <header>
+          <h3>{% trans "Request a BRF quote" %}</h3>
+          <p>{% trans "Fill in the form and we'll get back to you shortly." %}</p>
+        </header>
+        <label><span class="visually-hidden">{% trans "Full Name" %}</span><input type="text" name="full_name" value="{{ brf_quote_data.full_name|default:'' }}" placeholder="{% trans 'Full Name' %}" autocomplete="name" required></label>
+        <label><span class="visually-hidden">{% trans "Email" %}</span><input type="email" name="email" value="{{ brf_quote_data.email|default:'' }}" placeholder="{% trans 'Email' %}" autocomplete="email" required></label>
+        <label><span class="visually-hidden">{% trans "Phone number" %}</span><input type="tel" name="phone" value="{{ brf_quote_data.phone|default:'' }}" placeholder="{% trans 'Phone number' %}" autocomplete="tel" required></label>
+        <label><span class="visually-hidden">{% trans "BRF name" %}</span><input type="text" name="brf_name" value="{{ brf_quote_data.brf_name|default:'' }}" placeholder="{% trans 'BRF name' %}" required></label>
+        <label><span class="visually-hidden">{% trans "Property address / Postcode" %}</span><input type="text" name="address" value="{{ brf_quote_data.address|default:'' }}" placeholder="{% trans 'Property address / Postcode' %}" autocomplete="street-address" required></label>
+        <label><span class="visually-hidden">{% trans "Type of service" %}</span>
+          <select name="request_type" required>
+            <option value="" disabled {% if not brf_quote_data.request_type %}selected{% endif %}>{% trans "Type of service" %}</option>
+            <option value="Electrical maintenance" {% if brf_quote_data.request_type == 'Electrical maintenance' %}selected{% endif %}>{% trans "Electrical maintenance" %}</option>
+            <option value="Lighting solutions" {% if brf_quote_data.request_type == 'Lighting solutions' %}selected{% endif %}>{% trans "Lighting solutions" %}</option>
+            <option value="EV charging" {% if brf_quote_data.request_type == 'EV charging' %}selected{% endif %}>{% trans "EV charging" %}</option>
+            <option value="Fault finding and repairs" {% if brf_quote_data.request_type == 'Fault finding and repairs' %}selected{% endif %}>{% trans "Fault finding and repairs" %}</option>
+            <option value="Electrical upgrades" {% if brf_quote_data.request_type == 'Electrical upgrades' %}selected{% endif %}>{% trans "Electrical upgrades" %}</option>
+            <option value="Other" {% if brf_quote_data.request_type == 'Other' %}selected{% endif %}>{% trans "Other" %}</option>
+          </select>
+        </label>
+        <label><span class="visually-hidden">{% trans "Additional information" %}</span><textarea name="message" rows="3" placeholder="{% trans 'Additional information' %}">{{ brf_quote_data.message|default:'' }}</textarea></label>
+        <button type="submit">{% trans "Send request" %}<span aria-hidden="true">→</span></button>
+        <small>{% trans "No commitment. We'll contact you to discuss your needs." %}</small>
+        {% if brf_quote_status == "sent" %}<p class="brf-form-status is-success" role="status">{% trans "Thank you! We have received your request." %}</p>{% elif brf_quote_status == "error" %}<p class="brf-form-status is-error" role="alert">{% trans "Please check the required fields and try again." %}</p>{% endif %}
+      </form>
+    </div>
+  </section>
+
+  <section class="brf-process" aria-labelledby="brf-process-title">
+    <div class="container">
+      <header class="brf-process-header">
+        <div class="brf-eyebrow"><i aria-hidden="true"></i>{% trans "How it works" %}</div>
+        <h2 id="brf-process-title">{% trans "From enquiry to completed service" %}</h2>
+      </header>
+      <ol class="brf-process-steps">
+        <li>
+          <span class="brf-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m4 7 8 6 8-6"/></svg></span>
+          <div><h3>{% trans "Get in touch" %}</h3><p>{% trans "Send us a request or book a consultation." %}</p></div>
+        </li>
+        <li>
+          <span class="brf-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v5h4M9 12h7M9 16h7M9 8h2"/></svg></span>
+          <div><h3>{% trans "Site assessment" %}</h3><p>{% trans "We review your needs and visit the property if needed." %}</p></div>
+        </li>
+        <li>
+          <span class="brf-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h6M9 11h2M14 11h1M9 15h2M14 15h1"/></svg></span>
+          <div><h3>{% trans "Clear quotation" %}</h3><p>{% trans "You receive a transparent proposal with recommendations." %}</p></div>
+        </li>
+        <li>
+          <span class="brf-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 14 5.5l3.2-.4.7 3.1L21 10l-1.5 2.8.8 3-3 1.1-.9 3.1-3.2-.3L11 22l-2-2.5-3.2.4-.7-3.1L2 15l1.5-2.8-.8-3 3-1.1L6.6 5l3.2.3z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg></span>
+          <div><h3>{% trans "Professional delivery" %}</h3><p>{% trans "Our electricians carry out the work efficiently and safely." %}</p></div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="brf-residents" aria-labelledby="brf-residents-title">
+    <div class="brf-residents-photo" role="img" aria-label="{% trans 'Well-lit modern apartment buildings at night' %}"></div>
+    <div class="brf-residents-copy">
+      <div>
+        <h2 id="brf-residents-title">{% trans "Safe properties." %}<br>{% trans "Happy residents." %}</h2>
+        <p>{% trans "Well-maintained electrical systems create a safer, more comfortable and more valuable living environment for everyone in your BRF." %}</p>
+      </div>
+      <ul>
+        <li>{% trans "Modern solutions" %}</li>
+        <li>{% trans "Energy-efficient installations" %}</li>
+        <li>{% trans "Reliable support" %}</li>
+        <li>{% trans "A partner for the long term" %}</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="brf-faq" aria-labelledby="brf-faq-title">
+    <div class="container">
+      <header>
+        <div class="brf-eyebrow"><i aria-hidden="true"></i>{% trans "Frequently asked questions" %}</div>
+        <h2 id="brf-faq-title">{% trans "Common questions from BRFs" %}</h2>
+      </header>
+      <div class="brf-faq-grid">
+        {% for faq in brf_faqs %}
+          <details>
+            <summary>{{ faq.question }}<span aria-hidden="true"></span></summary>
+            <p>{{ faq.answer|linebreaksbr }}</p>
+          </details>
+        {% empty %}
+          <p class="brf-faq-empty">{% trans "No questions have been added yet." %}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="brf-final-cta" aria-labelledby="brf-final-cta-title">
+    <div class="container brf-final-cta-inner">
+      <div class="brf-final-cta-copy">
+        <div class="brf-final-kicker">{% trans "Let's power a brighter tomorrow" %}</div>
+        <h2 id="brf-final-cta-title">{% trans "Ready to discuss your BRF's electrical needs?" %}</h2>
+        <p>{% trans "Contact us today for a free consultation or quotation." %}</p>
+        <div class="brf-final-actions">
+          <a class="brf-final-primary" href="#brf-quote">{% trans "Request a free quote" %}<span aria-hidden="true">→</span></a>
+          <a class="brf-final-secondary" href="tel:+46700391611" aria-label="{% trans 'Call RWM EL' %}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.7 3.5 9.4 3l2 4.7-2.2 1.5c1.1 2.4 3.1 4.4 5.5 5.5l1.6-2.2 4.6 2-.5 2.8c-.3 1.8-2 3-3.8 2.7C9.9 18.8 5.2 14.1 4 7.3 3.7 5.5 4.9 3.8 6.7 3.5Z"/></svg>
+            {% trans "Call us" %}
+          </a>
+        </div>
+      </div>
+      <div class="brf-final-note" aria-hidden="true">{% trans "A safer," %}<br>{% trans "brighter everyday" %}<i></i></div>
+    </div>
+  </section>
+</main>
+{% endblock %}

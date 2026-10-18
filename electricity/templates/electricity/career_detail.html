@@ -1,0 +1,53 @@
+{% extends "electricity/base.html" %}
+{% load static i18n %}
+{% block title %}{{ job.title }} | RWM EL Careers{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/career-detail.css' %}"><link rel="stylesheet" href="{% static 'electricity/css/career-success.css' %}">{% endblock %}
+{% block body_class %}career-detail-page{% endblock %}
+{% block content %}
+<main class="career-detail">
+  <section class="career-detail-hero{% if not job.hero_image %} career-detail-hero--fallback{% endif %}"{% if job.hero_image %} style="--job-hero:url('{{ job.hero_image.url }}')"{% endif %}>
+    <div class="career-detail-shell career-detail-hero__inner">
+      <nav class="career-breadcrumb" aria-label="Breadcrumb"><a href="{% url 'electricity:home' %}">{% trans "Home" %}</a><span>/</span><a href="{% url 'electricity:careers' %}">{% trans "Careers" %}</a><span>/</span><strong>{{ job.title }}</strong></nav>
+      <p class="career-detail-kicker">{% trans "Join our team" %}</p>
+      <h1>{{ job.title }}</h1>
+      <div class="career-detail-meta"><span>⌖ {{ job.location }}</span><span>▣ {{ job.get_employment_type_display }}</span><span>{% trans "Posted" %} {{ job.created_at|date:"j M Y" }}</span></div>
+      <p class="career-detail-summary">{{ job.summary }}</p>
+      {% if job.tagline %}<p class="career-detail-tagline">{{ job.tagline }}</p>{% endif %}
+    </div>
+  </section>
+
+  <section class="career-detail-body"><div class="career-detail-shell career-detail-layout">
+    <div class="career-detail-copy">
+      <section><h2>{% trans "About the role" %}</h2><div class="career-richtext">{{ job.about_role|default:job.description|linebreaks }}</div></section>
+      {% if job.responsibility_items %}<section><h2>{% trans "Key responsibilities" %}</h2><ul>{% for item in job.responsibility_items %}<li>{{ item }}</li>{% endfor %}</ul></section>{% endif %}
+      {% if job.requirement_items %}<section><h2>{% trans "Who we are looking for" %}</h2><ul>{% for item in job.requirement_items %}<li>{{ item }}</li>{% endfor %}</ul></section>{% endif %}
+      {% if job.offer_items %}<section><h2>{% trans "What we offer" %}</h2><div class="career-offers">{% for offer in job.offer_items %}<article><span aria-hidden="true">✓</span><h3>{{ offer.title }}</h3><p>{{ offer.description }}</p></article>{% endfor %}</div></section>{% endif %}
+      <a class="career-back" href="{% url 'electricity:careers' %}#openings">← {% trans "Back to all opportunities" %}</a>
+    </div>
+
+    <aside class="career-apply-card" id="apply">
+      {% if application_submitted %}
+      <div class="career-success-card" role="status">
+        <div class="career-success-card__icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="m7 16 6 6L25 9"/></svg></div>
+        <h2>{% trans "Application Successfully Submitted!" %}</h2>
+        <p>{% trans "Thank you for your interest in joining RWM EL." %}</p>
+        <p>{% trans "We've received your application and appreciate you taking the time to introduce yourself. If a suitable opportunity becomes available, we will get in touch." %}</p>
+        <a href="{% url 'electricity:careers' %}">{% trans "Back to Careers" %}{% include "electricity/partials/arrow_icon.html" %}</a>
+        <div class="career-success-card__contact"><span></span><strong>{% trans "Questions?" %}</strong><p>{% trans "If you have any questions, you are welcome to contact us at" %} <a href="mailto:info@rwmel.se">info@rwmel.se</a></p></div>
+      </div>
+      {% else %}
+      <h2>{% trans "Apply for this position" %}</h2>
+      <p>{% trans "Fill in the form and attach your CV. We look forward to hearing from you." %}</p>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}{{ career_form.job }}
+        {% for field in career_form %}{% if field.name != "job" and field.name != "position" %}<div class="career-detail-field"><label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>{{ field }}{{ field.errors }}</div>{% endif %}{% endfor %}
+        <button type="submit">{% trans "Send application" %}{% include "electricity/partials/arrow_icon.html" %}</button>
+        <p class="career-detail-privacy">{% trans "Your personal data will be handled in accordance with our Privacy Policy and only used for recruitment purposes." %}</p>
+      </form>
+      {% endif %}
+    </aside>
+  </div></section>
+
+  {% if other_jobs %}<section class="career-other"><div class="career-detail-shell"><div class="career-other__head"><div><p class="career-detail-kicker">{% trans "Other opportunities" %}</p><h2>{% trans "Explore more roles" %}</h2></div><a href="{% url 'electricity:careers' %}#openings">{% trans "View all opportunities" %}</a></div><div class="career-other__grid">{% for other in other_jobs %}<a href="{% url 'electricity:career_detail' other.slug %}"><h3>{{ other.title }}</h3><p>{{ other.location }} · {{ other.get_employment_type_display }}</p><span>{{ other.summary|truncatewords:18 }}</span></a>{% endfor %}</div></div></section>{% endif %}
+</main>
+{% endblock %}

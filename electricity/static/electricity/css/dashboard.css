@@ -806,6 +806,27 @@ body {
     border-color: rgba(11, 36, 66, 0.2);
 }
 
+.dash-notify-item.is-unread {
+    border-color: rgba(202, 158, 62, 0.5);
+    background: #fff8e8;
+    box-shadow: inset 4px 0 0 #d8a93f;
+}
+
+.dash-notify-item.is-unread .dash-notify-msg {
+    font-weight: 700;
+    color: #0b2442;
+}
+
+.dash-notify-item.is-read {
+    border-color: rgba(11, 36, 66, 0.08);
+    background: #eef2f5;
+    opacity: 0.72;
+}
+
+.dash-notify-item.is-read .dash-notify-msg {
+    color: #647386;
+}
+
 .dash-notify-time {
     font-size: 0.75rem;
     color: var(--muted);

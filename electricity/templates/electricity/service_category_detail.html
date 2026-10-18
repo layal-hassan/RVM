@@ -184,40 +184,29 @@
           </details>
           {% endif %}
         </div>
-        {% if item.price_text or item.cta_label %}
-        <div class="category-project-config"
+        {% if item.pricing_mode == "quote" or item.price_text or item.cta_label %}
+        <div class="category-project-config{% if item.pricing_mode == 'quote' %} is-quote{% endif %}"
+             data-pricing-mode="{{ item.pricing_mode }}"
              data-project-config
              data-price-text="{{ item.price_text|default:'' }}">
-          <div class="category-project-options">
-            <label class="category-project-option">
-              <input type="radio" name="installation-{{ item.id }}" value="install" checked>
-              <span class="category-option-dot"></span>
-              <span>{% trans "With install" %}</span>
-            </label>
-            <label class="category-project-option">
-              <input type="radio" name="installation-{{ item.id }}" value="panel">
-              <span class="category-option-dot"></span>
-              <span>{% trans "Panel only" %}</span>
-            </label>
-            <label class="category-project-option">
-              <input type="radio" name="rot-{{ item.id }}" value="rot" checked>
-              <span class="category-option-dot"></span>
-              <span>{% trans "With ROT" %}</span>
-            </label>
-            <label class="category-project-option">
-              <input type="radio" name="rot-{{ item.id }}" value="no-rot">
-              <span class="category-option-dot"></span>
-              <span>{% trans "No ROT" %}</span>
-            </label>
+          {% if item.pricing_mode == "quote" %}
+          <div class="category-quote-heading">
+            <span class="category-quote-kicker">{% trans "Pricing" %}</span>
+            <strong>{% trans "Request a quote" %}</strong>
+            <p>
+              {% if item.price_note %}{{ item.price_note }}{% else %}{% trans "Pricing is tailored to the scope and requirements of your project." %}{% endif %}
+            </p>
           </div>
-
+          {% else %}
           {% if item.price_text %}
           <div class="category-project-total">
             <div>
               <strong>{% trans "Total investment" %}</strong>
+              {% if item.price_note %}
               <small>
-                {% if item.price_note %}{{ item.price_note }}{% else %}{% trans "Panel + install (with ROT)" %}{% endif %}
+                {{ item.price_note }}
               </small>
+              {% endif %}
             </div>
             <div class="category-project-price">
               <span data-project-total>{{ item.price_text }}</span>
@@ -225,19 +214,40 @@
             </div>
           </div>
           {% endif %}
+          {% endif %}
 
-          <div class="category-card-footer">
+          {% if item.pricing_mode == "quote" %}
+          <div class="category-card-footer category-quote-footer">
+            <a class="category-card-cta category-card-cta-primary" href="{% url 'electricity:quote_request_step' 1 %}?item={{ item.id }}&source={% if page.parent_category_id %}detail{% else %}category{% endif %}">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7zM14 3v5h5M10 12h5M10 16h5"/></svg>
+              <span>{% trans "Request a quote" %}</span>
+              <span class="category-cta-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+          <div class="category-quote-benefits" aria-label="{% trans 'Quote benefits' %}">
+            <span>{% trans "Free to request" %}</span>
+            <span>{% trans "No obligation" %}</span>
+            <span>{% trans "Tailored to your project" %}</span>
+          </div>
+          {% else %}
+          <div class="category-card-footer category-fixed-actions">
             <div class="category-quantity" aria-label="{% trans 'Quantity' %}">
-              <button type="button" data-quantity-minus aria-label="{% trans 'Decrease quantity' %}">−</button>
+              <button type="button" data-quantity-minus aria-label="{% trans 'Decrease quantity' %}">&minus;</button>
               <output data-quantity>1</output>
               <button type="button" data-quantity-plus aria-label="{% trans 'Increase quantity' %}">+</button>
             </div>
-            {% if item.cta_label and item.cta_url %}
-            <a class="category-card-cta js-booking-choice" href="{{ item.cta_url }}">
-              {% trans "Add to project" %}
+            <a class="category-card-cta category-card-cta-outline js-booking-choice" href="{% if item.cta_url %}{{ item.cta_url }}{% else %}{% url 'electricity:service_booking_step' 1 %}{% endif %}">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L20 8H7M10 20h.01M17 20h.01"/></svg>
+              <span>{% trans "Add to request" %}</span>
             </a>
-            {% endif %}
           </div>
+          <div class="category-booking-action">
+            <a class="category-card-cta category-card-cta-primary js-booking-choice" href="{% if item.cta_url %}{{ item.cta_url }}{% else %}{% url 'electricity:service_booking_step' 1 %}{% endif %}">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5h14v16H5zM8 3v4M16 3v4M5 9h14M9 13h2M13 13h2M9 17h2M13 17h2"/></svg>
+              <span>{% trans "Book service" %}</span>
+            </a>
+          </div>
+          {% endif %}
         </div>
         {% endif %}
       </article>
@@ -370,6 +380,7 @@
     });
 
     document.querySelectorAll("[data-project-config]").forEach((config) => {
+      if (config.dataset.pricingMode === "quote") return;
       const priceText = config.dataset.priceText || "";
       const priceMatch = priceText.match(/([\d\s,.]+)/);
       const basePrice = priceMatch

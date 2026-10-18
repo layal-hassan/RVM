@@ -1,216 +1,50 @@
-﻿{% extends "electricity/base.html" %}
+{% extends "electricity/base.html" %}
 {% load static i18n %}
-
 {% block title %}{% trans "Contact RWM EL" %}{% endblock %}
-{% block body_class %}contact-page{% endblock %}
-
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/contact.css' %}">{% endblock %}
+{% block body_class %}contact-page contact-page-v2{% endblock %}
 {% block content %}
-<section class="contact-hero contact-hero-dark">
-  <div class="contact-hero-media" aria-hidden="true"></div>
-  <div class="container contact-hero-center">
-    <div class="contact-hero-content">
-      <h1>{% trans "Contact RWM EL" %}</h1>
-      <p class="contact-hero-quote">{% blocktrans %}Clear communication is where safe electrical work begins.{% endblocktrans %}</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN" %}</a>
-        <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Book Consultation" %}</a>
-      </div>
+<main class="contact-v2">
+  <section class="contact-v2-help"><div class="contact-v2-shell">
+    <header class="contact-v2-heading"><span>{% trans "Inquiry Types" %}</span><h1>{% trans "How Can We Help You?" %}</h1><div class="contact-v2-types"><span>✓ {% trans "New service bookings" %}</span><span>✓ {% trans "Professional consultations" %}</span><span>✓ {% trans "Technical questions & support" %}</span></div></header>
+    <div class="contact-v2-actions">
+      <article class="contact-v2-action"><span class="contact-v2-icon">☎</span><h2>{% trans "Call Us" %}</h2><p>{% trans "Speak with our team for assistance." %}</p><strong>0046 70 03 91 611</strong><a href="tel:+46700391611">{% trans "Call Now" %} →</a></article>
+      <article class="contact-v2-action contact-v2-whatsapp"><span class="contact-v2-icon">{% include "electricity/partials/whatsapp_icon.html" %}</span><h2>{% trans "WhatsApp Us" %}</h2><p>{% trans "Get a quick reply on WhatsApp." %}</p><strong>0046 70 03 91 611</strong><a href="https://wa.me/46700391611" target="_blank" rel="noopener">{% trans "Chat on WhatsApp" %} →</a></article>
+      <article class="contact-v2-action"><span class="contact-v2-icon">✉</span><h2>{% trans "Email" %}</h2><p>{% trans "Send us project plans or detailed inquiries for a formal quote." %}</p><strong>Support@rwmel.se</strong><a href="mailto:Support@rwmel.se">{% trans "Send Email" %} →</a></article>
+      <article class="contact-v2-action"><span class="contact-v2-icon">▤</span><h2>{% trans "Contact Form" %}</h2><p>{% trans "Quickly submit your details and we will respond within 24 hours." %}</p><a href="#contact-form">{% trans "Submit Inquiry" %} →</a></article>
     </div>
-  </div>
-</section>
-
-<section class="contact-section contact-inquiry">
-  <div class="container">
-    <div class="contact-section-header">
-      <div class="contact-eyebrow">{% trans "Inquiry Types" %}</div>
-      <h2>{% trans "How Can We Help You?" %}</h2>
-    </div>
-    <div class="contact-chips" data-inquiry-chips>
-      <span class="contact-chip is-active" data-inquiry-value="new_booking" tabindex="0" role="button">
-        {% trans "New service bookings" %}
-      </span>
-      <span class="contact-chip" data-inquiry-value="consultation" tabindex="0" role="button">
-        {% trans "Professional consultations" %}
-      </span>
-      <span class="contact-chip" data-inquiry-value="tech_support" tabindex="0" role="button">
-        {% trans "Technical questions &amp; support" %}
-      </span>
-    </div>
-    <div class="contact-card-grid">
-      <article class="contact-card">
-        <div class="contact-card-icon" aria-hidden="true">
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 3a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c1 .3 2 .6 3 .7a2 2 0 0 1 1.7 1.9Z"/>
-  </svg>
-</div>
-        <h3>{% trans "Phone" %}</h3>
-        <p>{% trans "Speak with our expert dispatch team for immediate assistance." %}</p>
-        <span class="contact-card-link">0046760355633</span>
-      </article>
-      <article class="contact-card">
-        <div class="contact-card-icon" aria-hidden="true">
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <rect x="3" y="5" width="18" height="14" rx="2"/>
-    <path d="m3 7 9 6 9-6"/>
-  </svg>
-</div>
-        <h3>{% trans "Email" %}</h3>
-        <p>{% trans "Send us project plans or detailed inquiries for a formal quote." %}</p>
-        <span class="contact-card-link">Support@rwmel.se</span>
-      </article>
-      <article class="contact-card">
-        <div class="contact-card-icon" aria-hidden="true">
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-    <path d="M14 2v6h6"/>
-    <path d="M8 13h8"/>
-    <path d="M8 17h6"/>
-  </svg>
-</div>
-        <h3>{% trans "Contact Form" %}</h3>
-        <p>{% trans "Quickly submit your details and we will respond within 24 hours." %}</p>
-        <a class="contact-card-link" href="#contact-form">{% trans "Submit Inquiry" %}</a>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="contact-section contact-form-section contact-form-light">
-  <div class="container contact-form-grid">
-    <div class="contact-form-copy">
-      <h2>{% trans "Start Your Project Journey" %}</h2>
-      <p>{% trans "Our certified engineers are ready to assist with residential, commercial, and industrial electrical needs across Sweden." %}</p>
-      <div class="contact-meta">
-        <div>
-          <h4 class="contact-meta-title">
-            <span class="contact-meta-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="9"/>
-                <path d="M12 7v5l3 2"/>
-              </svg>
-            </span>
-            {% trans "Operating Hours" %}
-          </h4>
-          <p>{% trans "Mon - Fri 07:00 - 17:00" %}</p>
-        </div>
-        <div>
-          <h4 class="contact-meta-title">
-            <span class="contact-meta-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 22s7-6 7-12a7 7 0 0 0-14 0c0 6 7 12 7 12Z"/>
-                <circle cx="12" cy="10" r="2.5"/>
-              </svg>
-            </span>
-            {% trans "Headquarters" %}
-          </h4>
-          <p>{% trans "Kikarvägen 18, 175 46 Järfälla, Stockholm" %}</p>
-        </div>
-      </div>
-    </div>
-    <form id="contact-form" class="contact-form-card" method="post" action="{% url 'electricity:contact' %}">
-      {% csrf_token %}
-      <input type="hidden" name="inquiry_type" id="contact_inquiry_type" value="new_booking">
-      <div class="contact-form-row">
-        <label>{% trans "Full Name" %}
-          <input type="text" name="full_name" placeholder="{% trans "John Doe" %}" required>
-        </label>
-        <label>{% trans "Email Address" %}
-          <input type="email" name="email" placeholder="{% trans "john@example.com" %}" required>
-        </label>
-      </div>
-      <div class="contact-form-row">
-        <label>{% trans "Phone Number" %}
-          <input type="tel" name="phone" placeholder="0046760355633">
-        </label>
-        <label>{% trans "Project Address" %}
-          <input type="text" name="address" placeholder="{% trans "Street name, City" %}">
-        </label>
-      </div>
-        <div class="contact-field">
-          <label for="request_type">{% trans "Type of Request" %}</label>
-          <select id="request_type" name="request_type">
-            <option>{% trans "Residential" %}</option>
-            <option>{% trans "Commercial" %}</option>
-          </select>
-        </div>
-      <label>{% trans "Your Message" %}
-        <textarea rows="4" name="message" placeholder="{% trans "Tell us more about your needs..." %}" required></textarea>
-      </label>
-      <label class="contact-consent">
-        <input type="checkbox" name="consent" required>
-        {% trans "I consent to the processing of my personal data for the purpose of this inquiry in accordance with GDPR regulations." %}
-      </label>
-      <button class="btn btn-primary" type="submit">{% trans "Send Message" %}</button>
-      {% if contact_status == "sent" %}
-        <div class="contact-status contact-status-success">{% trans "Thank you! We have received your request." %}</div>
-      {% elif contact_status == "error" %}
-        <div class="contact-status contact-status-error">{% trans "We could not send your message right now. Please try again." %}</div>
-      {% endif %}
-      <div class="contact-secure">{% trans "Encrypted and secure communication" %}</div>
+  </div></section>
+  <section class="contact-v2-workspace"><div class="contact-v2-shell contact-v2-layout{% if contact_status == 'sent' %} has-success{% endif %}">
+    <aside class="contact-v2-info"><h2>{% trans "Start Your Project Journey" %}</h2><p>{% trans "Our certified electricians are ready to assist with residential, commercial, and industrial electrical needs across Sweden." %}</p><dl>
+      <div><dt><span>◷</span>{% trans "Operating Hours" %}</dt><dd>{% trans "Mon - Fri 08:00 - 17:00" %}</dd></div>
+      <div><dt><span>●</span>{% trans "Headquarters" %}</dt><dd>{% trans "Kikarvägen 18, 175 46 Järfälla, Stockholm" %}</dd></div>
+      <div><dt><span>☎</span>{% trans "Call Us" %}</dt><dd><a href="tel:+46700391611">0046 70 03 91 611</a></dd></div>
+      <div class="contact-v2-whatsapp"><dt><span>{% include "electricity/partials/whatsapp_icon.html" %}</span>{% trans "WhatsApp Us" %}</dt><dd><a href="https://wa.me/46700391611" target="_blank" rel="noopener">0046 70 03 91 611</a></dd></div>
+    </dl></aside>
+    <form id="contact-form" class="contact-v2-form" method="post" action="{% url 'electricity:contact' %}">{% csrf_token %}<input type="hidden" name="inquiry_type" value="new_booking">
+      <div class="contact-v2-row"><label>{% trans "Full Name" %}<input type="text" name="full_name" placeholder="{% trans 'John Doe' %}" required></label><label>{% trans "Email Address" %}<input type="email" name="email" placeholder="john@example.com" required></label></div>
+      <div class="contact-v2-row"><label>{% trans "Phone Number" %}<input type="tel" name="phone" placeholder="0046 70 03 91 611"></label><label>{% trans "Project Address" %}<input type="text" name="address" placeholder="{% trans 'Street address, City' %}"></label></div>
+      <label>{% trans "Service Needed" %}<select name="request_type"><option value="">{% trans "Select a service" %}</option><option>{% trans "Residential" %}</option><option>{% trans "Commercial" %}</option><option>{% trans "Emergency service" %}</option></select></label>
+      <label>{% trans "Your Message" %}<textarea rows="4" name="message" placeholder="{% trans 'Tell us more about your project...' %}" required></textarea></label>
+      <label class="contact-v2-consent"><input type="checkbox" name="consent" required><span>{% trans "I consent to the processing of my information for this inquiry." %}</span></label>
+      <button type="submit">{% trans "Submit Inquiry" %}<span>→</span></button>{% if contact_status == "error" %}<p class="contact-v2-error" role="alert">{% trans "We could not send your message right now. Please try again." %}</p>{% endif %}<small>♙ {% trans "Your information is handled securely and will only be used for this inquiry." %}</small>
     </form>
-  </div>
-</section>
-
-<section class="contact-section contact-steps contact-steps-light">
-  <div class="container">
-    <div class="contact-section-header">
-      <h2>{% trans "What Happens After You Contact Us?" %}</h2>
+    {% if contact_status == "sent" %}<aside class="contact-v2-success" role="status"><span class="contact-v2-check">✓</span><h2>{% trans "Enquiry Successfully Submitted!" %}</h2><p>{% trans "Thank you! We have received your request." %}</p><p>{% trans "We've received your enquiry and our team will review your request and get back to you as soon as possible." %}</p><a href="{% url 'electricity:home' %}">{% trans "Back to Home" %} →</a><div class="contact-v2-quick"><span>{% trans "Need assistance sooner?" %}</span><div><a href="tel:+46700391611">☎ {% trans "Call Us" %}</a><a class="contact-v2-whatsapp-link" href="https://wa.me/46700391611" target="_blank" rel="noopener">{% include "electricity/partials/whatsapp_icon.html" %} WhatsApp</a></div><strong>0046 70 03 91 611</strong></div></aside>{% endif %}
+  </div></section>
+  <section class="contact-v2-steps" aria-labelledby="contact-steps-title"><div class="contact-v2-shell">
+    <h2 id="contact-steps-title">{% trans "What Happens After You Contact Us?" %}</h2>
+    <div class="contact-v2-step-grid">
+      <article class="contact-v2-step"><div><strong>01</strong><span></span></div><h3>{% trans "Review" %}</h3><p>{% trans "Our technical lead reviews your request to assign the most suitable specialist." %}</p></article>
+      <article class="contact-v2-step"><div><strong>02</strong><span></span></div><h3>{% trans "Discovery Call" %}</h3><p>{% trans "We reach out to clarify details, discuss your timeline, and provide initial insights." %}</p></article>
+      <article class="contact-v2-step"><div><strong>03</strong><span></span></div><h3>{% trans "Proposal" %}</h3><p>{% trans "You receive a clear, transparent project proposal and a direct booking link." %}</p></article>
     </div>
-    <div class="contact-step-grid">
-      <div class="contact-step">
-        <span>01</span>
-        <h3>{% trans "Review" %}</h3>
-        <p>{% trans "Our technical lead reviews your request to assign the most suitable specialist." %}</p>
-      </div>
-      <div class="contact-step">
-        <span>02</span>
-        <h3>{% trans "Discovery Call" %}</h3>
-        <p>{% trans "We reach out to clarify details, discuss your timeline, and provide initial insights." %}</p>
-      </div>
-      <div class="contact-step">
-        <span>03</span>
-        <h3>{% trans "Proposal" %}</h3>
-        <p>{% trans "You receive a clear, transparent project proposal and a direct booking link." %}</p>
-      </div>
+  </div></section>
+  <section class="contact-v2-cta" aria-labelledby="contact-cta-title">
+    <div class="contact-v2-cta-content">
+      <h2 id="contact-cta-title">{% trans "Not sure where to start?" %}</h2>
+      <p>{% trans "We're here to guide you." %}</p>
+      <a href="{% url 'electricity:booking_step_1' %}">{% trans "Book Consultation" %}</a>
     </div>
-  </div>
-</section>
-
-<section class="contact-section contact-final">
-  <div class="container contact-final-inner">
-    <h2>{% trans "Not sure where to start?" %}</h2>
-    <p>{% trans "We're here to guide you." %}</p>
-    <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Book Consultation" %}</a>
-  </div>
-</section>
+  </section>
+</main>
 {% endblock %}
-
-{% block extra_js %}
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const chips = Array.from(document.querySelectorAll("[data-inquiry-value]"));
-    const hiddenInput = document.getElementById("contact_inquiry_type");
-    if (!chips.length || !hiddenInput) return;
-
-    const setActive = (value) => {
-      hiddenInput.value = value;
-      chips.forEach((chip) => {
-        chip.classList.toggle("is-active", chip.dataset.inquiryValue === value);
-      });
-    };
-
-    chips.forEach((chip) => {
-      chip.addEventListener("click", () => setActive(chip.dataset.inquiryValue));
-      chip.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          setActive(chip.dataset.inquiryValue);
-        }
-      });
-    });
-
-    setActive(hiddenInput.value || chips[0].dataset.inquiryValue);
-  });
-</script>
-{% endblock %}
-

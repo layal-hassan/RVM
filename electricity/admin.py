@@ -28,7 +28,22 @@ from .models import (
     ProviderShift,
     ServiceRequestOutsideArea,
     SupportTicket,
+    QuoteRequest,
+    QuoteRequestAttachment,
 )
+
+
+class QuoteRequestAttachmentInline(admin.TabularInline):
+    model = QuoteRequestAttachment
+    extra = 0
+    readonly_fields = ("original_name", "uploaded_at")
+
+
+class QuoteRequestAdmin(admin.ModelAdmin):
+    list_display = ("id", "full_name", "service_title", "customer_type", "status", "created_at")
+    list_filter = ("status", "customer_type", "created_at")
+    search_fields = ("full_name", "email", "phone", "service_title", "project_details")
+    inlines = [QuoteRequestAttachmentInline]
 
 
 class InvoiceLineInline(admin.TabularInline):
@@ -232,6 +247,7 @@ admin.site.register(ConsultationRequest, ConsultationRequestAdmin)
 admin.site.register(ConsultationBooking, ConsultationBookingAdmin)
 admin.site.register(ServiceBooking, ServiceBookingAdmin)
 admin.site.register(OnCallBooking, OnCallBookingAdmin)
+admin.site.register(QuoteRequest, QuoteRequestAdmin)
 admin.site.register(ServiceCategoryPage, ServiceCategoryPageAdmin)
 admin.site.register(ServiceCategoryContentBlock, ServiceCategoryContentBlockAdmin)
 admin.site.register(ServiceCategorySection, ServiceCategorySectionAdmin)
@@ -252,6 +268,7 @@ electricity_admin_site.register(ConsultationRequest, ConsultationRequestAdmin)
 electricity_admin_site.register(ConsultationBooking, ConsultationBookingAdmin)
 electricity_admin_site.register(ServiceBooking, ServiceBookingAdmin)
 electricity_admin_site.register(OnCallBooking, OnCallBookingAdmin)
+electricity_admin_site.register(QuoteRequest, QuoteRequestAdmin)
 electricity_admin_site.register(ServiceCategoryPage, ServiceCategoryPageAdmin)
 electricity_admin_site.register(ServiceCategoryContentBlock, ServiceCategoryContentBlockAdmin)
 electricity_admin_site.register(ServiceCategorySection, ServiceCategorySectionAdmin)

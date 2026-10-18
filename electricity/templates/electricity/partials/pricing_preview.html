@@ -1,0 +1,86 @@
+{% load i18n %}
+<section class="pricing-preview" id="pricing">
+  <div class="container">
+    <div class="pricing-header">
+      <div>
+        <div class="pricing-kicker">{% trans "Pricing for Booking Electrical" %}</div>
+        <h2>{% trans "PRICING FOR BOOKING ELECTRICAL" %}</h2>
+      </div>
+      <p>{% trans "Transparent fee structures for on-site engineering and maintenance services." %}</p>
+    </div>
+    <div class="pricing-grid pricing-grid-4">
+      <article class="pricing-card pricing-card-table">
+        <div class="pricing-card-top">
+          <span class="pricing-meta">{% trans "Base Deployment" %}</span>
+          <h3>{% trans "First Hour Breakdown" %}</h3>
+        </div>
+        <div class="pricing-table">
+          <div class="pricing-row">
+            <span>{% trans "Labour Rate" %}</span>
+            <strong>688 SEK</strong>
+          </div>
+          <div class="pricing-row">
+            <span>{% trans "Transport Fee" %}</span>
+            <strong>500 SEK</strong>
+          </div>
+          <div class="pricing-row pricing-total">
+            <span>{% trans "Total" %}</span>
+            <strong>1,188 SEK</strong>
+          </div>
+        </div>
+        <div class="pricing-foot">{% trans "Includes VAT" %}</div>
+      </article>
+      <article class="pricing-card pricing-card-table">
+        <div class="pricing-card-top">
+          <span class="pricing-meta">{% trans "Tax Optimization" %}</span>
+          <span class="pricing-pill">{% trans "Minimum charge with ROT" %}</span>
+          <h3>{% trans "ROT Deduction Applied" %}</h3>
+        </div>
+        <div class="pricing-table">
+          <div class="pricing-row">
+            <span>{% trans "Gross Total" %}</span>
+            <strong>688 SEK</strong>
+          </div>
+          <div class="pricing-row pricing-deduction">
+            <span>{% trans "ROT (30% Labour)" %}</span>
+            <strong>-206.4 SEK</strong>
+          </div>
+          <div class="pricing-row pricing-total pricing-rot-total">
+            <span>{% trans "Adjusted Total" %}</span>
+            <strong>481.6 SEK</strong>
+          </div>
+        </div>
+        <div class="pricing-foot">{% trans "Final charge per first hour" %}</div>
+      </article>
+      <article class="pricing-card pricing-card-table">
+        <div class="pricing-card-top">
+          <span class="pricing-meta">{% trans "Ongoing Rate" %}</span>
+          <h3>{% trans "Additional Service Time" %}</h3>
+        </div>
+        <div class="pricing-table">
+          <div class="pricing-row">
+            <span class="pricing-subhead">{% trans "Standard Hourly" %}</span>
+            <strong>688 SEK/hr</strong>
+          </div>
+          <div class="pricing-row pricing-rot">
+            <span class="pricing-subhead">{% trans "ROT Deduction" %}</span>
+            <strong>-206.4 SEK/hr</strong>
+          </div>
+        </div>
+        <div class="pricing-foot">{% trans "Billed in 30min increments" %}</div>
+      </article>
+      <article class="pricing-card pricing-card-terms">
+        <div class="pricing-card-top">
+          <span class="pricing-meta">{% trans "Documentation" %}</span>
+          <h3>{% trans "Terms &amp; Conditions" %}</h3>
+        </div>
+        <ul class="pricing-terms">
+          <li>{% trans "Minimum charge of 1 hour applies to all site deployments." %}</li>
+          <li>{% trans "Material costs and specialized equipment are excluded from the rates above." %}</li>
+          <li>{% trans "ROT deduction requires valid Swedish tax eligibility (Personal ID)." %}</li>
+        </ul>
+        <div class="pricing-foot">{% trans "Licensed by Elsäkerhetsverket" %}</div>
+      </article>
+    </div>
+  </div>
+</section>

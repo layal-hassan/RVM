@@ -14,16 +14,13 @@
     <div class="rwm-egh-navwrap" data-rwmh-menu>
       <div class="rwm-egh-left">
         <nav class="rwm-egh-nav" aria-label="{% trans 'Main navigation' %}">
-          <a class="rwm-egh-link" href="{% url 'electricity:home' %}">{% trans "Home" %}</a>
           <div class="rwm-egh-nav-item rwm-egh-dropdown" data-rwmh-dropdown>
-            <button
-              class="rwm-egh-link rwm-egh-link-button"
-              type="button"
-              aria-expanded="false"
-              data-rwmh-dropdown-trigger
+            <a
+              class="rwm-egh-link rwm-egh-link-button{% if request.resolver_match.url_name == 'services' or request.resolver_match.url_name == 'service_detail' or request.resolver_match.url_name == 'service_category_detail' %} is-active{% endif %}"
+              href="{% url 'electricity:services' %}"
             >
               <span>{% trans "Services" %}</span>
-            </button>
+            </a>
             <div class="rwm-egh-dropdown-menu">
               <div class="rwm-egh-mega-grid">
                 {% for category_page in category_pages %}
@@ -62,9 +59,12 @@
               </div>
             </div>
           </div>
-          <a class="rwm-egh-link" href="{% url 'electricity:services' %}#pricing">{% trans "Pricing" %}</a>
-          <a class="rwm-egh-link" href="{% url 'electricity:feedback' %}">{% trans "Feedback" %}</a>
-          <a class="rwm-egh-link" href="{% url 'electricity:contact' %}">{% trans "Contact" %}</a>
+          <a class="rwm-egh-link" data-rwmh-on-call="pricing" href="{% url 'electricity:on_call' %}#pricing">{% trans "Pricing" %}</a>
+          <a class="rwm-egh-link{% if request.resolver_match.url_name == 'on_call' %} is-active{% endif %}" data-rwmh-on-call="jour" href="{% url 'electricity:on_call' %}">{% trans "Jour" %}</a>
+          <a class="rwm-egh-link{% if request.resolver_match.url_name == 'for_brf' %} is-active{% endif %}" href="{% url 'electricity:for_brf' %}">{% trans "For BRF" %}</a>
+          <a class="rwm-egh-link{% if request.resolver_match.url_name == 'feedback' %} is-active{% endif %}" href="{% url 'electricity:feedback' %}">{% trans "Feedback" %}</a>
+          <a class="rwm-egh-link{% if request.resolver_match.url_name == 'contact' %} is-active{% endif %}" href="{% url 'electricity:contact' %}">{% trans "Contact" %}</a>
+          <a class="rwm-egh-link{% if request.resolver_match.url_name == 'careers' %} is-active{% endif %}" href="{% url 'electricity:careers' %}">{% trans "Careers" %}</a>
         </nav>
       </div>
       <div class="rwm-egh-right">

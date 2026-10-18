@@ -1,0 +1,114 @@
+.career-success-card {
+  text-align: center;
+}
+
+.career-success-card__icon {
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  margin: 2px auto 24px;
+  border: 3px solid var(--cd-gold);
+  border-radius: 50%;
+  color: var(--cd-gold);
+}
+
+.career-success-card__icon svg {
+  width: 37px;
+  height: 37px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.career-success-card > h2 {
+  max-width: 300px;
+  margin: 0 auto 18px !important;
+  font-size: 34px !important;
+  line-height: 1.08 !important;
+}
+
+.career-success-card > p {
+  margin: 0 auto 15px;
+  color: #c7cfc9;
+  font: 14px/1.65 Arial, sans-serif;
+}
+
+.career-success-card > a {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin: 24px 0 22px;
+  border-radius: 4px;
+  color: #171205;
+  background: var(--cd-gold);
+  font: 800 11px Arial, sans-serif;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.career-success-card__contact > span {
+  width: 30px;
+  height: 2px;
+  display: block;
+  margin: 0 auto 13px;
+  background: var(--cd-gold);
+}
+
+.career-success-card__contact strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #eee9de;
+  font: 600 15px "Vesper Libre", Georgia, serif;
+}
+
+.career-success-card__contact p {
+  margin: 0;
+  color: #9eaaa1;
+  font: 11px/1.55 Arial, sans-serif;
+}
+
+.career-success-card__contact a {
+  color: var(--cd-gold);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.career-detail-field input[type="file"] {
+  min-height: 58px;
+  padding: 7px 8px;
+  color: #aeb9b1;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.career-detail-field input[type="file"]::file-selector-button {
+  min-height: 42px;
+  margin-right: 14px;
+  padding: 0 18px;
+  border: 1px solid var(--cd-gold);
+  border-radius: 4px;
+  color: #171205;
+  background: var(--cd-gold);
+  font: 800 10px/1 Arial, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.career-detail-field input[type="file"]::file-selector-button:hover {
+  background: #f0c849;
+  box-shadow: 0 5px 14px rgba(227, 181, 39, 0.18);
+  transform: translateY(-1px);
+}
+
+[dir="rtl"] .career-detail-field input[type="file"]::file-selector-button {
+  margin-right: 0;
+  margin-left: 14px;
+}

@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import messages
 from django.core.files import File
+from django.core.files.storage import default_storage
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import Http404, HttpResponse, JsonResponse
@@ -25,11 +26,15 @@ from .forms import (
     ServiceBookingStatusUpdateForm,
     ConsultationBookingForm,
     ConsultationRequestForm,
+    QuickQuoteForm,
     CustomerProfileForm,
     InvoiceForm,
     InvoiceLineFormSet,
     CustomerFeedbackAdminForm,
     CustomerFeedbackForm,
+    CareerApplicationForm,
+    CareerApplicationAdminForm,
+    JobOpeningForm,
     ElectricalServiceForm,
     ProviderAssignForm,
     ServiceBookingAssignForm,
@@ -37,6 +42,7 @@ from .forms import (
     ElectricianBookingForm,
     ElectricianBookingAssignForm,
     FAQEntryForm,
+    HomeHeroPricingForm,
     ProviderProfileForm,
     ProviderShiftForm,
     ServiceCategoryFAQForm,
@@ -80,11 +86,14 @@ from .models import (
     ElectricianBookingAttachment,
     ConsultationRequest,
     CustomerFeedback,
+    CareerApplication,
+    JobOpening,
     ElectricalService,
     ContactInquiry,
     CustomerProfile,
     Invoice,
     InvoiceLine,
+    HomeHeroPricing,
     ProviderProfile,
     ProviderShift,
     ServiceBooking,
@@ -107,6 +116,8 @@ from .models import (
     SupportTicket,
     AcceptedZipCode,
     ServiceRequestOutsideArea,
+    QuoteRequest,
+    QuoteRequestAttachment,
 )
 from django.contrib.auth.models import User
 from .invoicing import create_invoice_for_booking, invoice_pdf_bytes, send_invoice_email
@@ -312,7 +323,71 @@ def _send_custom_booking_confirmation_email(
 
 def home(request):
     testimonials = CustomerFeedback.objects.filter(is_approved=True).order_by("-created_at")[:4]
-    return render(request, "electricity/landing.html", {"testimonials": testimonials})
+    hero_pricing = HomeHeroPricing.objects.first()
+    quote_form = QuickQuoteForm(request.POST or None)
+    quote_received = request.GET.get("quote") == "received"
+    if request.method == "POST" and request.POST.get("form_type") == "quick_quote" and quote_form.is_valid():
+        quote = quote_form.save(commit=False)
+        customer_type = request.POST.get("customer_type", "private").title()
+        postcode = request.POST.get("postcode", "").strip()
+        details = quote.message.strip()
+        quote.message = f"Customer type: {customer_type}\nPostcode: {postcode}\n\n{details}".strip()
+        quote.save()
+        AdminNotification.objects.create(
+            consultation_request=quote,
+            message=f"New quick quote request from {quote.full_name}.",
+        )
+        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "support@rwmel.se")
+        company_email = getattr(settings, "CONTACT_TO_EMAIL", "info@rwmel.se")
+        try:
+            company_message = EmailMessage(
+                subject=f"New quick quote request from {quote.full_name}",
+                body=(
+                    "A new quick quote request was submitted.\n\n"
+                    f"Name: {quote.full_name}\n"
+                    f"Customer type: {customer_type}\n"
+                    f"Postcode: {postcode}\n"
+                    f"Email: {quote.email or '-'}\n"
+                    f"Phone: {quote.phone}\n\n"
+                    f"Request details:\n{details or '-'}\n\n"
+                    f"Dashboard request ID: {quote.pk}"
+                ),
+                from_email=from_email,
+                to=[company_email],
+                reply_to=[quote.email] if quote.email else None,
+            )
+            company_message.send(fail_silently=False)
+        except Exception:
+            logger.exception("Quick quote company email failed for request %s", quote.pk)
+
+        if quote.email:
+            try:
+                send_mail(
+                    "RWM EL - Quote request received",
+                    (
+                        f"Hello {quote.full_name},\n\n"
+                        "We have received your quote request and will review the details. "
+                        "Our team will contact you shortly.\n\n"
+                        f"Your request reference is #{quote.pk}.\n\n"
+                        "RWM EL"
+                    ),
+                    from_email,
+                    [quote.email],
+                    fail_silently=False,
+                )
+            except Exception:
+                logger.exception("Quick quote customer confirmation failed for request %s", quote.pk)
+        return redirect(f"{reverse('electricity:home')}?quote=received#quick-quote")
+    return render(
+        request,
+        "electricity/landing.html",
+        {
+            "testimonials": testimonials,
+            "hero_pricing": hero_pricing,
+            "quote_form": quote_form,
+            "quote_received": quote_received,
+        },
+    )
 
 
 def feedback(request):
@@ -323,6 +398,52 @@ def feedback(request):
         AdminNotification.objects.create(
             message=f"New customer feedback from {item.full_name}.",
         )
+        from_email = (
+            getattr(settings, "EMAIL_HOST_USER", None)
+            or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+            or "Support@rwmel.se"
+        )
+        company_email = getattr(settings, "CONTACT_TO_EMAIL", None) or "Info@rwmel.se"
+
+        try:
+            company_message = EmailMessage(
+                subject=f"New customer feedback from {item.full_name}",
+                body=(
+                    "A new customer feedback submission was received.\n\n"
+                    f"Name: {item.full_name}\n"
+                    f"Email: {item.email}\n"
+                    f"Location: {item.location or '-'}\n"
+                    f"Rating: {item.rating}/5\n\n"
+                    f"Message:\n{item.message}\n\n"
+                    "The feedback is pending review in the dashboard."
+                ),
+                from_email=from_email,
+                to=[company_email],
+                reply_to=[item.email],
+            )
+            company_message.send(fail_silently=False)
+        except Exception:
+            logger.exception("Feedback company email failed for feedback %s", item.pk)
+
+        try:
+            customer_message = EmailMessage(
+                subject="RWM EL - Feedback received",
+                body=(
+                    f"Hello {item.full_name},\n\n"
+                    "Thank you for sharing your feedback with RWM EL. "
+                    "We have received it successfully and our team will review it.\n\n"
+                    f"Rating: {item.rating}/5\n"
+                    f"Your message: {item.message}\n\n"
+                    "Kind regards,\nRWM EL"
+                ),
+                from_email=from_email,
+                to=[item.email],
+                reply_to=[company_email],
+            )
+            customer_message.send(fail_silently=False)
+        except Exception:
+            logger.exception("Feedback confirmation email failed for feedback %s", item.pk)
+
         submitted = True
         form = CustomerFeedbackForm()
     return render(
@@ -416,6 +537,107 @@ def service_detail(request, slug):
     )
 
 
+QUOTE_SESSION_KEY = "electricity_quote_request"
+
+
+def _quote_service_item(source, item_id):
+    model = ServiceDetailItem if source == "detail" else ServiceCategoryItem
+    return model.objects.filter(pk=item_id).first()
+
+
+def quote_request_step(request, step):
+    if step not in {1, 2, 3, 4}:
+        return redirect("electricity:quote_request_step", step=1)
+    data = request.session.get(QUOTE_SESSION_KEY, {})
+    errors = []
+
+    if step == 1 and request.GET.get("item"):
+        source = request.GET.get("source", "detail")
+        item = _quote_service_item(source, request.GET.get("item"))
+        if item:
+            data = {
+                "source": source,
+                "item_id": item.pk,
+                "service_title": item.title,
+                "service_description": item.description or item.subtitle,
+                "service_image": item.image.url if item.image else "",
+            }
+            request.session[QUOTE_SESSION_KEY] = data
+
+    if step > 1 and not data.get("service_title"):
+        return redirect("electricity:services")
+
+    if request.method == "POST":
+        if step == 1:
+            customer_type = request.POST.get("customer_type", "")
+            project_details = request.POST.get("project_details", "").strip()
+            materials = request.POST.get("materials", "")
+            if customer_type not in dict(QuoteRequest.CustomerType.choices): errors.append("Please choose who is requesting the quote.")
+            if not project_details: errors.append("Please describe what you need help with.")
+            if materials not in dict(QuoteRequest.MaterialsChoice.choices): errors.append("Please choose a materials option.")
+            uploads = request.FILES.getlist("attachments")
+            if len(uploads) > 10: errors.append("You can upload a maximum of 10 files.")
+            allowed = {".jpg", ".jpeg", ".png", ".heic", ".mp4", ".mov", ".pdf", ".doc", ".docx", ".xls", ".xlsx"}
+            for upload in uploads:
+                if upload.size > 50 * 1024 * 1024: errors.append(f"{upload.name} is larger than 50 MB.")
+                if os.path.splitext(upload.name)[1].lower() not in allowed: errors.append(f"{upload.name} is not a supported file type.")
+            if not errors:
+                saved = []
+                for upload in uploads:
+                    safe_name = default_storage.save(f"quote_tmp/{uuid.uuid4().hex}{os.path.splitext(upload.name)[1].lower()}", upload)
+                    saved.append({"path": safe_name, "name": upload.name, "size": upload.size})
+                data.update(customer_type=customer_type, project_details=project_details, materials=materials, attachments=saved)
+                request.session[QUOTE_SESSION_KEY] = data
+                return redirect("electricity:quote_request_step", step=2)
+        elif step == 2:
+            required = ["full_name", "email", "phone", "street_address", "postcode", "city"]
+            values = {key: request.POST.get(key, "").strip() for key in required}
+            values["additional_information"] = request.POST.get("additional_information", "").strip()
+            for key in required:
+                if not values[key]: errors.append(f"{key.replace('_', ' ').title()} is required.")
+            try: validate_email(values["email"])
+            except ValidationError: errors.append("Please enter a valid email address.")
+            if not errors:
+                data.update(values)
+                request.session[QUOTE_SESSION_KEY] = data
+                return redirect("electricity:quote_request_step", step=3)
+        elif step == 3:
+            if not request.POST.get("confirm"): errors.append("Please confirm that the information is correct.")
+            if not request.POST.get("terms"): errors.append("Please accept the Terms and Conditions and Privacy Policy.")
+            if not errors:
+                quote = QuoteRequest.objects.create(
+                    service_title=data["service_title"], service_description=data.get("service_description", ""), service_image=data.get("service_image", ""),
+                    customer_type=data["customer_type"], project_details=data["project_details"], materials=data["materials"],
+                    full_name=data["full_name"], email=data["email"], phone=data["phone"], street_address=data["street_address"],
+                    postcode=data["postcode"], city=data["city"], additional_information=data.get("additional_information", ""),
+                )
+                attachments = []
+                for upload in data.get("attachments", []):
+                    if default_storage.exists(upload["path"]):
+                        with default_storage.open(upload["path"], "rb") as source_file:
+                            attachment = QuoteRequestAttachment(quote_request=quote, original_name=upload["name"])
+                            attachment.file.save(upload["name"], File(source_file), save=True)
+                            attachments.append(attachment)
+                        default_storage.delete(upload["path"])
+                AdminNotification.objects.create(quote_request=quote, message=f"New quote request from {quote.full_name} for {quote.service_title}.")
+                reference = f"QR-{quote.id:06d}"
+                body = (f"New quote request {reference}\n\nService: {quote.service_title}\nCustomer: {quote.full_name}\nType: {quote.get_customer_type_display()}\nEmail: {quote.email}\nPhone: {quote.phone}\nAddress: {quote.street_address}, {quote.postcode} {quote.city}\nMaterials: {quote.get_materials_display()}\n\nProject details:\n{quote.project_details}\n\nAdditional information:\n{quote.additional_information or '-'}")
+                try:
+                    company = EmailMessage(f"New quote request {reference} - {quote.service_title}", body, settings.DEFAULT_FROM_EMAIL, [settings.CONTACT_TO_EMAIL], reply_to=[quote.email])
+                    for attachment in attachments:
+                        with attachment.file.open("rb") as attached_file:
+                            company.attach(attachment.original_name, attached_file.read())
+                    company.send()
+                except Exception: logger.exception("Quote company email failed for %s", reference)
+                try:
+                    send_mail(f"Your quote request {reference} has been received", f"Hello {quote.full_name},\n\nThank you! Your request has been received. Our team will review your project and get back to you as soon as possible with a tailored quotation.\n\nService: {quote.service_title}\nReference: {reference}\n\nRWM EL", settings.DEFAULT_FROM_EMAIL, [quote.email])
+                except Exception: logger.exception("Quote customer email failed for %s", reference)
+                request.session[QUOTE_SESSION_KEY] = {**data, "quote_id": quote.id, "reference": reference}
+                return redirect("electricity:quote_request_step", step=4)
+
+    return render(request, "electricity/quote_request.html", {"step": step, "data": data, "errors": errors})
+
+
 def terms(request):
     return render(request, "electricity/terms.html")
 
@@ -432,8 +654,224 @@ def about(request):
     return render(request, "electricity/about.html")
 
 
+def _send_career_application_emails(application):
+    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "Support@rwmel.se")
+    company_email = getattr(settings, "CAREERS_TO_EMAIL", "Support@rwmel.se")
+
+    confirmation = EmailMessage(
+        subject="Thank you for your application to RWM EL",
+        body=(
+            f"Hello {application.full_name},\n\n"
+            "Thank you for your interest in joining RWM EL. We have received your open application "
+            "and our team will review it carefully. If your experience matches a current or future "
+            "opportunity, we will contact you.\n\n"
+            "Kind regards,\nRWM EL"
+        ),
+        from_email=from_email,
+        to=[application.email],
+    )
+    try:
+        confirmation.send(fail_silently=False)
+    except Exception:
+        logger.exception("Could not send career confirmation email for application #%s", application.pk)
+    else:
+        application.confirmation_email_sent = True
+
+    company_message = EmailMessage(
+        subject=f"New career application: {application.full_name}",
+        body=(
+            f"A new career application was submitted.\n\n"
+            f"Name: {application.full_name}\n"
+            f"Email: {application.email}\n"
+            f"Phone: {application.phone or '-'}\n"
+            f"Job opening: {application.job.title if application.job else '-'}\n"
+            f"Position: {application.get_position_display() if application.position else '-'}\n"
+            f"Years of experience: {application.years_of_experience if application.years_of_experience is not None else '-'}\n\n"
+            f"Message:\n{application.message or '-'}\n\n"
+            f"Dashboard record: #{application.pk}"
+        ),
+        from_email=from_email,
+        to=[company_email],
+        reply_to=[application.email],
+    )
+    if application.cv:
+        try:
+            application.cv.open("rb")
+            company_message.attach(application.cv.name.rsplit("/", 1)[-1], application.cv.read())
+        finally:
+            application.cv.close()
+    try:
+        company_message.send(fail_silently=False)
+    except Exception:
+        logger.exception("Could not send company career email for application #%s", application.pk)
+    else:
+        application.company_email_sent = True
+
+    application.save(update_fields=["confirmation_email_sent", "company_email_sent", "updated_at"])
+
+
+def careers(request):
+    active_jobs = JobOpening.objects.filter(is_active=True)
+    selected_job = active_jobs.filter(pk=request.GET.get("job")).first() if request.GET.get("job", "").isdigit() else None
+    form = CareerApplicationForm(request.POST or None, request.FILES or None, initial={"job": selected_job})
+    submitted = False
+    if request.method == "POST" and form.is_valid():
+        application = form.save()
+        AdminNotification.objects.create(
+            message=f"New career application from {application.full_name}"
+        )
+        _send_career_application_emails(application)
+        submitted = True
+        form = CareerApplicationForm()
+    return render(request, "electricity/careers.html", {
+        "career_form": form,
+        "application_submitted": submitted,
+        "active_jobs": active_jobs,
+        "selected_job": selected_job,
+    })
+
+
+def career_detail(request, slug):
+    job = get_object_or_404(JobOpening, slug=slug, is_active=True)
+    form = CareerApplicationForm(request.POST or None, request.FILES or None, initial={"job": job})
+    submitted = request.GET.get("submitted") == "1"
+    if request.method == "POST" and form.is_valid():
+        application = form.save(commit=False)
+        application.job = job
+        application.save()
+        AdminNotification.objects.create(message=f"New application for {job.title} from {application.full_name}")
+        _send_career_application_emails(application)
+        return redirect(f"{reverse('electricity:career_detail', args=[job.slug])}?submitted=1#apply")
+    other_jobs = JobOpening.objects.filter(is_active=True).exclude(pk=job.pk)[:3]
+    return render(request, "electricity/career_detail.html", {
+        "job": job,
+        "career_form": form,
+        "application_submitted": submitted,
+        "other_jobs": other_jobs,
+    })
+
+
 def on_call(request):
-    return render(request, "electricity/on_call.html")
+    category_pages = ServiceCategoryPage.objects.filter(is_active=True).order_by("order", "name")
+    ecosystem_services = ElectricalService.objects.filter(is_active=True).order_by("order", "title")
+    return render(
+        request,
+        "electricity/on_call.html",
+        {
+            "specialized_categories": category_pages,
+            "ecosystem_services": ecosystem_services,
+        },
+    )
+
+
+def for_brf(request):
+    status = None
+    form_data = {}
+    if request.method == "POST":
+        form_data = {
+            "full_name": request.POST.get("full_name", "").strip(),
+            "email": request.POST.get("email", "").strip(),
+            "phone": request.POST.get("phone", "").strip(),
+            "brf_name": request.POST.get("brf_name", "").strip(),
+            "address": request.POST.get("address", "").strip(),
+            "request_type": request.POST.get("request_type", "").strip(),
+            "message": request.POST.get("message", "").strip(),
+        }
+        try:
+            validate_email(form_data["email"])
+        except ValidationError:
+            status = "error"
+        else:
+            required = ("full_name", "phone", "brf_name", "address", "request_type")
+            if not all(form_data.get(field) for field in required):
+                status = "error"
+            else:
+                message = (
+                    f"BRF name: {form_data['brf_name']}\n"
+                    f"Service: {form_data['request_type']}\n\n"
+                    f"Additional information:\n{form_data['message'] or '-'}"
+                )
+                inquiry = ContactInquiry.objects.create(
+                    full_name=form_data["full_name"],
+                    email=form_data["email"],
+                    phone=form_data["phone"],
+                    address=form_data["address"],
+                    request_type=form_data["request_type"],
+                    inquiry_type="brf_quote",
+                    message=message,
+                    consent=True,
+                )
+                AdminNotification.objects.create(
+                    message=(
+                        f"New BRF quote request from {inquiry.full_name} "
+                        f"for {form_data['brf_name']}."
+                    )[:255],
+                )
+                subject = f"BRF Quote Request: {form_data['brf_name']}"
+                body = (
+                    f"Name: {form_data['full_name']}\n"
+                    f"Email: {form_data['email']}\n"
+                    f"Phone: {form_data['phone']}\n"
+                    f"BRF: {form_data['brf_name']}\n"
+                    f"Property address / postcode: {form_data['address']}\n"
+                    f"Type of service: {form_data['request_type']}\n\n"
+                    f"Additional information:\n{form_data['message'] or '-'}\n"
+                )
+                try:
+                    to_email = getattr(settings, "CONTACT_TO_EMAIL", None) or "info@rwmel.se"
+                    from_email = (
+                        getattr(settings, "EMAIL_HOST_USER", None)
+                        or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+                        or "support@rwmel.se"
+                    )
+                    email_message = EmailMessage(subject, body, from_email, [to_email])
+                    email_message.reply_to = [form_data["email"]]
+                    email_message.send()
+
+                    customer_subject = "We received your BRF quote request | RWM EL"
+                    customer_body = (
+                        f"Hello {form_data['full_name']},\n\n"
+                        "Thank you for contacting RWM EL. We have received your "
+                        "BRF quote request and our team will review it shortly.\n\n"
+                        "Request summary:\n"
+                        f"BRF: {form_data['brf_name']}\n"
+                        f"Property address / postcode: {form_data['address']}\n"
+                        f"Type of service: {form_data['request_type']}\n"
+                        f"Phone: {form_data['phone']}\n"
+                        f"Additional information: {form_data['message'] or '-'}\n\n"
+                        "We will contact you to discuss your needs and the next steps.\n\n"
+                        "Kind regards,\n"
+                        "RWM EL\n"
+                        "0046 70 03 91 611\n"
+                        "Support@rwmel.se"
+                    )
+                    customer_email = EmailMessage(
+                        customer_subject,
+                        customer_body,
+                        from_email,
+                        [form_data["email"]],
+                    )
+                    customer_email.reply_to = [to_email]
+                    customer_email.send()
+                    status = "sent"
+                    form_data = {}
+                except Exception:
+                    logger.exception("BRF quote request email failed to send.")
+                    status = "error"
+
+    brf_faqs = FAQEntry.objects.filter(
+        audience=FAQEntry.Audience.BRF,
+        is_active=True,
+    ).order_by("order", "-created_at")
+    return render(
+        request,
+        "electricity/for_brf.html",
+        {
+            "brf_quote_status": status,
+            "brf_quote_data": form_data,
+            "brf_faqs": brf_faqs,
+        },
+    )
 
 
 def support(request):
@@ -527,7 +965,7 @@ def contact(request):
             if not (full_name and message and consent and inquiry_type):
                 status = "error"
             else:
-                ContactInquiry.objects.create(
+                inquiry = ContactInquiry.objects.create(
                     full_name=full_name,
                     email=email,
                     phone=phone,
@@ -536,6 +974,9 @@ def contact(request):
                     inquiry_type=inquiry_type,
                     message=message,
                     consent=True,
+                )
+                AdminNotification.objects.create(
+                    message=f"New contact inquiry from {inquiry.full_name}.",
                 )
                 subject = f"Contact Request: {request_type or 'General Inquiry'}"
                 body = (
@@ -564,6 +1005,31 @@ def contact(request):
                         email_message.reply_to = [email]
                     email_message.send()
                     status = "sent"
+
+                    try:
+                        customer_message = EmailMessage(
+                            subject="RWM EL - We received your enquiry",
+                            body=(
+                                f"Hello {full_name},\n\n"
+                                "Thank you for contacting RWM EL. We have received your enquiry "
+                                "successfully and our team will review it shortly.\n\n"
+                                f"Service: {request_type or 'General inquiry'}\n"
+                                f"Phone: {phone or '-'}\n"
+                                f"Address: {address or '-'}\n\n"
+                                f"Your message:\n{message}\n\n"
+                                "We will get back to you as soon as possible.\n\n"
+                                "Kind regards,\nRWM EL\n0046 70 03 91 611"
+                            ),
+                            from_email=from_email,
+                            to=[email],
+                            reply_to=[to_email],
+                        )
+                        customer_message.send(fail_silently=False)
+                    except Exception:
+                        logger.exception(
+                            "Contact confirmation email failed for inquiry %s.",
+                            inquiry.pk,
+                        )
                 except Exception:
                     logger.exception("Contact inquiry email failed to send.")
                     status = "error"
@@ -572,7 +1038,10 @@ def contact(request):
 
 
 def faq(request):
-    faqs = FAQEntry.objects.filter(is_active=True).order_by("order", "-created_at")
+    faqs = FAQEntry.objects.filter(
+        audience=FAQEntry.Audience.GENERAL,
+        is_active=True,
+    ).order_by("order", "-created_at")
     return render(request, "electricity/faq.html", {"faqs": faqs})
 
 
@@ -2929,7 +3398,7 @@ def external_dashboard(request):
         # Attachment rows are implementation details, not standalone dashboard
         # resources. Excluding them also keeps the dashboard available during
         # rolling deployments while a new attachment migration is being applied.
-        if model_name in {"consultationbookingattachment", "electricianbookingattachment"}:
+        if model_name in {"consultationbookingattachment", "electricianbookingattachment", "quoterequestattachment"}:
             continue
         manage_url = None
         if model_name == "electricalservice":
@@ -2944,6 +3413,8 @@ def external_dashboard(request):
             manage_url = "electricity:dashboard_electrician_bookings"
         elif model_name == "oncallbooking":
             manage_url = "electricity:dashboard_on_call_bookings"
+        elif model_name == "quoterequest":
+            manage_url = "electricity:dashboard_quote_requests"
         elif model_name == "servicepricing":
             manage_url = "electricity:dashboard_pricing"
         elif model_name == "invoice":
@@ -2993,6 +3464,7 @@ def external_dashboard(request):
         "service_bookings": ServiceBooking.objects.count(),
         "electrician_bookings": ElectricianBooking.objects.count(),
         "on_call_bookings": OnCallBooking.objects.count(),
+        "quote_requests": QuoteRequest.objects.count(),
         "feedback": CustomerFeedback.objects.count(),
         "support_tickets": SupportTicket.objects.count(),
         "zip_codes": AcceptedZipCode.objects.count(),
@@ -3042,8 +3514,39 @@ def admin_notifications_mark_read(request):
     if guard:
         return guard
     if request.method == "POST":
-        AdminNotification.objects.filter(is_read=False).update(is_read=True)
+        notification_id = request.POST.get("notification_id")
+        if notification_id:
+            updated = AdminNotification.objects.filter(pk=notification_id, is_read=False).update(is_read=True)
+            unread_count = AdminNotification.objects.filter(is_read=False).count()
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({"updated": bool(updated), "unread_count": unread_count})
+        else:
+            AdminNotification.objects.filter(is_read=False).update(is_read=True)
     return redirect("electricity:dashboard")
+
+
+@login_required
+def dashboard_quote_requests(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    return render(request, "electricity/dashboard/quote_requests.html", {"items": QuoteRequest.objects.prefetch_related("attachments")})
+
+
+@login_required
+def dashboard_quote_request_detail(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = get_object_or_404(QuoteRequest.objects.prefetch_related("attachments"), pk=pk)
+    if request.method == "POST":
+        status = request.POST.get("status")
+        if status in dict(QuoteRequest.Status.choices):
+            item.status = status
+            item.save(update_fields=["status"])
+            messages.success(request, "Quote request status updated.")
+            return redirect("electricity:dashboard_quote_request_detail", pk=item.pk)
+    return render(request, "electricity/dashboard/quote_request_detail.html", {"item": item, "status_choices": QuoteRequest.Status.choices})
 
 
 def _require_dashboard_access(request):
@@ -3079,7 +3582,7 @@ def dashboard_services(request):
         request,
         "electricity/dashboard/list.html",
         {
-            "title": "Electrical Services",
+            "title": "Service Ecosystem",
             "items": items,
             "fields": [
                 "title",
@@ -3112,7 +3615,7 @@ def dashboard_services_add(request):
     return render(
         request,
         "electricity/dashboard/form.html",
-        {"title": "Add Electrical Service", "form": form, "back_url": "electricity:dashboard_services"},
+        {"title": "Add Service Ecosystem Item", "form": form, "back_url": "electricity:dashboard_services"},
     )
 
 
@@ -3129,7 +3632,7 @@ def dashboard_services_edit(request, pk):
     return render(
         request,
         "electricity/dashboard/form.html",
-        {"title": "Edit Electrical Service", "form": form, "back_url": "electricity:dashboard_services"},
+        {"title": "Edit Service Ecosystem Item", "form": form, "back_url": "electricity:dashboard_services"},
     )
 
 
@@ -3145,7 +3648,7 @@ def dashboard_services_delete(request, pk):
     return render(
         request,
         "electricity/dashboard/delete.html",
-        {"title": "Delete Electrical Service", "item": item, "back_url": "electricity:dashboard_services"},
+        {"title": "Delete Service Ecosystem Item", "item": item, "back_url": "electricity:dashboard_services"},
     )
 
 
@@ -3171,6 +3674,29 @@ def dashboard_pricing(request):
         "delete_url": "electricity:dashboard_pricing_delete",
     }
     return render(request, "electricity/dashboard/list.html", context)
+
+
+def dashboard_hero_pricing(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = HomeHeroPricing.objects.first()
+    if item is None:
+        item = HomeHeroPricing()
+    form = HomeHeroPricingForm(request.POST or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Hero prices updated successfully.")
+        return redirect("electricity:dashboard_hero_pricing")
+    return render(
+        request,
+        "electricity/dashboard/form.html",
+        {
+            "title": "Hero Pricing",
+            "form": form,
+            "back_url": "electricity:dashboard",
+        },
+    )
 
 
 def dashboard_pricing_add(request):
@@ -3905,6 +4431,129 @@ def dashboard_feedback_delete(request, pk):
 
 
 @login_required
+def dashboard_career_applications(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    return render(
+        request,
+        "electricity/dashboard/list.html",
+        {
+            "title": "Career Applications",
+            "items": CareerApplication.objects.all(),
+            "fields": ["full_name", "email", "job", "position", "years_of_experience", "status", "created_at"],
+            "create_url": "electricity:dashboard_career_applications_add",
+            "edit_url": "electricity:dashboard_career_applications_edit",
+            "delete_url": "electricity:dashboard_career_applications_delete",
+        },
+    )
+
+
+@login_required
+def dashboard_career_applications_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    form = CareerApplicationAdminForm(request.POST or None, request.FILES or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_career_applications")
+    return render(request, "electricity/dashboard/form.html", {
+        "title": "Add Career Application", "form": form,
+        "back_url": "electricity:dashboard_career_applications",
+    })
+
+
+@login_required
+def dashboard_career_applications_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = get_object_or_404(CareerApplication, pk=pk)
+    form = CareerApplicationAdminForm(request.POST or None, request.FILES or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_career_applications")
+    return render(request, "electricity/dashboard/form.html", {
+        "title": "Career Application", "form": form,
+        "back_url": "electricity:dashboard_career_applications",
+    })
+
+
+@login_required
+def dashboard_career_applications_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = get_object_or_404(CareerApplication, pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_career_applications")
+    return render(request, "electricity/dashboard/delete.html", {
+        "title": "Delete Career Application", "item": item,
+        "back_url": "electricity:dashboard_career_applications",
+    })
+
+
+@login_required
+def dashboard_job_openings(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    return render(request, "electricity/dashboard/list.html", {
+        "title": "Job Openings",
+        "items": JobOpening.objects.all(),
+        "fields": ["title", "location", "employment_type", "is_active", "order", "created_at"],
+        "create_url": "electricity:dashboard_job_openings_add",
+        "edit_url": "electricity:dashboard_job_openings_edit",
+        "delete_url": "electricity:dashboard_job_openings_delete",
+    })
+
+
+@login_required
+def dashboard_job_openings_add(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    form = JobOpeningForm(request.POST or None, request.FILES or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_job_openings")
+    return render(request, "electricity/dashboard/form.html", {
+        "title": "Add Job Opening", "form": form, "back_url": "electricity:dashboard_job_openings",
+    })
+
+
+@login_required
+def dashboard_job_openings_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = get_object_or_404(JobOpening, pk=pk)
+    form = JobOpeningForm(request.POST or None, request.FILES or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("electricity:dashboard_job_openings")
+    return render(request, "electricity/dashboard/form.html", {
+        "title": "Edit Job Opening", "form": form, "back_url": "electricity:dashboard_job_openings",
+    })
+
+
+@login_required
+def dashboard_job_openings_delete(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = get_object_or_404(JobOpening, pk=pk)
+    if request.method == "POST":
+        item.delete()
+        return redirect("electricity:dashboard_job_openings")
+    return render(request, "electricity/dashboard/delete.html", {
+        "title": "Delete Job Opening", "item": item, "back_url": "electricity:dashboard_job_openings",
+    })
+
+
+@login_required
 def dashboard_faq(request):
     guard = _dashboard_access_or_redirect(request)
     if guard:
@@ -3916,7 +4565,7 @@ def dashboard_faq(request):
         {
             "title": "FAQ",
             "items": items,
-            "fields": ["question", "is_active", "order", "created_at"],
+            "fields": ["question", "audience", "is_active", "order", "created_at"],
             "create_url": "electricity:dashboard_faq_add",
             "edit_url": "electricity:dashboard_faq_edit",
             "delete_url": "electricity:dashboard_faq_delete",
@@ -3983,7 +4632,7 @@ def dashboard_service_category_pages(request):
         request,
         "electricity/dashboard/list.html",
         {
-            "title": "Service Categories",
+            "title": "Specialized Service Categories",
             "items": items,
             "fields": ["name", "theme", "slug", "is_active", "order"],
             "create_url": "electricity:dashboard_service_category_pages_add",
@@ -4005,7 +4654,7 @@ def dashboard_service_category_pages_add(request):
     return render(
         request,
         "electricity/dashboard/form.html",
-        {"title": "Add Service Category", "form": form, "back_url": "electricity:dashboard_service_category_pages"},
+        {"title": "Add Specialized Service Category", "form": form, "back_url": "electricity:dashboard_service_category_pages"},
     )
 
 
@@ -4022,7 +4671,7 @@ def dashboard_service_category_pages_edit(request, pk):
     return render(
         request,
         "electricity/dashboard/form.html",
-        {"title": "Edit Service Category", "form": form, "back_url": "electricity:dashboard_service_category_pages"},
+        {"title": "Edit Specialized Service Category", "form": form, "back_url": "electricity:dashboard_service_category_pages"},
     )
 
 
@@ -4038,7 +4687,7 @@ def dashboard_service_category_pages_delete(request, pk):
     return render(
         request,
         "electricity/dashboard/delete.html",
-        {"title": "Delete Service Category", "item": item, "back_url": "electricity:dashboard_service_category_pages"},
+        {"title": "Delete Specialized Service Category", "item": item, "back_url": "electricity:dashboard_service_category_pages"},
     )
 
 
@@ -4196,7 +4845,7 @@ def dashboard_service_category_items(request):
         {
             "title": "Service Links",
             "items": items,
-            "fields": ["section", "title", "price_text", "is_featured", "order"],
+            "fields": ["section", "title", "pricing_mode", "price_text", "is_featured", "order"],
             "create_url": "electricity:dashboard_service_category_items_add",
             "edit_url": "electricity:dashboard_service_category_items_edit",
             "delete_url": "electricity:dashboard_service_category_items_delete",
@@ -4624,7 +5273,7 @@ def dashboard_service_page_items(request):
         {
             "title": "Service Page Items",
             "items": items,
-            "fields": ["section", "title", "price_text", "is_featured", "order"],
+            "fields": ["section", "title", "pricing_mode", "price_text", "is_featured", "order"],
             "create_url": "electricity:dashboard_service_page_items_add",
             "edit_url": "electricity:dashboard_service_page_items_edit",
             "delete_url": "electricity:dashboard_service_page_items_delete",

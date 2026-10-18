@@ -42,13 +42,14 @@
                 <a href="{% url 'electricity:dashboard' %}">Overview</a>
 
                 <div class="dash-nav-section">Website Content</div>
-                <a href="{% url 'electricity:dashboard_services' %}">Services</a>
+                <a href="{% url 'electricity:dashboard_services' %}">Service Ecosystem</a>
                 <a href="{% url 'electricity:dashboard_pricing' %}">Pricing</a>
+                <a href="{% url 'electricity:dashboard_hero_pricing' %}">Hero Pricing</a>
                 <a href="{% url 'electricity:dashboard_invoices' %}">Invoices</a>
                 <a href="{% url 'electricity:dashboard_faq' %}">FAQ</a>
 
                 <div class="dash-nav-section">Category Pages</div>
-                <a href="{% url 'electricity:dashboard_service_category_pages' %}">Service Categories</a>
+                <a href="{% url 'electricity:dashboard_service_category_pages' %}">Specialized Service Categories</a>
                 <a href="{% url 'electricity:dashboard_service_category_content_blocks' %}">Category Blocks (Main Pages)</a>
                 <a href="{% url 'electricity:dashboard_service_category_sections' %}">Category Groups</a>
                 <a href="{% url 'electricity:dashboard_service_category_items' %}">Category Content Items</a>
@@ -65,10 +66,13 @@
 
                 <div class="dash-nav-section">Bookings & Requests</div>
                 <a href="{% url 'electricity:dashboard_requests' %}">Requests</a>
+                <a href="{% url 'electricity:dashboard_quote_requests' %}">Quote Requests</a>
                 <a href="{% url 'electricity:dashboard_bookings' %}">Bookings</a>
                 <a href="{% url 'electricity:dashboard_service_bookings' %}">Service Bookings</a>
                 <a href="{% url 'electricity:dashboard_electrician_bookings' %}">Electrician Bookings</a>
                 <a href="{% url 'electricity:dashboard_on_call_bookings' %}">On-Call Bookings</a>
+                <a href="{% url 'electricity:dashboard_career_applications' %}">Career Applications</a>
+                <a href="{% url 'electricity:dashboard_job_openings' %}">Job Openings</a>
 
                 <div class="dash-nav-section">People & Scheduling</div>
                 <a href="{% url 'electricity:dashboard_profiles' %}">Customers</a>
@@ -113,10 +117,12 @@
                             <span class="sr-only">Notifications</span>
                         </button>
                         <div class="dash-notify-panel" id="dash-notify-panel"
+                             data-mark-read-url="{% url 'electricity:admin_notifications_mark_read' %}"
                              data-url-consultation="{% url 'electricity:dashboard_bookings' %}"
                              data-url-service="{% url 'electricity:dashboard_service_bookings' %}"
                              data-url-electrician="{% url 'electricity:dashboard_electrician_bookings' %}"
-                             data-url-oncall="{% url 'electricity:dashboard_on_call_bookings' %}">
+                             data-url-oncall="{% url 'electricity:dashboard_on_call_bookings' %}"
+                             data-url-careers="{% url 'electricity:dashboard_career_applications' %}">
                             <div class="dash-notify-head">
                                 <div>
                                     <div class="dash-notify-title">Notifications</div>
@@ -126,7 +132,7 @@
                             </div>
                             <div class="dash-notify-list">
                                 {% for note in notifications %}
-                                    <div class="dash-notify-item" data-message="{{ note.message|default:'' }}">
+                                    <div class="dash-notify-item{% if note.is_read %} is-read{% else %} is-unread{% endif %}" data-id="{{ note.id }}" data-message="{{ note.message|default:'' }}">
                                         <div class="dash-notify-time">{{ note.created_at|date:"M d, H:i" }}</div>
                                         <div class="dash-notify-msg">{{ note.message }}</div>
                                     </div>

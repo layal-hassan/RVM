@@ -7,63 +7,280 @@
 {% block content %}
 <section class="oncall-hero">
   <div class="container oncall-hero-grid">
-    <div>
-      <div class="oncall-eyebrow">{% trans "On-Call Availability" %}</div>
-      <h1 class="oncall-title">{% trans "Service" %} &amp;<br><span>{% trans "Emergency" %}</span> {% trans "On-Call" %}</h1>
+    <div class="oncall-hero-copy">
+      <div class="oncall-eyebrow">{% trans "JOUR · ON-CALL ELECTRICIANS" %}</div>
+      <h1 class="oncall-title">{% trans "Emergency electrician" %}<br><span>{% trans "in Stockholm" %}</span></h1>
       <p class="oncall-subtitle">
-        {% trans "Immediate access for businesses, property owners, and housing associations. We ensure critical operations stay powered through every incident." %}
+        {% trans "Power outages, electrical faults or urgent safety concerns? RWM EL provides professional on-call electrical assistance in Järfälla and across Stockholm." %}
       </p>
       <div class="oncall-actions">
-        <a class="btn btn-primary" href="{% url 'electricity:on_call_booking_step' 1 %}">{% trans "Apply for On-Call Service" %}</a>
+        <a class="btn btn-primary oncall-call-button" href="tel:+46700391611">
+          <span class="oncall-button-icon" aria-hidden="true">☎</span>
+          <span><small>{% trans "Call our on-call electrician" %}</small><strong>0046 70 03 91 611</strong></span>
+        </a>
+        <a class="btn btn-secondary oncall-chat-button" href="https://wa.me/46700391611" target="_blank" rel="noopener">
+          <span class="oncall-button-icon" aria-hidden="true">◉</span>
+          <span>{% trans "Chat on WhatsApp" %}</span><span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <div class="oncall-trust-row" aria-label="{% trans 'Service benefits' %}">
+        <div><span class="oncall-trust-icon" aria-hidden="true">◷</span><span>{% trans "Available" %}<br>{% trans "24/7" %}</span></div>
+        <div><span class="oncall-trust-icon" aria-hidden="true">⌖</span><span>{% trans "Based in Järfälla" %}<br>{% trans "Serving all of Stockholm" %}</span></div>
+        <div><span class="oncall-trust-icon" aria-hidden="true">♢</span><span>{% trans "Safe & certified" %}<br>{% trans "Professional service" %}</span></div>
       </div>
     </div>
     <div class="oncall-hero-card">
-      <div class="eyebrow">{% trans "Service Reliability" %}</div>
-      <h3>{% trans "Priority Dispatch & Direct Contact" %}</h3>
-      <p class="oncall-subtitle">
-        {% trans "Our emergency service provides direct access to certified electricians. With no intermediaries, you talk directly to the dispatched partners on duty." %}
-      </p>
-      <div class="oncall-metric-list">
-        <div class="oncall-metric">
-          <strong>{% trans "60 Min" %}</strong>
-          <span>{% trans "Average response time" %}</span>
-        </div>
-        <div class="oncall-metric">
-          <strong>{% trans "Certified" %}</strong>
-          <span>{% trans "Master electricians only" %}</span>
-        </div>
-        <div class="oncall-metric">
-          <strong>{% trans "24/7" %}</strong>
-          <span>{% trans "On-call coverage" %}</span>
-        </div>
+      <span class="oncall-card-bolt" aria-hidden="true">ϟ</span>
+      <div>
+        <strong>{% trans "ON-CALL" %}</strong>
+        <span>{% trans "ELECTRICAL SERVICE" %}</span>
+        <i aria-hidden="true"></i>
+        <p>{% trans "For homes, businesses and properties." %}</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="oncall-section light">
-  <div class="container oncall-grid">
-    <div>
-      <div class="eyebrow">{% trans "Priority Dispatch" %}</div>
-      <h2>{% trans "Priority Dispatch & Direct Contact" %}</h2>
-      <p class="oncall-subtitle">
-        {% trans "We prioritize core equipment partners to ensure minimal downtime and maximum safety. With a dedicated on-call agreement, you receive immediate dispatch status updates and certified documentation for every visit." %}
-      </p>
-      <div class="oncall-actions">
-        <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Request a Call Back" %}</a>
+<section class="oncall-assurance" aria-labelledby="oncall-help-title">
+  <div class="container">
+    <div class="oncall-help-row">
+      <div class="oncall-help-heading">
+        <strong id="oncall-help-title">{% trans "We help with" %}</strong>
+        <i aria-hidden="true"></i>
+      </div>
+      <div class="oncall-help-item">
+        <span class="oncall-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 5 14h6l-1 8 9-13h-6z"/></svg></span>
+        <span>{% trans "Power outages" %}</span>
+      </div>
+      <div class="oncall-help-item">
+        <span class="oncall-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 2v6m8-6v6M6 8h12v3a6 6 0 0 1-5 5.92V22h-2v-5.08A6 6 0 0 1 6 11z"/></svg></span>
+        <span>{% trans "Electrical faults" %}</span>
+      </div>
+      <div class="oncall-help-item">
+        <span class="oncall-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3zm4 1v7h1v-6h8v6h3v-7l-7-6z"/></svg></span>
+        <span>{% trans "Safety issues" %}</span>
+      </div>
+      <div class="oncall-help-item">
+        <span class="oncall-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14 6 4-4 4 4-4 4-2-2-5 5 2 2-5 5-4-4 5-5 2 2 5-5zM3 3l5 1 1 3-2 2-3-1z"/></svg></span>
+        <span>{% trans "Urgent repairs" %}</span>
+      </div>
+      <div class="oncall-help-item">
+        <span class="oncall-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18h6m-5 3h4M8 14c-1.6-1.2-2.5-3-2.5-5A6.5 6.5 0 0 1 12 2.5 6.5 6.5 0 0 1 18.5 9c0 2-.9 3.8-2.5 5-.7.5-1 1.2-1 2h-6c0-.8-.3-1.5-1-2z"/></svg></span>
+        <span>{% trans "Other electrical needs" %}</span>
       </div>
     </div>
-    <div class="oncall-photo-wrap">
-      <img
-        class="oncall-photo"
-        src="{% static 'electricity/img/emergency-electrician.jpg' %}"
-        alt="{% trans "Emergency electrician" %}"
-      >
+
+    <div class="oncall-proof-row">
+      <div class="oncall-proof-item">
+        <span class="oncall-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2h12v4h4v10h-2V7.5L14.5 4H6v16h6v2H4zm9 11h8v2h-8zm0-4h4v2h-4zm5 7 4 2v3c0 2-1.5 3.8-4 5-2.5-1.2-4-3-4-5v-3z"/></svg></span>
+        <span><strong>{% trans "Authorised electrical company" %}</strong><small>{% trans "Registered with Elsäkerhetsverket" %}</small></span>
+      </div>
+      <div class="oncall-proof-item">
+        <span class="oncall-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22s7-6.1 7-13A7 7 0 1 0 5 9c0 6.9 7 13 7 13zm0-9.5A3.5 3.5 0 1 1 12 5a3.5 3.5 0 0 1 0 7.5z"/></svg></span>
+        <span><strong>{% trans "Local and reliable" %}</strong><small>{% trans "Järfälla & across Stockholm" %}</small></span>
+      </div>
+      <div class="oncall-proof-item">
+        <span class="oncall-line-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8 0a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21v-3c0-3 2.5-5 6-5s6 2 6 5v3zm12 0v-3c0-1.8-.7-3.2-1.8-4.3 1.1-.5 2.3-.7 3.8-.7 3.5 0 6 2 6 5v3z"/></svg></span>
+        <span><strong>{% trans "Homes, businesses & properties" %}</strong><small>{% trans "We work with private customers, companies and property managers." %}</small></span>
+      </div>
+    </div>
+
+    <div class="oncall-value-grid">
+      <article class="oncall-value-card">
+        <span class="oncall-value-icon" aria-hidden="true">◆</span>
+        <div><h2>{% trans "Safety & Compliance" %}</h2><i aria-hidden="true"></i><p>{% trans "Electrical work done right, to code, and built to last. We follow all Swedish regulations and industry standards, ensuring your home or business is safe, compliant and future-proof." %}</p></div>
+      </article>
+      <article class="oncall-value-card">
+        <span class="oncall-value-icon" aria-hidden="true">⌂</span>
+        <div><h2>{% trans "Comfort & Reliability" %}</h2><i aria-hidden="true"></i><p>{% trans "Power that works exactly when and how it should. From lighting and heating to smart controls, we create electrical systems that run smoothly every day — without interruptions, flickering or guesswork." %}</p></div>
+      </article>
+      <article class="oncall-value-card">
+        <span class="oncall-value-icon" aria-hidden="true">◈</span>
+        <div><h2>{% trans "Efficiency & Future Readiness" %}</h2><i aria-hidden="true"></i><p>{% trans "Smarter energy use, lower costs and systems ready for tomorrow. We design and install energy-efficient solutions, EV charging, and modern electrical systems that reduce waste, lower bills and adapt as your needs grow." %}</p></div>
+      </article>
     </div>
   </div>
 </section>
 
-<section class="oncall-section light">
+<section class="oncall-safety" aria-labelledby="oncall-safety-title">
+  <div class="container oncall-safety-grid">
+    <div class="oncall-safety-media">
+      <img src="{% static 'electricity/img/rwm-electrician-jacket.png' %}" alt="{% trans 'RWM EL electrician working on a distribution board' %}">
+    </div>
+    <div class="oncall-safety-content">
+      <div class="oncall-safety-eyebrow"><i aria-hidden="true"></i>{% trans "Electrical foundation" %}</div>
+      <h2 id="oncall-safety-title"><span>{% trans "Built for Safety." %}</span><br>{% trans "Designed to Last." %}</h2>
+      <p class="oncall-safety-lead">{% trans "From electrical installations and distribution boards to upgrades and fault finding, we deliver reliable electrical solutions for homes, businesses and properties across Stockholm." %}</p>
+      <div class="oncall-safety-details">
+        <div class="oncall-safety-services">
+          <h3>{% trans "What we handle" %}</h3>
+          <ul>
+            <li><b aria-hidden="true">ϟ</b><span>{% trans "Electrical installations and system upgrades" %}</span></li>
+            <li><b aria-hidden="true">▦</b><span>{% trans "Distribution boards and electrical panels" %}</span></li>
+            <li><b aria-hidden="true">×</b><span>{% trans "Fault finding, diagnostics and repairs" %}</span></li>
+            <li><b aria-hidden="true">♢</b><span>{% trans "Electrical safety and maintenance" %}</span></li>
+          </ul>
+        </div>
+        <div class="oncall-safety-cta">
+          <h3>{% trans "Professional electrical services" %}</h3>
+          <p>{% trans "Our licensed electricians are available for both residential and commercial work, delivering fast response, clear communication and high-quality results." %}</p>
+          <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}<span aria-hidden="true">→</span></a>
+          <a class="btn btn-secondary" href="{% url 'electricity:contact' %}">{% trans "Request a free quote" %}<span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <div class="oncall-safety-trust" aria-label="{% trans 'Service guarantees' %}">
+        <span><b aria-hidden="true">♢</b>{% trans "Licensed & insured" %}</span>
+        <span><b aria-hidden="true">◷</b>{% trans "Reliable & on time" %}</span>
+        <span><b aria-hidden="true">⌖</b>{% trans "Serving Stockholm" %}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if specialized_categories %}
+<section class="oncall-specialized" aria-labelledby="oncall-specialized-title">
+  <div class="container">
+    <header class="oncall-specialized-header">
+      <div class="oncall-specialized-heading">
+        <span>{% trans "Specialized Service Categories" %}</span>
+        <h2 id="oncall-specialized-title">{% trans "Specialized Service Categories" %}</h2>
+      </div>
+      <p>{% trans "Each premium category has its own dedicated presentation page, while remaining fully manageable from the admin panel." %}</p>
+    </header>
+    <div class="oncall-specialized-grid">
+      {% for category in specialized_categories %}
+      <article class="oncall-specialized-card">
+        <a class="oncall-specialized-media" href="{% url 'electricity:service_category_detail' category.slug %}" aria-label="{{ category.name }}">
+          {% if category.hero_image %}
+          <img src="{{ category.hero_image.url }}" alt="{{ category.name }}">
+          {% else %}
+          <span>{{ category.name }}</span>
+          {% endif %}
+        </a>
+        <div class="oncall-specialized-body">
+          <span class="oncall-specialized-kicker">{{ category.nav_label|default:category.name }}</span>
+          <h3>{{ category.hero_title|default:category.name }}</h3>
+          {% if category.teaser %}
+          <p>{{ category.teaser }}</p>
+          {% elif category.hero_description %}
+          <p>{{ category.hero_description|truncatechars:180 }}</p>
+          {% endif %}
+          <a class="btn btn-primary" href="{% url 'electricity:service_category_detail' category.slug %}">{% trans "Open category page" %}</a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="oncall-integrated" aria-labelledby="oncall-integrated-title">
+  <div class="container">
+    <article class="oncall-integrated-card">
+      <span class="oncall-integrated-bolt" aria-hidden="true">ϟ</span>
+      <div class="oncall-integrated-copy">
+        <h2 id="oncall-integrated-title">{% trans "Integrated Electrical Services" %}</h2>
+        <p>{% trans "Coordinated electrical solutions for homes, BRF associations, and property-focused projects. From planning and installation to ongoing support, we deliver safe, reliable and future-ready electrical systems with a focus on long-term value." %}</p>
+      </div>
+      <div class="oncall-integrated-points">
+        <span><b aria-hidden="true">▣</b>{% trans "Tailored planning" %}</span>
+        <span><b aria-hidden="true">⌕</b>{% trans "Professional execution" %}</span>
+        <span><b aria-hidden="true">♢</b>{% trans "Long-term reliability" %}</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="oncall-priority-band">
+  <div class="container oncall-priority-inner">
+    <div class="oncall-priority-copy">
+      <span>{% trans "Priority Support" %}</span>
+      <h2>{% trans "On-Call & Emergency Service" %}</h2>
+      <p>{% trans "Priority electrical support for businesses, BRF, and property managers. Get immediate access to qualified electricians with an on-call agreement tailored to your site." %}</p>
+    </div>
+    <div class="oncall-priority-action">
+      <a class="btn" href="{% url 'electricity:on_call_booking_step' 1 %}">{% trans "Apply for on-call service" %}<span aria-hidden="true">→</span></a>
+      <small>{% trans "Response windows confirmed in writing." %}</small>
+    </div>
+  </div>
+</section>
+
+{% if ecosystem_services %}
+<section class="oncall-ecosystem" aria-labelledby="oncall-ecosystem-title">
+  <div class="container">
+    <header class="oncall-ecosystem-header">
+      <h2 id="oncall-ecosystem-title">{% trans "The Service Ecosystem" %}</h2>
+      <p>{% trans "While our detailed technical library is in development, our boutique engineering team is fully operational and ready to serve you today." %}</p>
+    </header>
+    <div class="oncall-ecosystem-grid">
+      {% for service in ecosystem_services %}
+      <article class="oncall-ecosystem-card">
+        <div class="oncall-ecosystem-media">
+          {% if service.icon %}
+          <img src="{{ service.icon.url }}" alt="{{ service.title }}">
+          {% else %}
+          <span>{{ service.title|slice:":2" }}</span>
+          {% endif %}
+        </div>
+        <div class="oncall-ecosystem-body">
+          <h3>{{ service.title }}</h3>
+          {% if service.short_description %}
+          <p>{{ service.short_description|truncatechars:145 }}</p>
+          {% elif service.bullet_points %}
+          <p>{{ service.bullet_points|truncatechars:145|linebreaksbr }}</p>
+          {% endif %}
+          <a class="btn btn-primary" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Book this service" %}<span aria-hidden="true">→</span></a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="oncall-project-support" aria-labelledby="oncall-project-title">
+  <div class="container">
+    <article class="oncall-project-banner">
+      <div class="oncall-project-copy">
+        <span>{% trans "Tailored Electrical Solutions" %}</span>
+        <h2 id="oncall-project-title">{% trans "Reliable Electrical Support" %}<br>{% trans "for Every Stage of Your Project" %}</h2>
+        <p>{% trans "From initial planning to expert installations, we deliver safe, efficient and future-ready electrical solutions for your home or property." %}</p>
+        <div class="oncall-project-badges">
+          <span><b aria-hidden="true">♢</b>{% trans "Licensed & insured" %}</span>
+          <span><b aria-hidden="true">⚙</b>{% trans "Quality workmanship" %}</span>
+          <span><b aria-hidden="true">⌂</b>{% trans "Homes & businesses" %}</span>
+        </div>
+      </div>
+      <div class="oncall-project-cta">
+        <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a consultation" %}<span aria-hidden="true">→</span></a>
+        <small>{% trans "Expert advice. Real solutions." %}</small>
+      </div>
+    </article>
+
+    <div class="oncall-project-options">
+      <article class="oncall-project-option">
+        <span class="oncall-project-icon" aria-hidden="true">▤</span>
+        <h3>{% trans "Plan Your Electrical Project" %}</h3>
+        <p>{% trans "Get expert guidance to design the right electrical solution for your home or property." %}</p>
+        <a href="{% url 'electricity:booking_step_1' %}">{% trans "Request a consultation" %}<span aria-hidden="true">→</span></a>
+      </article>
+      <article class="oncall-project-option">
+        <span class="oncall-project-icon" aria-hidden="true">ϟ</span>
+        <h3>{% trans "Book a Licensed Electrician" %}</h3>
+        <p>{% trans "Professional installations, repairs and troubleshooting — done safely, efficiently and to code." %}</p>
+        <a href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}<span aria-hidden="true">→</span></a>
+      </article>
+      <article class="oncall-project-option">
+        <span class="oncall-project-icon" aria-hidden="true">◯</span>
+        <h3>{% trans "Get Expert Advice" %}</h3>
+        <p>{% trans "Have a question? Speak with our team for clear, honest advice tailored to your needs." %}</p>
+        <a href="{% url 'electricity:contact' %}">{% trans "Speak with our team" %}<span aria-hidden="true">→</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="oncall-section light oncall-section-audience">
   <div class="container">
     <div class="oncall-section-header">
       <div class="eyebrow">{% trans "Enterprise Partnerships" %}</div>
@@ -118,7 +335,29 @@
   </div>
 </section>
 
-<section class="oncall-section light">
+<section class="oncall-section light oncall-section-feature">
+  <div class="container oncall-grid">
+    <div>
+      <div class="eyebrow">{% trans "Priority Dispatch" %}</div>
+      <h2>{% trans "Priority Dispatch & Direct Contact" %}</h2>
+      <p class="oncall-subtitle">
+        {% trans "We prioritize core equipment partners to ensure minimal downtime and maximum safety. With a dedicated on-call agreement, you receive immediate dispatch status updates and certified documentation for every visit." %}
+      </p>
+      <div class="oncall-actions">
+        <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Request a Call Back" %}</a>
+      </div>
+    </div>
+    <div class="oncall-photo-wrap">
+      <img
+        class="oncall-photo"
+        src="{% static 'electricity/img/emergency-electrician.jpg' %}"
+        alt="{% trans "Emergency electrician" %}"
+      >
+    </div>
+  </div>
+</section>
+
+<section class="oncall-section light oncall-section-situations">
   <div class="container">
     <div class="oncall-section-header">
       <div class="eyebrow">{% trans "When to Call Us" %}</div>
@@ -187,6 +426,17 @@
         <span>{% trans "Priority queue" %}</span>
         <span>{% trans "Fixed night rates" %}</span>
       </div>
+    </div>
+  </div>
+</section>
+{% include "electricity/partials/pricing_preview.html" %}
+<section class="oncall-final-booking" aria-labelledby="oncall-final-booking-title">
+  <div class="container oncall-final-booking-inner">
+    <h2 id="oncall-final-booking-title">{% trans "Ready to Book Your Home?" %}</h2>
+    <p>{% trans "From electrical upgrades to modern home systems, our licensed electricians are ready to help. Scope, materials, and final pricing are confirmed before work begins." %}</p>
+    <div class="oncall-final-booking-actions">
+      <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Request a consultation" %}</a>
+      <a class="btn btn-secondary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}</a>
     </div>
   </div>
 </section>

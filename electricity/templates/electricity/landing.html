@@ -31,18 +31,47 @@
       <p class="home-hero-copy">
         {% trans "Experienced electricians delivering safe, lasting solutions, so you never have to call twice." %}
       </p>
+      <div class="home-hero-rates" aria-label="{% trans 'Service rates' %}">
+        <div class="home-hero-rate">
+          <span class="home-hero-rate-icon" aria-hidden="true">◷</span>
+          <span class="home-hero-rate-copy"><small>{% trans "Hourly rate" %}</small><strong>{% if hero_pricing %}{{ hero_pricing.hourly_rate|hero_price }}{% else %}688{% endif %} kr/h</strong><em>{% trans "incl. VAT" %}</em></span>
+        </div>
+        <div class="home-hero-rate">
+          <span class="home-hero-rate-icon" aria-hidden="true">▰</span>
+          <span class="home-hero-rate-copy"><small>{% trans "First-hour visit" %}</small><strong>{% if hero_pricing %}{{ hero_pricing.first_hour_visit|hero_price }}{% else %}1,188{% endif %} kr</strong><em>{% trans "incl. VAT" %}</em></span>
+        </div>
+        <div class="home-hero-rate">
+          <span class="home-hero-rate-icon" aria-hidden="true">%</span>
+          <span class="home-hero-rate-copy"><small>{% trans "With eligible ROT" %}</small><strong>{% if hero_pricing %}{{ hero_pricing.eligible_rot_price|hero_price }}{% else %}981.60{% endif %} kr</strong><em>{% trans "incl. VAT" %}</em></span>
+        </div>
+        <p class="home-hero-rate-note">{% trans "First-hour price includes a 500 kr call-out fee. Materials extra. ROT applies only to eligible labour." %}</p>
+      </div>
       <div class="home-hero-actions">
         <a class="home-btn home-btn-primary js-electrician-booking-choice" href="{% url 'electricity:electrician_booking_step' 1 %}">
-          {% trans "Book a Licensed Electrician" %}
+          {% trans "Book a Licensed Electrician" %} <span aria-hidden="true">→</span>
         </a>
         <a class="home-btn home-btn-secondary" href="{% url 'electricity:booking_step_1' %}">
-          {% trans "Get a Free Quote" %}
+          {% trans "Get a Free Quote" %} <span aria-hidden="true">→</span>
+        </a>
+        <a class="home-btn home-btn-jour" href="{% url 'electricity:on_call' %}">
+          <span aria-hidden="true">ϟ</span> {% trans "Book Jour" %} <span aria-hidden="true">→</span>
         </a>
       </div>
+      <div class="home-hero-contact-title"><span></span>{% trans "Contact Us Directly" %}<span></span></div>
+      <div class="home-hero-contact">
+        <a href="tel:+46700391611"><span class="home-hero-contact-icon" aria-hidden="true">☎</span><span><small>{% trans "Call Us" %}</small><strong>0046 70 03 91 611</strong></span><b aria-hidden="true">→</b></a>
+        <a href="https://wa.me/46700391611" target="_blank" rel="noopener"><span class="home-hero-contact-icon home-hero-contact-icon-whatsapp" aria-hidden="true"><svg viewBox="0 0 32 32" role="img"><path fill="currentColor" d="M16.04 4A11.8 11.8 0 0 0 5.8 21.67L4.23 27.4l5.86-1.54A11.8 11.8 0 1 0 16.04 4Zm0 21.6c-1.9 0-3.76-.51-5.38-1.47l-.42-.25-3.48.91.93-3.39-.27-.44A9.8 9.8 0 1 1 16.04 25.6Zm5.37-7.34c-.3-.15-1.74-.86-2.01-.96-.27-.1-.47-.15-.66.15-.2.29-.76.95-.93 1.15-.17.2-.34.22-.64.07-.29-.15-1.24-.46-2.36-1.46a8.84 8.84 0 0 1-1.63-2.02c-.17-.3-.02-.46.13-.6.13-.13.29-.34.44-.51.15-.17.2-.3.29-.49.1-.2.05-.37-.02-.52-.08-.15-.66-1.6-.91-2.18-.24-.58-.49-.5-.66-.51h-.57c-.2 0-.52.07-.79.36-.27.3-1.03 1.01-1.03 2.46 0 1.45 1.06 2.85 1.2 3.05.15.2 2.08 3.18 5.04 4.46.7.3 1.25.49 1.68.62.71.23 1.35.2 1.86.12.57-.08 1.74-.71 1.99-1.4.24-.68.24-1.27.17-1.39-.07-.12-.27-.2-.56-.34Z"/></svg></span><span><small>{% trans "WhatsApp Us" %}</small><strong>0046 70 03 91 611</strong></span><b aria-hidden="true">→</b></a>
+      </div>
+      <div class="home-hero-promises"><span>{% trans "Fast Response" %}</span><i></i><span>{% trans "Professional Advice" %}</span><i></i><span>{% trans "Available When You Need Us" %}</span></div>
+      <a class="home-hero-scroll" href="#our-services" aria-label="{% trans 'View our services' %}">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M7 12l9 9 9-9"/>
+        </svg>
+      </a>
     </div>
   </section>
 
-  <section class="home-section home-section-services">
+  <section class="home-section home-section-services" id="our-services">
     <div class="home-section-heading">
       <h2>{% trans "Our Services" %}</h2>
       <p>{% trans "Expert solutions for all your electrical needs, delivered with precision and care." %}</p>
@@ -115,11 +144,54 @@
     </div>
   </section>
 
-  <section class="home-strip-cta">
-    <div class="home-strip-copy">{% trans "Need Help Fast? Book a Licensed Electrician Today." %}</div>
-    <div class="home-strip-actions">
-      <a class="home-btn home-btn-dark js-electrician-booking-choice" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an Electrician" %}</a>
-      <a class="home-btn home-btn-outline-dark" href="{% url 'electricity:contact' %}">{% trans "Schedule a Call" %}</a>
+  <section class="home-quick-quote" id="quick-quote">
+    <div class="home-quick-quote-inner">
+      <div class="home-quick-quote-copy">
+        <div class="home-quick-kicker">{% trans "Get a Quote" %}<span></span></div>
+        <h2>{% trans "Need a" %}<strong>{% trans "quick quote?" %}</strong></h2>
+        <p>{% trans "Tell us a few details and we’ll get back to you shortly." %}</p>
+        <div class="home-quote-benefits">
+          <div><b>ϟ</b><strong>{% trans "Fast response" %}</strong><span>{% trans "Usually within 24 hours" %}</span></div>
+          <div><b>▤</b><strong>{% trans "Clear pricing" %}</strong><span>{% trans "No hidden costs" %}</span></div>
+          <div><b>◇</b><strong>{% trans "Licensed electricians" %}</strong><span>{% trans "Safe, compliant and insured" %}</span></div>
+        </div>
+      </div>
+      <div class="home-quote-card">
+        {% if quote_received %}
+        <div class="home-quote-success">
+          <div class="home-quote-success-icon">✓</div>
+          <h3>{% trans "Quote request received!" %}</h3>
+          <p>{% trans "Thank you for contacting RWM EL." %}</p>
+          <small>{% trans "We’ve received your request and will review the details. Our team will contact you using the information you provided." %}</small>
+          <hr>
+          <div class="home-quote-confirmation">✉ <span>{% trans "A confirmation will be sent to your email." %}</span></div>
+          <a class="home-quote-reset" href="{% url 'electricity:home' %}#quick-quote">{% trans "Send another request" %}</a>
+        </div>
+        {% else %}
+        <div class="home-quote-card-head"><strong>▰ &nbsp; {% trans "Quick Quote Request" %}</strong><span>{% trans "Same great service. A faster start." %}</span></div>
+        <form method="post" action="{% url 'electricity:home' %}#quick-quote" class="home-quote-form">
+          {% csrf_token %}
+          <input type="hidden" name="form_type" value="quick_quote">
+          <fieldset>
+            <legend>{% trans "I am a..." %}</legend>
+            <div class="home-quote-type">
+              <label><input type="radio" name="customer_type" value="private" checked><span>♙ &nbsp; {% trans "Private" %}</span></label>
+              <label><input type="radio" name="customer_type" value="business"><span>▦ &nbsp; {% trans "Business" %}</span></label>
+            </div>
+          </fieldset>
+          <div class="home-quote-fields">
+            <label>{% trans "Postcode" %}<input type="text" name="postcode" placeholder="e.g. 114 34" required></label>
+            <label>{% trans "Full name" %}<input type="text" name="full_name" value="{{ quote_form.full_name.value|default:'' }}" placeholder="{% trans 'Your full name' %}" required></label>
+            <label>{% trans "Email address" %}<input type="email" name="email" value="{{ quote_form.email.value|default:'' }}" placeholder="you@example.com" required></label>
+            <label>{% trans "Phone number" %}<input type="tel" name="phone" value="{{ quote_form.phone.value|default:'' }}" placeholder="e.g. 070 03 91 611" required></label>
+            <label class="home-quote-note">{% trans "Note" %}<textarea name="message" rows="3" placeholder="{% trans 'Tell us about your project or what you need help with...' %}">{{ quote_form.message.value|default:'' }}</textarea></label>
+          </div>
+          {% if quote_form.errors %}<div class="home-quote-errors">{% trans "Please check the information and try again." %}</div>{% endif %}
+          <button type="submit">{% trans "Request Quick Quote" %} <span>→</span></button>
+          <small class="home-quote-safe">▣ &nbsp; {% trans "Simple, fast, no obligation." %}</small>
+        </form>
+        {% endif %}
+      </div>
     </div>
   </section>
 
@@ -222,9 +294,17 @@
 
   <section class="home-cleaning-cta">
     <div class="home-cleaning-inner">
-      <h2>{% trans "Also Serving Your Home Needs" %}</h2>
-      <p>{% trans "From electrics to every detail of your home. We're proud to work alongside our other cleaning and repair partner for all-around home assistance. From removing out maintenance to complete home cleaning support, we make sure your home runs more smoothly - beyond just the electrical." %}</p>
-      <a class="home-btn home-btn-primary" href="{% url 'electricity:services' %}">{% trans "Visit Our Cleaning Services" %}</a>
+      <div class="home-cleaning-copy">
+        <div class="home-cleaning-kicker"><span></span>{% trans "Also Serving Your Home Needs" %}</div>
+        <p>{% trans "Professional cleaning and" %} {% trans "everyday home assistance" %}<br>{% trans "through" %} <strong>Hembla Experten</strong> — {% trans "the same care and reliability you expect from us." %}</p>
+        <a class="home-cleaning-link" href="https://hembla-experten.se/" target="_blank" rel="noopener">
+          {% trans "Explore Hembla Experten" %}<span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <a class="home-cleaning-brand" href="https://hembla-experten.se/" target="_blank" rel="noopener" aria-label="{% trans 'Visit Hembla Experten' %}">
+        <img src="{% static 'electricity/img/hembla-logo.png' %}" alt="Hembla Experten">
+        <small>{% trans "Cleaning & Home Services" %}</small>
+      </a>
     </div>
   </section>
 
@@ -293,7 +373,7 @@
       <h4>{% trans "Contact" %}</h4>
       <ul class="home-footer-contact">
         <li><span>{% trans "Address" %}</span> {% trans "Kikarvägen 18, 175 46 Järfälla, Stockholm" %}</li>
-        <li><span>{% trans "Phone" %}</span> 0046760355633</li>
+        <li><span>{% trans "Phone" %}</span> 0046 70 03 91 611</li>
         <li><span>{% trans "Email" %}</span> Support@rwmel.se</li>
       </ul>
     </div>

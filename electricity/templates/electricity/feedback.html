@@ -1,47 +1,31 @@
 {% extends "electricity/base.html" %}
 {% load i18n static %}
-
 {% block title %}{% trans "Customer Feedback" %}{% endblock %}
-
-{% block extra_head %}
-  <link rel="stylesheet" href="{% static 'electricity/css/feedback.css' %}">
-{% endblock %}
-
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/feedback.css' %}">{% endblock %}
 {% block body_class %}feedback-page{% endblock %}
-
 {% block content %}
-<section class="feedback-hero">
-  <div class="feedback-shell">
-    <div class="feedback-copy">
-      <div class="feedback-kicker">{% trans "Customer Feedback" %}</div>
-      <h1>{% trans "Tell Us How The Job Went" %}</h1>
-      <p>{% trans "Send your opinion directly to our team. Your review stays pending until the admin approves it, then it can appear on the website." %}</p>
-    </div>
-    <div class="feedback-card">
-      {% if submitted %}
-        <div class="feedback-success">
-          <h2>{% trans "Thank You" %}</h2>
-          <p>{% trans "Your feedback was submitted successfully and is now waiting for admin approval." %}</p>
-          <a class="feedback-btn feedback-btn-primary" href="{% url 'electricity:feedback' %}">{% trans "Send Another Review" %}</a>
-        </div>
-      {% else %}
-        <form method="post" class="feedback-form">
-          {% csrf_token %}
-          <div class="feedback-grid">
-            {% for field in form %}
-              <div class="feedback-field{% if field.name == 'message' %} feedback-field-wide{% endif %}">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-                {% if field.errors %}
-                  <div class="feedback-error">{{ field.errors|striptags }}</div>
-                {% endif %}
-              </div>
-            {% endfor %}
-          </div>
-          <button class="feedback-btn feedback-btn-primary" type="submit">{% trans "Submit Feedback" %}</button>
-        </form>
-      {% endif %}
-    </div>
+<section class="feedback-hero"><div class="feedback-shell">
+  <div class="feedback-copy">
+    <div class="feedback-kicker"><i aria-hidden="true"></i>{% trans "Customer Feedback" %}</div>
+    <h1>{% trans "Tell us how" %}<br>{% trans "the" %} <span>{% trans "job went" %}</span></h1>
+    <p>{% trans "Your feedback helps us improve our services and continue delivering safe, reliable and high-quality electrical solutions." %}</p>
+    <ul class="feedback-benefits"><li><span aria-hidden="true">▣</span>{% trans "Your feedback matters" %}</li><li><span aria-hidden="true">♢</span>{% trans "Reviewed by our team" %}</li><li><span aria-hidden="true">♧</span>{% trans "Helps us improve" %}</li></ul>
+    <div class="feedback-thanks"><div><i aria-hidden="true"></i>{% trans "Thank you" %}</div><p>{% trans "We truly appreciate you taking the time to share your experience." %}</p></div>
+    <div class="feedback-photo" aria-hidden="true"><img src="{% static 'electricity/img/rwm-electrician-jacket.png' %}" alt=""></div>
   </div>
-</section>
+  <div class="feedback-card">
+    {% if submitted %}
+    <div class="feedback-success" role="status"><div class="feedback-success-icon" aria-hidden="true">✓</div><h2><span>{% trans "Thank You" %}</span> {% trans "for" %}<br>{% trans "Your feedback!" %}</h2><p>{% trans "We really appreciate you taking the time to share your experience with RWM EL." %}</p><p>{% trans "Your feedback has been successfully submitted and will be reviewed by our team." %}<span class="feedback-visually-hidden"> {% trans "Your feedback is waiting for admin approval." %}</span></p><a class="feedback-btn" href="{% url 'electricity:home' %}">{% trans "Back to home" %}<span aria-hidden="true">→</span></a></div>
+    {% else %}
+    <form method="post" class="feedback-form">{% csrf_token %}{% if form.non_field_errors %}<div class="feedback-error feedback-form-error" role="alert">{{ form.non_field_errors|striptags }}</div>{% endif %}<div class="feedback-grid">
+      <div class="feedback-field"><label for="{{ form.full_name.id_for_label }}">{% trans "Full name" %} <b>*</b></label>{{ form.full_name }}{% if form.full_name.errors %}<div class="feedback-error">{{ form.full_name.errors|striptags }}</div>{% endif %}</div>
+      <div class="feedback-field"><label for="{{ form.email.id_for_label }}">{% trans "Email" %} <b>*</b></label>{{ form.email }}{% if form.email.errors %}<div class="feedback-error">{{ form.email.errors|striptags }}</div>{% endif %}</div>
+      <div class="feedback-field"><label for="{{ form.location.id_for_label }}">{% trans "Location" %}</label>{{ form.location }}{% if form.location.errors %}<div class="feedback-error">{{ form.location.errors|striptags }}</div>{% endif %}</div>
+      <fieldset class="feedback-field feedback-rating"><legend>{% trans "Rating" %} <b>*</b></legend><div class="feedback-stars" role="radiogroup" aria-label="{% trans 'Rating' %}">{% for value in "12345" %}<input type="radio" name="rating" value="{{ value }}" id="feedback-star-{{ value }}" {% if form.rating.value|stringformat:'s' == value or not form.is_bound and value == '5' %}checked{% endif %}><label for="feedback-star-{{ value }}" data-rating="{{ value }}" aria-label="{{ value }} {% trans 'stars' %}">☆</label>{% endfor %}</div><small>{% trans "Click a star to rate" %}</small>{% if form.rating.errors %}<div class="feedback-error">{{ form.rating.errors|striptags }}</div>{% endif %}</fieldset>
+      <div class="feedback-field feedback-field-wide"><label for="{{ form.message.id_for_label }}">{% trans "Message" %} <b>*</b></label><div class="feedback-message-wrap">{{ form.message }}<span><output id="feedback-count">0</output>/500</span></div>{% if form.message.errors %}<div class="feedback-error">{{ form.message.errors|striptags }}</div>{% endif %}</div>
+    </div><button class="feedback-btn" type="submit">{% trans "Submit Feedback" %}<span aria-hidden="true">→</span></button><div class="feedback-privacy"><span aria-hidden="true">♙</span><p>{% trans "Your feedback will be reviewed by our team. With your permission, we may share your review on our website." %} {% trans "Read our" %} <a href="{% url 'electricity:privacy' %}">{% trans "Privacy Policy" %}</a>.</p></div></form>
+    {% endif %}
+  </div>
+</div></section>
 {% endblock %}
+{% block extra_js %}<script>(()=>{const s=[...document.querySelectorAll('.feedback-stars label')],r=[...document.querySelectorAll('.feedback-stars input')],paint=v=>s.forEach(x=>x.textContent=Number(x.dataset.rating)<=v?'★':'☆'),c=r.find(x=>x.checked);if(c)paint(Number(c.value));r.forEach(x=>x.addEventListener('change',()=>paint(Number(x.value))));const m=document.querySelector('#{{ form.message.id_for_label }}'),o=document.querySelector('#feedback-count');if(m&&o){const u=()=>o.textContent=m.value.length;u();m.addEventListener('input',u)}})();</script>{% endblock %}

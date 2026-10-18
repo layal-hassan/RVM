@@ -6,6 +6,61 @@
     --muted: #6b7280;
 }
 
+/* RWM EL dark consultation flow */
+.booking-flow {
+    --navy: #f5ead0;
+    --gold: #d6aa38;
+    --cream: #11170d;
+    --ink: #f4eee0;
+    --muted: rgba(244, 238, 224, 0.68);
+}
+
+.booking-wrapper.electricity-body {
+    background:
+        linear-gradient(180deg, rgba(7, 10, 7, 0.9), rgba(11, 16, 9, 0.98)),
+        url("../img/project-support-electrician-v2.png") center top / 100% auto no-repeat,
+        #0b1009;
+    color: var(--ink);
+}
+
+.booking-page { min-height: 760px; padding: 70px 0 90px; }
+.booking-shell { max-width: 1080px; }
+.booking-header { margin-bottom: 22px; padding: 18px 22px; border: 1px solid rgba(214,170,56,.2); border-radius: 8px; background: rgba(8,12,8,.84); }
+.booking-step, .booking-percent { color: #d9b34c; font-family: Arial, sans-serif; letter-spacing: .14em; }
+.booking-progress { height: 5px; background: rgba(255,255,255,.1); }
+.booking-progress-bar { background: linear-gradient(90deg, #b8861d, #f0cb64); box-shadow: 0 0 16px rgba(214,170,56,.32); }
+.booking-card { padding: 44px; border: 1px solid rgba(214,170,56,.25); border-radius: 10px; background: linear-gradient(145deg, rgba(23,30,16,.97), rgba(8,13,8,.98)); box-shadow: 0 28px 70px rgba(0,0,0,.38); }
+.booking-title { color: #f3dfac; font-size: clamp(30px,4vw,48px); }
+.booking-subtitle { max-width: 700px; margin: 0 auto 30px; color: var(--muted); }
+.booking-input, .booking-flow .form-control, .booking-flow .form-select { border: 1px solid rgba(214,170,56,.25); background-color: rgba(5,9,6,.72); color: #f7f1e4; }
+.booking-input:focus, .booking-flow .form-control:focus, .booking-flow .form-select:focus { border-color: #d6aa38; background-color: rgba(5,9,6,.88); color: #fff; box-shadow: 0 0 0 3px rgba(214,170,56,.12); }
+.option-card, .service-card, .time-card, .toggle-option, .day-pill, .urgent-option, .upload-card, .review-card { border-color: rgba(214,170,56,.2); background: linear-gradient(145deg, rgba(25,32,16,.96), rgba(10,15,8,.98)); color: #f4eee0; }
+.option-card:hover, .service-card:hover, .time-card:hover, .toggle-option:hover, .day-pill:hover { border-color: rgba(214,170,56,.55); transform: translateY(-2px); }
+.option-card.is-active, .service-card.is-active, .time-card.is-active, .toggle-option.is-active, .day-pill.is-active, .urgent-option.is-active { border-color: #d6aa38; background: linear-gradient(145deg, rgba(48,48,20,.98), rgba(15,21,10,.98)); box-shadow: 0 14px 34px rgba(0,0,0,.28), 0 0 0 1px rgba(214,170,56,.12); }
+.option-title, .service-title, .time-title, .urgent-title, .tip-title, .upload-title, .review-title { color: #f1d995; }
+.option-text, .service-note, .urgent-subtitle, .upload-note, .tip-list { color: var(--muted); }
+.option-icon, .service-icon, .upload-icon, .urgent-icon { background: rgba(214,170,56,.12); color: #e2b941; }
+.option-pill { background: linear-gradient(110deg,#c79725,#efd064); color: #1b170d; }
+.option-check, .service-check { border-color: rgba(226,185,65,.5); }
+.urgent-box, .tip-box, .upload-summary { border-color: rgba(214,170,56,.25); background: rgba(8,13,8,.7); }
+.review-row { border-bottom-color: rgba(255,255,255,.09); }
+.booking-actions { padding-top: 24px; border-top: 1px solid rgba(255,255,255,.08); }
+.booking-btn { min-width: 160px; border-radius: 5px; padding: 13px 28px; text-transform: uppercase; letter-spacing: .1em; font-family: Arial, sans-serif; font-size: 11px; }
+.booking-page .btn-primary { background: linear-gradient(110deg,#c89929,#e9c45c); border-color: #d6aa38; color: #17140c; }
+.booking-page .btn-primary:hover, .booking-page .btn-primary:focus, .booking-page .btn-primary:active { background: #f1d374; border-color: #f1d374; color: #17140c; }
+.booking-page .btn-light { border-color: rgba(214,170,56,.3); background: rgba(8,12,8,.72); color: #eee3c8; }
+.booking-page .btn-light:hover { border-color: #d6aa38; background: rgba(214,170,56,.1); color: #fff; }
+.booking-errors { border-color: rgba(220,91,91,.45); background: rgba(75,18,18,.38); color: #ffb5b5; }
+
+@media (max-width: 640px) {
+    .booking-page { padding: 38px 0 58px; }
+    .booking-header { padding: 15px; }
+    .booking-card { padding: 28px 18px; }
+    .booking-actions { align-items: stretch; flex-direction: column-reverse; }
+    .booking-btn { width: 100%; }
+    .option-card-large { min-height: 250px; }
+}
+
 body {
     font-family: "Vesper Libre", serif;
     background: radial-gradient(circle at top, #ffffff 0%, #f6f2ea 55%, #f4efe6 100%);
@@ -1463,5 +1518,47 @@ html[dir="rtl"] .booking-input {
 
     .booking-flow .option-card-large {
         min-height: 280px;
+    }
+}
+
+/* Consultation flow aligned with the current on-call experience. */
+body.booking-flow.booking-wrapper.electricity-body {
+    background: #0a0f08;
+}
+
+.booking-flow .booking-page {
+    position: relative;
+    background:
+        linear-gradient(180deg, rgba(7, 10, 7, .86), rgba(10, 15, 8, .98) 520px),
+        url("../img/project-support-electrician-v2.png") center top / 100% auto no-repeat,
+        #0a0f08;
+}
+
+.booking-flow .booking-header {
+    padding: 18px 22px;
+    border: 1px solid rgba(202, 161, 61, .2);
+    border-radius: 8px;
+    background: rgba(7, 11, 7, .86);
+    backdrop-filter: blur(8px);
+}
+
+.booking-flow .booking-card,
+.booking-flow .thankyou-card {
+    border-color: rgba(202, 161, 61, .28);
+    background: linear-gradient(145deg, rgba(22, 29, 15, .98), rgba(7, 12, 7, .99));
+}
+
+.booking-flow .booking-title,
+.booking-flow .thankyou-card h1 {
+    color: #f1d995;
+    text-shadow: 0 3px 22px rgba(0, 0, 0, .3);
+}
+
+@media (max-width: 600px) {
+    .booking-flow .booking-page {
+        background:
+            linear-gradient(180deg, rgba(7, 10, 7, .78), rgba(10, 15, 8, .99) 360px),
+            url("../img/project-support-electrician-v2.png") 68% top / auto 420px no-repeat,
+            #0a0f08;
     }
 }

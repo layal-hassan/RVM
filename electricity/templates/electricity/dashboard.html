@@ -367,24 +367,49 @@
                 oncall: panel.dataset.urlOncall,
                 service: panel.dataset.urlService,
                 consultation: panel.dataset.urlConsultation,
+                careers: panel.dataset.urlCareers,
             };
 
+            const markReadUrl = panel.dataset.markReadUrl;
+            const csrfInput = panel.querySelector('input[name="csrfmiddlewaretoken"]');
+
             panel.querySelectorAll(".dash-notify-item").forEach((item) => {
-                item.addEventListener("click", () => {
+                item.addEventListener("click", async () => {
                     const message = (item.dataset.message || "").toLowerCase();
-                    if (message.includes("electrician")) {
-                        window.location.href = urlMap.electrician;
-                        return;
+                    let destination = urlMap.consultation;
+                    if (message.includes("career") || message.includes("application for")) {
+                        destination = urlMap.careers;
+                    } else if (message.includes("electrician")) {
+                        destination = urlMap.electrician;
+                    } else if (message.includes("on-call") || message.includes("on call")) {
+                        destination = urlMap.oncall;
+                    } else if (message.includes("service")) {
+                        destination = urlMap.service;
                     }
-                    if (message.includes("on-call") || message.includes("on call")) {
-                        window.location.href = urlMap.oncall;
-                        return;
+
+                    if (item.classList.contains("is-unread") && markReadUrl) {
+                        const body = new URLSearchParams({ notification_id: item.dataset.id });
+                        try {
+                            const response = await fetch(markReadUrl, {
+                                method: "POST",
+                                credentials: "same-origin",
+                                headers: {
+                                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+                                    "X-CSRFToken": csrfInput ? csrfInput.value : "",
+                                    "X-Requested-With": "XMLHttpRequest",
+                                },
+                                body,
+                            });
+                            if (response.ok) {
+                                const data = await response.json();
+                                item.classList.remove("is-unread");
+                                item.classList.add("is-read");
+                                updateBanner(data.unread_count || 0);
+                            }
+                        } catch (error) {}
                     }
-                    if (message.includes("service")) {
-                        window.location.href = urlMap.service;
-                        return;
-                    }
-                    window.location.href = urlMap.consultation;
+
+                    window.location.href = destination;
                 });
             });
         }

@@ -213,6 +213,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 # DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Support@rwmel.se")
 # SERVER_EMAIL = os.getenv("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
 # CONTACT_TO_EMAIL = os.getenv("CONTACT_TO_EMAIL", "Info@rwmel.se")
+# CAREERS_TO_EMAIL = os.getenv("CAREERS_TO_EMAIL", "Support@rwmel.se")
 # EMAIL_HOST = os.getenv("EMAIL_HOST", "")
 # EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
 # EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")

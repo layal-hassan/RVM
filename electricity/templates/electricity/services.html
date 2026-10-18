@@ -28,6 +28,100 @@
   </div>
 </section>
 
+<section class="service-solutions" id="service-ecosystem">
+  <div class="container">
+    <header class="service-section-heading">
+      <div>
+        <span class="service-section-kicker">{% trans "Our Service Categories" %}</span>
+        <h2>{% trans "Find the Right Solution" %}</h2>
+        <p>{% trans "Explore our main service areas and discover how we can help." %}</p>
+      </div>
+      <a href="#popular-services">{% trans "View all services" %} <span aria-hidden="true">→</span></a>
+    </header>
+    <div class="solution-card-grid">
+      {% for category_page in category_pages %}
+      <article class="solution-card">
+        <a class="solution-card-media" href="{% url 'electricity:service_category_detail' category_page.slug %}">
+          {% if category_page.hero_image %}
+          <img src="{{ category_page.hero_image.url }}" alt="{{ category_page.name }}">
+          {% elif category_page.theme == 'smart' %}
+          <img src="{% static 'electricity/img/brf-ev-charging.png' %}" alt="{{ category_page.name }}">
+          {% elif category_page.theme == 'lighting' %}
+          <img src="{% static 'electricity/img/brf-lighting-solutions.png' %}" alt="{{ category_page.name }}">
+          {% else %}
+          <img src="{% static 'electricity/img/brf-electrical-upgrades.png' %}" alt="{{ category_page.name }}">
+          {% endif %}
+        </a>
+        <div class="solution-card-body">
+          <h3>{{ category_page.name }}</h3>
+          <p>{{ category_page.teaser|default:category_page.hero_description|truncatechars:120 }}</p>
+          <ul>
+            {% if category_page.theme == 'smart' %}
+            <li>{% trans "Smart home setup" %}</li><li>{% trans "EV charger installation" %}</li><li>{% trans "Sensors, timers and controls" %}</li>
+            {% elif category_page.theme == 'lighting' %}
+            <li>{% trans "Interior and exterior lighting" %}</li><li>{% trans "Kitchen and bathroom lighting" %}</li><li>{% trans "Appliance connections" %}</li>
+            {% else %}
+            <li>{% trans "Wiring and cabling" %}</li><li>{% trans "Electrical panels" %}</li><li>{% trans "Repairs and troubleshooting" %}</li>
+            {% endif %}
+          </ul>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="service-process">
+  <div class="container service-process-inner">
+    <div class="service-process-copy">
+      <span class="service-section-kicker">{% trans "A Simple Process" %}</span>
+      <h2>{% trans "From Request to" %}<br>{% trans "Completed Service" %}</h2>
+      <p>{% trans "We make it easy to get started. Book a service or request a quote, and we will handle the rest." %}</p>
+    </div>
+    <ol class="service-process-steps">
+      <li><b>1</b><span>{% trans "Book a service or request a quote" %}</span></li>
+      <li><b>2</b><span>{% trans "We confirm the details with you" %}</span></li>
+      <li><b>3</b><span>{% trans "Our electrician completes the work" %}</span></li>
+      <li><b>4</b><span>{% trans "You enjoy a safe and reliable solution" %}</span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="popular-services" id="popular-services">
+  <div class="container">
+    <header class="service-section-heading">
+      <div><span class="service-section-kicker">{% trans "Featured Services" %}</span><h2>{% trans "Popular Services" %}</h2></div>
+      {% if services|length > 4 %}
+      <button class="services-toggle" type="button" aria-expanded="false" aria-controls="all-popular-services">
+        <span class="services-toggle-label">{% trans "View all services" %}</span>
+        <span aria-hidden="true">→</span>
+      </button>
+      {% endif %}
+    </header>
+    <div class="popular-service-grid" id="all-popular-services">
+      {% for service in services %}
+      <article class="popular-service-card{% if forloop.counter > 4 %} popular-service-extra{% endif %}"{% if forloop.counter > 4 %} hidden{% endif %}>
+        {% if service.icon %}
+        <img src="{{ service.icon.url }}" alt="{{ service.title }}">
+        {% else %}
+        <div class="popular-service-fallback" aria-hidden="true">{{ service.title|slice:":2" }}</div>
+        {% endif %}
+        <div class="popular-service-body">
+          <h3>{{ service.title }}</h3>
+          {% if service.short_description %}<p>{{ service.short_description|truncatechars:120 }}</p>{% endif %}
+        </div>
+      </article>
+      {% empty %}
+      <div class="empty-state">
+        <h3>{% trans "No services available yet" %}</h3>
+        <p>{% trans "New electrical solutions are being curated. Please check back soon." %}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% comment %}
 <section class="feature-strip">
   <div class="container feature-grid">
     <div class="feature-card">
@@ -101,94 +195,52 @@
   </div>
 </section>
 {% endif %}
+{% endcomment %}
 
-<section class="catalog-section">
-  <div class="container">
-    <div class="catalog-panel">
-      <div class="catalog-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12.9 2.8l.7 2.3 2.4.5-1.7 1.7.4 2.4-2.1-1.1-2.1 1.1.4-2.4L9 5.6l2.4-.5.5-2.3zM4 18.5l3-3 2.5 2.5-3 3H4v-2.5zm10.7-9.2l2-2 2.5 2.5-2 2-.7-.7-4.1 4.1-.9-.9 4.1-4.1-.9-.9z"/>
-        </svg>
+<section class="services-trust-section">
+  <div class="services-emergency">
+    <div class="container services-emergency-content">
+      <span class="service-section-kicker">{% trans "Emergency Electrical Services" %}</span>
+      <h2>{% trans "Need Urgent Assistance?" %}</h2>
+      <p>{% trans "Experiencing an electrical fault or power issue? Our team is ready to help." %}</p>
+      <div class="services-trust-actions">
+        <a class="btn btn-primary" href="{% url 'electricity:on_call_booking_step' 1 %}">{% trans "Contact us" %} <span aria-hidden="true">→</span></a>
+        <a class="services-phone" href="tel:+46700391611"><span aria-hidden="true">☎</span> 0046 70 03 91 611</a>
       </div>
-      <h3>{% trans "TECHNICAL CATALOG INTEGRATION" %}</h3>
-      <p>
-        {% trans "We are currently finalizing our digital blueprints and proprietary material packages. Our web expansion will soon include complete technical specifications for all hardware tiers." %}
-      </p>
-      <p class="catalog-emphasis">{% trans "Until then, our field engineering teams remain fully active." %}</p>
     </div>
   </div>
-</section>
 
-<section class="callout-band">
-  <div class="container callout-grid">
-    <div class="callout-copy">
-      <div class="eyebrow">{% trans "Priority Infrastructure Support" %}</div>
-      <h2>{% trans "On-Call & Emergency Service" %}</h2>
-      <p>
-        {% trans "Priority electrical support for businesses, housing associations (BRF), and property managers. Activate immediate access with an on-call agreement tailored to your site." %}
-      </p>
-    </div>
-    <div class="callout-actions">
-      <a class="btn btn-primary" href="{% url 'electricity:on_call_booking_step' 1 %}">{% trans "Apply for On-Call Service" %}</a>
-      <span class="callout-note">{% trans "Response windows confirmed in writing." %}</span>
+  <div class="container services-benefits">
+    <header>
+      <span class="service-section-kicker">{% trans "Why Choose RWM EL" %}</span>
+      <h2>{% trans "Quality, Safety and Expertise" %}</h2>
+    </header>
+    <div class="services-benefit-grid">
+      <article><span class="services-benefit-icon" aria-hidden="true">✓</span><div><h3>{% trans "Certified & insured" %}</h3><p>{% trans "Work performed by qualified electricians." %}</p></div></article>
+      <article><span class="services-benefit-icon" aria-hidden="true">◆</span><div><h3>{% trans "Modern solutions" %}</h3><p>{% trans "High-quality materials and latest technology." %}</p></div></article>
+      <article><span class="services-benefit-icon" aria-hidden="true">♙</span><div><h3>{% trans "For homes & businesses" %}</h3><p>{% trans "Tailored solutions for every need." %}</p></div></article>
+      <article><span class="services-benefit-icon" aria-hidden="true">◎</span><div><h3>{% trans "Clear communication" %}</h3><p>{% trans "We keep you informed throughout the process." %}</p></div></article>
     </div>
   </div>
-</section>
 
-<section class="section section-light"{% if not category_pages %} id="service-ecosystem"{% endif %}>
-  <div class="container">
-    <div class="section-header ecosystem-header">
-      <div>
-        <h2>{% trans "The Service Ecosystem" %}</h2>
+  <div class="services-booking-split">
+    <div class="services-booking-image" role="img" aria-label="{% trans 'Modern kitchen with warm lighting' %}"></div>
+    <div class="services-booking-content">
+      <span class="service-section-kicker">{% trans "Ready to Get Started?" %}</span>
+      <h2>{% trans "Book a Service or" %}<br>{% trans "Request a Quote" %}</h2>
+      <p>{% trans "Tell us what you need and we'll get back to you quickly with the next steps." %}</p>
+      <div class="services-trust-actions">
+        <a class="btn btn-primary" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Book a service" %} <span aria-hidden="true">→</span></a>
+        <a class="btn btn-secondary" href="{% url 'electricity:quote_request_step' 1 %}">{% trans "Get a quote" %} <span aria-hidden="true">→</span></a>
       </div>
-      <p class="section-copy">{% trans "While our detailed technical library is in development, our boutique engineering team is fully operational and ready to serve you today." %}</p>
-    </div>
-
-    <div class="service-grid{% if services|length == 1 %} service-grid-single{% endif %}">
-      {% for service in services %}
-        <article class="service-card service-card-dynamic">
-          <div class="service-media">
-            {% if service.icon %}
-              <img src="{{ service.icon.url }}" alt="{{ service.title }}">
-            {% else %}
-              <div class="service-fallback">{{ service.title|slice:":2" }}</div>
-            {% endif %}
-          </div>
-          <div class="service-body">
-            <h3>{{ service.title }}</h3>
-              {% if service.bullet_points %}
-                <div class="service-specs">
-                  <ul class="service-bullets">
-                    {% for line in service.bullet_points|split_lines %}
-                      <li>{{ line }}</li>
-                    {% endfor %}
-                  </ul>
-                </div>
-              {% elif service.short_description %}
-                <div class="service-specs">
-                  <ul class="service-bullets">
-                    {% for line in service.short_description|split_lines %}
-                      <li>{{ line }}</li>
-                    {% endfor %}
-                  </ul>
-                </div>
-              {% endif %}
-            <div class="service-actions">
-              <a class="mini-cta" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a consultation" %}</a>
-              <a class="mini-cta mini-cta-secondary" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Book a service" %}</a>
-            </div>
-          </div>
-        </article>
-      {% empty %}
-        <div class="empty-state">
-          <h3>{% trans "No services available yet" %}</h3>
-          <p>{% trans "New electrical solutions are being curated. Please check back soon." %}</p>
-        </div>
-      {% endfor %}
+      <div class="services-booking-notes">
+        <span>▣ {% trans "Flexible appointments" %}</span>
+        <span>▱ {% trans "Quick response" %}</span>
+        <span>⌖ {% trans "Stockholm & surrounding areas" %}</span>
+      </div>
     </div>
   </div>
 </section>
-
 
 <section class="section engineering-section">
   <div class="container engineering-grid">
@@ -257,21 +309,6 @@
   </div>
 </section>
 
-<section class="section section-light">
-  <div class="container">
-    <div class="cta-panel muted-panel muted-panel-back4">
-      <div>
-        <div class="eyebrow">{% trans "More Smart Home Details" %}</div>
-        <h2>{% trans "Coming Soon" %}</h2>
-        <p>{% trans "We are currently collecting our advanced catalog and proprietary solutions to help you get the most out of your infrastructure." %}</p>
-      </div>
-      <div class="cta-actions">
-        <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a Smart Home Consultation" %}</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section class="section mini-cta-section">
   <div class="container mini-cta-grid">
     <div class="mini-cta-card">
@@ -292,92 +329,6 @@
   </div>
 </section>
 
-<section class="pricing-preview" id="pricing">
-  <div class="container">
-    <div class="pricing-header">
-      <div>
-        <div class="pricing-kicker">{% trans "Pricing for Booking Electrical" %}</div>
-        <h2>{% trans "PRICING FOR BOOKING ELECTRICAL" %}</h2>
-      </div>
-      <p>{% trans "Transparent fee structures for on-site engineering and maintenance services." %}</p>
-    </div>
-    <div class="pricing-grid pricing-grid-4">
-      <article class="pricing-card pricing-card-table">
-        <div class="pricing-card-top">
-          <span class="pricing-meta">{% trans "Base Deployment" %}</span>
-          <h3>{% trans "First Hour Breakdown" %}</h3>
-        </div>
-        <div class="pricing-table">
-          <div class="pricing-row">
-            <span>{% trans "Labour Rate" %}</span>
-            <strong>688 SEK</strong>
-          </div>
-          <div class="pricing-row">
-            <span>{% trans "Transport Fee" %}</span>
-            <strong>500 SEK</strong>
-          </div>
-          <div class="pricing-row pricing-total">
-            <span>{% trans "Total" %}</span>
-            <strong>1,188 SEK</strong>
-          </div>
-        </div>
-        <div class="pricing-foot">{% trans "Includes VAT" %}</div>
-      </article>
-      <article class="pricing-card pricing-card-table">
-        <div class="pricing-card-top">
-          <span class="pricing-meta">{% trans "Tax Optimization" %}</span>
-          <span class="pricing-pill">{% trans "Minimum charge with ROT" %}</span>
-          <h3>{% trans "ROT Deduction Applied" %}</h3>
-        </div>
-        <div class="pricing-table">
-          <div class="pricing-row">
-            <span>{% trans "Gross Total" %}</span>
-            <strong>688 SEK</strong>
-          </div>
-          <div class="pricing-row pricing-deduction">
-            <span>{% trans "ROT (30% Labour)" %}</span>
-            <strong>-206.4 SEK</strong>
-          </div>
-          <div class="pricing-row pricing-total pricing-rot-total">
-            <span>{% trans "Adjusted Total" %}</span>
-            <strong>481.6 SEK</strong>
-          </div>
-        </div>
-        <div class="pricing-foot">{% trans "Final charge per first hour" %}</div>
-      </article>
-      <article class="pricing-card pricing-card-table">
-        <div class="pricing-card-top">
-          <span class="pricing-meta">{% trans "Ongoing Rate" %}</span>
-          <h3>{% trans "Additional Service Time" %}</h3>
-        </div>
-        <div class="pricing-table">
-          <div class="pricing-row">
-            <span class="pricing-subhead">{% trans "Standard Hourly" %}</span>
-            <strong>688 SEK/hr</strong>
-          </div>
-          <div class="pricing-row pricing-rot">
-            <span class="pricing-subhead">{% trans "ROT Deduction" %}</span>
-            <strong>-206.4 SEK/hr</strong>
-          </div>
-        </div>
-        <div class="pricing-foot">{% trans "Billed in 30min increments" %}</div>
-      </article>
-      <article class="pricing-card pricing-card-terms">
-        <div class="pricing-card-top">
-          <span class="pricing-meta">{% trans "Documentation" %}</span>
-          <h3>{% trans "Terms &amp; Conditions" %}</h3>
-        </div>
-        <ul class="pricing-terms">
-          <li>{% trans "Minimum charge of 1 hour applies to all site deployments." %}</li>
-          <li>{% trans "Material costs and specialized equipment are excluded from the rates above." %}</li>
-          <li>{% trans "ROT deduction requires valid Swedish tax eligibility (Personal ID)." %}</li>
-        </ul>
-        <div class="pricing-foot">{% trans "Licensed by Elsäkerhetsverket" %}</div>
-      </article>
-    </div>
-  </div>
-</section>
-
 <section class="section bottom-cta">
   <div class="container bottom-cta-inner">
     <h2>{% trans "READY TO UPGRADE YOUR HOME?" %}</h2>
@@ -388,6 +339,29 @@
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toggle = document.querySelector(".services-toggle");
+    if (!toggle) return;
+
+    const extraServices = document.querySelectorAll(".popular-service-extra");
+    const label = toggle.querySelector(".services-toggle-label");
+    const showLabel = "{% trans 'View all services' %}";
+    const hideLabel = "{% trans 'Show fewer services' %}";
+
+    toggle.addEventListener("click", function () {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      extraServices.forEach(function (service) {
+        service.hidden = expanded;
+      });
+      toggle.setAttribute("aria-expanded", String(!expanded));
+      label.textContent = expanded ? showLabel : hideLabel;
+    });
+  });
+</script>
 {% endblock %}
 
 
