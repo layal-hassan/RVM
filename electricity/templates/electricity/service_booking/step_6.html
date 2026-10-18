@@ -88,7 +88,12 @@
 
       <div class="schedule-title">
 
-        <span class="schedule-icon">📅</span>
+        <span class="schedule-icon" aria-hidden="true">
+          <svg class="booking-calendar-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M7 3v3M17 3v3M4 9h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/>
+            <path d="M8 13h2M14 13h2M8 17h2M14 17h2"/>
+          </svg>
+        </span>
 
         {% trans "Primary Choice" %}
 
@@ -108,7 +113,10 @@
           <div class="date-input-shell">
             <input class="form-control" type="date" name="preferred_date" value="{{ data.preferred_date|default:'' }}">
             <button class="date-input-trigger" type="button" data-date-trigger aria-label="{% trans 'Open calendar' %}">
-              <span aria-hidden="true">📅</span>
+              <svg class="booking-calendar-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 3v3M17 3v3M4 9h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/>
+                <path d="M8 13h2M14 13h2M8 17h2M14 17h2"/>
+              </svg>
             </button>
           </div>
 
@@ -177,7 +185,10 @@
           <div class="date-input-shell">
             <input class="form-control" type="date" name="alt_date" value="{{ data.alt_date|default:'' }}">
             <button class="date-input-trigger" type="button" data-date-trigger aria-label="{% trans 'Open calendar' %}">
-              <span aria-hidden="true">📅</span>
+              <svg class="booking-calendar-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 3v3M17 3v3M4 9h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/>
+                <path d="M8 13h2M14 13h2M8 17h2M14 17h2"/>
+              </svg>
             </button>
           </div>
 

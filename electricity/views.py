@@ -1178,11 +1178,10 @@ def _provider_slots_for_date(provider, for_date, duration_minutes, start_from=No
     return slots
 
 
-def _available_slots_for_zip(zip_code, for_date, duration_minutes):
-    zip_code = _normalize_zip(zip_code or "")
-    if not zip_code:
-        return []
-    providers = ProviderProfile.objects.filter(is_active=True, zip_code=zip_code)
+def _available_slots(for_date, duration_minutes):
+    # ZIP codes define the customer service area, not an individual provider's
+    # coverage. Any active provider can therefore satisfy a booking request.
+    providers = ProviderProfile.objects.filter(is_active=True)
     slot_map = {}
     for provider in providers:
         for slot in _provider_slots_for_date(provider, for_date, duration_minutes):
@@ -1192,8 +1191,8 @@ def _available_slots_for_zip(zip_code, for_date, duration_minutes):
     return slots
 
 
-def _format_slots(zip_code, for_date, duration_minutes):
-    slots = _available_slots_for_zip(zip_code, for_date, duration_minutes)
+def _format_slots(for_date, duration_minutes):
+    slots = _available_slots(for_date, duration_minutes)
     formatted = []
     duration = datetime.timedelta(minutes=duration_minutes)
     for slot in slots:
@@ -1208,8 +1207,8 @@ def _format_slots(zip_code, for_date, duration_minutes):
     return formatted
 
 
-def _earliest_availability_for_zip(zip_code, duration_minutes, start_date=None):
-    providers = ProviderProfile.objects.filter(is_active=True, zip_code=zip_code)
+def _earliest_availability(duration_minutes, start_date=None):
+    providers = ProviderProfile.objects.filter(is_active=True)
     if not providers.exists():
         return None, None
     start_date = start_date or timezone.localdate()
@@ -1230,11 +1229,17 @@ def _earliest_availability_for_zip(zip_code, duration_minutes, start_date=None):
     return earliest_provider, earliest
 
 
-def _find_provider_for_slot(zip_code, start_at, end_at):
-    providers = ProviderProfile.objects.filter(is_active=True, zip_code=zip_code)
+def _find_provider_for_slot(start_at, end_at):
+    providers = ProviderProfile.objects.filter(is_active=True)
     candidates = []
+    duration_minutes = int((end_at - start_at).total_seconds() // 60)
     for provider in providers:
-        if _provider_is_available(provider, start_at, end_at):
+        provider_slots = _provider_slots_for_date(
+            provider,
+            timezone.localtime(start_at).date(),
+            duration_minutes,
+        )
+        if any(slot == start_at for slot in provider_slots):
             candidates.append(provider)
     if not candidates:
         return None
@@ -2517,8 +2522,7 @@ def service_booking_slots(request):
     if not duration_minutes:
         # Fallback preview window to show availability even if duration is not finalized yet.
         duration_minutes = 60
-    zip_code = request.session.get(ZIP_CHECK_SESSION_KEY, {}).get("service", "")
-    slots = _format_slots(zip_code, for_date, duration_minutes)
+    slots = _format_slots(for_date, duration_minutes)
     return JsonResponse({"slots": slots})
 
 
@@ -2665,11 +2669,11 @@ def service_booking_step(request, step):
                     if not preferred_date or not preferred_time:
                         errors.append("Please select a valid date and start time.")
                     else:
-                        slots = _available_slots_for_zip(zip_code, preferred_date, duration_minutes)
+                        slots = _available_slots(preferred_date, duration_minutes)
                         slot_labels = {slot.time().strftime("%H:%M") for slot in slots}
                         if preferred_time.strftime("%H:%M") not in slot_labels:
-                            provider, earliest = _earliest_availability_for_zip(
-                                zip_code, duration_minutes, preferred_date
+                            provider, earliest = _earliest_availability(
+                                duration_minutes, preferred_date
                             )
                             if earliest:
                                 provider_name = provider.display_name if provider else "a provider"
@@ -2726,9 +2730,9 @@ def service_booking_step(request, step):
                 errors.append("Please select a valid start time.")
             assigned_provider = None
             if start_at and end_at and zip_code:
-                assigned_provider = _find_provider_for_slot(zip_code, start_at, end_at)
+                assigned_provider = _find_provider_for_slot(start_at, end_at)
                 if not assigned_provider:
-                    provider, earliest = _earliest_availability_for_zip(zip_code, duration_minutes, preferred_date)
+                    provider, earliest = _earliest_availability(duration_minutes, preferred_date)
                     if earliest:
                         provider_name = provider.display_name if provider else "a provider"
                         errors.append(
@@ -2876,19 +2880,17 @@ def service_booking_step(request, step):
                     duration_for_slots = 60
                     duration_assumed = True
                 if not preferred_date and duration_minutes:
-                    earliest_provider, earliest = _earliest_availability_for_zip(
-                        zip_code, duration_minutes
-                    )
+                    earliest_provider, earliest = _earliest_availability(duration_minutes)
                     if earliest:
                         preferred_date = earliest.date()
                         data["preferred_date"] = preferred_date.isoformat()
                 context["available_slots"] = (
-                    _format_slots(zip_code, preferred_date, duration_for_slots)
+                    _format_slots(preferred_date, duration_for_slots)
                     if preferred_date and duration_for_slots
                     else []
                 )
                 context["alt_available_slots"] = (
-                    _format_slots(zip_code, alt_date, duration_for_slots)
+                    _format_slots(alt_date, duration_for_slots)
                     if alt_date and duration_for_slots
                     else []
                 )
@@ -2932,19 +2934,17 @@ def service_booking_step(request, step):
             duration_for_slots = 60
             duration_assumed = True
         if not preferred_date and duration_minutes:
-            earliest_provider, earliest = _earliest_availability_for_zip(
-                zip_code, duration_minutes
-            )
+            earliest_provider, earliest = _earliest_availability(duration_minutes)
             if earliest:
                 preferred_date = earliest.date()
                 data["preferred_date"] = preferred_date.isoformat()
         context["available_slots"] = (
-            _format_slots(zip_code, preferred_date, duration_for_slots)
+            _format_slots(preferred_date, duration_for_slots)
             if preferred_date and duration_for_slots
             else []
         )
         context["alt_available_slots"] = (
-            _format_slots(zip_code, alt_date, duration_for_slots)
+            _format_slots(alt_date, duration_for_slots)
             if alt_date and duration_for_slots
             else []
         )

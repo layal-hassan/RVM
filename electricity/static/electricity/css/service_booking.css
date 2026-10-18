@@ -376,6 +376,26 @@ body.electricity-body.service-booking-page {
 
 .service-booking-page .date-input-shell {
   position: relative;
+  width: 100%;
+}
+
+/* Keep the date picker and enhanced time select visually aligned. */
+.service-booking-page .schedule-block .date-input-shell,
+.service-booking-page .schedule-block .date-input-shell .form-control,
+.service-booking-page .schedule-block .time-slot-select + .ts-wrapper,
+.service-booking-page .schedule-block .time-slot-select + .ts-wrapper .ts-control {
+  min-height: 56px;
+}
+
+.service-booking-page .schedule-block .date-input-shell .form-control,
+.service-booking-page .schedule-block .time-slot-select + .ts-wrapper .ts-control {
+  height: 56px;
+  box-sizing: border-box;
+}
+
+.service-booking-page .schedule-block .time-slot-select + .ts-wrapper .ts-control {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .service-booking-page .date-input-trigger {
@@ -394,6 +414,21 @@ body.electricity-body.service-booking-page {
   cursor: pointer;
   padding: 0;
   z-index: 2;
+}
+
+.service-booking-page .booking-calendar-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.service-booking-page .schedule-icon .booking-calendar-icon {
+  width: 17px;
+  height: 17px;
 }
 
 .service-booking-page .date-input-trigger:focus-visible {
