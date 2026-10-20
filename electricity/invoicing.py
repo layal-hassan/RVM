@@ -73,6 +73,21 @@ def customer_for_booking(booking):
     email = _value(booking, "email")
     customer = CustomerProfile.objects.filter(email__iexact=email).first() if email else None
     if customer:
+        booking_values = {
+            "phone": _value(booking, "phone"),
+            "street_address": _value(booking, "street_address", "company_address", "site_address"),
+            "postal_code": _value(booking, "postal_code", "postcode", "zip_code"),
+            "city": _value(booking, "city"),
+            "company_name": _value(booking, "organization_name", "company_name"),
+            "organization_number": _value(booking, "organization_number"),
+        }
+        changed_fields = []
+        for field, value in booking_values.items():
+            if value and not getattr(customer, field, ""):
+                setattr(customer, field, value)
+                changed_fields.append(field)
+        if changed_fields:
+            customer.save(update_fields=[*changed_fields])
         return customer
     is_business = bool(_value(booking, "organization_number", "organization_name", "company_name"))
     name = _value(booking, "organization_name", "company_name", "full_name", "contact_person", default="Customer")
@@ -83,7 +98,7 @@ def customer_for_booking(booking):
         phone=_value(booking, "phone"),
         street_address=_value(booking, "street_address", "company_address", "site_address"),
         city=_value(booking, "city"),
-        postal_code=_value(booking, "zip_code"),
+        postal_code=_value(booking, "postal_code", "postcode", "zip_code"),
         personal_id=_value(booking, "personal_id"),
         company_name=_value(booking, "organization_name", "company_name"),
         organization_number=_value(booking, "organization_number"),
@@ -236,7 +251,7 @@ def invoice_pdf_bytes(invoice):
         def __init__(self):
             super().__init__()
             self.width = 88 * mm
-            self.height = 58 * mm
+            self.height = 70 * mm
 
         def wrap(self, available_width, available_height):
             return min(self.width, available_width), self.height
@@ -248,6 +263,11 @@ def invoice_pdf_bytes(invoice):
             amount_currency = "kr" if invoice.currency.upper() == "SEK" else invoice.currency
             amount = f"{invoice.invoice_total:,.2f}".replace(",", " ").replace(".", ",")
             amount_label = "Fakturabelopp" if invoice.status == Invoice.Status.PAID else "Summa att betala"
+            billing_address = (
+                customer.company_address
+                if customer.account_type == CustomerProfile.AccountType.BUSINESS and customer.company_address
+                else customer.street_address
+            )
 
             pdf.setStrokeColor(navy)
             pdf.setLineWidth(1.2)
@@ -260,39 +280,43 @@ def invoice_pdf_bytes(invoice):
             pdf.setLineWidth(1.2)
             pdf.line(padding, height - 9 * mm, padding + 39 * mm, height - 9 * mm)
 
-            rows = [
-                ("Förfallodatum", invoice.due_date.isoformat(), "Helvetica", 7),
-                (amount_label, f"{amount} {amount_currency}", "Helvetica-Bold", 11),
-                ("Fakturanummer", str(invoice.invoice_number), "Helvetica", 7),
-                ("Bankgiro", "5192-1302", "Helvetica", 7),
+            customer_rows = [
+                ("Kundnummer", customer.customer_number or "-"),
+                ("Kundnamn", customer.full_name or "-"),
+                ("Telefonnummer", customer.phone or "-"),
+                ("Fakturaadress", billing_address or "-"),
+                ("Postnummer och ort", " ".join(filter(None, [customer.postal_code, customer.city])) or "-"),
             ]
             row_y = height - 15 * mm
-            for label, value, font, size in rows:
+            for label, value in customer_rows:
                 pdf.setFillColor(muted_navy)
-                pdf.setFont("Helvetica", 7)
+                pdf.setFont("Helvetica", 7.2)
+                pdf.drawString(padding, row_y, label)
+                pdf.setFillColor(ink)
+                pdf.setFont("Helvetica", 7.2)
+                pdf.drawRightString(width - padding, row_y, str(value))
+                row_y -= 4.6 * mm
+
+            divider_y = row_y + 1.6 * mm
+            pdf.setStrokeColor(colors.HexColor("#9AA7BD"))
+            pdf.setLineWidth(.65)
+            pdf.line(0, divider_y, width, divider_y)
+
+            payment_rows = [
+                ("Förfallodatum", invoice.due_date.isoformat(), "Helvetica", 7.2),
+                (amount_label, f"{amount} {amount_currency}", "Helvetica-Bold", 11),
+                ("Fakturanummer", str(invoice.invoice_number), "Helvetica", 7.2),
+                ("Bankgiro", "5192-1302", "Helvetica", 7.2),
+            ]
+            row_y = divider_y - 5.5 * mm
+            for label, value, font, size in payment_rows:
+                pdf.setFillColor(muted_navy)
+                pdf.setFont("Helvetica", 7.2)
                 pdf.drawString(padding, row_y, label)
                 pdf.setFillColor(navy if font == "Helvetica-Bold" else ink)
                 pdf.setFont(font, size)
                 pdf.drawRightString(width - padding, row_y, value)
                 row_y -= 5 * mm
-
-            divider_y = row_y + 1.5 * mm
-            pdf.setStrokeColor(colors.HexColor("#9AA7BD"))
-            pdf.setLineWidth(.65)
-            pdf.line(0, divider_y, width, divider_y)
-
-            address_y = divider_y - 6 * mm
-            pdf.setFillColor(ink)
-            pdf.setFont("Helvetica-Bold", 7.5)
-            pdf.drawString(padding, address_y, str(customer.full_name))
-            pdf.setFont("Helvetica", 7)
-            for address_line in [
-                f"Kundnr {customer.customer_number}",
-                customer.street_address,
-                f"{customer.postal_code} {customer.city}".strip(),
-            ]:
-                address_y -= 4.5 * mm
-                pdf.drawString(padding, address_y, str(address_line or ""))
 
     customer_box = CustomerInformationCard()
     info = Table([[company, customer_box]], colWidths=[88 * mm, 88 * mm])
@@ -341,46 +365,64 @@ def invoice_pdf_bytes(invoice):
     material = category_totals[InvoiceLine.Category.MATERIAL]
     transport = category_totals[InvoiceLine.Category.TRANSPORT]
     other = category_totals[InvoiceLine.Category.OTHER]
+    display_currency = "kr" if invoice.currency.upper() == "SEK" else invoice.currency
     summary_rows = [
-        ["Arbete exkl. moms", f"{_sv_amount(labour['ex_vat'])} {invoice.currency}"],
-        ["Material exkl. moms", f"{_sv_amount(material['ex_vat'])} {invoice.currency}"],
+        ["Arbete exkl. moms", f"{_sv_amount(labour['ex_vat'])} {display_currency}"],
+        ["Material exkl. moms", f"{_sv_amount(material['ex_vat'])} {display_currency}"],
     ]
     if transport["ex_vat"]:
-        summary_rows.append(["Transport exkl. moms", f"{_sv_amount(transport['ex_vat'])} {invoice.currency}"])
+        summary_rows.append(["Transport exkl. moms", f"{_sv_amount(transport['ex_vat'])} {display_currency}"])
     if other["ex_vat"]:
-        summary_rows.append(["Övrigt exkl. moms", f"{_sv_amount(other['ex_vat'])} {invoice.currency}"])
+        summary_rows.append(["Övrigt exkl. moms", f"{_sv_amount(other['ex_vat'])} {display_currency}"])
+    ex_vat_total_row = len(summary_rows)
     summary_rows.extend([
-        ["Summa exkl. moms", f"{_sv_amount(invoice.total_inc_vat - invoice.vat_total)} {invoice.currency}"],
-        ["Moms på arbete", f"{_sv_amount(labour['vat'])} {invoice.currency}"],
-        ["Moms på material", f"{_sv_amount(material['vat'])} {invoice.currency}"],
+        ["Summa exkl. moms", f"{_sv_amount(invoice.total_inc_vat - invoice.vat_total)} {display_currency}"],
+        ["Moms 25 % på arbete", f"{_sv_amount(labour['vat'])} {display_currency}"],
+        ["Moms 25 % på material", f"{_sv_amount(material['vat'])} {display_currency}"],
     ])
     if transport["vat"]:
-        summary_rows.append(["Moms på transport", f"{_sv_amount(transport['vat'])} {invoice.currency}"])
+        summary_rows.append(["Moms 25 % på transport", f"{_sv_amount(transport['vat'])} {display_currency}"])
     if other["vat"]:
-        summary_rows.append(["Moms på övrigt", f"{_sv_amount(other['vat'])} {invoice.currency}"])
+        summary_rows.append(["Moms 25 % på övrigt", f"{_sv_amount(other['vat'])} {display_currency}"])
+    vat_total_row = len(summary_rows)
     summary_rows.extend([
-        ["Moms totalt", f"{_sv_amount(invoice.vat_total)} {invoice.currency}"],
-        ["Arbete inkl. moms", f"{_sv_amount(labour['inc_vat'])} {invoice.currency}"],
-        ["Material inkl. moms", f"{_sv_amount(material['inc_vat'])} {invoice.currency}"],
-        ["Summa inkl. moms", f"{_sv_amount(invoice.total_inc_vat)} {invoice.currency}"],
+        ["Moms 25 %", f"{_sv_amount(invoice.vat_total)} {display_currency}"],
+        ["Summa inkl. moms", f"{_sv_amount(invoice.total_inc_vat)} {display_currency}"],
     ])
     if invoice.discount_total:
-        summary_rows.insert(2, ["Rabatt", f"-{_sv_amount(invoice.discount_total)} {invoice.currency}"])
+        summary_rows.insert(ex_vat_total_row, ["Rabatt", f"-{_sv_amount(invoice.discount_total)} {display_currency}"])
+        ex_vat_total_row += 1
+        vat_total_row += 1
+    total_inc_vat_row = vat_total_row + 1
     if invoice.rot_enabled or invoice.rot_total:
         rot_prefix = "-" if invoice.rot_total else ""
-        summary_rows.append([f"ROT-avdrag {invoice.rot_percent:g}%", f"{rot_prefix}{_sv_amount(invoice.rot_total)} {invoice.currency}"])
-    summary = Table(summary_rows, colWidths=[55 * mm, 38 * mm])
+        summary_rows.append([f"ROT-avdrag {invoice.rot_percent:g} % (på arbetskostnad)", f"{rot_prefix}{_sv_amount(invoice.rot_total)} {display_currency}"])
+    amount_due_row = len(summary_rows)
+    total_label = "FAKTURABELOPP" if invoice.status == Invoice.Status.PAID else "SUMMA ATT BETALA"
+    summary_rows.append([total_label, f"{_sv_amount(invoice.invoice_total)} {display_currency}"])
+    summary = Table(summary_rows, colWidths=[72 * mm, 36 * mm])
     summary.setStyle(TableStyle([
         ("ALIGN", (1, 0), (1, -1), "RIGHT"),
         ("TEXTCOLOR", (0, 0), (-1, -1), ink),
         ("TEXTCOLOR", (0, 0), (0, -1), muted_navy),
         ("FONTSIZE", (0, 0), (-1, -1), 8),
-        ("LEFTPADDING", (0, 0), (-1, -1), 4),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-        ("TOPPADDING", (0, 0), (-1, -1), 1.5),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 1.5),
-        ("LINEABOVE", (0, -1), (-1, -1), 1, navy),
-        ("FONTNAME", (0, -1), (-1, -1), "Helvetica-Bold"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 3),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 3),
+        ("TOPPADDING", (0, 0), (-1, -1), 1.1),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 1.1),
+        ("LINEABOVE", (0, ex_vat_total_row), (-1, ex_vat_total_row), .7, colors.HexColor("#8CA4C4")),
+        ("LINEABOVE", (0, vat_total_row), (-1, vat_total_row), .7, colors.HexColor("#8CA4C4")),
+        ("LINEABOVE", (0, total_inc_vat_row), (-1, total_inc_vat_row), .7, colors.HexColor("#8CA4C4")),
+        ("FONTNAME", (0, ex_vat_total_row), (-1, ex_vat_total_row), "Helvetica-Bold"),
+        ("FONTNAME", (0, vat_total_row), (-1, vat_total_row), "Helvetica-Bold"),
+        ("FONTNAME", (0, total_inc_vat_row), (-1, total_inc_vat_row), "Helvetica-Bold"),
+        ("BOX", (0, amount_due_row), (-1, amount_due_row), 1.2, gold),
+        ("TEXTCOLOR", (0, amount_due_row), (-1, amount_due_row), navy),
+        ("FONTNAME", (0, amount_due_row), (-1, amount_due_row), "Helvetica-Bold"),
+        ("FONTSIZE", (0, amount_due_row), (0, amount_due_row), 8.5),
+        ("FONTSIZE", (1, amount_due_row), (1, amount_due_row), 13),
+        ("TOPPADDING", (0, amount_due_row), (-1, amount_due_row), 3.5),
+        ("BOTTOMPADDING", (0, amount_due_row), (-1, amount_due_row), 3.5),
     ]))
 
     rot_information = None
@@ -537,7 +579,7 @@ def invoice_pdf_bytes(invoice):
         def __init__(self):
             super().__init__()
             self.width = 186 * mm
-            self.height = 43 * mm
+            self.height = 33 * mm
 
         def wrap(self, available_width, available_height):
             return min(self.width, available_width), self.height
@@ -545,23 +587,10 @@ def invoice_pdf_bytes(invoice):
         def draw(self):
             pdf = self.canv
             width, height = self.width, self.height
-            total_height = 8 * mm
-            footer_top = height - total_height - 2 * mm
-            total_width = 108 * mm
-            total_x = width - total_width
+            footer_top = height
             first_divider = 48 * mm
             second_divider = 116 * mm
             third_divider = 145 * mm
-
-            # Amount due bar.
-            pdf.setStrokeColor(gold)
-            pdf.setLineWidth(1.2)
-            pdf.rect(total_x, height - total_height, total_width, total_height)
-            pdf.setFillColor(navy)
-            pdf.setFont("Helvetica-Bold", 8)
-            pdf.drawString(total_x + 3 * mm, height - 5.3 * mm, display_total_label)
-            pdf.setFont("Helvetica-Bold", 13)
-            pdf.drawRightString(width - 3 * mm, height - 5.7 * mm, f"{display_total} {display_currency}")
 
             # Footer structure.
             pdf.setStrokeColor(navy)
