@@ -14,34 +14,17 @@
 }
 
 .careers-page .rwm-arrow {
-  width: 30px;
-  height: 30px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  box-sizing: border-box;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  transition: color 0.22s ease, background 0.22s ease, transform 0.22s ease;
-}
-
-.careers-page .rwm-arrow svg {
-  width: 16px;
-  height: 16px;
-  overflow: visible;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  font: 16px/1 Arial, sans-serif;
+  transition: transform 0.22s ease;
 }
 
 .careers-page a:hover .rwm-arrow,
 .careers-page button:hover .rwm-arrow {
-  color: #151005;
-  background: #e3b527;
-  transform: translate(2px, -2px);
+  transform: translateX(2px);
 }
 
 [dir="rtl"] .careers-page .rwm-arrow {
@@ -50,7 +33,7 @@
 
 [dir="rtl"] .careers-page a:hover .rwm-arrow,
 [dir="rtl"] .careers-page button:hover .rwm-arrow {
-  transform: scaleX(-1) translate(2px, -2px);
+  transform: scaleX(-1) translateX(2px);
 }
 
 .careers-page .careers-openings:has(.careers-jobs)::after {

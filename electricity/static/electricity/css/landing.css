@@ -1300,6 +1300,67 @@ a {
     grid-template-columns: 1fr;
   }
 
+  .home-service-card {
+    text-align: center;
+  }
+
+  .home-service-card .home-card-icon {
+    display: flex;
+    margin-inline: auto;
+  }
+
+  .home-service-card h3,
+  .home-service-card p {
+    text-align: center;
+  }
+
+  .home-cleaning-cta {
+    padding: 24px 16px;
+  }
+
+  .home-cleaning-inner {
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    min-height: 0;
+    background:
+      linear-gradient(180deg, rgba(10, 15, 8, 0.98) 0%, rgba(10, 15, 8, 0.9) 54%, rgba(10, 15, 8, 0.18) 100%),
+      url("../img/home-hero.jpg") center/cover no-repeat;
+  }
+
+  .home-cleaning-copy {
+    padding: 28px 22px 24px;
+    text-align: center;
+  }
+
+  .home-cleaning-kicker {
+    justify-content: center;
+    line-height: 1.5;
+  }
+
+  .home-cleaning-copy p {
+    margin-inline: auto;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .home-cleaning-link {
+    justify-content: center;
+    width: min(100%, 280px);
+    gap: 18px;
+  }
+
+  .home-cleaning-brand {
+    min-height: 150px;
+    padding: 22px 18px;
+    border-top: 1px solid rgba(244, 212, 111, 0.28);
+    border-left: 0;
+  }
+
+  .home-cleaning-brand img {
+    width: min(190px, 75%);
+    height: 78px;
+  }
+
   .home-quick-quote { padding: 56px 18px; }
   .home-quick-quote-inner { grid-template-columns: 1fr; }
   .home-quick-quote-copy h2 { font-size: clamp(42px, 15vw, 64px) !important; }

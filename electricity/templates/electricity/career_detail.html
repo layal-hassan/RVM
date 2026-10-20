@@ -1,7 +1,7 @@
 {% extends "electricity/base.html" %}
 {% load static i18n %}
 {% block title %}{{ job.title }} | RWM EL Careers{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/career-detail.css' %}"><link rel="stylesheet" href="{% static 'electricity/css/career-success.css' %}">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/career-detail.css' %}"><link rel="stylesheet" href="{% static 'electricity/css/career-success.css' %}"><style>.career-detail-page .rwm-arrow{width:auto;height:auto;border:0;border-radius:0;font:16px/1 Arial,sans-serif}.career-detail-page button:hover .rwm-arrow{transform:translateX(2px)}</style>{% endblock %}
 {% block body_class %}career-detail-page{% endblock %}
 {% block content %}
 <main class="career-detail">
