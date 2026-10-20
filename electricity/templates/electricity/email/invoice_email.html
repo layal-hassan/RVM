@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Faktura {{ invoice.invoice_number }} från RWM EL</title>
+</head>
+<body style="margin:0;padding:0;background:#f1f2f4;color:#0b2147;font-family:Arial,Helvetica,sans-serif;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Faktura {{ invoice.invoice_number }} från RWM EL – {{ amount_due }}</div>
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;background:#f1f2f4;">
+    <tr>
+      <td align="center" style="padding:20px 10px;">
+        <table role="presentation" width="640" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:640px;background:#ffffff;border-radius:10px;box-shadow:0 4px 18px rgba(10,28,58,.08);">
+          <tr>
+            <td align="center" style="padding:22px 28px 10px;">
+              <img src="{{ logo_url }}" width="98" alt="RWM EL" style="display:block;width:98px;max-width:98px;height:auto;border:0;">
+            </td>
+          </tr>
+          <tr><td style="padding:0 28px;"><div style="height:4px;background:#ffc400;line-height:4px;font-size:1px;">&nbsp;</div></td></tr>
+          <tr>
+            <td style="padding:26px 38px 8px;">
+              <h1 style="margin:0 0 15px;color:#092255;font-size:30px;line-height:1.15;font-weight:800;">Faktura {{ invoice.invoice_number }} från RWM EL</h1>
+              <p style="margin:0 0 14px;color:#263954;font-size:16px;line-height:1.45;">Hej {{ customer_name }},</p>
+              <p style="margin:0 0 14px;color:#263954;font-size:16px;line-height:1.45;">Tack för att du valde RWM EL – vi uppskattar verkligen ditt förtroende!</p>
+              <p style="margin:0;color:#263954;font-size:16px;line-height:1.45;">Din faktura finns bifogad. Nedan hittar du fakturauppgifterna.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:12px 28px 0;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;background:#f4f6f8;border-radius:7px;">
+                <tr>
+                  <td valign="top" style="padding:18px 24px;width:68%;">
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;">
+                      <tr><td style="padding:7px 0;border-bottom:1px solid #d8dde4;color:#34445a;font-size:14px;">Fakturanummer</td><td align="right" style="padding:7px 0;border-bottom:1px solid #d8dde4;color:#0b2147;font-size:15px;font-weight:700;">{{ invoice.invoice_number }}</td></tr>
+                      <tr><td style="padding:7px 0;border-bottom:1px solid #d8dde4;color:#34445a;font-size:14px;">Att betala</td><td align="right" style="padding:7px 0;border-bottom:1px solid #d8dde4;color:#0b2147;font-size:18px;font-weight:800;">{{ amount_due }}</td></tr>
+                      <tr><td style="padding:7px 0;border-bottom:1px solid #d8dde4;color:#34445a;font-size:14px;">Förfallodatum</td><td align="right" style="padding:7px 0;border-bottom:1px solid #d8dde4;color:#0b2147;font-size:15px;">{{ invoice.due_date|date:"Y-m-d" }}</td></tr>
+                      <tr><td style="padding:7px 0;border-bottom:1px solid #d8dde4;color:#34445a;font-size:14px;">Bankgiro</td><td align="right" style="padding:7px 0;border-bottom:1px solid #d8dde4;color:#0b2147;font-size:15px;">5192-1302</td></tr>
+                      <tr><td style="padding:7px 0;color:#34445a;font-size:14px;">Betalningsreferens</td><td align="right" style="padding:7px 0;color:#0b2147;font-size:15px;">{{ invoice.invoice_number }}</td></tr>
+                    </table>
+                  </td>
+                  <td align="center" valign="middle" style="padding:16px 18px;border-left:1px solid #cbd2dc;width:32%;">
+                    <img src="{{ qr_url }}" width="118" alt="QR-kod för betalningsuppgifter" style="display:block;width:118px;max-width:100%;height:auto;margin:0 auto 7px;border:0;">
+                    <div style="color:#172b4d;font-size:13px;line-height:1.25;">Skanna för<br>fakturauppgifter</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:14px 28px 0;">
+              <a href="{{ pdf_url }}" target="_blank" style="display:block;padding:14px 18px;border-radius:6px;background:#ffc400;color:#102342;text-align:center;text-decoration:none;font-size:18px;line-height:1.2;font-weight:800;">▣ &nbsp; Öppna faktura (PDF)</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:12px 28px 0;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;background:#fff8dc;border-radius:6px;">
+                <tr>
+                  <td valign="top" style="padding:14px 10px 14px 16px;width:34px;"><span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#ffc400;color:#ffffff;text-align:center;font-size:20px;line-height:28px;font-weight:800;">!</span></td>
+                  <td style="padding:13px 16px 13px 0;color:#253958;font-size:13px;line-height:1.45;"><strong>Vänligen ange fakturanumret som referens vid betalning.</strong><br>Vi uppskattar om du betalar fakturan senast på förfallodatumet.</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:18px 34px 14px;color:#263954;font-size:14px;line-height:1.5;">
+              <p style="margin:0 0 16px;">Har du några frågor om fakturan eller arbetet vi utfört?<br>Svara gärna direkt på det här mejlet, så hjälper vi dig.</p>
+              <p style="margin:0 0 16px;">Tack för att du anlitar oss!</p>
+              <p style="margin:0;">Vänliga hälsningar,<br><strong style="color:#0b2147;">RWM EL</strong><br>RWM Helservice AB</p>
+            </td>
+          </tr>
+          <tr><td style="padding:0 28px;"><div style="height:1px;background:#cdd3db;line-height:1px;font-size:1px;">&nbsp;</div></td></tr>
+          <tr>
+            <td style="padding:16px 30px 20px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                  <td style="color:#172b4d;font-size:12px;line-height:1.45;">☎&nbsp; 0046 70 03 91 611</td>
+                  <td align="center" style="color:#172b4d;font-size:12px;line-height:1.45;">✉&nbsp; faktura@rwmel.se</td>
+                  <td align="right" style="color:#172b4d;font-size:12px;line-height:1.45;">⌖&nbsp; Kikarvägen 18,<br>175 46 Järfälla, Stockholm</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

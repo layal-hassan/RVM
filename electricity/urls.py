@@ -430,6 +430,7 @@ urlpatterns = [
     path("dashboard/invoices/<int:pk>/", views.dashboard_invoice_detail, name="dashboard_invoice_detail"),
     path("dashboard/invoices/<int:pk>/edit/", views.dashboard_invoice_edit, name="dashboard_invoice_edit"),
     path("dashboard/invoices/<int:pk>/pdf/", views.dashboard_invoice_pdf, name="dashboard_invoice_pdf"),
+    path("invoices/open/<str:token>/pdf/", views.public_invoice_pdf, name="public_invoice_pdf"),
     path("dashboard/invoices/<int:pk>/send/", views.dashboard_invoice_send, name="dashboard_invoice_send"),
     path("dashboard/invoices/<int:pk>/paid/", views.dashboard_invoice_paid, name="dashboard_invoice_paid"),
     path("dashboard/invoices/<int:pk>/duplicate/", views.dashboard_invoice_duplicate, name="dashboard_invoice_duplicate"),

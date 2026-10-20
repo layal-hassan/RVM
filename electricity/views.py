@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.core.files.storage import FileSystemStorage
+from django.core.signing import BadSignature, SignatureExpired
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import Http404, HttpResponse, JsonResponse
 from django.urls import reverse
@@ -125,7 +126,12 @@ from .models import (
     QuoteRequestAttachment,
 )
 from django.contrib.auth.models import User
-from .invoicing import create_invoice_for_booking, invoice_pdf_bytes, send_invoice_email
+from .invoicing import (
+    create_invoice_for_booking,
+    invoice_pdf_bytes,
+    invoice_pdf_token_data,
+    send_invoice_email,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -6095,6 +6101,21 @@ def dashboard_invoice_pdf(request, pk):
     if disposition == "inline":
         # Allow the dashboard on this same origin to embed the exact customer PDF.
         response["X-Frame-Options"] = "SAMEORIGIN"
+    return response
+
+
+def public_invoice_pdf(request, token):
+    try:
+        token_data = invoice_pdf_token_data(token)
+        invoice = get_object_or_404(Invoice, pk=token_data.get("invoice_id"))
+        if invoice.invoice_number != token_data.get("invoice_number"):
+            raise Http404
+    except (BadSignature, SignatureExpired, TypeError, ValueError):
+        raise Http404
+    response = HttpResponse(invoice_pdf_bytes(invoice), content_type="application/pdf")
+    response["Content-Disposition"] = f'inline; filename="invoice-{invoice.invoice_number}.pdf"'
+    response["Cache-Control"] = "private, no-store"
+    response["X-Robots-Tag"] = "noindex, nofollow, noarchive"
     return response
 
 

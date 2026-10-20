@@ -3,8 +3,11 @@ import os
 from decimal import Decimal
 
 from django.conf import settings
-from django.core.mail import EmailMessage
+from django.core import signing
+from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
+from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils import timezone
 
 from .models import (
@@ -19,6 +22,7 @@ from .models import (
 
 
 VAT_FACTOR = Decimal("1.25")
+INVOICE_LINK_SALT = "electricity.invoice-pdf"
 
 
 def _sv_amount(value):
@@ -371,7 +375,10 @@ def invoice_pdf_bytes(invoice):
         ("TEXTCOLOR", (0, 0), (-1, -1), ink),
         ("TEXTCOLOR", (0, 0), (0, -1), muted_navy),
         ("FONTSIZE", (0, 0), (-1, -1), 8),
-        ("PADDING", (0, 0), (-1, -1), 4),
+        ("LEFTPADDING", (0, 0), (-1, -1), 4),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+        ("TOPPADDING", (0, 0), (-1, -1), 1.5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 1.5),
         ("LINEABOVE", (0, -1), (-1, -1), 1, navy),
         ("FONTNAME", (0, -1), (-1, -1), "Helvetica-Bold"),
     ]))
@@ -718,6 +725,25 @@ def invoice_pdf_bytes(invoice):
     return buffer.getvalue()
 
 
+def invoice_pdf_token(invoice):
+    return signing.dumps(
+        {"invoice_id": invoice.pk, "invoice_number": invoice.invoice_number},
+        salt=INVOICE_LINK_SALT,
+        compress=True,
+    )
+
+
+def invoice_pdf_token_data(token):
+    max_age = getattr(settings, "INVOICE_LINK_MAX_AGE", 60 * 60 * 24 * 90)
+    return signing.loads(token, salt=INVOICE_LINK_SALT, max_age=max_age)
+
+
+def invoice_pdf_public_url(invoice):
+    base_url = getattr(settings, "INVOICE_PUBLIC_BASE_URL", "https://www.rwmel.se").rstrip("/")
+    path = reverse("electricity:public_invoice_pdf", kwargs={"token": invoice_pdf_token(invoice)})
+    return f"{base_url}{path}"
+
+
 def send_invoice_email(invoice):
     if not invoice.recipient_email:
         raise ValueError("The invoice does not have a recipient email address.")
@@ -725,18 +751,39 @@ def send_invoice_email(invoice):
         getattr(settings, "EMAIL_HOST_USER", "")
         or getattr(settings, "INVOICE_FROM_EMAIL", "Faktura@rwmel.se")
     )
-    message = EmailMessage(
+    customer_name = invoice.customer.full_name or "kund"
+    currency = "kr" if invoice.currency.upper() == "SEK" else invoice.currency
+    amount_due = f"{_sv_amount(invoice.amount_due)} {currency}"
+    pdf_url = invoice_pdf_public_url(invoice)
+    public_base_url = getattr(settings, "INVOICE_PUBLIC_BASE_URL", "https://www.rwmel.se").rstrip("/")
+    context = {
+        "invoice": invoice,
+        "customer_name": customer_name,
+        "amount_due": amount_due,
+        "pdf_url": pdf_url,
+        "logo_url": f"{public_base_url}/static/electricity/img/electricity_logo.jpg",
+        "qr_url": f"{public_base_url}/static/electricity/img/invoice-payment-qr.jpg",
+    }
+    text_body = (
+        f"Hej {customer_name},\n\n"
+        "Tack för att du valde RWM EL – vi uppskattar verkligen ditt förtroende!\n\n"
+        f"Fakturanummer: {invoice.invoice_number}\n"
+        f"Att betala: {amount_due}\n"
+        f"Förfallodatum: {invoice.due_date.isoformat()}\n"
+        "Bankgiro: 5192-1302\n"
+        f"Betalningsreferens: {invoice.invoice_number}\n\n"
+        f"Öppna fakturan: {pdf_url}\n\n"
+        "Vänliga hälsningar,\nRWM EL\nRWM Helservice AB"
+    )
+    message = EmailMultiAlternatives(
         subject=f"Faktura {invoice.invoice_number} från RWM EL",
-        body=(
-            f"Hej {invoice.customer.full_name},\n\n"
-            "Tack för att du valde RWM EL – vi uppskattar verkligen ditt förtroende!\n\n"
-            "Din faktura finns bifogad. Har du några frågor är du välkommen att "
-            "kontakta oss, så hjälper vi dig gärna.\n\n"
-            "Vänliga hälsningar,\n"
-            "RWM EL"
-        ),
+        body=text_body,
         from_email=from_email,
         to=[invoice.recipient_email],
+    )
+    message.attach_alternative(
+        render_to_string("electricity/email/invoice_email.html", context),
+        "text/html",
     )
     message.attach(f"invoice-{invoice.invoice_number}.pdf", invoice_pdf_bytes(invoice), "application/pdf")
     sent_count = message.send(fail_silently=False)

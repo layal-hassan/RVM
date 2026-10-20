@@ -12,6 +12,13 @@
       <span></span>
     </button>
     <div class="rwm-egh-navwrap" data-rwmh-menu>
+      <div class="rwm-egh-mobile-head">
+        <div>
+          <small>{% trans "Navigation" %}</small>
+          <strong>{% trans "How can we help?" %}</strong>
+        </div>
+        <span aria-hidden="true">RWM EL</span>
+      </div>
       <div class="rwm-egh-left">
         <nav class="rwm-egh-nav" aria-label="{% trans 'Main navigation' %}">
           <div class="rwm-egh-nav-item rwm-egh-dropdown" data-rwmh-dropdown>
@@ -21,6 +28,9 @@
             >
               <span>{% trans "Services" %}</span>
             </a>
+            <button class="rwm-egh-submenu-toggle" type="button" aria-label="{% trans 'Toggle services menu' %}" aria-expanded="false" data-rwmh-dropdown-trigger>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg>
+            </button>
             <div class="rwm-egh-dropdown-menu">
               <div class="rwm-egh-mega-grid">
                 {% for category_page in category_pages %}

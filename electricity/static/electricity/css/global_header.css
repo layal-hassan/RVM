@@ -104,6 +104,10 @@ body.dash-body {
   padding-top: var(--rwmh-height);
 }
 
+body.rwm-mobile-menu-open {
+  overflow: hidden;
+}
+
 .rwm-electricity-global-header .rwm-egh-toggle {
   display: none;
   width: 42px;
@@ -125,6 +129,12 @@ body.dash-body {
   height: 2px;
   background: var(--rwmh-text);
   border-radius: 999px;
+  transition: transform 0.25s ease, opacity 0.2s ease, width 0.2s ease;
+}
+
+.rwm-electricity-global-header .rwm-egh-mobile-head,
+.rwm-electricity-global-header .rwm-egh-submenu-toggle {
+  display: none;
 }
 
 .rwm-electricity-global-header .rwm-egh-navwrap {
@@ -667,26 +677,122 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
 
 @media (max-width: 980px) {
   .rwm-electricity-global-header .rwm-electricity-global-header__inner {
-    flex-wrap: wrap;
-    gap: 12px;
+    min-height: 72px;
+    padding: 8px 18px;
+    flex-wrap: nowrap;
+    gap: 16px;
   }
 
   .rwm-electricity-global-header .rwm-egh-toggle {
     display: inline-flex;
+    position: relative;
+    flex-direction: column;
+    margin-inline-start: auto;
+    width: 46px;
+    height: 46px;
+    padding: 11px;
+    gap: 5px;
+    border-color: rgba(199, 164, 91, 0.42);
+    background: linear-gradient(145deg, rgba(199, 164, 91, 0.12), rgba(255, 255, 255, 0.025));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .rwm-electricity-global-header .rwm-egh-toggle span {
+    width: 21px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-toggle span:nth-child(2) {
+    width: 15px;
     margin-inline-start: auto;
   }
 
+  .rwm-electricity-global-header.is-open .rwm-egh-toggle span:first-child {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .rwm-electricity-global-header.is-open .rwm-egh-toggle span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .rwm-electricity-global-header.is-open .rwm-egh-toggle span:last-child {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .rwm-electricity-global-header::before {
+    content: "";
+    position: fixed;
+    inset: 72px 0 0;
+    z-index: -1;
+    background: rgba(2, 4, 7, 0.68);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+
+  .rwm-electricity-global-header.is-open::before {
+    opacity: 1;
+    visibility: visible;
+  }
+
   .rwm-electricity-global-header .rwm-egh-navwrap {
-    width: 100%;
+    position: fixed;
+    top: 84px;
+    right: 14px;
+    left: 14px;
+    width: auto;
     flex-direction: column;
     align-items: stretch;
-    gap: 20px;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
+    gap: 16px;
+    max-height: calc(100dvh - 98px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 18px;
     opacity: 0;
-    padding: 0 2px;
-    border-radius: 18px;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-12px) scale(0.98);
+    transform-origin: top center;
+    border: 1px solid rgba(199, 164, 91, 0.24);
+    border-radius: 22px;
+    background: linear-gradient(155deg, rgba(21, 23, 27, 0.99), rgba(9, 11, 14, 0.99));
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.25s ease;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-mobile-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 2px 2px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  .rwm-electricity-global-header .rwm-egh-mobile-head div {
+    display: grid;
+    gap: 2px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-mobile-head small {
+    color: #c7a45b;
+    font: 700 9px/1.2 Arial, sans-serif;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-mobile-head strong {
+    color: #fff;
+    font-size: 19px;
+    font-weight: 500;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-mobile-head > span {
+    color: rgba(255, 255, 255, 0.4);
+    font: 700 10px/1 Arial, sans-serif;
+    letter-spacing: 0.14em;
   }
 
   .rwm-electricity-global-header .rwm-egh-left,
@@ -698,12 +804,10 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
   }
 
   .rwm-electricity-global-header.is-open .rwm-egh-navwrap {
-    max-height: 80vh;
-    padding: 16px 14px 18px;
     opacity: 1;
-    background: #0f1114;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 18px 30px rgba(0, 0, 0, 0.35);
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
   }
 
   .rwm-electricity-global-header .rwm-egh-nav {
@@ -714,13 +818,32 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
 
   .rwm-electricity-global-header .rwm-egh-link,
   .rwm-electricity-global-header .rwm-egh-link-button {
-    padding: 12px 14px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    letter-spacing: 0.2em;
+    min-height: 50px;
+    padding: 14px 16px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    letter-spacing: 0.14em;
     justify-content: space-between;
     width: 100%;
+    font-size: 12px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-link:hover,
+  .rwm-electricity-global-header .rwm-egh-link:focus-visible,
+  .rwm-electricity-global-header .rwm-egh-link.is-active {
+    color: #f0d490;
+    border-color: rgba(199, 164, 91, 0.38);
+    background: rgba(199, 164, 91, 0.1);
+  }
+
+  .rwm-electricity-global-header .rwm-egh-link.is-active::after {
+    top: 12px;
+    right: auto;
+    bottom: 12px;
+    left: 5px;
+    width: 3px;
+    height: auto;
   }
 
   .rwm-electricity-global-header .rwm-egh-right {
@@ -729,10 +852,39 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
 
   .rwm-electricity-global-header .rwm-egh-nav-item {
     width: 100%;
-    display: block;
+    display: grid;
+    grid-template-columns: 1fr 48px;
+    gap: 6px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-submenu-toggle {
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(199, 164, 91, 0.24);
+    border-radius: 13px;
+    color: #e7c882;
+    background: rgba(199, 164, 91, 0.08);
+    cursor: pointer;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-submenu-toggle svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.22s ease;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-dropdown.is-open .rwm-egh-submenu-toggle svg {
+    transform: rotate(180deg);
   }
 
   .rwm-electricity-global-header .rwm-egh-dropdown-menu {
+    display: none;
+    grid-column: 1 / -1;
     position: static;
     min-width: 0;
     max-width: none;
@@ -743,6 +895,15 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
     border-radius: 14px;
     box-shadow: none;
     background: rgba(255, 255, 255, 0.03);
+  }
+
+  .rwm-electricity-global-header .rwm-egh-dropdown:hover .rwm-egh-dropdown-menu,
+  .rwm-electricity-global-header .rwm-egh-dropdown:focus-within .rwm-egh-dropdown-menu {
+    display: none;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-dropdown.is-open .rwm-egh-dropdown-menu {
+    display: flex;
   }
 
   .rwm-electricity-global-header .rwm-egh-dropdown-menu::before {
@@ -822,9 +983,15 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
 }
 
 @media (max-width: 600px) {
+  :root {
+    --rwmh-height: 72px;
+  }
+
   .rwm-electricity-global-header .rwm-egh-logo img {
-    width: 38px;
-    height: 38px;
+    width: 46px;
+    height: 46px;
+    border-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 0 3px rgba(199, 164, 91, 0.1);
   }
 
   .rwm-electricity-global-header .rwm-egh-btn {

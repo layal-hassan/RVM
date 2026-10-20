@@ -9,6 +9,12 @@
   const dropdowns = Array.from(header.querySelectorAll("[data-rwmh-dropdown]"));
   const onCallLinks = Array.from(header.querySelectorAll("[data-rwmh-on-call]"));
 
+  const closeMenu = () => {
+    header.classList.remove("is-open");
+    document.body.classList.remove("rwm-mobile-menu-open");
+    toggle.setAttribute("aria-expanded", "false");
+  };
+
   const updateOnCallActiveLink = () => {
     if (!onCallLinks.length) return;
     const jourLink = onCallLinks.find((link) => link.dataset.rwmhOnCall === "jour");
@@ -65,7 +71,12 @@
 
   toggle.addEventListener("click", () => {
     const isOpen = header.classList.toggle("is-open");
+    document.body.classList.toggle("rwm-mobile-menu-open", isOpen);
     toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  });
+
+  menu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeMenu);
   });
 
   document.addEventListener("click", (event) => {
@@ -80,11 +91,16 @@
 
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
+    closeMenu();
     dropdowns.forEach((dropdown) => {
       dropdown.classList.remove("is-open");
       dropdown.classList.remove("is-hover-open");
       const trigger = dropdown.querySelector("[data-rwmh-dropdown-trigger]");
       if (trigger) trigger.setAttribute("aria-expanded", "false");
     });
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 980) closeMenu();
   });
 })();

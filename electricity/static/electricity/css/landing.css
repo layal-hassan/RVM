@@ -1227,7 +1227,7 @@ a {
 
 @media (max-width: 760px) {
   .home-shell {
-    padding-top: 64px;
+    padding-top: 72px;
   }
 
   .home-hero {
@@ -1313,12 +1313,70 @@ a {
     grid-template-columns: 1fr;
   }
 
+  .home-footer {
+    padding: 48px 0 28px;
+  }
+
+  .home-footer-grid {
+    gap: 24px;
+  }
+
+  .home-footer-brand,
+  .home-footer-col {
+    text-align: center;
+  }
+
+  .home-footer-brand {
+    display: grid;
+    justify-items: center;
+    gap: 16px;
+  }
+
+  .home-footer-logo,
+  .home-footer-copy,
+  .home-footer-brand h4 {
+    margin-bottom: 0;
+  }
+
+  .home-footer-copy {
+    max-width: 280px;
+  }
+
+  .home-footer-col ul {
+    justify-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .home-footer h4 {
+    font-size: 14px;
+    letter-spacing: 0.1em;
+  }
+
+  .home-footer-cert {
+    display: grid;
+    justify-items: center;
+    width: 100%;
+  }
+
+  .home-footer-bottom {
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 16px;
+    text-align: center;
+  }
+
   .home-footer-rights {
-    text-align: left;
+    text-align: center;
   }
 
   .home-footer-links {
     flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .home-footer-lang {
+    justify-self: center;
   }
 
   .home-booking-dialog {

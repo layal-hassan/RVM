@@ -988,6 +988,22 @@ body {
         align-items: center;
     }
 
+    .dash-sidebar .dash-brand,
+    .dash-sidebar .dash-nav-search,
+    .dash-sidebar .dash-nav,
+    .dash-sidebar .dash-card {
+        width: 100%;
+    }
+
+    .dash-sidebar .dash-nav {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .dash-sidebar .dash-nav-section {
+        grid-column: 1 / -1;
+    }
+
     .dash-main {
         padding: 28px;
     }
@@ -1034,7 +1050,24 @@ body {
     }
 
     .dash-main {
-        padding: 22px;
+        min-width: 0;
+        padding: 20px 16px 40px;
+    }
+
+    .dash-panel {
+        min-width: 0;
+        padding: 16px;
+        border-radius: 16px;
+    }
+
+    .dash-grid,
+    .dash-stats,
+    .attachment-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dash-top h1 {
+        font-size: clamp(1.75rem, 9vw, 2.2rem);
     }
 }
 .panel-actions {
