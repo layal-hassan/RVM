@@ -518,6 +518,14 @@ def invoice_pdf_bytes(invoice):
             pdfmetrics.registerFont(TTFont("InvoiceSignature", signature_font_path))
         signature_font = "InvoiceSignature"
 
+    payment_qr_path = os.path.join(
+        os.path.dirname(__file__),
+        "static",
+        "electricity",
+        "img",
+        "invoice-payment-qr.jpg",
+    )
+
     class InvoiceFooterBlock(Flowable):
         def __init__(self):
             super().__init__()
@@ -534,8 +542,9 @@ def invoice_pdf_bytes(invoice):
             footer_top = height - total_height - 2 * mm
             total_width = 108 * mm
             total_x = width - total_width
-            first_divider = 62 * mm
-            second_divider = 124 * mm
+            first_divider = 48 * mm
+            second_divider = 116 * mm
+            third_divider = 145 * mm
 
             # Amount due bar.
             pdf.setStrokeColor(gold)
@@ -553,6 +562,7 @@ def invoice_pdf_bytes(invoice):
             pdf.line(0, footer_top, width, footer_top)
             pdf.line(first_divider, footer_top - 2 * mm, first_divider, 1 * mm)
             pdf.line(second_divider, footer_top - 2 * mm, second_divider, 1 * mm)
+            pdf.line(third_divider, footer_top - 2 * mm, third_divider, 1 * mm)
 
             # Signature section; positions are fixed so the script cannot
             # collide with the company address.
@@ -588,20 +598,27 @@ def invoice_pdf_bytes(invoice):
                 pdf.drawRightString(second_divider - 8 * mm, payment_y, value)
                 payment_y -= 5 * mm
 
-            # True vector bank icon (never becomes a missing-glyph square).
-            icon_x = second_divider + 12 * mm
-            icon_y = footer_top - 17 * mm
-            pdf.setStrokeColor(navy)
-            pdf.setLineWidth(1)
-            pdf.circle(icon_x, icon_y, 7 * mm, stroke=1, fill=0)
-            pdf.line(icon_x - 4 * mm, icon_y + 2 * mm, icon_x, icon_y + 5 * mm)
-            pdf.line(icon_x, icon_y + 5 * mm, icon_x + 4 * mm, icon_y + 2 * mm)
-            pdf.line(icon_x - 4 * mm, icon_y + 2 * mm, icon_x + 4 * mm, icon_y + 2 * mm)
-            for offset in (-2.5, 0, 2.5):
-                pdf.line(icon_x + offset * mm, icon_y + 1.3 * mm, icon_x + offset * mm, icon_y - 3 * mm)
-            pdf.line(icon_x - 4 * mm, icon_y - 3.5 * mm, icon_x + 4 * mm, icon_y - 3.5 * mm)
+            # Payment QR supplied by the client. Keep it square and large
+            # enough to scan from both the dashboard preview and emailed PDF.
+            qr_size = 20 * mm
+            qr_x = second_divider + ((third_divider - second_divider) - qr_size) / 2
+            qr_y = footer_top - 22 * mm
+            if os.path.exists(payment_qr_path):
+                pdf.drawImage(
+                    payment_qr_path,
+                    qr_x,
+                    qr_y,
+                    width=qr_size,
+                    height=qr_size,
+                    preserveAspectRatio=True,
+                )
+            pdf.setFillColor(navy)
+            pdf.setFont("Helvetica-Bold", 5.2)
+            qr_center = (second_divider + third_divider) / 2
+            pdf.drawCentredString(qr_center, footer_top - 25 * mm, "Skanna för")
+            pdf.drawCentredString(qr_center, footer_top - 28 * mm, "betalningsuppgifter")
 
-            thanks_x = second_divider + 23 * mm
+            thanks_x = third_divider + 5 * mm
             pdf.setFillColor(navy)
             pdf.setFont("Helvetica-Bold", 6)
             pdf.drawString(thanks_x, footer_top - 10 * mm, "Tack för ditt förtroende!")
