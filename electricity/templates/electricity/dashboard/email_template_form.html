@@ -1,0 +1,31 @@
+{% extends "electricity/dashboard/base.html" %}
+
+{% block page_title %}{{ title }} Emails{% endblock %}
+{% block page_subtitle %}Edit exactly what the company and customer receive for this workflow.{% endblock %}
+
+{% block content %}
+<section class="dash-panel dash-panel-wide">
+    <div class="panel-header">
+        <div>
+            <h2>{{ item.get_workflow_display }}</h2>
+            <div class="panel-meta">Unknown or empty placeholders are safely rendered as blank. Do not change the text inside braces unless using a listed placeholder.</div>
+        </div>
+    </div>
+    <form method="post" class="dash-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+        <div class="form-row">
+            <label>{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<div class="panel-meta">{{ field.help_text }}</div>{% endif %}
+            {% if field.errors %}<div class="field-error">{{ field.errors }}</div>{% endif %}
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+            <a class="dash-btn ghost" href="{% url 'electricity:dashboard_email_templates' %}">Back</a>
+            <button class="dash-btn primary" type="submit">Save email settings</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

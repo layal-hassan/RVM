@@ -14,46 +14,18 @@
     {{ form.non_field_errors }}
   </div>
 {% endif %}
-<div class="form-row">
-    <label class="form-label">{% trans "Are you a private individual or a business?" %}</label>
-    <div class="contact-type-inputs" aria-hidden="true">
-        <input
-            id="contact-type-private"
-            type="radio"
-            name="contact_type"
-            value="private"
-            {% if form.contact_type.value != "business" %}checked{% endif %}
-        >
-        <input
-            id="contact-type-business"
-            type="radio"
-            name="contact_type"
-            value="business"
-            {% if form.contact_type.value == "business" %}checked{% endif %}
-        >
-    </div>
-    <div class="toggle-group contact-toggle-group">
-        <button type="button" class="toggle-option contact-toggle-option" data-contact-option="private">
-            <span>{% trans "Private" %}</span>
-        </button>
-        <button type="button" class="toggle-option contact-toggle-option" data-contact-option="business">
-            <span>{% trans "Business" %}</span>
-        </button>
-    </div>
-    {% if form.contact_type.errors %}
-      <div class="booking-field-error">{{ form.contact_type.errors|join:", " }}</div>
-    {% endif %}
-</div>
-
-<div class="form-row contact-private{% if form.contact_type.value != "business" %} is-visible{% endif %}" data-private>
+{% if contact_type == "private" %}
+<div class="form-row contact-private is-visible">
     <label class="form-label">{% trans "Personal ID number" %}</label>
     {{ form.personal_id }}
     {% if form.personal_id.errors %}
       <div class="booking-field-error">{{ form.personal_id.errors|join:", " }}</div>
     {% endif %}
 </div>
+{% endif %}
 
-<div class="form-row split-row contact-business{% if form.contact_type.value == "business" %} is-visible{% endif %}" data-business>
+{% if contact_type == "business" %}
+<div class="form-row split-row contact-business is-visible">
     <div>
         <label class="form-label">{% trans "Company name" %}</label>
         {{ form.company_name }}
@@ -69,12 +41,31 @@
         {% endif %}
     </div>
 </div>
-<div class="form-row contact-private{% if form.contact_type.value != "business" %} is-visible{% endif %}" data-private>
+{% endif %}
+<div class="form-row">
     <label class="form-label">{% trans "Full Name" %}</label>
     {{ form.full_name }}
     {% if form.full_name.errors %}
       <div class="booking-field-error">{{ form.full_name.errors|join:", " }}</div>
     {% endif %}
+</div>
+
+<div class="form-row">
+    <label class="form-label">{% trans "Street address" %}</label>
+    {{ form.street_address }}
+    {% if form.street_address.errors %}<div class="booking-field-error">{{ form.street_address.errors|join:", " }}</div>{% endif %}
+</div>
+<div class="form-row split-row">
+    <div>
+        <label class="form-label">{% trans "Postal code" %}</label>
+        {{ form.postal_code }}
+        {% if form.postal_code.errors %}<div class="booking-field-error">{{ form.postal_code.errors|join:", " }}</div>{% endif %}
+    </div>
+    <div>
+        <label class="form-label">{% trans "City" %}</label>
+        {{ form.city }}
+        {% if form.city.errors %}<div class="booking-field-error">{{ form.city.errors|join:", " }}</div>{% endif %}
+    </div>
 </div>
 
 <div class="form-row split-row">

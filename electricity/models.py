@@ -92,6 +92,32 @@ class ContactInquiry(models.Model):
         return f"{self.full_name} ({self.get_inquiry_type_display()})"
 
 
+class AutomatedEmailTemplate(models.Model):
+    class Workflow(models.TextChoices):
+        CONTACT = "contact", "Contact Us"
+        FEEDBACK = "feedback", "Submit Feedback"
+        QUOTE = "quote", "Request a Quote / Send Request"
+
+    workflow = models.CharField(max_length=20, choices=Workflow.choices, unique=True)
+    company_enabled = models.BooleanField(default=True)
+    company_recipient = models.EmailField(
+        blank=True,
+        help_text="Leave blank to use CONTACT_TO_EMAIL from the server settings.",
+    )
+    company_subject = models.CharField(max_length=240)
+    company_body = models.TextField()
+    customer_enabled = models.BooleanField(default=True)
+    customer_subject = models.CharField(max_length=240)
+    customer_body = models.TextField()
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["workflow"]
+
+    def __str__(self):
+        return self.get_workflow_display()
+
+
 class ServiceBooking(models.Model):
     class AccountType(models.TextChoices):
         PRIVATE = "private", "Private Customer"
@@ -894,8 +920,8 @@ class ServiceRequestOutsideArea(models.Model):
 class ServicePricing(models.Model):
     name = models.CharField(max_length=120, default="Default Pricing")
     labor_rate = models.DecimalField(max_digits=10, decimal_places=2, default=1250)
-    transport_fee = models.DecimalField(max_digits=10, decimal_places=2, default=495)
-    hourly_rate_electrician = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    transport_fee = models.DecimalField(max_digits=10, decimal_places=2, default=400)
+    hourly_rate_electrician = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("550.40"))
     hourly_rate_emergency = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     consultation_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     rot_percent = models.DecimalField(max_digits=5, decimal_places=2, default=30)
@@ -964,6 +990,9 @@ class ConsultationBooking(models.Model):
     company_name = models.CharField(max_length=160, blank=True)
     organization_number = models.CharField(max_length=40, blank=True)
     company_address = models.CharField(max_length=220, blank=True)
+    street_address = models.CharField(max_length=220, blank=True)
+    postal_code = models.CharField(max_length=20, blank=True)
+    city = models.CharField(max_length=120, blank=True)
     full_name = models.CharField(max_length=160)
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=40, blank=True)

@@ -176,18 +176,167 @@
 })();
 
 (() => {
-  document.querySelectorAll("[data-date-trigger]").forEach((trigger) => {
-    const shell = trigger.closest(".date-input-shell");
-    const input = shell ? shell.querySelector('input[type="date"]') : null;
-    if (!input) return;
+  const shells = document.querySelectorAll(".date-input-shell");
+  if (!shells.length) return;
 
-    trigger.addEventListener("click", () => {
-      if (typeof input.showPicker === "function") {
-        input.showPicker();
-        return;
+  const locale = document.documentElement.lang || "en";
+  const isArabic = locale.startsWith("ar");
+  const labels = isArabic
+    ? { today: "اليوم", clear: "مسح", previous: "الشهر السابق", next: "الشهر التالي" }
+    : { today: "Today", clear: "Clear", previous: "Previous month", next: "Next month" };
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  let activePicker = null;
+
+  const parseDate = (value) => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return null;
+    const [year, month, day] = value.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    return Number.isNaN(date.getTime()) ? null : date;
+  };
+
+  const toISO = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const closePicker = () => {
+    if (!activePicker) return;
+    activePicker.picker.hidden = true;
+    activePicker.shell.classList.remove("is-calendar-open");
+    activePicker.trigger.setAttribute("aria-expanded", "false");
+    activePicker = null;
+  };
+
+  shells.forEach((shell) => {
+    const input = shell.querySelector('input[type="date"]');
+    const trigger = shell.querySelector("[data-date-trigger]");
+    if (!input || !trigger) return;
+
+    input.type = "text";
+    input.readOnly = true;
+    input.setAttribute("inputmode", "none");
+    input.setAttribute("autocomplete", "off");
+    input.setAttribute("aria-haspopup", "dialog");
+    trigger.setAttribute("aria-haspopup", "dialog");
+    trigger.setAttribute("aria-expanded", "false");
+
+    const picker = document.createElement("div");
+    picker.className = "rwm-calendar";
+    picker.hidden = true;
+    picker.setAttribute("role", "dialog");
+    picker.setAttribute("aria-label", "Calendar");
+    picker.innerHTML = `
+      <div class="rwm-calendar-head">
+        <button type="button" class="rwm-calendar-nav" data-calendar-prev aria-label="${labels.previous}">‹</button>
+        <strong class="rwm-calendar-month"></strong>
+        <button type="button" class="rwm-calendar-nav" data-calendar-next aria-label="${labels.next}">›</button>
+      </div>
+      <div class="rwm-calendar-weekdays"></div>
+      <div class="rwm-calendar-days"></div>
+      <div class="rwm-calendar-footer">
+        <button type="button" data-calendar-clear>${labels.clear}</button>
+        <button type="button" data-calendar-today>${labels.today}</button>
+      </div>`;
+    shell.appendChild(picker);
+
+    const selected = parseDate(input.value);
+    let viewDate = selected ? new Date(selected) : new Date(today);
+    viewDate.setDate(1);
+    const monthLabel = picker.querySelector(".rwm-calendar-month");
+    const weekdays = picker.querySelector(".rwm-calendar-weekdays");
+    const days = picker.querySelector(".rwm-calendar-days");
+
+    const weekdayFormat = new Intl.DateTimeFormat(locale, { weekday: "short" });
+    const sunday = new Date(2024, 0, 7);
+    weekdays.innerHTML = Array.from({ length: 7 }, (_, index) => {
+      const day = new Date(sunday);
+      day.setDate(sunday.getDate() + index);
+      return `<span>${weekdayFormat.format(day).replace(".", "")}</span>`;
+    }).join("");
+
+    const render = () => {
+      monthLabel.textContent = new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(viewDate);
+      days.innerHTML = "";
+      const year = viewDate.getFullYear();
+      const month = viewDate.getMonth();
+      const firstWeekday = new Date(year, month, 1).getDay();
+      const monthLength = new Date(year, month + 1, 0).getDate();
+      const previousLength = new Date(year, month, 0).getDate();
+
+      for (let cell = 0; cell < 42; cell += 1) {
+        const dayOffset = cell - firstWeekday + 1;
+        let date;
+        let outside = false;
+        if (dayOffset < 1) {
+          date = new Date(year, month - 1, previousLength + dayOffset);
+          outside = true;
+        } else if (dayOffset > monthLength) {
+          date = new Date(year, month + 1, dayOffset - monthLength);
+          outside = true;
+        } else {
+          date = new Date(year, month, dayOffset);
+        }
+        date.setHours(0, 0, 0, 0);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "rwm-calendar-day";
+        button.textContent = date.getDate();
+        button.dataset.value = toISO(date);
+        if (outside) button.classList.add("is-outside");
+        if (date < today) {
+          button.disabled = true;
+          button.classList.add("is-disabled");
+        }
+        if (toISO(date) === toISO(today)) button.classList.add("is-today");
+        if (button.dataset.value === input.value) button.classList.add("is-selected");
+        button.addEventListener("click", () => {
+          input.value = button.dataset.value;
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+          closePicker();
+        });
+        days.appendChild(button);
       }
-      input.focus();
-      input.click();
+    };
+
+    const openPicker = () => {
+      if (activePicker && activePicker.picker !== picker) closePicker();
+      const current = parseDate(input.value);
+      viewDate = current ? new Date(current.getFullYear(), current.getMonth(), 1) : new Date(today.getFullYear(), today.getMonth(), 1);
+      render();
+      picker.hidden = false;
+      shell.classList.add("is-calendar-open");
+      trigger.setAttribute("aria-expanded", "true");
+      activePicker = { picker, shell, trigger };
+    };
+
+    trigger.addEventListener("click", (event) => {
+      event.stopPropagation();
+      if (!picker.hidden) closePicker(); else openPicker();
     });
+    input.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openPicker();
+    });
+    picker.addEventListener("click", (event) => event.stopPropagation());
+    picker.querySelector("[data-calendar-prev]").addEventListener("click", () => { viewDate.setMonth(viewDate.getMonth() - 1); render(); });
+    picker.querySelector("[data-calendar-next]").addEventListener("click", () => { viewDate.setMonth(viewDate.getMonth() + 1); render(); });
+    picker.querySelector("[data-calendar-today]").addEventListener("click", () => {
+      input.value = toISO(today);
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      closePicker();
+    });
+    picker.querySelector("[data-calendar-clear]").addEventListener("click", () => {
+      input.value = "";
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      closePicker();
+    });
+  });
+
+  document.addEventListener("click", closePicker);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closePicker();
   });
 })();

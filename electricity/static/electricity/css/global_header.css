@@ -67,7 +67,7 @@
 }
 
 .rwm-electricity-global-header .rwm-electricity-global-header__inner {
-  max-width: 1500px;
+  max-width: 1660px;
   margin: 0 auto;
   padding: 4px 40px;
   display: flex;
@@ -214,6 +214,43 @@ body.dash-body {
   border-radius: 99px;
   background: var(--rwmh-gold);
   box-shadow: 0 0 7px rgba(199, 164, 91, .35);
+}
+
+/* Draw attention to the 24/7 emergency service without overwhelming the nav. */
+.rwm-electricity-global-header .rwm-egh-link[data-rwmh-on-call="jour"] {
+  position: relative;
+  z-index: 0;
+  color: #efc44e;
+  animation: rwm-jour-glow 1.8s ease-in-out infinite;
+}
+
+.rwm-electricity-global-header .rwm-egh-link[data-rwmh-on-call="jour"]::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -10px -7px;
+  border-radius: 999px;
+  background: radial-gradient(ellipse, rgba(229, 181, 47, 0.22), transparent 68%);
+  opacity: 0.35;
+  animation: rwm-jour-halo 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes rwm-jour-glow {
+  0%, 100% { color: #d7ad45; text-shadow: 0 0 4px rgba(226, 181, 47, 0.25); }
+  50% { color: #ffe17c; text-shadow: 0 0 7px rgba(255, 210, 73, 0.95), 0 0 16px rgba(226, 181, 47, 0.72); }
+}
+
+@keyframes rwm-jour-halo {
+  0%, 100% { opacity: 0.2; transform: scale(0.88); }
+  50% { opacity: 0.8; transform: scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rwm-electricity-global-header .rwm-egh-link[data-rwmh-on-call="jour"],
+  .rwm-electricity-global-header .rwm-egh-link[data-rwmh-on-call="jour"]::before {
+    animation: none;
+  }
 }
 
 .rwm-electricity-global-header .rwm-egh-dropdown-menu {
@@ -797,5 +834,29 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
 
   .site-announcement__inner {
     font-size: 11px;
+  }
+}
+
+@media (max-width: 1500px) and (min-width: 981px) {
+  .rwm-electricity-global-header .rwm-electricity-global-header__inner {
+    padding-inline: 24px;
+    gap: 16px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-navwrap {
+    gap: 16px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-nav {
+    gap: 12px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-link {
+    padding-inline: 7px;
+    letter-spacing: 0.18em;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-right {
+    gap: 10px;
   }
 }

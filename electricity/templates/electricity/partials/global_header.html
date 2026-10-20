@@ -59,7 +59,7 @@
               </div>
             </div>
           </div>
-          <a class="rwm-egh-link" data-rwmh-on-call="pricing" href="{% url 'electricity:on_call' %}#pricing">{% trans "Pricing" %}</a>
+          <a class="rwm-egh-link{% if request.resolver_match.url_name == 'pricing' %} is-active{% endif %}" data-rwmh-on-call="pricing" href="{% url 'electricity:pricing' %}">{% trans "Pricing" %}</a>
           <a class="rwm-egh-link{% if request.resolver_match.url_name == 'on_call' %} is-active{% endif %}" data-rwmh-on-call="jour" href="{% url 'electricity:on_call' %}">{% trans "Jour" %}</a>
           <a class="rwm-egh-link{% if request.resolver_match.url_name == 'for_brf' %} is-active{% endif %}" href="{% url 'electricity:for_brf' %}">{% trans "For BRF" %}</a>
           <a class="rwm-egh-link{% if request.resolver_match.url_name == 'feedback' %} is-active{% endif %}" href="{% url 'electricity:feedback' %}">{% trans "Feedback" %}</a>

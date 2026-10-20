@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from .models import (
     AcceptedZipCode,
+    AutomatedEmailTemplate,
     AdminNotification,
     BookingStatusUpdate,
     ServiceBookingStatusUpdate,
@@ -234,6 +235,10 @@ class HumanizedJSONModelForm(forms.ModelForm):
 
 
 class Step1Form(forms.Form):
+    contact_type = forms.ChoiceField(
+        choices=[("private", _("Private")), ("business", _("Business"))],
+        widget=forms.RadioSelect,
+    )
     consultation_type = forms.ChoiceField(
         choices=[
             ("onsite", _("On-site Visit")),
@@ -340,10 +345,6 @@ class Step5Form(forms.Form):
 
 
 class Step6Form(forms.Form):
-    contact_type = forms.ChoiceField(
-        choices=[("private", _("Private")), ("business", _("Business"))],
-        widget=forms.RadioSelect,
-    )
     full_name = forms.CharField(
         required=False,
         max_length=160,
@@ -385,6 +386,21 @@ class Step6Form(forms.Form):
                 "data-contact-field": "business",
             }
         ),
+    )
+    street_address = forms.CharField(
+        required=False,
+        max_length=220,
+        widget=forms.TextInput(attrs={"class": "form-control booking-input"}),
+    )
+    postal_code = forms.CharField(
+        required=False,
+        max_length=20,
+        widget=forms.TextInput(attrs={"class": "form-control booking-input"}),
+    )
+    city = forms.CharField(
+        required=False,
+        max_length=120,
+        widget=forms.TextInput(attrs={"class": "form-control booking-input"}),
     )
     company_address = forms.CharField(
         required=False,
@@ -587,6 +603,32 @@ class CustomerFeedbackAdminForm(HumanizedJSONModelForm):
     class Meta:
         model = CustomerFeedback
         fields = ("full_name", "email", "location", "rating", "message", "is_approved")
+
+
+class AutomatedEmailTemplateForm(forms.ModelForm):
+    class Meta:
+        model = AutomatedEmailTemplate
+        fields = (
+            "company_enabled",
+            "company_recipient",
+            "company_subject",
+            "company_body",
+            "customer_enabled",
+            "customer_subject",
+            "customer_body",
+        )
+        widgets = {
+            "company_body": forms.Textarea(attrs={"rows": 12}),
+            "customer_body": forms.Textarea(attrs={"rows": 12}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        placeholders = "Available placeholders: {name}, {email}, {phone}, {address}, {message}, {reference}, {service}, {rating}, {location}, {customer_type}, {details}."
+        self.fields["company_subject"].help_text = placeholders
+        self.fields["company_body"].help_text = placeholders
+        self.fields["customer_subject"].help_text = placeholders
+        self.fields["customer_body"].help_text = placeholders
 
 
 class CareerApplicationForm(forms.ModelForm):

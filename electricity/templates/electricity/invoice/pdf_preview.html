@@ -1,0 +1,21 @@
+{% extends "electricity/dashboard/base.html" %}
+{% load static %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/invoice.css' %}">{% endblock %}
+{% block page_title %}{{ invoice.title }} {{ invoice.invoice_number }}{% endblock %}
+{% block page_subtitle %}Exact customer PDF preview{% endblock %}
+{% block content %}
+<div class="invoice-toolbar">
+  <a class="dash-btn ghost" href="{% url 'electricity:dashboard_invoices' %}">Back</a>
+  <a class="dash-btn ghost" href="{% url 'electricity:dashboard_invoice_edit' invoice.pk %}">Edit</a>
+  <a class="dash-btn primary" href="{% url 'electricity:dashboard_invoice_pdf' invoice.pk %}">Download PDF</a>
+  <form method="post" action="{% url 'electricity:dashboard_invoice_send' invoice.pk %}">{% csrf_token %}<button class="dash-btn primary" type="submit">Send by email</button></form>
+  {% if invoice.status != "paid" %}<form method="post" action="{% url 'electricity:dashboard_invoice_paid' invoice.pk %}">{% csrf_token %}<button class="dash-btn ghost" type="submit">Mark as paid</button></form>{% endif %}
+  <form method="post" action="{% url 'electricity:dashboard_invoice_duplicate' invoice.pk %}">{% csrf_token %}<button class="dash-btn ghost" type="submit">Duplicate</button></form>
+  {% if invoice.invoice_type != "credit" %}<form method="post" action="{% url 'electricity:dashboard_invoice_credit' invoice.pk %}">{% csrf_token %}<button class="dash-btn ghost" type="submit">Create credit invoice</button></form>{% endif %}
+</div>
+<section class="invoice-pdf-preview" aria-label="Exact customer invoice PDF preview">
+  <div class="sr-only">Invoice total {{ invoice.invoice_total|floatformat:2 }} {{ invoice.currency }}</div>
+  <iframe title="Invoice {{ invoice.invoice_number }} PDF preview" src="{% url 'electricity:dashboard_invoice_pdf' invoice.pk %}?preview=1#toolbar=0&navpanes=0&view=FitH"></iframe>
+  <p>This is the exact PDF attached to the customer's email.</p>
+</section>
+{% endblock %}

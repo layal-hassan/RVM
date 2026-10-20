@@ -10,8 +10,8 @@
     {% if CURRENT_LANGUAGE == "ar" %}
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
     {% endif %}
-    <link rel="stylesheet" href="{% static 'electricity/css/select-system.css' %}">
-    <link rel="stylesheet" href="{% static 'electricity/css/electricity.css' %}">
+    <link rel="stylesheet" href="{% static 'electricity/css/select-system.css' %}?v=20261019-2">
+    <link rel="stylesheet" href="{% static 'electricity/css/electricity.css' %}?v=20261018-2">
     <link rel="stylesheet" href="{% static 'electricity/css/dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'electricity/css/global_header.css' %}">
     <link rel="stylesheet" href="{% static 'electricity/css/typography.css' %}">
@@ -46,6 +46,7 @@
                 <a href="{% url 'electricity:dashboard_pricing' %}">Pricing</a>
                 <a href="{% url 'electricity:dashboard_hero_pricing' %}">Hero Pricing</a>
                 <a href="{% url 'electricity:dashboard_invoices' %}">Invoices</a>
+                <a href="{% url 'electricity:dashboard_email_templates' %}">Automated Emails</a>
                 <a href="{% url 'electricity:dashboard_faq' %}">FAQ</a>
 
                 <div class="dash-nav-section">Category Pages</div>
@@ -188,19 +189,35 @@
 
                 searchInput.addEventListener("input", () => {
                     const query = searchInput.value.trim().toLocaleLowerCase();
-                    links.forEach((link) => {
-                        link.hidden = Boolean(query) && !link.textContent.trim().toLocaleLowerCase().includes(query);
-                    });
-
                     sections.forEach((section) => {
+                        const sectionMatches = Boolean(query) && section.textContent.trim().toLocaleLowerCase().includes(query);
                         let next = section.nextElementSibling;
                         let hasVisibleLink = false;
                         while (next && !next.classList.contains("dash-nav-section")) {
-                            if (next.matches("a") && !next.hidden) hasVisibleLink = true;
+                            if (next.matches("a")) {
+                                const linkMatches = next.textContent.trim().toLocaleLowerCase().includes(query);
+                                next.hidden = Boolean(query) && !sectionMatches && !linkMatches;
+                                if (!next.hidden) hasVisibleLink = true;
+                            }
                             next = next.nextElementSibling;
                         }
                         section.hidden = Boolean(query) && !hasVisibleLink;
                     });
+
+                    links.filter((link) => !link.previousElementSibling || !link.previousElementSibling.classList.contains("dash-nav-section"))
+                        .forEach((link) => {
+                            const belongsToSection = sections.some((section) => {
+                                let next = section.nextElementSibling;
+                                while (next && !next.classList.contains("dash-nav-section")) {
+                                    if (next === link) return true;
+                                    next = next.nextElementSibling;
+                                }
+                                return false;
+                            });
+                            if (!belongsToSection) {
+                                link.hidden = Boolean(query) && !link.textContent.trim().toLocaleLowerCase().includes(query);
+                            }
+                        });
                 });
             }
         })();

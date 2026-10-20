@@ -11,7 +11,9 @@
 
   const updateOnCallActiveLink = () => {
     if (!onCallLinks.length) return;
-    const onCallPath = new URL(onCallLinks[0].href, window.location.href).pathname;
+    const jourLink = onCallLinks.find((link) => link.dataset.rwmhOnCall === "jour");
+    if (!jourLink) return;
+    const onCallPath = new URL(jourLink.href, window.location.href).pathname;
     if (window.location.pathname !== onCallPath) return;
     const activeSection = window.location.hash === "#pricing" ? "pricing" : "jour";
     onCallLinks.forEach((link) => {

@@ -1,35 +1,18 @@
-﻿{% extends "electricity/base.html" %}
-{% load i18n %}
-
-{% block title %}{% trans "FAQ | RWM EL" %}{% endblock %}
+{% extends "electricity/base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "Frequently Asked Questions | RWM EL" %}{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/faq-theme.css' %}?v=20261020-4">{% endblock %}
 {% block body_class %}faq-page{% endblock %}
-
 {% block content %}
-<section class="faq-hero">
-  <div class="container">
-    <div class="faq-kicker">{% trans "FAQ" %}</div>
-    <h1>{% trans "Frequently Asked Questions" %}</h1>
-    <p>{% trans "Clear answers to the most common questions about bookings, pricing, and services." %}</p>
-  </div>
-</section>
-
-<section class="faq-section">
-  <div class="container">
-    <div class="faq-list">
-      {% for faq in faqs %}
-        <details class="faq-item">
-          <summary>
-            <span>{{ faq.question }}</span>
-            <span class="faq-icon">+</span>
-          </summary>
-          <div class="faq-answer">
-            {{ faq.answer|linebreaksbr }}
-          </div>
-        </details>
-      {% empty %}
-        <div class="faq-empty">{% trans "No FAQ entries yet. Please check back soon." %}</div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
+<main class="faq-main">
+  <section class="faq-hero"><div class="container faq-hero-inner"><div><div class="faq-kicker"><span></span>{% trans "Customer support" %}</div><h1>{% trans "Frequently Asked Questions" %}</h1><p>{% trans "Find quick answers to the most common questions about our electrical services, pricing, bookings and ROT deduction. Can't find what you're looking for? We're here to help." %}</p></div><div class="faq-note">{% trans "Same questions." %}<br><strong>{% trans "Clear answers." %}</strong></div></div></section>
+  <section class="faq-content"><div class="container">
+    <label class="faq-search"><span aria-hidden="true">⌕</span><input type="search" data-faq-search placeholder="{% trans 'Search for answers (e.g. pricing, booking, ROT...)' %}" aria-label="{% trans 'Search frequently asked questions' %}"></label>
+    <nav class="faq-filters" aria-label="{% trans 'FAQ categories' %}"><button class="is-active" type="button" data-faq-filter="all"><span>▦</span>{% trans "All questions" %}</button><button type="button" data-faq-filter="bookings"><span>▣</span>{% trans "Bookings & appointments" %}</button><button type="button" data-faq-filter="pricing"><span>▤</span>{% trans "Pricing & payments" %}</button><button type="button" data-faq-filter="rot"><span>⌂</span>{% trans "ROT deduction" %}</button><button type="button" data-faq-filter="services"><span>⌁</span>{% trans "Our services" %}</button></nav>
+    <div class="faq-list" data-faq-list>{% for faq in faqs %}<details class="faq-item" data-category="{{ faq.display_category }}" data-search="{{ faq.question|lower }} {{ faq.answer|lower }}"><summary><span>{{ faq.question }}</span><span class="faq-icon" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="m5.5 7.5 4.5 4.5 4.5-4.5"/></svg></span></summary><div class="faq-answer">{{ faq.answer|linebreaksbr }}</div></details>{% empty %}<div class="faq-empty">{% trans "No FAQ entries yet. Please check back soon." %}</div>{% endfor %}<div class="faq-no-results" data-faq-empty hidden>{% trans "No questions match your search." %}</div></div>
+    <section class="faq-help"><div class="faq-help-heading"><span>♧</span><div><h2>{% trans "Still have questions?" %}</h2><p>{% trans "Our team is happy to help with bookings, electrical services, pricing or any other questions." %}</p></div></div><div class="faq-help-actions"><a class="faq-btn faq-btn-gold" href="{% url 'electricity:contact' %}"><span>✉</span>{% trans "Contact support" %} →</a><a class="faq-btn" href="tel:+46700391611"><span>☎</span>070 03 91 611</a><div class="faq-hours"><span>◷</span><p><b>{% trans "Mon – Fri: 07:00 – 17:00" %}</b><small>{% trans "For urgent electrical issues outside these hours, please contact our on-call service." %}</small></p></div></div></section>
+  </div></section>
+  <section class="faq-cta"><div class="container"><div class="faq-cta-copy"><div class="faq-kicker"><span></span>{% trans "Ready to get started?" %}</div><h2>{% trans "Book a licensed electrician today" %}</h2><p>{% trans "Safe, professional and reliable electrical services for your home or business." %}</p><div><a class="faq-btn faq-btn-gold" href="{% url 'electricity:service_booking_step' 1 %}">▣ {% trans "Book an electrician" %} →</a><a class="faq-btn" href="{% url 'electricity:services' %}">▤ {% trans "Get a free quote" %} →</a></div></div><div class="faq-trust"><span>♢<b>{% trans "Licensed & insured" %}</b><small>{% trans "Your safety is our priority" %}</small></span><span>♢<b>{% trans "Transparent pricing" %}</b><small>{% trans "No hidden fees" %}</small></span><span>♧<b>{% trans "High quality work" %}</b><small>{% trans "Done right, every time" %}</small></span></div></div></section>
+</main>
+<script>(()=>{const search=document.querySelector('[data-faq-search]'),buttons=[...document.querySelectorAll('[data-faq-filter]')],items=[...document.querySelectorAll('.faq-item')],empty=document.querySelector('[data-faq-empty]');let filter='all';function update(){const term=search.value.trim().toLowerCase();let shown=0;items.forEach(item=>{const visible=(filter==='all'||item.dataset.category===filter)&&(!term||item.dataset.search.includes(term));item.hidden=!visible;if(visible)shown++;});empty.hidden=shown!==0;}buttons.forEach(button=>button.addEventListener('click',()=>{filter=button.dataset.faqFilter;buttons.forEach(node=>node.classList.toggle('is-active',node===button));update();}));search.addEventListener('input',update);})();</script>
 {% endblock %}

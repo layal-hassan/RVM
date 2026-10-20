@@ -3,3 +3,55 @@
 @media(max-width:640px){.feedback-hero{padding:38px 0 0}.feedback-shell{width:min(92vw,520px)}.feedback-copy h1{font-size:44px}.feedback-benefits{grid-template-columns:1fr}.feedback-thanks{display:none}.feedback-card{padding:22px 16px}.feedback-grid{grid-template-columns:1fr}.feedback-field-wide{grid-column:auto}.feedback-success{min-height:440px}.feedback-success h2{font-size:38px}.feedback-success p{font-size:14px}.feedback-success .feedback-btn{min-width:0;width:100%}}
 .feedback-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}.feedback-form-error{margin-bottom:16px}.feedback-stars input:focus-visible+label,.feedback-btn:focus-visible{outline:2px solid #fff;outline-offset:4px}
 @media(prefers-reduced-motion:reduce){.feedback-stars label,.feedback-btn{transition:none}.feedback-btn:hover{transform:none}}
+
+/* Match the stronger typography proportions shown in the feedback reference. */
+.feedback-page .feedback-kicker { font-size: 13px !important; }
+.feedback-page .feedback-copy h1 { font-size: clamp(54px, 4.8vw, 72px) !important; }
+.feedback-page .feedback-copy > p { max-width: 430px; font-size: 17px !important; }
+.feedback-page .feedback-benefits li { font-size: 15px !important; }
+.feedback-benefits li > span { width: 36px; height: 36px; font-size: 15px; }
+.feedback-page .feedback-thanks > div { font-size: 12px !important; }
+.feedback-page .feedback-thanks p { max-width: 330px; font-size: 15px !important; }
+
+.feedback-page .feedback-field label,
+.feedback-page .feedback-field legend { font-size: 12px !important; }
+.feedback-page .feedback-field .form-control { min-height: 50px; font-size: 14px !important; }
+.feedback-field textarea.form-control { min-height: 155px; }
+.feedback-page .feedback-rating small { font-size: 12px !important; }
+.feedback-page .feedback-stars label { font-size: 36px !important; }
+.feedback-page .feedback-stars { min-height: 42px; gap: 10px; }
+.feedback-page .feedback-stars label { display: inline-grid; place-items: center; width: 36px; height: 40px; line-height: 1 !important; }
+.feedback-page .feedback-rating small { display: block; margin-top: 2px; }
+.feedback-message-wrap > span { font-size: 11px; }
+.feedback-page .feedback-btn { min-width: 245px; min-height: 56px; font-size: 13px !important; }
+.feedback-page .feedback-privacy p { font-size: 12px !important; }
+.feedback-page .feedback-error { font-size: 12px !important; }
+
+.feedback-success-icon { width: 78px; height: 78px; font-size: 46px; }
+.feedback-page .feedback-success h2 { font-size: clamp(46px, 4.5vw, 64px) !important; }
+.feedback-page .feedback-success p { font-size: 18px !important; }
+.feedback-success .feedback-btn { min-width: 310px; }
+
+/* Keep the enlarged copy and artwork in normal flow so they never overlap. */
+.feedback-page .feedback-copy { min-height: 0; }
+.feedback-page .feedback-photo {
+  position: relative;
+  right: auto;
+  bottom: auto;
+  left: -70px;
+  width: calc(100% + 90px);
+  height: 250px;
+  margin-top: 30px;
+}
+
+@media (max-width: 640px) {
+  .feedback-page .feedback-kicker { font-size: 11px !important; }
+  .feedback-page .feedback-copy h1 { font-size: 48px !important; }
+  .feedback-page .feedback-copy > p { font-size: 15px !important; }
+  .feedback-page .feedback-benefits li { font-size: 14px !important; }
+  .feedback-page .feedback-field label,
+  .feedback-page .feedback-field legend { font-size: 11px !important; }
+  .feedback-page .feedback-field .form-control { font-size: 13px !important; }
+  .feedback-page .feedback-success h2 { font-size: 42px !important; }
+  .feedback-page .feedback-success p { font-size: 16px !important; }
+}

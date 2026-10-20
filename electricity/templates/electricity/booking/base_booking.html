@@ -11,8 +11,8 @@
     {% if CURRENT_LANGUAGE == "ar" %}
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
     {% endif %}
-    <link rel="stylesheet" href="{% static 'electricity/css/select-system.css' %}">
-    <link href="{% static 'electricity/css/electricity.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'electricity/css/select-system.css' %}?v=20261019-2">
+    <link href="{% static 'electricity/css/electricity.css' %}?v=20261018-2" rel="stylesheet">
     <link href="{% static 'electricity/css/booking.css' %}" rel="stylesheet">
     {% block extra_css %}{% endblock %}
     <link href="{% static 'electricity/css/global_header.css' %}" rel="stylesheet">
@@ -71,7 +71,7 @@
         <li><a href="{% url 'electricity:terms' %}">{% trans "Terms &amp; Conditions" %}</a></li>
         <li><a href="{% url 'electricity:privacy' %}">{% trans "Privacy Policy" %}</a></li>
         <li><a href="{% url 'electricity:cookies' %}">{% trans "Cookies" %}</a></li>
-        <li><a href="{% url 'electricity:support' %}">{% trans "Customer Support" %}</a></li>
+        <li><a href="{% url 'electricity:faq' %}">{% trans "FAQ" %}</a></li>
         <li><a href="{% url 'electricity:contact' %}">{% trans "Contact us" %}</a></li>
       </ul>
     </div>

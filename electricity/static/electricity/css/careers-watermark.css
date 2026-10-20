@@ -90,7 +90,7 @@
 
 .careers-page .careers-job-card {
   display: grid;
-  grid-template-columns: 58px minmax(210px, 0.8fr) minmax(300px, 1.5fr) auto;
+  grid-template-columns: 58px minmax(210px, 0.8fr) minmax(300px, 1.5fr) minmax(172px, auto);
   align-items: center;
   gap: 22px;
   padding: 20px 24px;
@@ -139,19 +139,49 @@
 }
 
 .careers-page .careers-job-card__apply {
-  min-width: 132px;
-  min-height: 46px;
+  width: 172px;
+  min-height: 50px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
+  justify-self: end;
+  gap: 12px;
+  padding: 0 14px;
+  box-sizing: border-box;
   border: 1px solid #e3b527;
   border-radius: 4px;
   color: #e3b527;
-  font: 800 11px/1 Arial, sans-serif;
+  font: 800 12px/1 Arial, sans-serif;
   letter-spacing: 0.1em;
   text-decoration: none;
   text-transform: uppercase;
+}
+
+.careers-page .careers-job-card__apply .rwm-arrow {
+  flex: 0 0 auto;
+}
+
+.careers-page .careers-community a {
+  width: 290px;
+  min-width: 290px;
+  min-height: 58px;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 14px 0 22px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  font-size: 12px !important;
+}
+
+.careers-page .careers-community a .rwm-arrow {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 640px) {
+  .careers-page .careers-community a {
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 .careers-page .careers-job-card__apply:hover {
@@ -206,6 +236,7 @@
 
 .careers-page .careers-apply--with-jobs .careers-form {
   gap: 12px 10px;
+  align-items: start;
 }
 
 .careers-page .careers-apply--with-jobs .careers-field label {
@@ -228,7 +259,10 @@
 
 .careers-page .careers-apply--with-jobs .careers-form button {
   grid-column: 1;
+  width: 100%;
+  height: 52px;
   min-height: 52px;
+  align-self: start;
 }
 
 .careers-page .careers-apply--with-jobs .careers-privacy {
@@ -243,6 +277,8 @@
 .careers-page .careers-apply--with-jobs .careers-privacy svg {
   width: 17px;
   height: 17px;
+  max-width: 17px;
+  max-height: 17px;
   flex: 0 0 auto;
   fill: none;
   stroke: currentColor;

@@ -1,8 +1,10 @@
 import os
 import re
 import uuid
+import json
 import datetime
 import logging
+from decimal import Decimal, ROUND_HALF_UP
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -19,6 +21,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils import timezone
 from django.utils.translation import gettext as _
+from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.db import transaction
 from .forms import (
@@ -32,6 +35,7 @@ from .forms import (
     InvoiceLineFormSet,
     CustomerFeedbackAdminForm,
     CustomerFeedbackForm,
+    AutomatedEmailTemplateForm,
     CareerApplicationForm,
     CareerApplicationAdminForm,
     JobOpeningForm,
@@ -79,6 +83,7 @@ from .forms import (
 from .admin_site import electricity_admin_site
 from .models import (
     AdminNotification,
+    AutomatedEmailTemplate,
     BookingStatusUpdate,
     ServiceBookingStatusUpdate,
     ConsultationBooking,
@@ -123,6 +128,90 @@ from django.contrib.auth.models import User
 from .invoicing import create_invoice_for_booking, invoice_pdf_bytes, send_invoice_email
 
 logger = logging.getLogger(__name__)
+
+
+_AUTOMATED_EMAIL_DEFAULTS = {
+    "contact": {
+        "company_subject": "New contact request from {name}",
+        "company_body": "Name: {name}\nEmail: {email}\nPhone: {phone}\nAddress: {address}\nService: {service}\n\nMessage:\n{message}",
+        "customer_subject": "RWM EL - We received your enquiry",
+        "customer_body": "Hello {name},\n\nThank you for contacting RWM EL. We received your enquiry and will get back to you as soon as possible.\n\nService: {service}\nYour message:\n{message}\n\nKind regards,\nRWM EL",
+    },
+    "feedback": {
+        "company_subject": "New customer feedback from {name}",
+        "company_body": "Name: {name}\nEmail: {email}\nLocation: {location}\nRating: {rating}/5\n\nFeedback:\n{message}\n\nThis feedback is pending review in the dashboard.",
+        "customer_subject": "RWM EL - Feedback received",
+        "customer_body": "Hello {name},\n\nThank you for sharing your feedback with RWM EL. We received it successfully and our team will review it.\n\nRating: {rating}/5\nYour message: {message}\n\nKind regards,\nRWM EL",
+    },
+    "quote": {
+        "company_subject": "New quote request {reference} - {name}",
+        "company_body": "Reference: {reference}\nCustomer: {name}\nType: {customer_type}\nEmail: {email}\nPhone: {phone}\nAddress: {address}\nService: {service}\n\nRequest details:\n{details}",
+        "customer_subject": "Your quote request {reference} has been received",
+        "customer_body": "Hello {name},\n\nThank you! We received your request. Our team will review it and get back to you with a tailored quotation.\n\nService: {service}\nReference: {reference}\n\nKind regards,\nRWM EL",
+    },
+}
+
+
+class _EmailContext(dict):
+    def __missing__(self, key):
+        return ""
+
+
+def _render_automated_email(value, context):
+    try:
+        return (value or "").format_map(_EmailContext(context))
+    except (ValueError, KeyError):
+        logger.exception("Invalid automated email placeholder in template.")
+        return value or ""
+
+
+def _send_automated_workflow_emails(workflow, context, attachments=None):
+    defaults = _AUTOMATED_EMAIL_DEFAULTS[workflow]
+    template = AutomatedEmailTemplate.objects.filter(workflow=workflow).first()
+    from_email = (
+        getattr(settings, "EMAIL_HOST_USER", None)
+        or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+        or "support@rwmel.se"
+    )
+    company_recipient = (
+        getattr(template, "company_recipient", "")
+        or getattr(settings, "CONTACT_TO_EMAIL", None)
+        or "info@rwmel.se"
+    )
+    customer_email = context.get("email", "")
+    results = {"company": "disabled", "customer": "disabled"}
+
+    if template is None or template.company_enabled:
+        try:
+            message = EmailMessage(
+                _render_automated_email(getattr(template, "company_subject", "") or defaults["company_subject"], context),
+                _render_automated_email(getattr(template, "company_body", "") or defaults["company_body"], context),
+                from_email,
+                [company_recipient],
+                reply_to=[customer_email] if customer_email else None,
+            )
+            for name, content in attachments or []:
+                message.attach(name, content)
+            message.send(fail_silently=False)
+            results["company"] = "sent"
+        except Exception:
+            results["company"] = "failed"
+            logger.exception("%s company notification email failed.", workflow)
+
+    if customer_email and (template is None or template.customer_enabled):
+        try:
+            EmailMessage(
+                _render_automated_email(getattr(template, "customer_subject", "") or defaults["customer_subject"], context),
+                _render_automated_email(getattr(template, "customer_body", "") or defaults["customer_body"], context),
+                from_email,
+                [customer_email],
+                reply_to=[company_recipient],
+            ).send(fail_silently=False)
+            results["customer"] = "sent"
+        except Exception:
+            results["customer"] = "failed"
+            logger.exception("%s customer confirmation email failed.", workflow)
+    return results
 
 
 def _invoice_email_error_message(exc):
@@ -398,51 +487,17 @@ def feedback(request):
         AdminNotification.objects.create(
             message=f"New customer feedback from {item.full_name}.",
         )
-        from_email = (
-            getattr(settings, "EMAIL_HOST_USER", None)
-            or getattr(settings, "DEFAULT_FROM_EMAIL", None)
-            or "Support@rwmel.se"
+        _send_automated_workflow_emails(
+            AutomatedEmailTemplate.Workflow.FEEDBACK,
+            {
+                "name": item.full_name,
+                "email": item.email,
+                "location": item.location or "-",
+                "rating": item.rating,
+                "message": item.message,
+                "reference": f"FB-{item.pk:06d}",
+            },
         )
-        company_email = getattr(settings, "CONTACT_TO_EMAIL", None) or "Info@rwmel.se"
-
-        try:
-            company_message = EmailMessage(
-                subject=f"New customer feedback from {item.full_name}",
-                body=(
-                    "A new customer feedback submission was received.\n\n"
-                    f"Name: {item.full_name}\n"
-                    f"Email: {item.email}\n"
-                    f"Location: {item.location or '-'}\n"
-                    f"Rating: {item.rating}/5\n\n"
-                    f"Message:\n{item.message}\n\n"
-                    "The feedback is pending review in the dashboard."
-                ),
-                from_email=from_email,
-                to=[company_email],
-                reply_to=[item.email],
-            )
-            company_message.send(fail_silently=False)
-        except Exception:
-            logger.exception("Feedback company email failed for feedback %s", item.pk)
-
-        try:
-            customer_message = EmailMessage(
-                subject="RWM EL - Feedback received",
-                body=(
-                    f"Hello {item.full_name},\n\n"
-                    "Thank you for sharing your feedback with RWM EL. "
-                    "We have received it successfully and our team will review it.\n\n"
-                    f"Rating: {item.rating}/5\n"
-                    f"Your message: {item.message}\n\n"
-                    "Kind regards,\nRWM EL"
-                ),
-                from_email=from_email,
-                to=[item.email],
-                reply_to=[company_email],
-            )
-            customer_message.send(fail_silently=False)
-        except Exception:
-            logger.exception("Feedback confirmation email failed for feedback %s", item.pk)
 
         submitted = True
         form = CustomerFeedbackForm()
@@ -621,21 +676,140 @@ def quote_request_step(request, step):
                         default_storage.delete(upload["path"])
                 AdminNotification.objects.create(quote_request=quote, message=f"New quote request from {quote.full_name} for {quote.service_title}.")
                 reference = f"QR-{quote.id:06d}"
-                body = (f"New quote request {reference}\n\nService: {quote.service_title}\nCustomer: {quote.full_name}\nType: {quote.get_customer_type_display()}\nEmail: {quote.email}\nPhone: {quote.phone}\nAddress: {quote.street_address}, {quote.postcode} {quote.city}\nMaterials: {quote.get_materials_display()}\n\nProject details:\n{quote.project_details}\n\nAdditional information:\n{quote.additional_information or '-'}")
-                try:
-                    company = EmailMessage(f"New quote request {reference} - {quote.service_title}", body, settings.DEFAULT_FROM_EMAIL, [settings.CONTACT_TO_EMAIL], reply_to=[quote.email])
-                    for attachment in attachments:
-                        with attachment.file.open("rb") as attached_file:
-                            company.attach(attachment.original_name, attached_file.read())
-                    company.send()
-                except Exception: logger.exception("Quote company email failed for %s", reference)
-                try:
-                    send_mail(f"Your quote request {reference} has been received", f"Hello {quote.full_name},\n\nThank you! Your request has been received. Our team will review your project and get back to you as soon as possible with a tailored quotation.\n\nService: {quote.service_title}\nReference: {reference}\n\nRWM EL", settings.DEFAULT_FROM_EMAIL, [quote.email])
-                except Exception: logger.exception("Quote customer email failed for %s", reference)
+                email_attachments = []
+                for attachment in attachments:
+                    with attachment.file.open("rb") as attached_file:
+                        email_attachments.append((attachment.original_name, attached_file.read()))
+                _send_automated_workflow_emails(
+                    AutomatedEmailTemplate.Workflow.QUOTE,
+                    {
+                        "name": quote.full_name,
+                        "email": quote.email,
+                        "phone": quote.phone,
+                        "address": f"{quote.street_address}, {quote.postcode} {quote.city}",
+                        "service": quote.service_title,
+                        "customer_type": quote.get_customer_type_display(),
+                        "details": f"Materials: {quote.get_materials_display()}\n\n{quote.project_details}\n\nAdditional information: {quote.additional_information or '-'}",
+                        "reference": reference,
+                    },
+                    email_attachments,
+                )
                 request.session[QUOTE_SESSION_KEY] = {**data, "quote_id": quote.id, "reference": reference}
                 return redirect("electricity:quote_request_step", step=4)
 
     return render(request, "electricity/quote_request.html", {"step": step, "data": data, "errors": errors})
+
+
+@require_POST
+def request_flow_submit(request):
+    """Submit the complete in-page multi-service request flow."""
+    try:
+        requested_services = json.loads(request.POST.get("services_json", "[]"))
+    except (TypeError, ValueError, json.JSONDecodeError):
+        requested_services = []
+    if not isinstance(requested_services, list) or not requested_services:
+        return JsonResponse({"ok": False, "error": "Please add at least one service."}, status=400)
+
+    verified_services = []
+    for requested in requested_services[:30]:
+        if not isinstance(requested, dict):
+            continue
+        source = requested.get("source", "detail")
+        item = _quote_service_item(source, requested.get("id"))
+        if not item:
+            continue
+        try:
+            quantity = max(1, min(99, int(requested.get("quantity", 1))))
+        except (TypeError, ValueError):
+            quantity = 1
+        verified_services.append({"item": item, "quantity": quantity})
+    if not verified_services:
+        return JsonResponse({"ok": False, "error": "The selected services could not be found."}, status=404)
+
+    required = ("full_name", "email", "phone", "street_address", "postcode")
+    values = {key: request.POST.get(key, "").strip() for key in required}
+    missing = [key.replace("_", " ").title() for key, value in values.items() if not value]
+    if missing:
+        return JsonResponse({"ok": False, "error": f"Please complete: {', '.join(missing)}."}, status=400)
+    try:
+        validate_email(values["email"])
+    except ValidationError:
+        return JsonResponse({"ok": False, "error": "Please enter a valid email address."}, status=400)
+
+    uploads = request.FILES.getlist("attachments")
+    if len(uploads) > 10:
+        return JsonResponse({"ok": False, "error": "You can upload a maximum of 10 files."}, status=400)
+    allowed = {".jpg", ".jpeg", ".png", ".heic", ".mp4", ".mov", ".pdf", ".doc", ".docx"}
+    for upload in uploads:
+        if upload.size > 50 * 1024 * 1024:
+            return JsonResponse({"ok": False, "error": f"{upload.name} is larger than 50 MB."}, status=400)
+        if os.path.splitext(upload.name)[1].lower() not in allowed:
+            return JsonResponse({"ok": False, "error": f"{upload.name} is not a supported file type."}, status=400)
+
+    requested_customer_type = request.POST.get("customer_type", QuoteRequest.CustomerType.PRIVATE)
+    customer_type = QuoteRequest.CustomerType.BUSINESS if requested_customer_type == "brf" else requested_customer_type
+    if customer_type not in dict(QuoteRequest.CustomerType.choices):
+        customer_type = QuoteRequest.CustomerType.PRIVATE
+    notes = request.POST.get("additional_information", "").strip()
+    timeframe = request.POST.get("preferred_timeframe", "").strip()
+    service_lines = [f"- {entry['item'].title} × {entry['quantity']} ({entry['item'].get_pricing_mode_display()})" for entry in verified_services]
+    project_details = "Selected services:\n" + "\n".join(service_lines)
+    project_details += f"\n\nCustomer type: {'BRF' if requested_customer_type == 'brf' else customer_type.title()}"
+    if timeframe:
+        project_details += f"\n\nPreferred timeframe: {timeframe}"
+    if notes:
+        project_details += f"\n\n{notes}"
+
+    first_item = verified_services[0]["item"]
+    service_title = ", ".join(entry["item"].title for entry in verified_services)
+    service_title = service_title[:160]
+
+    quote = QuoteRequest.objects.create(
+        service_title=service_title,
+        service_description="Multiple services" if len(verified_services) > 1 else (first_item.description or first_item.subtitle),
+        service_image=first_item.image.url if first_item.image else "",
+        customer_type=customer_type,
+        project_details=project_details,
+        materials=QuoteRequest.MaterialsChoice.UNSURE,
+        full_name=values["full_name"],
+        email=values["email"],
+        phone=values["phone"],
+        street_address=values["street_address"],
+        postcode=values["postcode"],
+        city=request.POST.get("city", "").strip(),
+        additional_information=notes,
+    )
+    attachments = []
+    for upload in uploads:
+        attachments.append(QuoteRequestAttachment.objects.create(
+            quote_request=quote,
+            file=upload,
+            original_name=upload.name,
+        ))
+    reference = f"RWM-{quote.id:06d}"
+    AdminNotification.objects.create(
+        quote_request=quote,
+        message=f"New service request from {quote.full_name} for {len(verified_services)} selected service(s).",
+    )
+    email_attachments = []
+    for attachment in attachments:
+        with attachment.file.open("rb") as attached_file:
+            email_attachments.append((attachment.original_name, attached_file.read()))
+    _send_automated_workflow_emails(
+        AutomatedEmailTemplate.Workflow.QUOTE,
+        {
+            "name": quote.full_name,
+            "email": quote.email,
+            "phone": quote.phone,
+            "address": f"{quote.street_address}, {quote.postcode} {quote.city}",
+            "service": quote.service_title,
+            "customer_type": quote.get_customer_type_display(),
+            "details": project_details,
+            "reference": reference,
+        },
+        email_attachments,
+    )
+    return JsonResponse({"ok": True, "reference": reference})
 
 
 def terms(request):
@@ -762,6 +936,27 @@ def on_call(request):
             "ecosystem_services": ecosystem_services,
         },
     )
+
+
+def pricing(request):
+    active_pricing = ServicePricing.objects.filter(is_active=True).order_by("-created_at").first()
+    labor_rate = active_pricing.labor_rate if active_pricing else Decimal("688")
+    transport_fee = active_pricing.transport_fee if active_pricing else Decimal("500")
+    rot_percent = active_pricing.rot_percent if active_pricing else Decimal("30")
+    currency = active_pricing.currency if active_pricing else "SEK"
+    base_total = labor_rate + transport_fee
+    rot_deduction = labor_rate * rot_percent / Decimal("100")
+    return render(request, "electricity/pricing.html", {
+        "pricing": active_pricing,
+        "labor_rate": labor_rate,
+        "transport_fee": transport_fee,
+        "rot_percent": rot_percent,
+        "currency": currency,
+        "base_total": base_total,
+        "rot_deduction": rot_deduction,
+        "rot_labor_rate": labor_rate - rot_deduction,
+        "rot_first_hour": base_total - rot_deduction,
+    })
 
 
 def for_brf(request):
@@ -978,70 +1173,42 @@ def contact(request):
                 AdminNotification.objects.create(
                     message=f"New contact inquiry from {inquiry.full_name}.",
                 )
-                subject = f"Contact Request: {request_type or 'General Inquiry'}"
-                body = (
-                    f"Name: {full_name}\n"
-                    f"Email: {email}\n"
-                    f"Phone: {phone}\n"
-                    f"Address: {address}\n"
-                    f"Request Type: {request_type}\n"
-                    f"Inquiry Type: {inquiry_type}\n"
-                    f"\nMessage:\n{message}\n"
+                _send_automated_workflow_emails(
+                    AutomatedEmailTemplate.Workflow.CONTACT,
+                    {
+                        "name": full_name,
+                        "email": email,
+                        "phone": phone or "-",
+                        "address": address or "-",
+                        "service": request_type or "General inquiry",
+                        "message": message,
+                        "details": inquiry.get_inquiry_type_display(),
+                        "reference": f"CI-{inquiry.pk:06d}",
+                    },
                 )
-                try:
-                    to_email = getattr(settings, "CONTACT_TO_EMAIL", None) or "info@rwmel.se"
-                    from_email = (
-                        getattr(settings, "EMAIL_HOST_USER", None)
-                        or getattr(settings, "DEFAULT_FROM_EMAIL", None)
-                        or "support@rwmel.se"
-                    )
-                    email_message = EmailMessage(
-                        subject,
-                        body,
-                        from_email,
-                        [to_email],
-                    )
-                    if email:
-                        email_message.reply_to = [email]
-                    email_message.send()
-                    status = "sent"
-
-                    try:
-                        customer_message = EmailMessage(
-                            subject="RWM EL - We received your enquiry",
-                            body=(
-                                f"Hello {full_name},\n\n"
-                                "Thank you for contacting RWM EL. We have received your enquiry "
-                                "successfully and our team will review it shortly.\n\n"
-                                f"Service: {request_type or 'General inquiry'}\n"
-                                f"Phone: {phone or '-'}\n"
-                                f"Address: {address or '-'}\n\n"
-                                f"Your message:\n{message}\n\n"
-                                "We will get back to you as soon as possible.\n\n"
-                                "Kind regards,\nRWM EL\n0046 70 03 91 611"
-                            ),
-                            from_email=from_email,
-                            to=[email],
-                            reply_to=[to_email],
-                        )
-                        customer_message.send(fail_silently=False)
-                    except Exception:
-                        logger.exception(
-                            "Contact confirmation email failed for inquiry %s.",
-                            inquiry.pk,
-                        )
-                except Exception:
-                    logger.exception("Contact inquiry email failed to send.")
-                    status = "error"
+                # The enquiry is safely stored even if SMTP is temporarily unavailable.
+                status = "sent"
 
     return render(request, "electricity/contact.html", {"contact_status": status})
 
 
 def faq(request):
-    faqs = FAQEntry.objects.filter(
+    faqs = list(FAQEntry.objects.filter(
         audience=FAQEntry.Audience.GENERAL,
         is_active=True,
-    ).order_by("order", "-created_at")
+    ).order_by("order", "-created_at"))
+    category_keywords = {
+        "bookings": ("book", "appointment", "schedule", "time", "cancel", "reschedule"),
+        "pricing": ("price", "pricing", "cost", "payment", "invoice", "fee", "quote"),
+        "rot": ("rot", "deduction", "tax"),
+    }
+    for item in faqs:
+        searchable = f"{item.question} {item.answer}".lower()
+        item.display_category = "services"
+        for category, keywords in category_keywords.items():
+            if any(keyword in searchable for keyword in keywords):
+                item.display_category = category
+                break
     return render(request, "electricity/faq.html", {"faqs": faqs})
 
 
@@ -1645,7 +1812,7 @@ def booking_step_1(request):
 def booking_step_2(request):
     if not _ensure_zip_verified(request, "consultation"):
         return redirect("electricity:zip_check", flow="consultation")
-    guard = _require_fields_or_redirect(request, ["consultation_type"], "electricity:booking_step_1")
+    guard = _require_fields_or_redirect(request, ["contact_type", "consultation_type"], "electricity:booking_step_1")
     if guard:
         return guard
     data = _get_booking_data(request)
@@ -1705,7 +1872,7 @@ def booking_step_4(request):
         return redirect("electricity:zip_check", flow="consultation")
     guard = _require_fields_or_redirect(
         request,
-        ["consultation_type", "property_type", "property_size", "urgent"],
+        ["contact_type", "consultation_type", "property_type", "property_size", "urgent"],
         "electricity:booking_step_3",
     )
     if guard:
@@ -1774,7 +1941,7 @@ def booking_step_6(request):
         return redirect("electricity:zip_check", flow="consultation")
     guard = _require_fields_or_redirect(
         request,
-        ["consultation_type", "property_type", "property_size", "urgent"],
+        ["contact_type", "consultation_type", "property_type", "property_size", "urgent"],
         "electricity:booking_step_5",
     )
     if guard:
@@ -1783,16 +1950,10 @@ def booking_step_6(request):
     form = Step6Form(request.POST or None, initial=data)
     if request.method == "POST":
         if form.is_valid():
-            contact_type = form.cleaned_data.get("contact_type")
+            contact_type = data.get("contact_type")
             if contact_type == "private":
                 if not form.cleaned_data.get("personal_id"):
                     form.add_error("personal_id", _("Personal ID is required for private bookings."))
-                if not form.cleaned_data.get("full_name"):
-                    form.add_error("full_name", _("Full name is required."))
-                if not form.cleaned_data.get("email"):
-                    form.add_error("email", _("Email is required."))
-                if not form.cleaned_data.get("phone"):
-                    form.add_error("phone", _("Phone number is required."))
                 if not form.cleaned_data.get("availability_days"):
                     form.add_error("availability_days", _("Please select at least one available day."))
                 if not form.cleaned_data.get("time_window"):
@@ -1802,8 +1963,24 @@ def booking_step_6(request):
                     form.add_error("company_name", _("Company name is required."))
                 if not form.cleaned_data.get("organization_number"):
                     form.add_error("organization_number", _("Organization number is required."))
-                if not form.cleaned_data.get("full_name"):
-                    form.cleaned_data["full_name"] = form.cleaned_data.get("company_name", "")
+            if not form.cleaned_data.get("full_name"):
+                form.add_error("full_name", _("Full name is required."))
+            if not form.cleaned_data.get("email"):
+                form.add_error("email", _("Email is required."))
+            if not form.cleaned_data.get("phone"):
+                form.add_error("phone", _("Phone number is required."))
+            if not form.cleaned_data.get("full_name"):
+                form.add_error("full_name", _("Full name is required."))
+            if not form.cleaned_data.get("email"):
+                form.add_error("email", _("Email is required."))
+            if not form.cleaned_data.get("phone"):
+                form.add_error("phone", _("Phone number is required."))
+            if not form.cleaned_data.get("street_address"):
+                form.add_error("street_address", _("Street address is required."))
+            if not form.cleaned_data.get("postal_code"):
+                form.add_error("postal_code", _("Postal code is required."))
+            if not form.cleaned_data.get("city"):
+                form.add_error("city", _("City is required."))
             if form.errors:
                 data = _update_session_from_form_data(data, form)
                 _set_booking_data(request, data)
@@ -1817,6 +1994,7 @@ def booking_step_6(request):
                         "progress_percent": 85,
                         "title": _("Your contact details"),
                         "consultation_free": is_free,
+                        "contact_type": contact_type,
                     },
                 )
             data.update(form.cleaned_data)
@@ -1834,6 +2012,7 @@ def booking_step_6(request):
             "progress_percent": 85,
             "title": _("Your contact details"),
             "consultation_free": is_free,
+            "contact_type": data.get("contact_type", "private"),
         },
     )
 
@@ -1848,7 +2027,10 @@ def booking_step_7(request):
             "property_type",
             "property_size",
             "urgent",
+            "contact_type",
             "full_name",
+            "email",
+            "phone",
         ],
         "electricity:booking_step_6",
     )
@@ -1894,7 +2076,10 @@ def booking_step_7(request):
             "property_type",
             "property_size",
             "urgent",
+            "contact_type",
             "full_name",
+            "email",
+            "phone",
         ]
         if data.get("contact_type") == "private":
             required.append("personal_id")
@@ -1922,6 +2107,9 @@ def booking_step_7(request):
             company_name=data.get("company_name", ""),
             organization_number=data.get("organization_number", ""),
             company_address=data.get("company_address", ""),
+            street_address=data.get("street_address", ""),
+            postal_code=data.get("postal_code", ""),
+            city=data.get("city", ""),
             full_name=data.get("full_name", ""),
             email=data.get("email", ""),
             phone=data.get("phone", ""),
@@ -1971,6 +2159,7 @@ def booking_step_7(request):
                 f"Consultation type: {booking.consultation_type or '-'}",
                 f"Property type: {booking.property_type or '-'}",
                 f"Property size: {booking.property_size or '-'}",
+                f"Address: {', '.join(part for part in [booking.street_address, booking.postal_code, booking.city] if part) or '-'}",
                 f"Consultation fee: {'Free first consultation' if booking.is_first_free else _format_currency_amount(booking.consultation_price, pricing.currency if pricing else 'SEK')}",
             ],
             next_steps=[
@@ -2017,37 +2206,50 @@ def legacy_consultation_booking_thank_you(request):
 
 def _electrician_pricing_breakdown(data):
     pricing = _get_active_pricing()
-    hourly_rate = 85
-    transport_fee = 0
+    hourly_rate = Decimal("550.40")
+    transport_fee = Decimal("400.00")
     currency = "SEK"
-    rot_percent = 30.0
+    rot_percent = Decimal("30.00")
     if pricing:
-        hourly_rate = float(pricing.hourly_rate_electrician or pricing.labor_rate or hourly_rate)
-        transport_fee = float(pricing.transport_fee or 0)
+        hourly_rate = pricing.hourly_rate_electrician or pricing.labor_rate or hourly_rate
+        transport_fee = pricing.transport_fee if pricing.transport_fee is not None else transport_fee
         currency = pricing.currency or currency
-        rot_percent = float(pricing.rot_percent or rot_percent)
+        rot_percent = pricing.rot_percent if pricing.rot_percent is not None else rot_percent
     try:
         hours = int(data.get("hours") or 1)
     except (TypeError, ValueError):
         hours = 1
     hours = max(1, hours)
     arrival_window = data.get("arrival_window", "")
-    multiplier = 2 if arrival_window in {
+    multiplier = Decimal("2") if arrival_window in {
         "Evening (05:00 PM - 10:00 PM)",
         "Night (10:00 PM - 06:00 AM)",
-    } else 1
-    effective_hourly_rate = hourly_rate * multiplier
+    } else Decimal("1")
+    money = Decimal("0.01")
+    effective_hourly_rate = (hourly_rate * multiplier).quantize(money, ROUND_HALF_UP)
     minimum_callout = effective_hourly_rate
     additional_hours = max(hours - 1, 0)
     additional_total = additional_hours * effective_hourly_rate
-    labor_total = minimum_callout + additional_total
-    total_before_rot = labor_total + transport_fee
-    use_rot = bool(data.get("use_rot")) and data.get("customer_type") == ElectricianBooking.CustomerType.PRIVATE
-    rot_discount = labor_total * (rot_percent / 100) if use_rot else 0
+    labor_total = (minimum_callout + additional_total).quantize(money, ROUND_HALF_UP)
+    transport_fee = transport_fee.quantize(money, ROUND_HALF_UP)
+    subtotal_ex_vat = (labor_total + transport_fee).quantize(money, ROUND_HALF_UP)
+    vat_percent = Decimal("25.00")
+    vat_amount = (subtotal_ex_vat * vat_percent / Decimal("100")).quantize(money, ROUND_HALF_UP)
+    total_inc_vat = (subtotal_ex_vat + vat_amount).quantize(money, ROUND_HALF_UP)
+    use_rot = all((
+        bool(data.get("use_rot")),
+        data.get("customer_type") == ElectricianBooking.CustomerType.PRIVATE,
+        bool(re.fullmatch(r"\d{8}-\d{4}", str(data.get("personal_id") or ""))),
+        data.get("housing_type") in {"house", "apartment"},
+        bool(data.get("rot_owner_confirm")),
+        bool(data.get("electronic_invoice_confirm")),
+    ))
+    labor_inc_vat = (labor_total * (Decimal("1") + vat_percent / Decimal("100"))).quantize(money, ROUND_HALF_UP)
+    rot_discount = (
+        labor_inc_vat * (rot_percent / Decimal("100")) if use_rot else Decimal("0")
+    ).quantize(money, ROUND_HALF_UP)
     is_business = data.get("customer_type") == ElectricianBooking.CustomerType.BUSINESS
-    vat_percent = 25.0 if is_business else 0.0
-    vat_amount = total_before_rot * (vat_percent / 100)
-    total = total_before_rot + vat_amount - rot_discount
+    total = (total_inc_vat - rot_discount).quantize(money, ROUND_HALF_UP)
     return {
         "hours": hours,
         "hourly_rate": hourly_rate,
@@ -2061,9 +2263,12 @@ def _electrician_pricing_breakdown(data):
         "additional_hours": additional_hours,
         "additional_total": additional_total,
         "labor_total": labor_total,
-        "total_before_rot": total_before_rot,
+        "labor_inc_vat": labor_inc_vat,
+        "subtotal_ex_vat": subtotal_ex_vat,
+        "total_before_rot": subtotal_ex_vat,
         "vat_percent": vat_percent,
         "vat_amount": vat_amount,
+        "total_inc_vat": total_inc_vat,
         "is_business": is_business,
         "total": total,
         "currency": currency,
@@ -2071,20 +2276,28 @@ def _electrician_pricing_breakdown(data):
 
 
 def _electrician_pricing_from_booking(booking):
-    hourly_rate = float(booking.hourly_rate_snapshot or 0)
-    transport_fee = float(booking.transport_fee_snapshot or 0)
-    rot_percent = float(booking.rot_percent_snapshot or 0)
+    hourly_rate = booking.hourly_rate_snapshot or Decimal("0")
+    transport_fee = booking.transport_fee_snapshot or Decimal("0")
+    rot_percent = booking.rot_percent_snapshot or Decimal("0")
     hours = max(int(booking.hours or 1), 1)
-    multiplier = 2 if booking.arrival_window in {
+    multiplier = Decimal("2") if booking.arrival_window in {
         "Evening (05:00 PM - 10:00 PM)",
         "Night (10:00 PM - 06:00 AM)",
-    } else 1
-    effective_hourly_rate = hourly_rate * multiplier
+    } else Decimal("1")
+    money = Decimal("0.01")
+    effective_hourly_rate = (hourly_rate * multiplier).quantize(money, ROUND_HALF_UP)
     additional_hours = max(hours - 1, 0)
     additional_total = additional_hours * effective_hourly_rate
-    labor_total = effective_hourly_rate + additional_total
-    total_before_rot = labor_total + transport_fee
-    rot_discount = labor_total * (rot_percent / 100) if booking.rot_requested else 0
+    labor_total = (effective_hourly_rate + additional_total).quantize(money, ROUND_HALF_UP)
+    transport_fee = transport_fee.quantize(money, ROUND_HALF_UP)
+    subtotal_ex_vat = (labor_total + transport_fee).quantize(money, ROUND_HALF_UP)
+    vat_percent = Decimal("25.00")
+    vat_amount = (subtotal_ex_vat * vat_percent / Decimal("100")).quantize(money, ROUND_HALF_UP)
+    total_inc_vat = (subtotal_ex_vat + vat_amount).quantize(money, ROUND_HALF_UP)
+    labor_inc_vat = (labor_total * (Decimal("1") + vat_percent / Decimal("100"))).quantize(money, ROUND_HALF_UP)
+    rot_discount = (
+        labor_inc_vat * (rot_percent / Decimal("100")) if booking.rot_requested else Decimal("0")
+    ).quantize(money, ROUND_HALF_UP)
     return {
         "hours": hours,
         "hourly_rate": hourly_rate,
@@ -2098,8 +2311,13 @@ def _electrician_pricing_from_booking(booking):
         "additional_hours": additional_hours,
         "additional_total": additional_total,
         "labor_total": labor_total,
-        "total_before_rot": total_before_rot,
-        "total": float(booking.estimated_total or 0),
+        "labor_inc_vat": labor_inc_vat,
+        "subtotal_ex_vat": subtotal_ex_vat,
+        "total_before_rot": subtotal_ex_vat,
+        "vat_percent": vat_percent,
+        "vat_amount": vat_amount,
+        "total_inc_vat": total_inc_vat,
+        "total": booking.estimated_total or Decimal("0"),
         "currency": booking.currency or "SEK",
     }
 
@@ -3431,6 +3649,8 @@ def external_dashboard(request):
             manage_url = "electricity:dashboard_profiles"
         elif model_name == "providerprofile":
             manage_url = "electricity:dashboard_providers"
+        elif model_name == "automatedemailtemplate":
+            manage_url = "electricity:dashboard_email_templates"
 
         fields = [f for f in model._meta.fields if f.name != "id"]
         display_fields = [f for f in fields if f.get_internal_type() not in {"TextField", "JSONField"}]
@@ -3470,6 +3690,7 @@ def external_dashboard(request):
         "zip_codes": AcceptedZipCode.objects.count(),
         "outside_area": ServiceRequestOutsideArea.objects.count(),
         "invoices": Invoice.objects.count(),
+        "email_templates": AutomatedEmailTemplate.objects.count(),
         "total_models": len(model_cards),
     }
     notifications = AdminNotification.objects.order_by("-created_at")[:6]
@@ -3696,6 +3917,37 @@ def dashboard_hero_pricing(request):
             "form": form,
             "back_url": "electricity:dashboard",
         },
+    )
+
+
+@login_required
+def dashboard_email_templates(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    templates = AutomatedEmailTemplate.objects.order_by("workflow")
+    return render(
+        request,
+        "electricity/dashboard/email_templates.html",
+        {"templates": templates},
+    )
+
+
+@login_required
+def dashboard_email_template_edit(request, pk):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    item = get_object_or_404(AutomatedEmailTemplate, pk=pk)
+    form = AutomatedEmailTemplateForm(request.POST or None, instance=item)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, f"{item.get_workflow_display()} email settings updated.")
+        return redirect("electricity:dashboard_email_templates")
+    return render(
+        request,
+        "electricity/dashboard/email_template_form.html",
+        {"title": item.get_workflow_display(), "form": form, "item": item},
     )
 
 
@@ -5828,7 +6080,7 @@ def dashboard_invoice_detail(request, pk):
         return guard
     invoice = get_object_or_404(Invoice.objects.select_related("customer").prefetch_related("lines"), pk=pk)
     invoice.recalculate()
-    return render(request, "electricity/invoice/detail.html", {"invoice": invoice})
+    return render(request, "electricity/invoice/pdf_preview.html", {"invoice": invoice})
 
 
 @login_required
@@ -5838,7 +6090,11 @@ def dashboard_invoice_pdf(request, pk):
         return guard
     invoice = get_object_or_404(Invoice, pk=pk)
     response = HttpResponse(invoice_pdf_bytes(invoice), content_type="application/pdf")
-    response["Content-Disposition"] = f'attachment; filename="invoice-{invoice.invoice_number}.pdf"'
+    disposition = "inline" if request.GET.get("preview") == "1" else "attachment"
+    response["Content-Disposition"] = f'{disposition}; filename="invoice-{invoice.invoice_number}.pdf"'
+    if disposition == "inline":
+        # Allow the dashboard on this same origin to embed the exact customer PDF.
+        response["X-Frame-Options"] = "SAMEORIGIN"
     return response
 
 

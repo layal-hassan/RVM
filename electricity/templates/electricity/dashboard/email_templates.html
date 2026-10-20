@@ -1,0 +1,32 @@
+{% extends "electricity/dashboard/base.html" %}
+
+{% block page_title %}Automated Emails{% endblock %}
+{% block page_subtitle %}Control the notifications sent to the company and the confirmations customers receive.{% endblock %}
+
+{% block content %}
+<section class="dash-panel dash-panel-wide">
+    <div class="panel-header">
+        <div>
+            <h2>Email workflows</h2>
+            <div class="panel-meta">Each form submission can notify the company and send a separate confirmation to the customer.</div>
+        </div>
+    </div>
+    <div class="panel-table">
+        {% for item in templates %}
+        <div class="panel-row">
+            <span class="row-title">
+                {{ item.get_workflow_display }}
+                <small class="panel-meta">Last updated {{ item.updated_at|date:"Y-m-d H:i" }}</small>
+            </span>
+            <span class="row-meta">
+                Company: {% if item.company_enabled %}Enabled{% else %}Disabled{% endif %}<br>
+                Customer: {% if item.customer_enabled %}Enabled{% else %}Disabled{% endif %}
+            </span>
+            <span><a class="dash-btn primary" href="{% url 'electricity:dashboard_email_template_edit' item.pk %}">Edit email</a></span>
+        </div>
+        {% empty %}
+        <div class="panel-row"><span>No email workflows are configured. Run the latest database migrations.</span></div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

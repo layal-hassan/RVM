@@ -52,7 +52,7 @@
 .brf-hero-note small { max-width: 145px; color: rgba(255,255,255,.8); font: 700 10px/1.45 Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
 
 .brf-partner { padding: 72px 0; background: radial-gradient(circle at 52% 42%, rgba(36,76,34,.18), transparent 43%), #061007; }
-.brf-partner-grid { display: grid; grid-template-columns: minmax(240px, 1.03fr) minmax(290px, 1.16fr) minmax(270px, .96fr); gap: clamp(28px, 3vw, 54px); align-items: center; }
+.brf-partner-grid { width: min(1680px, 96%); display: grid; grid-template-columns: minmax(240px, 1.03fr) minmax(290px, 1.16fr) minmax(270px, .96fr); gap: clamp(28px, 3vw, 54px); align-items: center; }
 .brf-partner-photo { height: 540px; margin: 0; overflow: hidden; border: 1px solid #a77c17; border-radius: 7px; box-shadow: 0 22px 48px rgba(0,0,0,.3); }
 .brf-partner-photo img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 58% center; }
 .brf-partner-copy h2 { margin: 20px 0 22px; color: #f4efe5; font: 400 clamp(36px, 3.2vw, 54px)/1.03 Georgia, serif; letter-spacing: -.025em; }
@@ -65,6 +65,7 @@
 .brf-quote-form h3 { margin: 0 0 5px; color: #edbd3f; font: 700 18px/1.2 Arial, sans-serif; letter-spacing: .03em; text-transform: uppercase; }
 .brf-quote-form header p, .brf-quote-form > small { margin: 0; color: rgba(255,255,255,.7); font: 11px/1.4 Arial, sans-serif; }
 .brf-quote-form label { display: block; margin-bottom: 6px; }
+.brf-quote-form label > .visually-hidden { display: block; margin-bottom: 7px; }
 .brf-quote-form input, .brf-quote-form select, .brf-quote-form textarea { width: 100%; min-height: 43px; padding: 10px 13px; border: 1px solid rgba(255,255,255,.04); border-radius: 4px; outline: 0; color: #f4f1e9; background: rgba(28,42,31,.83); font: 12px/1.35 Arial, sans-serif; box-shadow: inset 0 1px 4px rgba(0,0,0,.18); }
 .brf-quote-form textarea { min-height: 72px; resize: vertical; }
 .brf-quote-form select { color-scheme: dark; cursor: pointer; }
@@ -76,6 +77,19 @@
 .brf-form-status { margin: 12px 0 0 !important; padding: 9px 10px; border-radius: 4px; font: 600 12px/1.35 Arial, sans-serif !important; }
 .brf-form-status.is-success { color: #cceec5; background: rgba(46,125,50,.24); }
 .brf-form-status.is-error { color: #ffd1c9; background: rgba(160,48,35,.28); }
+.brf-quote-success { align-self: center; padding: 28px 24px 22px; border: 1px solid rgba(213,169,44,.72); border-radius: 7px; color: #f5f0e5; background: radial-gradient(circle at 50% 8%, rgba(75,91,31,.22), transparent 40%), rgba(5,13,7,.9); box-shadow: 0 20px 50px rgba(0,0,0,.25); text-align: center; }
+.brf-success-icon { display: grid; place-items: center; width: 52px; height: 52px; margin: 0 auto 15px; color: #f1c13e; }
+.brf-success-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.brf-quote-success h3 { max-width: 300px; margin: 0 auto 8px; color: #f6f0e7; font: 400 27px/1.08 Georgia, serif; text-transform: none; }
+.brf-quote-success > strong { display: block; color: rgba(255,255,255,.9); font: 700 12px/1.4 Arial, sans-serif; }
+.brf-quote-success > p { margin: 14px auto 18px; color: rgba(255,255,255,.72); font: 12px/1.55 Arial, sans-serif; }
+.brf-success-home { display: flex; align-items: center; justify-content: center; gap: 22px; min-height: 49px; padding: 12px 18px; border: 1px solid #f2c555; border-radius: 4px; color: #211a05; background: linear-gradient(110deg, #f4bd39, #ffd468); font: 800 11px/1 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.brf-success-home:hover { filter: brightness(1.06); transform: translateY(-1px); }
+.brf-success-contact { display: grid; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(213,169,44,.28); text-align: left; }
+.brf-success-contact small { color: rgba(255,255,255,.72); font: 11px/1.4 Arial, sans-serif; }
+.brf-success-contact a { display: flex; align-items: center; gap: 10px; color: #efbf3f; font: 12px/1.35 Arial, sans-serif; }
+.brf-success-contact a span { width: 18px; font-size: 17px; text-align: center; }
+.brf-success-contact a b { margin-left: 2px; font-size: 16px; }
 
 .brf-process { padding: 64px 0 70px; border-top: 1px solid rgba(213,169,44,.22); background: #071007; }
 .brf-process-header h2, .brf-faq h2 { margin: 14px 0 0; color: #f3eee3; font: 400 clamp(32px, 3vw, 48px)/1.12 Georgia, serif; }
@@ -91,11 +105,11 @@
 .brf-residents { display: grid; grid-template-columns: 42% 58%; min-height: 270px; border-top: 1px solid rgba(213,169,44,.3); border-bottom: 1px solid rgba(213,169,44,.3); background: #081309; }
 .brf-residents-photo { background: linear-gradient(90deg, transparent 70%, #081309 100%), url("../img/brf-hero-stockholm.png") center/cover no-repeat; }
 .brf-residents-copy { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(240px,.8fr); align-items: center; gap: 55px; padding: 40px max(5vw, 38px) 40px 50px; }
-.brf-residents-copy h2 { margin: 0 0 12px; color: #eaba37; font: 800 clamp(25px, 2.2vw, 35px)/1.18 Arial, sans-serif; letter-spacing: .025em; text-transform: uppercase; }
-.brf-residents-copy p { max-width: 500px; margin: 0; color: rgba(255,255,255,.7); font: 14px/1.5 Arial, sans-serif; }
+.brf-residents-copy h2 { margin: 0 0 15px; color: #eaba37; font: 800 clamp(32px, 2.7vw, 46px)/1.15 Arial, sans-serif; letter-spacing: .025em; text-transform: uppercase; }
+.brf-residents-copy p { max-width: 600px; margin: 0; color: rgba(255,255,255,.7); font: 17px/1.55 Arial, sans-serif; }
 .brf-residents-copy ul { display: grid; gap: 14px; margin: 0; padding: 5px 0 5px 46px; border-left: 1px solid rgba(218,170,42,.45); list-style: none; }
-.brf-residents-copy li { position: relative; padding-left: 32px; color: rgba(255,255,255,.75); font: 14px/1.3 Arial, sans-serif; }
-.brf-residents-copy li::before { content: "✓"; position: absolute; left: 0; display: grid; place-items: center; width: 19px; height: 19px; border-radius: 50%; color: #17200e; background: #efbd40; font-size: 11px; font-weight: 900; }
+.brf-residents-copy li { position: relative; padding-left: 36px; color: rgba(255,255,255,.75); font: 16px/1.35 Arial, sans-serif; }
+.brf-residents-copy li::before { content: "✓"; position: absolute; left: 0; display: grid; place-items: center; width: 23px; height: 23px; border-radius: 50%; color: #17200e; background: #efbd40; font-size: 13px; font-weight: 900; }
 
 .brf-faq { padding: 56px 0 76px; background: radial-gradient(circle at 60% 20%, rgba(36,76,34,.13), transparent 40%), #071007; }
 .brf-faq header { margin-bottom: 24px; }
@@ -113,11 +127,11 @@
 .brf-final-cta { position: relative; isolation: isolate; overflow: hidden; min-height: 330px; display: grid; align-items: center; border-top: 1px solid rgba(213,169,44,.55); background: #08100a url("../img/rwm-electrician-jacket.png") 12% 42%/cover no-repeat; }
 .brf-final-cta::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(4,10,6,.12) 0%, rgba(5,12,7,.68) 30%, rgba(5,12,7,.96) 48%, rgba(5,12,7,.88) 76%, rgba(5,12,7,.55) 100%); }
 .brf-final-cta-inner { display: grid; grid-template-columns: minmax(0,1fr) 230px; align-items: center; gap: 55px; padding-top: 52px; padding-bottom: 52px; padding-left: min(34vw, 490px); }
-.brf-final-kicker { margin-bottom: 13px; color: #e6b638; font: 800 12px/1.2 Arial, sans-serif; letter-spacing: .18em; text-transform: uppercase; }
-.brf-final-cta h2 { margin: 0 0 10px; color: #f4efe6; font: 400 clamp(30px, 2.8vw, 45px)/1.12 Georgia, serif; letter-spacing: -.015em; }
-.brf-final-cta-copy > p { margin: 0; color: rgba(255,255,255,.72); font: 15px/1.5 Arial, sans-serif; }
+.brf-final-kicker { margin-bottom: 15px; color: #e6b638; font: 800 14px/1.2 Arial, sans-serif; letter-spacing: .18em; text-transform: uppercase; }
+.brf-final-cta h2 { margin: 0 0 12px; color: #f4efe6; font: 400 clamp(38px, 3.4vw, 58px)/1.1 Georgia, serif; letter-spacing: -.015em; }
+.brf-final-cta-copy > p { margin: 0; color: rgba(255,255,255,.72); font: 17px/1.5 Arial, sans-serif; }
 .brf-final-actions { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 22px; }
-.brf-final-actions a { min-width: 235px; min-height: 56px; display: inline-flex; align-items: center; justify-content: center; gap: 14px; border-radius: 5px; font: 800 12px/1 Arial, sans-serif; letter-spacing: .09em; text-decoration: none; text-transform: uppercase; transition: transform .2s ease, filter .2s ease; }
+.brf-final-actions a { min-width: 250px; min-height: 58px; display: inline-flex; align-items: center; justify-content: center; gap: 14px; border-radius: 5px; font: 800 14px/1 Arial, sans-serif; letter-spacing: .09em; text-decoration: none; text-transform: uppercase; transition: transform .2s ease, filter .2s ease; }
 .brf-final-actions a:hover { transform: translateY(-2px); filter: brightness(1.07); }
 .brf-final-primary { border: 1px solid #f3c653; color: #241b05; background: linear-gradient(110deg, #efb936, #ffd56b); }
 .brf-final-primary span { font-size: 18px; }
@@ -127,6 +141,7 @@
 .brf-final-note i { display: block; width: 72px; height: 2px; margin: 18px 0 0 auto; background: #c79a27; transform: rotate(-13deg); }
 
 .brf-services { padding: 72px 0 88px; background: radial-gradient(circle at 50% 0, rgba(68,86,31,.14), transparent 38%), #071007; }
+.brf-services > .container { width: min(1680px, 96%); }
 .brf-services-header { margin-bottom: 30px; }
 .for-brf-page .brf-services-header h2 { margin: 15px 0 0; color: #f3eee3; font-family: Georgia, serif; font-size: clamp(32px, 3.1vw, 50px) !important; font-weight: 400; line-height: 1.15 !important; letter-spacing: -.015em; }
 .brf-services-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }

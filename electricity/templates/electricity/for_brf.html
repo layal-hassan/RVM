@@ -26,7 +26,13 @@
             <strong>{% trans "Electrical Safety" %}<br>{% trans "& Compliance" %}</strong>
           </div>
           <div>
-            <span class="brf-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8 13 3 3 5-5m-9-1-3 3 4 4 3-3m6-4 3 3-4 4-3-3"/></svg></span>
+            <span class="brf-benefit-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="m11 17 2 2a1 1 0 1 0 3-3"/>
+                <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 0 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/>
+                <path d="m21 3 1 11h-2M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3M3 4h8"/>
+              </svg>
+            </span>
             <strong>{% trans "Flexible Service" %}<br>{% trans "Agreements" %}</strong>
           </div>
           <div>
@@ -117,6 +123,22 @@
         </ul>
       </div>
 
+      {% if brf_quote_status == "sent" %}
+      <article class="brf-quote-success" id="brf-quote" role="status" aria-labelledby="brf-success-title">
+        <div class="brf-success-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.6 2.6L16.5 9"/></svg>
+        </div>
+        <h3 id="brf-success-title">{% trans "Request Successfully Submitted!" %}</h3>
+        <strong>{% trans "Thank you for contacting RWM EL!" %}</strong>
+        <p>{% trans "We've received your BRF quotation request. Our team will review the details and get back to you as soon as possible during our business hours." %}</p>
+        <a class="brf-success-home" href="{% url 'electricity:home' %}">{% trans "Back to home" %}<span aria-hidden="true">→</span></a>
+        <div class="brf-success-contact">
+          <small>{% trans "Need assistance sooner?" %}</small>
+          <a href="tel:+46700391611"><span aria-hidden="true">☎</span>{% trans "Call us:" %} 070 03 91 611</a>
+          <a href="https://wa.me/46700391611" target="_blank" rel="noopener"><span aria-hidden="true">◉</span>{% trans "WhatsApp us" %}<b aria-hidden="true">→</b></a>
+        </div>
+      </article>
+      {% else %}
       <form class="brf-quote-form" method="post" action="{% url 'electricity:for_brf' %}#brf-quote" id="brf-quote">
         {% csrf_token %}
         <header>
@@ -142,8 +164,9 @@
         <label><span class="visually-hidden">{% trans "Additional information" %}</span><textarea name="message" rows="3" placeholder="{% trans 'Additional information' %}">{{ brf_quote_data.message|default:'' }}</textarea></label>
         <button type="submit">{% trans "Send request" %}<span aria-hidden="true">→</span></button>
         <small>{% trans "No commitment. We'll contact you to discuss your needs." %}</small>
-        {% if brf_quote_status == "sent" %}<p class="brf-form-status is-success" role="status">{% trans "Thank you! We have received your request." %}</p>{% elif brf_quote_status == "error" %}<p class="brf-form-status is-error" role="alert">{% trans "Please check the required fields and try again." %}</p>{% endif %}
+        {% if brf_quote_status == "error" %}<p class="brf-form-status is-error" role="alert">{% trans "Please check the required fields and try again." %}</p>{% endif %}
       </form>
+      {% endif %}
     </div>
   </section>
 

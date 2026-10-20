@@ -126,6 +126,18 @@
             <div class="stat-value">{{ stats.invoices }}</div>
         </div>
     </a>
+    <a class="stat-card stat-card-link" href="{% url 'electricity:dashboard_email_templates' %}">
+        <div class="stat-icon stat-icon-requests" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="2"/>
+                <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Automated Emails</div>
+            <div class="stat-value">{{ stats.email_templates }}</div>
+        </div>
+    </a>
     <div class="stat-card">
         <div class="stat-icon stat-icon-total" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">

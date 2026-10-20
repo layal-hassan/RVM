@@ -1,0 +1,54 @@
+{% extends "electricity/base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Electrical Pricing" %} | RWM EL{% endblock %}
+{% block body_class %}pricing-page{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/pricing-page.css' %}?v=20261019-9">{% endblock %}
+
+{% block content %}
+<main class="pp-main" data-labor="{{ labor_rate }}" data-transport="{{ transport_fee }}" data-rot="{{ rot_percent }}" data-currency="{{ currency }}">
+  <section class="pp-hero">
+    <div class="pp-hero-shade"></div>
+    <div class="container pp-hero-inner">
+      <div class="pp-eyebrow"><span>01</span>{% trans "Pricing" %}</div>
+      <h1>{% trans "Professional" %}<br>{% trans "Electrical Services." %}<br><em>{% trans "Clear Pricing." %}</em></h1>
+      <p>{% trans "Transparent and fair prices for electrical work in Stockholm and surrounding areas. See our standard rates, what's included and get an estimate for your project." %}</p>
+      <div class="pp-actions">
+        <a class="pp-btn pp-btn-gold" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}<span>→</span></a>
+        <a class="pp-btn pp-btn-outline" href="{% url 'electricity:quote_request_step' 1 %}">{% trans "Request a free quote" %}<span>→</span></a>
+      </div>
+      <div class="pp-hero-trust"><span>◉ {% trans "Licensed & insured" %}</span><span>⌖ {% trans "Reliable & on time" %}</span><span>⌾ {% trans "Serving Stockholm" %}</span></div>
+    </div>
+  </section>
+
+  <section class="pp-section pp-rates" aria-labelledby="pp-rates-title">
+    <div class="container">
+      <div class="pp-section-label">{% trans "Our pricing" %}</div>
+      <h2 id="pp-rates-title">{% trans "Transparent Pricing for" %} <em>{% trans "Our Most Common Services" %}</em></h2>
+      <p class="pp-lead">{% trans "Clear and upfront fee structures for on-site engineering and maintenance services." %}</p>
+      <div class="pp-rate-grid">
+        <article class="pp-rate-card"><span>{% trans "Base deployment" %}</span><h3>{% trans "First Hour Breakdown" %}</h3><dl><div><dt>{% trans "Labour rate" %}</dt><dd>{{ labor_rate|floatformat:0 }} {{ currency }}</dd></div><div><dt>{% trans "Transport fee" %}</dt><dd>{{ transport_fee|floatformat:0 }} {{ currency }}</dd></div><div class="total"><dt>{% trans "Total" %}</dt><dd>{{ base_total|floatformat:0 }} {{ currency }}</dd></div></dl><small>{% trans "Includes VAT" %}</small></article>
+        <article class="pp-rate-card pp-rate-featured"><b>{% trans "Minimum charge with ROT" %}</b><span>{% trans "Tax optimization" %}</span><h3>{% trans "ROT Deduction Applied" %}</h3><dl><div><dt>{% trans "Gross total" %}</dt><dd>{{ base_total|floatformat:0 }} {{ currency }}</dd></div><div class="discount"><dt>{% blocktrans %}ROT ({{ rot_percent|floatformat:0 }}% labour){% endblocktrans %}</dt><dd>−{{ rot_deduction|floatformat:1 }} {{ currency }}</dd></div><div class="total"><dt>{% trans "Adjusted total" %}</dt><dd>{{ rot_first_hour|floatformat:1 }} {{ currency }}</dd></div></dl><small>{% trans "Final charge per first hour" %}</small></article>
+        <article class="pp-rate-card"><span>{% trans "Ongoing rate" %}</span><h3>{% trans "Additional Service Time" %}</h3><dl><div><dt>{% trans "Standard hourly" %}</dt><dd>{{ labor_rate|floatformat:0 }} {{ currency }}/hr</dd></div><div class="discount"><dt>{% trans "After ROT deduction" %}</dt><dd>{{ rot_labor_rate|floatformat:1 }} {{ currency }}/hr</dd></div></dl><small>{% trans "Billed in 30min increments" %}</small></article>
+        <article class="pp-rate-card"><span>{% trans "Documentation" %}</span><h3>{% trans "Terms & Conditions" %}</h3><ul><li>{% trans "Minimum charge of 1 hour applies to all site deployments." %}</li><li>{% trans "Material costs and specialized equipment are excluded from the rates above." %}</li><li>{% trans "ROT deduction requires valid Swedish tax eligibility." %}</li></ul><small>{% trans "Licensed by Elsäkerhetsverket" %}</small></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="pp-calculator"><div class="container"><div class="pp-calc-box">
+    <div class="pp-calc-title"><span>▦</span><div><h2>{% trans "Estimate your electrical service cost" %}</h2><p>{% trans "Get an estimated price based on the number of hours. The final price is confirmed after the work is completed." %}</p></div></div>
+    <div class="pp-calc-controls"><label>{% trans "Estimated working time" %}<span class="pp-stepper"><button type="button" data-step="-1">−</button><strong><output id="pp-hours">3</output> {% trans "hours" %}</strong><button type="button" data-step="1">+</button></span></label><fieldset><legend>{% trans "Property type" %}</legend><label><input type="radio" name="property" value="private" checked> {% trans "Private home" %}</label><label><input type="radio" name="property" value="business"> {% trans "Business" %}</label><label class="pp-switch"><input id="pp-rot" type="checkbox" checked><span></span>{% trans "Apply ROT deduction (if eligible)" %}</label></fieldset></div>
+    <div class="pp-calc-result"><dl><div><dt>{% trans "Labour" %} (<span id="pp-result-hours">3</span>h)</dt><dd id="pp-labour"></dd></div><div><dt>{% trans "Call-out fee" %}</dt><dd id="pp-transport"></dd></div><div><dt>{% trans "ROT deduction" %}</dt><dd id="pp-discount"></dd></div><div><dt>{% trans "VAT included" %}</dt><dd>✓</dd></div></dl><div><span>{% trans "Estimated total" %}</span><strong id="pp-total"></strong></div></div>
+    <a class="pp-btn pp-btn-gold" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book this service" %}<span>→</span></a>
+  </div></div></section>
+
+  <section class="pp-section pp-services"><div class="container"><div class="pp-section-label">{% trans "Our main services" %}</div><h2>{% trans "Professional Electrical Solutions" %}</h2><p class="pp-lead">{% trans "We offer a full range of electrical services for homes, businesses and properties." %}</p><div class="pp-service-grid">
+    <article><b>ϟ</b><h3>{% trans "Troubleshooting & Fault Finding" %}</h3><p>{% trans "Diagnose and resolve electrical issues quickly and safely." %}</p></article><article><b>▦</b><h3>{% trans "Electrical Panels & Upgrades" %}</h3><p>{% trans "Installation and replacement of distribution boards." %}</p></article><article><b>▣</b><h3>{% trans "EV Charger Installation" %}</h3><p>{% trans "Complete installation of home charging stations." %}</p></article><article><b>⌂</b><h3>{% trans "Sockets, Lighting & General Work" %}</h3><p>{% trans "Installation of sockets, lights, dimmers and more." %}</p></article><article><b>⚙</b><h3>{% trans "Smart Home Solutions" %}</h3><p>{% trans "Smart lighting, sensors, thermostats and automation." %}</p></article>
+  </div></div></section>
+
+  <section class="pp-rot-info"><div class="pp-rot-photo"></div><div class="pp-rot-copy"><div class="pp-section-label">{% trans "ROT deduction" %}</div><h2>{% trans "Save on eligible electrical work" %}</h2><p>{% trans "Homeowners may receive a tax deduction on qualifying labour costs." %}</p><ul><li>{% blocktrans %}{{ rot_percent|floatformat:0 }}% deduction on eligible labour.{% endblocktrans %}</li><li>{% trans "The deduction can be applied directly to your invoice." %}</li><li>{% trans "Available for qualifying work in eligible residential properties." %}</li></ul><aside><strong>{% trans "What isn't covered?" %}</strong><p>{% trans "Materials, travel, call-out fees and other non-labour costs are not included in the ROT deduction. Eligibility depends on the homeowner, property and type of work." %}</p></aside></div></section>
+
+  <section class="pp-book"><div class="container pp-book-inner"><div><div class="pp-section-label">{% trans "Ready to get started?" %}</div><h2>{% trans "Book an Electrician Today" %}</h2><p>{% trans "Choose a service, select a time that works for you, and our electrician will take care of the rest." %}</p><div class="pp-actions"><a class="pp-btn pp-btn-gold" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}<span>→</span></a><a class="pp-btn pp-btn-outline" href="{% url 'electricity:quote_request_step' 1 %}">{% trans "Request a quote" %}<span>→</span></a></div></div></div><div class="container pp-book-trust"><span>♢ <b>{% trans "Certified & insured" %}</b></span><span>◇ <b>{% trans "Quality & safety" %}</b></span><span>⌖ <b>{% trans "Stockholm & surrounding areas" %}</b></span><span>◎ <b>{% trans "Clear communication" %}</b></span></div></section>
+</main>
+{% endblock %}
+{% block extra_js %}<script defer src="{% static 'electricity/js/pricing-page.js' %}?v=20261019-1"></script>{% endblock %}

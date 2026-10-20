@@ -242,37 +242,38 @@
   </div>
 </section>
 
-<section class="section engineering-section">
-  <div class="container engineering-grid">
-    <div class="engineering-media">
-      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80" alt="{% trans 'Electrical foundation' %}">
+<section class="oncall-safety" aria-labelledby="services-safety-title">
+  <div class="container oncall-safety-grid">
+    <div class="oncall-safety-media">
+      <img src="{% static 'electricity/img/rwm-electrician-jacket.png' %}" alt="{% trans 'RWM EL electrician working on a distribution board' %}">
     </div>
-    <div class="engineering-content">
-      <div class="eyebrow">{% trans "ELECTRICAL FOUNDATION" %}</div>
-      <h2>{% trans "ENGINEERED" %}<br><span class="hero-italic">{% trans "FOR RELIABILITY" %}</span></h2>
-      <p class="engineering-lead">
-        {% trans "Our electrical work forms the backbone of safe, high-performing homes and properties. We design, install, and upgrade electrical infrastructure that supports modern living—handling both everyday systems and high-load requirements with precision and care." %}
-      </p>
-      <div class="engineering-columns">
-        <div>
-          <div class="eyebrow">{% trans "WHAT WE HANDLE" %}</div>
-          <ul class="engineering-list">
-            <li>{% trans "Fault tracing, troubleshooting &amp; diagnostics" %}</li>
-            <li>{% trans "Electrical panels, distribution boards &amp; capacity upgrades" %}</li>
-            <li>{% trans "Power supply for modern homes, EV charging &amp; automation" %}</li>
-            <li>{% trans "Safety improvements, upgrades &amp; corrective work" %}</li>
-            <li>{% trans "All related electrical installations and service—even if not explicitly listed" %}</li>
+    <div class="oncall-safety-content">
+      <div class="oncall-safety-eyebrow"><i aria-hidden="true"></i>{% trans "Electrical foundation" %}</div>
+      <h2 id="services-safety-title"><span>{% trans "Built for Safety." %}</span><br>{% trans "Designed to Last." %}</h2>
+      <p class="oncall-safety-lead">{% trans "From electrical installations and distribution boards to upgrades and fault finding, we deliver reliable electrical solutions for homes, businesses and properties across Stockholm." %}</p>
+      <div class="oncall-safety-details">
+        <div class="oncall-safety-services">
+          <h3>{% trans "What we handle" %}</h3>
+          <ul>
+            <li><b aria-hidden="true">ϟ</b><span>{% trans "Electrical installations and system upgrades" %}</span></li>
+            <li><b aria-hidden="true">▦</b><span>{% trans "Distribution boards and electrical panels" %}</span></li>
+            <li><b aria-hidden="true">×</b><span>{% trans "Fault finding, diagnostics and repairs" %}</span></li>
+            <li><b aria-hidden="true">♢</b><span>{% trans "Electrical safety and maintenance" %}</span></li>
           </ul>
         </div>
-        <div class="engineering-side">
-          <div class="eyebrow">{% trans "READY WHEN YOU NEED US" %}</div>
-          {% trans "Our licensed electricians are available for both residential and commercial work, delivering fast response, clear communication, and work done right the first time." %}
+        <div class="oncall-safety-cta">
+          <h3>{% trans "Professional electrical services" %}</h3>
+          <p>{% trans "Our licensed electricians are available for both residential and commercial work, delivering fast response, clear communication and high-quality results." %}</p>
+          <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}<span aria-hidden="true">→</span></a>
+          <a class="btn btn-secondary" href="{% url 'electricity:contact' %}">{% trans "Request a free quote" %}<span aria-hidden="true">→</span></a>
         </div>
       </div>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN" %}</a>
+      <div class="oncall-safety-trust" aria-label="{% trans 'Service guarantees' %}">
+        <span><b aria-hidden="true">♢</b>{% trans "Licensed & insured" %}</span>
+        <span><b aria-hidden="true">◷</b>{% trans "Reliable & on time" %}</span>
+        <span><b aria-hidden="true">⌖</b>{% trans "Serving Stockholm" %}</span>
       </div>
-</div>
+    </div>
   </div>
 </section>
 

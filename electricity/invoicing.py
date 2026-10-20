@@ -21,6 +21,42 @@ from .models import (
 VAT_FACTOR = Decimal("1.25")
 
 
+def _sv_amount(value):
+    """Format invoice numbers with Swedish separators, e.g. 2 107,20."""
+    return f"{Decimal(value):,.2f}".replace(",", " ").replace(".", ",")
+
+
+def _invoice_category_totals(invoice):
+    """Return category totals after row and invoice discounts, split by VAT."""
+    lines = list(invoice.lines.all())
+    base_after_row_discounts = sum(
+        (line.total_ex_vat - line.discount_amount for line in lines),
+        Decimal("0"),
+    )
+    invoice_discount = max(invoice.discount_total - sum(
+        (line.discount_amount for line in lines), Decimal("0")
+    ), Decimal("0"))
+    ratio = (
+        (base_after_row_discounts - invoice_discount) / base_after_row_discounts
+        if base_after_row_discounts else Decimal("1")
+    )
+    totals = {
+        category: {"ex_vat": Decimal("0"), "vat": Decimal("0"), "inc_vat": Decimal("0")}
+        for category in InvoiceLine.Category.values
+    }
+    for line in lines:
+        ex_vat = (line.total_ex_vat - line.discount_amount) * ratio
+        vat = ex_vat * line.vat_percent / Decimal("100")
+        totals[line.category]["ex_vat"] += ex_vat
+        totals[line.category]["vat"] += vat
+        totals[line.category]["inc_vat"] += ex_vat + vat
+    q = Decimal("0.01")
+    for category in totals.values():
+        for key, value in category.items():
+            category[key] = value.quantize(q)
+    return totals
+
+
 def _value(booking, *names, default=""):
     for name in names:
         value = getattr(booking, name, None)
@@ -285,24 +321,84 @@ def invoice_pdf_bytes(invoice):
 
     rows = [["Beskrivning", "Moms", "Antal", "À-pris", "Summa"]]
     for line in invoice.lines.all():
-        rows.append([Paragraph(line.description.replace("\n", "<br/>"), styles["BodyText"]), f"{line.vat_percent:g}%", f"{line.quantity:g}", f"{line.unit_price_ex_vat:,.2f}", f"{line.total_ex_vat:,.2f}"])
+        rows.append([
+            Paragraph(line.description.replace("\n", "<br/>"), styles["BodyText"]),
+            f"{line.vat_percent:.2f}%",
+            f"{line.quantity:.2f}",
+            _sv_amount(line.unit_price_ex_vat),
+            _sv_amount(line.total_inc_vat),
+        ])
     table = Table(rows, colWidths=[82 * mm, 20 * mm, 18 * mm, 30 * mm, 30 * mm])
     table.setStyle(TableStyle([("LINEABOVE", (0, 0), (-1, 0), 1, navy), ("LINEBELOW", (0, 0), (-1, 0), 1, navy), ("LINEBELOW", (0, -1), (-1, -1), .5, colors.lightgrey), ("TEXTCOLOR", (0, 0), (-1, -1), ink), ("TEXTCOLOR", (0, 0), (-1, 0), navy), ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"), ("ALIGN", (1, 0), (-1, -1), "CENTER"), ("VALIGN", (0, 0), (-1, -1), "TOP"), ("FONTSIZE", (0, 0), (-1, -1), 8), ("PADDING", (0, 0), (-1, -1), 5)]))
     story.extend([table, Spacer(1, 4 * mm)])
 
-    summary = Table([
-        ["Summa ex moms", f"{invoice.subtotal_ex_vat:,.2f} {invoice.currency}"],
-        ["Rabatt", f"-{invoice.discount_total:,.2f} {invoice.currency}"],
-        ["Moms 25%", f"{invoice.vat_total:,.2f} {invoice.currency}"],
-        ["ROT 30%", f"-{invoice.rot_total:,.2f} {invoice.currency}"],
-    ], colWidths=[65 * mm, 43 * mm])
+    category_totals = _invoice_category_totals(invoice)
+    labour = category_totals[InvoiceLine.Category.LABOUR]
+    material = category_totals[InvoiceLine.Category.MATERIAL]
+    transport = category_totals[InvoiceLine.Category.TRANSPORT]
+    other = category_totals[InvoiceLine.Category.OTHER]
+    summary_rows = [
+        ["Arbete exkl. moms", f"{_sv_amount(labour['ex_vat'])} {invoice.currency}"],
+        ["Material exkl. moms", f"{_sv_amount(material['ex_vat'])} {invoice.currency}"],
+    ]
+    if transport["ex_vat"]:
+        summary_rows.append(["Transport exkl. moms", f"{_sv_amount(transport['ex_vat'])} {invoice.currency}"])
+    if other["ex_vat"]:
+        summary_rows.append(["Övrigt exkl. moms", f"{_sv_amount(other['ex_vat'])} {invoice.currency}"])
+    summary_rows.extend([
+        ["Summa exkl. moms", f"{_sv_amount(invoice.total_inc_vat - invoice.vat_total)} {invoice.currency}"],
+        ["Moms på arbete", f"{_sv_amount(labour['vat'])} {invoice.currency}"],
+        ["Moms på material", f"{_sv_amount(material['vat'])} {invoice.currency}"],
+    ])
+    if transport["vat"]:
+        summary_rows.append(["Moms på transport", f"{_sv_amount(transport['vat'])} {invoice.currency}"])
+    if other["vat"]:
+        summary_rows.append(["Moms på övrigt", f"{_sv_amount(other['vat'])} {invoice.currency}"])
+    summary_rows.extend([
+        ["Moms totalt", f"{_sv_amount(invoice.vat_total)} {invoice.currency}"],
+        ["Arbete inkl. moms", f"{_sv_amount(labour['inc_vat'])} {invoice.currency}"],
+        ["Material inkl. moms", f"{_sv_amount(material['inc_vat'])} {invoice.currency}"],
+        ["Summa inkl. moms", f"{_sv_amount(invoice.total_inc_vat)} {invoice.currency}"],
+    ])
+    if invoice.discount_total:
+        summary_rows.insert(2, ["Rabatt", f"-{_sv_amount(invoice.discount_total)} {invoice.currency}"])
+    if invoice.rot_enabled or invoice.rot_total:
+        rot_prefix = "-" if invoice.rot_total else ""
+        summary_rows.append([f"ROT-avdrag {invoice.rot_percent:g}%", f"{rot_prefix}{_sv_amount(invoice.rot_total)} {invoice.currency}"])
+    summary = Table(summary_rows, colWidths=[55 * mm, 38 * mm])
     summary.setStyle(TableStyle([
         ("ALIGN", (1, 0), (1, -1), "RIGHT"),
         ("TEXTCOLOR", (0, 0), (-1, -1), ink),
         ("TEXTCOLOR", (0, 0), (0, -1), muted_navy),
         ("FONTSIZE", (0, 0), (-1, -1), 8),
         ("PADDING", (0, 0), (-1, -1), 4),
+        ("LINEABOVE", (0, -1), (-1, -1), 1, navy),
+        ("FONTNAME", (0, -1), (-1, -1), "Helvetica-Bold"),
     ]))
+
+    rot_information = None
+    if invoice.rot_enabled:
+        rot_information = Table(
+            [
+                ["UPPGIFTER FÖR ROT-AVDRAG", ""],
+                ["Personnummer:", "Fastighetsbeteckning:"],
+                [invoice.rot_personal_number, invoice.rot_property_designation],
+            ],
+            colWidths=[43 * mm, 43 * mm],
+        )
+        rot_information.setStyle(TableStyle([
+            ("SPAN", (0, 0), (1, 0)),
+            ("FONTNAME", (0, 0), (1, 0), "Helvetica-Bold"),
+            ("TEXTCOLOR", (0, 0), (-1, -1), navy),
+            ("FONTSIZE", (0, 0), (-1, -1), 8),
+            ("LINEBELOW", (0, 0), (1, 0), 1, navy),
+            ("LINEBELOW", (0, 2), (0, 2), .6, colors.HexColor("#9AA7BD")),
+            ("LINEBELOW", (1, 2), (1, 2), .6, colors.HexColor("#9AA7BD")),
+            ("TOPPADDING", (0, 0), (-1, -1), 3),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 5),
+        ]))
 
     def draw_invoice_footer(pdf, _document):
         page_width, _ = A4
@@ -581,26 +677,26 @@ def invoice_pdf_bytes(invoice):
         ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
     ]))
 
-    class BottomInvoiceBlock(Flowable):
-        """Draw the summary and footer against the bottom edge of the page."""
-
-        def wrap(self, available_width, available_height):
-            self.width = available_width
-            self.height = available_height
-            return available_width, available_height
-
-        def draw(self):
-            footer_block = InvoiceFooterBlock()
-            footer_width, footer_height = footer_block.wrap(self.width, self.height)
-            summary_width, summary_height = summary.wrap(self.width, self.height - footer_height)
-            footer_x = max(0, (self.width - footer_width) / 2)
-            # Align both elements to the exact same footer right edge.
-            summary_x = footer_x + footer_width - summary_width
-            footer_block.drawOn(self.canv, footer_x, 0)
-            summary.drawOn(self.canv, summary_x, footer_height + 2 * mm)
-
-    bottom_block_height = 58 * mm
-    story.extend([CondPageBreak(bottom_block_height), BottomInvoiceBlock()])
+    summary_block = Table(
+        [[rot_information or "", summary]],
+        colWidths=[88 * mm, 93 * mm],
+        hAlign="RIGHT",
+    )
+    summary_block.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    # Keep the financial breakdown close to the item table, matching the
+    # approved reference instead of forcing it to the bottom of a sparse page.
+    story.extend([
+        CondPageBreak(88 * mm),
+        summary_block,
+        Spacer(1, 3 * mm),
+        InvoiceFooterBlock(),
+    ])
     doc.build(story)
     return buffer.getvalue()
 

@@ -128,3 +128,108 @@
 .booking-input .ts-dropdown {
     margin-top: 8px;
 }
+
+/* ===== SITE-WIDE DARK SELECT THEME ===== */
+
+body select:not(.ts-hidden-accessible) {
+    color-scheme: dark;
+    border-color: rgba(214, 170, 56, 0.28) !important;
+    background-color: #191d13 !important;
+    color: #f5efe2 !important;
+}
+
+body select:not(.ts-hidden-accessible) option,
+body select:not(.ts-hidden-accessible) optgroup {
+    background: #151a10 !important;
+    color: #f5efe2 !important;
+}
+
+body .ts-wrapper,
+body .booking-input.ts-wrapper {
+    border-color: rgba(214, 170, 56, 0.28) !important;
+    background: #191d13 !important;
+}
+
+body .ts-control,
+body .ts-wrapper.single .ts-control,
+body .booking-input .ts-control {
+    border-color: rgba(214, 170, 56, 0.28) !important;
+    background: #191d13 !important;
+    background-image: none !important;
+    color: #f5efe2 !important;
+    box-shadow: none !important;
+}
+
+body .ts-control > .item,
+body .ts-control input,
+body .searchable-select .ts-control input {
+    color: #f5efe2 !important;
+}
+
+body .ts-control input::placeholder,
+body .searchable-select .ts-control input::placeholder {
+    color: rgba(245, 239, 226, 0.5) !important;
+}
+
+body .ts-control::after,
+body .ts-wrapper.single .ts-control::after {
+    border-top-color: #d8aa32 !important;
+}
+
+body .ts-control:hover {
+    border-color: rgba(224, 180, 57, 0.55) !important;
+    background: #1d2216 !important;
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+body .ts-wrapper.focus .ts-control,
+body .ts-wrapper.dropdown-active .ts-control {
+    border-color: #d8aa32 !important;
+    background: #1b2015 !important;
+    box-shadow: 0 0 0 3px rgba(216, 170, 50, 0.14) !important;
+}
+
+body .ts-dropdown,
+body .ts-wrapper .ts-dropdown {
+    border: 1px solid rgba(214, 170, 56, 0.38) !important;
+    border-radius: 10px !important;
+    background: #11170e !important;
+    color: #f5efe2 !important;
+    box-shadow: 0 22px 48px rgba(0, 0, 0, 0.48) !important;
+}
+
+body .ts-dropdown .dropdown-input-wrap {
+    border-bottom: 1px solid rgba(214, 170, 56, 0.2) !important;
+    background: #11170e !important;
+}
+
+body .ts-dropdown .dropdown-input {
+    border-color: rgba(214, 170, 56, 0.25) !important;
+    background: #1a2015 !important;
+    color: #f5efe2 !important;
+}
+
+body .ts-dropdown .option,
+body .ts-dropdown [data-selectable] {
+    background: #11170e !important;
+    color: rgba(245, 239, 226, 0.86) !important;
+}
+
+body .ts-dropdown .option:hover,
+body .ts-dropdown .option.active,
+body .ts-dropdown .active {
+    background: #252817 !important;
+    color: #ffffff !important;
+}
+
+body .ts-dropdown .option.selected,
+body .ts-dropdown .selected {
+    background: rgba(202, 161, 45, 0.22) !important;
+    color: #f5cf67 !important;
+}
+
+body .ts-dropdown .no-results,
+body .ts-dropdown .create {
+    background: #11170e !important;
+    color: rgba(245, 239, 226, 0.62) !important;
+}

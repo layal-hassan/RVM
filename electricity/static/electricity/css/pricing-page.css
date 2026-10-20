@@ -1,0 +1,207 @@
+.pricing-page { background: #07100c; color: #f7f0df; }
+.pricing-page .site-footer { margin-top: 0; }
+.pp-main { overflow: hidden; background: #07100c; }
+.pp-main .container { width: min(1740px, 94%); max-width: none; }
+.pp-main h1,.pp-main h2,.pp-main h3 { font-family: Georgia, "Times New Roman", serif; }
+.pp-main em { color: #e4b835; font-style: normal; }
+.pp-hero { position: relative; min-height: 650px; display: grid; align-items: center; background: url("../img/pricing-hero-electrician-v3.png") center/cover no-repeat; }
+.pp-hero-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(3,10,7,.78) 0%, rgba(3,10,7,.58) 38%, rgba(3,10,7,.08) 65%, rgba(3,10,7,.16)), linear-gradient(180deg, rgba(0,0,0,.08), rgba(3,11,7,.42)); }
+.pp-hero-inner { position: relative; z-index: 1; padding-top: 70px; padding-bottom: 65px; }
+.pp-eyebrow,.pp-section-label { color: #dfb229; font: 700 11px/1.2 Arial,sans-serif; letter-spacing: .24em; text-transform: uppercase; }
+.pp-eyebrow { display: flex; align-items: center; gap: 12px; }.pp-eyebrow span { font-size: 9px; }.pp-eyebrow::after { content:""; width: 55px; height: 1px; background: #dfb229; }
+.pp-hero h1 { max-width: 690px; margin: 20px 0; font-size: clamp(44px,5.5vw,78px); line-height: .98; font-weight: 500; letter-spacing: -.035em; }
+.pp-hero p { max-width: 650px; margin: 0; color: rgba(255,255,255,.8); font: 16px/1.7 Arial,sans-serif; }
+.pp-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+.pp-btn { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 18px; padding: 0 25px; border: 1px solid #c99b22; color: #fff5d9; font: 700 10px/1 Arial,sans-serif; letter-spacing: .15em; text-decoration: none; text-transform: uppercase; transition: .2s ease; }
+.pp-btn:hover { transform: translateY(-2px); }.pp-btn-gold { background: linear-gradient(100deg,#d6a72c,#efc758); color: #171005; }.pp-btn-outline { background: rgba(3,9,6,.65); }
+.pp-hero-trust { display: flex; flex-wrap: wrap; gap: 32px; margin-top: 38px; color: rgba(255,255,255,.8); font: 11px Arial,sans-serif; }.pp-hero-trust span::first-letter { color: #e2b832; }
+.pp-section { padding: 76px 0; }.pp-section h2 { margin: 9px 0 8px; font-size: clamp(28px,3vw,43px); font-weight: 500; }.pp-lead { margin: 0; color: rgba(255,255,255,.63); font: 14px/1.6 Arial,sans-serif; }
+.pp-rates { background: radial-gradient(circle at 50% 0,rgba(59,81,37,.2),transparent 38%),#07110d; }
+.pp-rate-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 14px; margin-top: 33px; }
+.pp-rate-card { position: relative; min-height: 318px; display: flex; flex-direction: column; padding: 28px 24px 22px; border: 1px solid rgba(213,174,50,.3); background: linear-gradient(150deg,rgba(23,31,18,.98),rgba(9,15,10,.98)); }
+.pp-rate-card>span { color:#d7ac39; font:700 9px Arial,sans-serif; letter-spacing:.2em; text-transform:uppercase; }.pp-rate-card h3 { min-height: 52px; margin: 16px 0 20px; font-size: 21px; line-height: 1.25; text-transform: uppercase; }
+.pp-rate-card>b { position:absolute; top:-14px; left:50%; transform:translateX(-50%); width:max-content; padding:8px 18px; border-radius:30px; background:#187a4c; color:#fff; font:700 8px Arial,sans-serif; letter-spacing:.12em; text-transform:uppercase; }
+.pp-rate-card dl { display:grid; gap:13px; margin:0 0 18px; padding-top:16px; border-top:1px solid rgba(255,255,255,.12); font:12px Arial,sans-serif; }.pp-rate-card dl div { display:flex; justify-content:space-between; gap:10px; }.pp-rate-card dt { color:rgba(255,255,255,.68); }.pp-rate-card dd { margin:0; font-weight:700; }.pp-rate-card .total dd { color:#e8bd3d; }.pp-rate-card .discount dd { color:#3ed47d; }
+.pp-rate-card ul { display:grid; gap:13px; margin:0 0 18px; padding:0; list-style:none; color:rgba(255,255,255,.72); font:11px/1.5 Arial,sans-serif; }.pp-rate-card li { position:relative; padding-left:17px; }.pp-rate-card li::before { content:""; position:absolute; left:0; top:.45em; width:7px; height:7px; border-radius:50%; background:#d9ad35; }.pp-rate-card small { margin-top:auto; color:rgba(255,255,255,.42); font:700 9px Arial,sans-serif; letter-spacing:.15em; text-transform:uppercase; }
+.pp-calculator { padding: 0 0 72px; background:#07110d; }.pp-calc-box { display:grid; grid-template-columns:1.25fr 1fr 1fr auto; align-items:center; gap:26px; padding:22px; border:2px solid #c99d24; background:#09130e; }
+.pp-calc-title { display:flex; align-items:flex-start; gap:14px; }.pp-calc-title>span { display:grid; place-items:center; flex:0 0 42px; height:42px; border:1px solid #d8ae34; color:#e5ba38; font-size:23px; }.pp-calc-title h2 { margin:0 0 6px; font-size:19px; }.pp-calc-title p { margin:0; color:rgba(255,255,255,.57); font:10px/1.5 Arial,sans-serif; }
+.pp-calc-controls { display:grid; grid-template-columns:1fr 1fr; gap:18px; font:10px Arial,sans-serif; }.pp-calc-controls>label,.pp-calc-controls fieldset { margin:0; padding:0; border:0; color:#d6b354; font-weight:700; }.pp-stepper { display:flex; align-items:center; justify-content:space-between; margin-top:9px; border:1px solid rgba(216,174,52,.48); }.pp-stepper button { width:36px; height:35px; border:0; background:#172014; color:#efc143; font-size:20px; cursor:pointer; }.pp-stepper strong { color:#fff; font-size:11px; }.pp-calc-controls fieldset { display:flex; flex-wrap:wrap; gap:10px 15px; }.pp-calc-controls legend { margin-bottom:10px; }.pp-calc-controls fieldset label { color:rgba(255,255,255,.72); font-weight:400; }.pp-switch { flex-basis:100%; display:flex; align-items:center; gap:7px; }.pp-switch input { position:absolute; opacity:0; }.pp-switch span { width:29px;height:16px;padding:2px;border-radius:20px;background:#394037; }.pp-switch span::after { content:"";display:block;width:12px;height:12px;border-radius:50%;background:#aaa;transition:.2s; }.pp-switch input:checked+span { background:#d7a92d; }.pp-switch input:checked+span::after { transform:translateX(13px);background:#fff; }
+.pp-calc-result { padding-left:22px; border-left:1px solid rgba(255,255,255,.14); }.pp-calc-result dl { display:grid;gap:7px;margin:0 0 10px;font:10px Arial,sans-serif; }.pp-calc-result dl div,.pp-calc-result>div { display:flex;justify-content:space-between;gap:20px; }.pp-calc-result dt { color:rgba(255,255,255,.65); }.pp-calc-result dd { margin:0;color:#fff; }.pp-calc-result>div { padding-top:9px;border-top:1px solid rgba(255,255,255,.12);color:#dfb432;font:700 11px Arial,sans-serif; }.pp-calc-box>.pp-btn { white-space:nowrap; }
+.pp-services { background:linear-gradient(180deg,#06100c,#08150f);border-top:1px solid rgba(211,171,47,.22); }.pp-service-grid { display:grid;grid-template-columns:repeat(5,1fr);margin-top:28px;border:1px solid rgba(211,171,47,.2); }.pp-service-grid article { min-height:180px;padding:24px 20px;border-left:1px solid rgba(211,171,47,.18); }.pp-service-grid article:first-child { border-left:0; }.pp-service-grid b { color:#e2b832;font-size:27px; }.pp-service-grid h3 { margin:15px 0 8px;font:700 13px/1.3 Arial,sans-serif; }.pp-service-grid p { margin:0;color:rgba(255,255,255,.58);font:10px/1.55 Arial,sans-serif; }
+.pp-rot-info { display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr);min-height:520px;background:#0b1510; }.pp-rot-photo { min-height:520px;margin-inline-start:clamp(28px,4vw,72px);border:1px solid rgba(211,171,47,.22);border-radius:8px;background:linear-gradient(90deg,transparent,rgba(11,21,16,.24)),url("../img/pricing-rot-electrician.jpg") 48% center/cover no-repeat; }.pp-rot-copy { display:flex;flex-direction:column;align-items:center;justify-content:center;padding:62px clamp(34px,6vw,100px);text-align:center; }.pp-rot-copy h2 { max-width:760px;margin:12px auto 16px;font-size:37px; }.pp-rot-copy>p { max-width:720px;margin:0 auto 22px;color:rgba(255,255,255,.65);font:13px Arial,sans-serif; }.pp-rot-copy ul { display:grid;gap:13px;width:min(100%,680px);margin:0 auto;padding:0;list-style:none;text-align:left;font:12px Arial,sans-serif; }.pp-rot-copy li { display:flex;align-items:flex-start; }.pp-rot-copy li::before { content:"✓";display:inline-grid;place-items:center;flex:0 0 18px;width:18px;height:18px;margin-right:10px;border-radius:50%;background:#dfb32d;color:#111;font-weight:900; }.pp-rot-copy aside { position:static;width:min(100%,680px);margin:28px auto 0;padding:20px 24px;border:1px solid rgba(211,171,47,.25);background:rgba(2,9,6,.58);text-align:center; }.pp-rot-copy aside strong { color:#e5bd4b;font:700 10px Arial,sans-serif; }.pp-rot-copy aside p { max-width:560px;margin:10px auto 0;color:rgba(255,255,255,.6);font:9px/1.55 Arial,sans-serif; }
+.pp-book { position:relative; margin-top:52px; border-top:1px solid rgba(217,175,50,.38); background:linear-gradient(90deg,rgba(3,9,6,.96) 0%,rgba(3,9,6,.78) 42%,rgba(3,9,6,.38) 72%,rgba(3,9,6,.62)),url("../img/pricing-book-electrician.jpg") center 48%/cover no-repeat; }.pp-book::before { content:""; position:absolute; left:50%; top:-53px; width:1px; height:52px; background:linear-gradient(transparent,rgba(217,175,50,.48)); }.pp-book-inner { min-height:350px;display:flex;align-items:center; }.pp-book-inner>div { max-width:620px; }.pp-book h2 { margin:9px 0;font-size:39px; }.pp-book p { color:rgba(255,255,255,.72);font:13px/1.6 Arial,sans-serif; }.pp-book-trust { display:grid;grid-template-columns:repeat(4,1fr);padding-top:22px;padding-bottom:22px;border-top:1px solid rgba(217,175,50,.4); }.pp-book-trust span { color:#dcb331;font-size:20px; }.pp-book-trust b { margin-left:8px;color:#fff;font:700 10px Arial,sans-serif; }
+@media (max-width:1000px){.pp-rate-grid{grid-template-columns:repeat(2,1fr)}.pp-calc-box{grid-template-columns:1fr 1fr}.pp-service-grid{grid-template-columns:repeat(2,1fr)}.pp-service-grid article{border-top:1px solid rgba(211,171,47,.18)}.pp-rot-info{grid-template-columns:1fr}.pp-rot-photo{min-height:360px;margin:32px 24px 0}.pp-book-trust{grid-template-columns:repeat(2,1fr);gap:18px}}
+@media (max-width:640px){.pp-hero{min-height:600px;background-position:62% center}.pp-hero h1{font-size:42px}.pp-hero p{font-size:14px}.pp-actions,.pp-actions .pp-btn{width:100%}.pp-rate-grid,.pp-calc-box,.pp-calc-controls,.pp-service-grid{grid-template-columns:1fr}.pp-calc-result{padding:18px 0 0;border-left:0;border-top:1px solid rgba(255,255,255,.14)}.pp-calc-box>.pp-btn{width:100%}.pp-service-grid article{border-left:0}.pp-rot-photo{min-height:280px}.pp-rot-copy{padding:45px 22px}.pp-book{margin-top:32px}.pp-book::before{top:-33px;height:32px}.pp-book-inner{min-height:420px}.pp-book-trust{grid-template-columns:1fr}.pp-hero-trust{gap:14px}.pp-section{padding:55px 0}}
+@media (max-width:640px){.pp-main .container{width:calc(100% - 32px)}}
+[dir="rtl"] .pp-rate-card li{padding-left:0;padding-right:17px}[dir="rtl"] .pp-rate-card li::before{left:auto;right:0}[dir="rtl"] .pp-rot-copy ul{text-align:right}[dir="rtl"] .pp-rot-copy li::before{margin-right:0;margin-left:10px}[dir="rtl"] .pp-service-grid article{border-left:0;border-right:1px solid rgba(211,171,47,.18)}[dir="rtl"] .pp-calc-result{padding-left:0;padding-right:22px;border-left:0;border-right:1px solid rgba(255,255,255,.14)}
+
+/* Pricing calculator: clear three-part layout with stable alignment. */
+.pp-calc-box {
+  grid-template-columns: minmax(290px, 1.15fr) minmax(350px, 1.35fr) minmax(255px, .9fr);
+  grid-template-areas:
+    "title controls result"
+    "title controls action";
+  grid-template-rows: 1fr auto;
+  align-items: stretch;
+  gap: 0 34px;
+  padding: 32px;
+}
+
+.pp-calc-title {
+  grid-area: title;
+  align-items: flex-start;
+  align-self: center;
+  padding-right: 30px;
+}
+
+.pp-calc-title > span {
+  flex-basis: 48px;
+  height: 48px;
+}
+
+.pp-calc-title h2 {
+  max-width: 290px;
+  margin-bottom: 12px;
+  line-height: 1.25;
+}
+
+.pp-calc-title p {
+  max-width: 315px;
+  line-height: 1.7;
+}
+
+.pp-calc-controls {
+  grid-area: controls;
+  align-self: center;
+  grid-template-columns: minmax(135px, .8fr) minmax(180px, 1.2fr);
+  gap: 32px;
+  padding: 4px 34px;
+  border-left: 1px solid rgba(255,255,255,.13);
+  border-right: 1px solid rgba(255,255,255,.13);
+}
+
+.pp-calc-controls > label,
+.pp-calc-controls fieldset {
+  display: flex;
+  flex-direction: column;
+}
+
+.pp-stepper {
+  min-height: 44px;
+  margin-top: 14px;
+}
+
+.pp-stepper button {
+  height: 42px;
+}
+
+.pp-calc-controls fieldset {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.pp-calc-controls legend {
+  margin-bottom: 12px;
+}
+
+.pp-calc-controls fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pp-switch {
+  margin-top: 2px;
+  line-height: 1.45;
+}
+
+.pp-switch span {
+  flex: 0 0 29px;
+}
+
+.pp-calc-result {
+  grid-area: result;
+  align-self: end;
+  padding: 0 0 18px;
+  border-left: 0;
+}
+
+.pp-calc-result dl {
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.pp-calc-result > div {
+  padding-top: 14px;
+}
+
+.pp-calc-box > .pp-btn {
+  grid-area: action;
+  width: 100%;
+  margin-top: 0;
+}
+
+@media (max-width: 1180px) {
+  .pp-calc-box {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, .75fr);
+    grid-template-areas:
+      "title title"
+      "controls result"
+      "action action";
+    gap: 28px 30px;
+  }
+
+  .pp-calc-title {
+    padding-right: 0;
+  }
+
+  .pp-calc-title h2,
+  .pp-calc-title p {
+    max-width: 680px;
+  }
+
+  .pp-calc-controls {
+    padding: 0 30px 0 0;
+    border-left: 0;
+  }
+
+  .pp-calc-result {
+    align-self: center;
+  }
+}
+
+@media (max-width: 720px) {
+  .pp-calc-box {
+    grid-template-columns: 1fr;
+    grid-template-areas: "title" "controls" "result" "action";
+    gap: 26px;
+    padding: 24px 20px;
+  }
+
+  .pp-calc-controls {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 0;
+    border-right: 0;
+    border-top: 1px solid rgba(255,255,255,.13);
+    border-bottom: 1px solid rgba(255,255,255,.13);
+  }
+
+  .pp-calc-result {
+    padding: 0;
+    border: 0;
+  }
+}
+
+[dir="rtl"] .pp-calc-title { padding-right: 0; padding-left: 30px; }
+[dir="rtl"] .pp-calc-result { padding-right: 0; border-right: 0; }
+
+@media (max-width: 1180px) {
+  [dir="rtl"] .pp-calc-title { padding-left: 0; }
+  [dir="rtl"] .pp-calc-controls { padding: 0 0 0 30px; border-left: 1px solid rgba(255,255,255,.13); border-right: 0; }
+}
+
+@media (max-width: 720px) {
+  [dir="rtl"] .pp-calc-controls { padding: 24px 0; border-left: 0; }
+}

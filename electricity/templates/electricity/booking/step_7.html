@@ -12,9 +12,11 @@
 <div class="review-grid">
     <div class="review-card">
         <div class="review-title">{% trans "Contact Information" %}</div>
+        <div class="review-row"><span>{% trans "Customer type" %}</span><span>{% if data.contact_type == "business" %}{% trans "Business" %}{% else %}{% trans "Private" %}{% endif %}</span></div>
         <div class="review-row"><span>{% trans "Full Name" %}</span><span>{{ data.full_name }}</span></div>
         <div class="review-row"><span>{% trans "Email Address" %}</span><span>{{ data.email|default:"-" }}</span></div>
         <div class="review-row"><span>{% trans "Phone Number" %}</span><span>{{ data.phone|default:"-" }}</span></div>
+        <div class="review-row"><span>{% trans "Address" %}</span><span>{{ data.street_address }}, {{ data.postal_code }} {{ data.city }}</span></div>
     </div>
     <div class="review-card">
         <div class="review-title">{% trans "Consultation Topics" %}</div>

@@ -83,13 +83,14 @@
         {{ line_form.id }}
         {% if line_form.non_field_errors %}<div class="form-errors wide">{{ line_form.non_field_errors }}</div>{% endif %}
         <label>Category {{ line_form.category }}{{ line_form.category.errors }}</label>
-        <label class="wide">Description {{ line_form.description }}{{ line_form.description.errors }}</label>
-        <label>Quantity {{ line_form.quantity }}{{ line_form.quantity.errors }}</label>
+        <label class="wide">Description / Beskrivning {{ line_form.description }}{{ line_form.description.errors }}</label>
+        <label>VAT / Moms % <span data-line-vat>{{ line_form.vat_percent }}</span>{{ line_form.vat_percent.errors }}</label>
+        <label>Quantity / Antal <span data-line-quantity>{{ line_form.quantity }}</span>{{ line_form.quantity.errors }}</label>
         <label>Unit {{ line_form.unit }}{{ line_form.unit.errors }}</label>
-        <label>Price excl. VAT {{ line_form.unit_price_ex_vat }}{{ line_form.unit_price_ex_vat.errors }}</label>
-        <label>Row discount type {{ line_form.discount_type }}{{ line_form.discount_type.errors }}</label>
-        <label>Row discount {{ line_form.discount_value }}{{ line_form.discount_value.errors }}</label>
-        <label>VAT % {{ line_form.vat_percent }}{{ line_form.vat_percent.errors }}</label>
+        <label>Unit price / À-pris excl. VAT <span data-line-price>{{ line_form.unit_price_ex_vat }}</span>{{ line_form.unit_price_ex_vat.errors }}</label>
+        <label>Sum / Summa incl. VAT <output class="invoice-line-total" data-line-total>0.00</output></label>
+        <label>Row discount type <span data-line-discount-type>{{ line_form.discount_type }}</span>{{ line_form.discount_type.errors }}</label>
+        <label>Row discount <span data-line-discount-value>{{ line_form.discount_value }}</span>{{ line_form.discount_value.errors }}</label>
         <label class="check">{{ line_form.rot_eligible }} ROT eligible {{ line_form.rot_eligible.errors }}</label>
         {% if line_form.instance.pk %}<label class="check danger">{{ line_form.DELETE }} Delete row</label>{% endif %}
       </div>
@@ -100,13 +101,14 @@
         {{ formset.empty_form.id }}
         <span hidden>{{ formset.empty_form.DELETE }}</span>
         <label>Category {{ formset.empty_form.category }}</label>
-        <label class="wide">Description {{ formset.empty_form.description }}</label>
-        <label>Quantity {{ formset.empty_form.quantity }}</label>
+        <label class="wide">Description / Beskrivning {{ formset.empty_form.description }}</label>
+        <label>VAT / Moms % <span data-line-vat>{{ formset.empty_form.vat_percent }}</span></label>
+        <label>Quantity / Antal <span data-line-quantity>{{ formset.empty_form.quantity }}</span></label>
         <label>Unit {{ formset.empty_form.unit }}</label>
-        <label>Price excl. VAT {{ formset.empty_form.unit_price_ex_vat }}</label>
-        <label>Row discount type {{ formset.empty_form.discount_type }}</label>
-        <label>Row discount {{ formset.empty_form.discount_value }}</label>
-        <label>VAT % {{ formset.empty_form.vat_percent }}</label>
+        <label>Unit price / À-pris excl. VAT <span data-line-price>{{ formset.empty_form.unit_price_ex_vat }}</span></label>
+        <label>Sum / Summa incl. VAT <output class="invoice-line-total" data-line-total>0.00</output></label>
+        <label>Row discount type <span data-line-discount-type>{{ formset.empty_form.discount_type }}</span></label>
+        <label>Row discount <span data-line-discount-value>{{ formset.empty_form.discount_value }}</span></label>
         <label class="check">{{ formset.empty_form.rot_eligible }} ROT eligible</label>
         <button class="dash-btn ghost remove-invoice-line" type="button">Remove row</button>
       </div>
@@ -176,8 +178,28 @@ if (addLineButton && emptyLineTemplate && totalFormsInput) {
     const html = emptyLineTemplate.innerHTML.replaceAll("__prefix__", index);
     document.querySelector(".invoice-lines").insertAdjacentHTML("beforeend", html);
     totalFormsInput.value = index + 1;
+    updateInvoiceLineTotal(document.querySelector(".invoice-lines [data-invoice-line]:last-child"));
   });
 }
+const updateInvoiceLineTotal = (line) => {
+  const quantity = Number(line.querySelector("[data-line-quantity] input")?.value || 0);
+  const price = Number(line.querySelector("[data-line-price] input")?.value || 0);
+  const vat = Number(line.querySelector("[data-line-vat] input")?.value || 0);
+  const discountType = line.querySelector("[data-line-discount-type] select")?.value || "none";
+  const discountValue = Number(line.querySelector("[data-line-discount-value] input")?.value || 0);
+  const subtotal = quantity * price;
+  const discount = discountType === "percent"
+    ? subtotal * discountValue / 100
+    : discountType === "fixed" ? Math.min(discountValue, subtotal) : 0;
+  const totalIncludingVat = (subtotal - discount) * (1 + vat / 100);
+  const output = line.querySelector("[data-line-total]");
+  if (output) output.textContent = totalIncludingVat.toFixed(2);
+};
+document.querySelectorAll("[data-invoice-line]").forEach(updateInvoiceLineTotal);
+document.querySelector(".invoice-lines")?.addEventListener("input", (event) => {
+  const line = event.target.closest("[data-invoice-line]");
+  if (line) updateInvoiceLineTotal(line);
+});
 document.getElementById("invoice-editor").addEventListener("click", event => {
   const removeButton = event.target.closest(".remove-invoice-line");
   if (!removeButton) return;

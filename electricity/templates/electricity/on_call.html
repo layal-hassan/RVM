@@ -102,41 +102,6 @@
   </div>
 </section>
 
-<section class="oncall-safety" aria-labelledby="oncall-safety-title">
-  <div class="container oncall-safety-grid">
-    <div class="oncall-safety-media">
-      <img src="{% static 'electricity/img/rwm-electrician-jacket.png' %}" alt="{% trans 'RWM EL electrician working on a distribution board' %}">
-    </div>
-    <div class="oncall-safety-content">
-      <div class="oncall-safety-eyebrow"><i aria-hidden="true"></i>{% trans "Electrical foundation" %}</div>
-      <h2 id="oncall-safety-title"><span>{% trans "Built for Safety." %}</span><br>{% trans "Designed to Last." %}</h2>
-      <p class="oncall-safety-lead">{% trans "From electrical installations and distribution boards to upgrades and fault finding, we deliver reliable electrical solutions for homes, businesses and properties across Stockholm." %}</p>
-      <div class="oncall-safety-details">
-        <div class="oncall-safety-services">
-          <h3>{% trans "What we handle" %}</h3>
-          <ul>
-            <li><b aria-hidden="true">ϟ</b><span>{% trans "Electrical installations and system upgrades" %}</span></li>
-            <li><b aria-hidden="true">▦</b><span>{% trans "Distribution boards and electrical panels" %}</span></li>
-            <li><b aria-hidden="true">×</b><span>{% trans "Fault finding, diagnostics and repairs" %}</span></li>
-            <li><b aria-hidden="true">♢</b><span>{% trans "Electrical safety and maintenance" %}</span></li>
-          </ul>
-        </div>
-        <div class="oncall-safety-cta">
-          <h3>{% trans "Professional electrical services" %}</h3>
-          <p>{% trans "Our licensed electricians are available for both residential and commercial work, delivering fast response, clear communication and high-quality results." %}</p>
-          <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}<span aria-hidden="true">→</span></a>
-          <a class="btn btn-secondary" href="{% url 'electricity:contact' %}">{% trans "Request a free quote" %}<span aria-hidden="true">→</span></a>
-        </div>
-      </div>
-      <div class="oncall-safety-trust" aria-label="{% trans 'Service guarantees' %}">
-        <span><b aria-hidden="true">♢</b>{% trans "Licensed & insured" %}</span>
-        <span><b aria-hidden="true">◷</b>{% trans "Reliable & on time" %}</span>
-        <span><b aria-hidden="true">⌖</b>{% trans "Serving Stockholm" %}</span>
-      </div>
-    </div>
-  </div>
-</section>
-
 {% if specialized_categories %}
 <section class="oncall-specialized" aria-labelledby="oncall-specialized-title">
   <div class="container">
@@ -335,28 +300,6 @@
   </div>
 </section>
 
-<section class="oncall-section light oncall-section-feature">
-  <div class="container oncall-grid">
-    <div>
-      <div class="eyebrow">{% trans "Priority Dispatch" %}</div>
-      <h2>{% trans "Priority Dispatch & Direct Contact" %}</h2>
-      <p class="oncall-subtitle">
-        {% trans "We prioritize core equipment partners to ensure minimal downtime and maximum safety. With a dedicated on-call agreement, you receive immediate dispatch status updates and certified documentation for every visit." %}
-      </p>
-      <div class="oncall-actions">
-        <a class="btn btn-secondary" href="{% url 'electricity:booking_step_1' %}">{% trans "Request a Call Back" %}</a>
-      </div>
-    </div>
-    <div class="oncall-photo-wrap">
-      <img
-        class="oncall-photo"
-        src="{% static 'electricity/img/emergency-electrician.jpg' %}"
-        alt="{% trans "Emergency electrician" %}"
-      >
-    </div>
-  </div>
-</section>
-
 <section class="oncall-section light oncall-section-situations">
   <div class="container">
     <div class="oncall-section-header">
@@ -413,23 +356,6 @@
   </div>
 </section>
 
-<section class="oncall-section light">
-  <div class="container">
-    <div class="oncall-cta">
-      <h2>{% trans "Want access to on-call service? Register your property for an agreement." %}</h2>
-      <p>
-        {% trans "Joining the RWM EL On-Call Network ensures your property is already in our system for the fastest possible dispatch when an emergency strikes." %}
-      </p>
-      <a class="btn btn-primary" href="{% url 'electricity:on_call_booking_step' 1 %}">{% trans "Apply for On-Call Service" %}</a>
-      <div class="oncall-cta-notes">
-        <span>{% trans "No setup fee" %}</span>
-        <span>{% trans "Priority queue" %}</span>
-        <span>{% trans "Fixed night rates" %}</span>
-      </div>
-    </div>
-  </div>
-</section>
-{% include "electricity/partials/pricing_preview.html" %}
 <section class="oncall-final-booking" aria-labelledby="oncall-final-booking-title">
   <div class="container oncall-final-booking-inner">
     <h2 id="oncall-final-booking-title">{% trans "Ready to Book Your Home?" %}</h2>

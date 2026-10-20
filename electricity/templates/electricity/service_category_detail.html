@@ -218,7 +218,7 @@
 
           {% if item.pricing_mode == "quote" %}
           <div class="category-card-footer category-quote-footer">
-            <a class="category-card-cta category-card-cta-primary" href="{% url 'electricity:quote_request_step' 1 %}?item={{ item.id }}&source={% if page.parent_category_id %}detail{% else %}category{% endif %}">
+            <a class="category-card-cta category-card-cta-primary js-request-flow" href="#request-flow" data-item-id="{{ item.id }}" data-source="{% if page.parent_category_id %}detail{% else %}category{% endif %}" data-title="{{ item.title|escape }}" data-description="{{ item.description|default:item.subtitle|escape }}" data-mode="quote" data-price="" {% if item.image %}data-image="{{ item.image.url }}"{% endif %}>
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7zM14 3v5h5M10 12h5M10 16h5"/></svg>
               <span>{% trans "Request a quote" %}</span>
               <span class="category-cta-arrow" aria-hidden="true">→</span>
@@ -236,13 +236,13 @@
               <output data-quantity>1</output>
               <button type="button" data-quantity-plus aria-label="{% trans 'Increase quantity' %}">+</button>
             </div>
-            <a class="category-card-cta category-card-cta-outline js-booking-choice" href="{% if item.cta_url %}{{ item.cta_url }}{% else %}{% url 'electricity:service_booking_step' 1 %}{% endif %}">
+            <a class="category-card-cta category-card-cta-outline js-request-flow" href="#request-flow" data-item-id="{{ item.id }}" data-source="{% if page.parent_category_id %}detail{% else %}category{% endif %}" data-title="{{ item.title|escape }}" data-description="{{ item.description|default:item.subtitle|escape }}" data-mode="fixed" data-price="{{ item.price_text|escape }}" {% if item.image %}data-image="{{ item.image.url }}"{% endif %}>
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L20 8H7M10 20h.01M17 20h.01"/></svg>
               <span>{% trans "Add to request" %}</span>
             </a>
           </div>
           <div class="category-booking-action">
-            <a class="category-card-cta category-card-cta-primary js-booking-choice" href="{% if item.cta_url %}{{ item.cta_url }}{% else %}{% url 'electricity:service_booking_step' 1 %}{% endif %}">
+            <a class="category-card-cta category-card-cta-primary js-request-flow" href="#request-flow" data-item-id="{{ item.id }}" data-source="{% if page.parent_category_id %}detail{% else %}category{% endif %}" data-title="{{ item.title|escape }}" data-description="{{ item.description|default:item.subtitle|escape }}" data-mode="fixed" data-price="{{ item.price_text|escape }}" {% if item.image %}data-image="{{ item.image.url }}"{% endif %}>
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5h14v16H5zM8 3v4M16 3v4M5 9h14M9 13h2M13 13h2M9 17h2M13 17h2"/></svg>
               <span>{% trans "Book service" %}</span>
             </a>
@@ -344,41 +344,12 @@
 </section>
 {% endif %}
 
-<dialog class="booking-type-dialog" id="booking-type-dialog" aria-labelledby="booking-type-title">
-  <button class="booking-type-close" type="button" aria-label="{% trans 'Close' %}">&times;</button>
-  <div class="booking-type-kicker">{% trans "Before you begin" %}</div>
-  <h2 id="booking-type-title">{% trans "Who is this booking for?" %}</h2>
-  <p>{% trans "Choose the customer type to continue with the correct booking options." %}</p>
-  <div class="booking-type-options">
-    <a class="booking-type-option"
-       href="{% url 'electricity:service_booking_step' 1 %}?account_type=private">
-      <span class="booking-type-icon" aria-hidden="true">👤</span>
-      <strong>{% trans "Private" %}</strong>
-      <small>{% trans "Home and personal electrical services" %}</small>
-    </a>
-    <a class="booking-type-option"
-       href="{% url 'electricity:service_booking_step' 1 %}?account_type=business">
-      <span class="booking-type-icon" aria-hidden="true">🏢</span>
-      <strong>{% trans "Business" %}</strong>
-      <small>{% trans "Companies, organizations, and BRF" %}</small>
-    </a>
-  </div>
-</dialog>
+{% include "electricity/partials/request_flow_dialog.html" %}
 {% endblock %}
 
 {% block extra_js %}
 <script>
   (() => {
-    const dialog = document.getElementById("booking-type-dialog");
-    if (!dialog || typeof dialog.showModal !== "function") return;
-
-    document.querySelectorAll(".js-booking-choice").forEach((button) => {
-      button.addEventListener("click", (event) => {
-        event.preventDefault();
-        dialog.showModal();
-      });
-    });
-
     document.querySelectorAll("[data-project-config]").forEach((config) => {
       if (config.dataset.pricingMode === "quote") return;
       const priceText = config.dataset.priceText || "";
@@ -413,10 +384,7 @@
       });
     });
 
-    dialog.querySelector(".booking-type-close").addEventListener("click", () => dialog.close());
-    dialog.addEventListener("click", (event) => {
-      if (event.target === dialog) dialog.close();
-    });
   })();
 </script>
+{% load static %}<script src="{% static 'electricity/js/request_flow.js' %}?v=20261020-6"></script>
 {% endblock %}
