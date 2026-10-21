@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 
+from .email_backend import invoice_email_connection
 from .models import (
     ConsultationBooking,
     CustomerProfile,
@@ -778,10 +779,7 @@ def invoice_pdf_public_url(invoice):
 def send_invoice_email(invoice):
     if not invoice.recipient_email:
         raise ValueError("The invoice does not have a recipient email address.")
-    from_email = (
-        getattr(settings, "EMAIL_HOST_USER", "")
-        or getattr(settings, "INVOICE_FROM_EMAIL", "Faktura@rwmel.se")
-    )
+    from_email = getattr(settings, "INVOICE_FROM_EMAIL", "Faktura@rwmel.se")
     customer_name = invoice.customer.full_name or "kund"
     currency = "kr" if invoice.currency.upper() == "SEK" else invoice.currency
     amount_due = f"{_sv_amount(invoice.amount_due)} {currency}"
@@ -812,6 +810,7 @@ def send_invoice_email(invoice):
         body=text_body,
         from_email=from_email,
         to=[invoice.recipient_email],
+        connection=invoice_email_connection(),
     )
     message.attach_alternative(
         render_to_string("electricity/email/invoice_email.html", context),

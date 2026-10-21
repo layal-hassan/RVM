@@ -2,6 +2,8 @@
 
 import smtplib
 
+from django.conf import settings
+from django.core.mail import get_connection
 from django.core.mail.backends.smtp import EmailBackend as DjangoSMTPBackend
 
 
@@ -35,3 +37,34 @@ class EmailBackend(DjangoSMTPBackend):
     @property
     def connection_class(self):
         return ChunkedSMTPSSL if self.use_ssl else ChunkedSMTP
+
+
+def _smtp_connection(username, password):
+    """Build an authenticated SMTP connection without exposing credentials."""
+    backend = getattr(settings, "EMAIL_BACKEND", "")
+    if not getattr(settings, "EMAIL_HOST", "") or "smtp" not in backend.lower():
+        return None
+    return get_connection(
+        backend=backend,
+        host=settings.EMAIL_HOST,
+        port=settings.EMAIL_PORT,
+        username=username,
+        password=password,
+        use_tls=settings.EMAIL_USE_TLS,
+        use_ssl=settings.EMAIL_USE_SSL,
+        timeout=settings.EMAIL_TIMEOUT,
+    )
+
+
+def support_email_connection():
+    return _smtp_connection(
+        getattr(settings, "SUPPORT_EMAIL_HOST_USER", ""),
+        getattr(settings, "SUPPORT_EMAIL_HOST_PASSWORD", ""),
+    )
+
+
+def invoice_email_connection():
+    return _smtp_connection(
+        getattr(settings, "INVOICE_EMAIL_HOST_USER", ""),
+        getattr(settings, "INVOICE_EMAIL_HOST_PASSWORD", ""),
+    )

@@ -25,6 +25,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.db import transaction
+from .email_backend import support_email_connection
 from .forms import (
     BookingStatusUpdateForm,
     ServiceBookingStatusUpdateForm,
@@ -176,7 +177,7 @@ def _send_automated_workflow_emails(workflow, context, attachments=None):
     defaults = _AUTOMATED_EMAIL_DEFAULTS[workflow]
     template = AutomatedEmailTemplate.objects.filter(workflow=workflow).first()
     from_email = (
-        getattr(settings, "EMAIL_HOST_USER", None)
+        getattr(settings, "SUPPORT_FROM_EMAIL", None)
         or getattr(settings, "DEFAULT_FROM_EMAIL", None)
         or "support@rwmel.se"
     )
@@ -196,6 +197,7 @@ def _send_automated_workflow_emails(workflow, context, attachments=None):
                 from_email,
                 [company_recipient],
                 reply_to=[customer_email] if customer_email else None,
+                connection=support_email_connection(),
             )
             for name, content in attachments or []:
                 message.attach(name, content)
@@ -213,6 +215,7 @@ def _send_automated_workflow_emails(workflow, context, attachments=None):
                 from_email,
                 [customer_email],
                 reply_to=[company_recipient],
+                connection=support_email_connection(),
             ).send(fail_silently=False)
             results["customer"] = "sent"
         except Exception:
@@ -322,7 +325,7 @@ def _send_booking_confirmation_email(
             or getattr(settings, "DEFAULT_FROM_EMAIL", None)
             or "services@rwmel.se"
         )
-        send_mail(subject, "\n".join(lines), from_email, [to_email])
+        send_mail(subject, "\n".join(lines), from_email, [to_email], connection=support_email_connection())
     except Exception:
         logger.exception("Booking confirmation email failed to send to %s.", to_email)
 
@@ -413,6 +416,7 @@ def _send_on_call_company_notification_email(*, booking, booking_reference, curr
             from_email=from_email,
             to=[company_email],
             reply_to=[booking.email] if booking.email else None,
+            connection=support_email_connection(),
         ).send(fail_silently=False)
     except Exception:
         logger.exception("On-Call company notification failed for booking %s.", booking.pk)
@@ -468,7 +472,7 @@ def _send_custom_booking_confirmation_email(
             or getattr(settings, "DEFAULT_FROM_EMAIL", None)
             or "services@rwmel.se"
         )
-        send_mail(subject, "\n".join(lines), from_email, [to_email])
+        send_mail(subject, "\n".join(lines), from_email, [to_email], connection=support_email_connection())
     except Exception:
         logger.exception("Booking confirmation email failed to send to %s.", to_email)
 
@@ -507,6 +511,7 @@ def home(request):
                 from_email=from_email,
                 to=[company_email],
                 reply_to=[quote.email] if quote.email else None,
+                connection=support_email_connection(),
             )
             company_message.send(fail_silently=False)
         except Exception:
@@ -526,6 +531,7 @@ def home(request):
                     from_email,
                     [quote.email],
                     fail_silently=False,
+                    connection=support_email_connection(),
                 )
             except Exception:
                 logger.exception("Quick quote customer confirmation failed for request %s", quote.pk)
@@ -906,6 +912,7 @@ def _send_career_application_emails(application):
         ),
         from_email=from_email,
         to=[application.email],
+        connection=support_email_connection(),
     )
     try:
         confirmation.send(fail_silently=False)
@@ -930,6 +937,7 @@ def _send_career_application_emails(application):
         from_email=from_email,
         to=[company_email],
         reply_to=[application.email],
+        connection=support_email_connection(),
     )
     if application.cv:
         try:
@@ -1078,11 +1086,11 @@ def for_brf(request):
                 try:
                     to_email = getattr(settings, "CONTACT_TO_EMAIL", None) or "info@rwmel.se"
                     from_email = (
-                        getattr(settings, "EMAIL_HOST_USER", None)
+                        getattr(settings, "SUPPORT_FROM_EMAIL", None)
                         or getattr(settings, "DEFAULT_FROM_EMAIL", None)
                         or "support@rwmel.se"
                     )
-                    email_message = EmailMessage(subject, body, from_email, [to_email])
+                    email_message = EmailMessage(subject, body, from_email, [to_email], connection=support_email_connection())
                     email_message.reply_to = [form_data["email"]]
                     email_message.send()
 
@@ -1108,6 +1116,7 @@ def for_brf(request):
                         customer_body,
                         from_email,
                         [form_data["email"]],
+                        connection=support_email_connection(),
                     )
                     customer_email.reply_to = [to_email]
                     customer_email.send()
@@ -1180,7 +1189,7 @@ def support(request):
             )
             try:
                 from_email = (
-                    getattr(settings, "EMAIL_HOST_USER", None)
+                    getattr(settings, "SUPPORT_FROM_EMAIL", None)
                     or getattr(settings, "DEFAULT_FROM_EMAIL", None)
                     or "support@rwmel.se"
                 )
@@ -1189,6 +1198,7 @@ def support(request):
                     body,
                     from_email,
                     ["support@rwmel.se"],
+                    connection=support_email_connection(),
                 )
                 if data.get("email"):
                     email_message.reply_to = [data.get("email")]
