@@ -811,6 +811,44 @@ class ProviderShiftForm(HumanizedJSONModelForm):
         super().__init__(*args, **kwargs)
         self.fields["weekday"].widget = forms.Select(choices=self.WEEKDAY_CHOICES)
 
+
+class ProviderShiftBulkForm(HumanizedJSONModelForm):
+    WEEKDAY_CHOICES = ProviderShiftForm.WEEKDAY_CHOICES
+    weekdays = forms.TypedMultipleChoiceField(
+        label="Weekdays",
+        choices=WEEKDAY_CHOICES,
+        coerce=int,
+        widget=forms.CheckboxSelectMultiple,
+        help_text="Select every day that should use these working hours.",
+    )
+
+    class Meta:
+        model = ProviderShift
+        fields = ("provider", "weekdays", "start_time", "end_time")
+        widgets = {
+            "start_time": forms.TimeInput(attrs={"type": "time"}),
+            "end_time": forms.TimeInput(attrs={"type": "time"}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_time = cleaned_data.get("start_time")
+        end_time = cleaned_data.get("end_time")
+        if start_time and end_time and end_time <= start_time:
+            self.add_error("end_time", "Shift end time must be after start time.")
+        return cleaned_data
+
+    def save(self):
+        return [
+            ProviderShift.objects.create(
+                provider=self.cleaned_data["provider"],
+                weekday=weekday,
+                start_time=self.cleaned_data["start_time"],
+                end_time=self.cleaned_data["end_time"],
+            )
+            for weekday in self.cleaned_data["weekdays"]
+        ]
+
 class ProviderProfileForm(HumanizedJSONModelForm):
     class Meta:
         model = ProviderProfile

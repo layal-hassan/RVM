@@ -49,19 +49,19 @@
       </div>
       <div class="home-hero-actions">
         <a class="home-btn home-btn-primary js-electrician-booking-choice" href="{% url 'electricity:electrician_booking_step' 1 %}">
-          {% trans "Book a Licensed Electrician" %} <span aria-hidden="true">→</span>
+          {% trans "Book a Licensed Electrician" %} 
         </a>
         <a class="home-btn home-btn-secondary" href="{% url 'electricity:booking_step_1' %}">
-          {% trans "Get a Free Quote" %} <span aria-hidden="true">→</span>
+          {% trans "Get a Free Quote" %} 
         </a>
         <a class="home-btn home-btn-jour" href="{% url 'electricity:on_call' %}">
-          <span aria-hidden="true">ϟ</span> {% trans "Book Jour" %} <span aria-hidden="true">→</span>
+          <span aria-hidden="true">ϟ</span> {% trans "Book Jour" %} 
         </a>
       </div>
       <div class="home-hero-contact-title"><span></span>{% trans "Contact Us Directly" %}<span></span></div>
       <div class="home-hero-contact">
-        <a href="tel:+46700391611"><span class="home-hero-contact-icon" aria-hidden="true">☎</span><span><small>{% trans "Call Us" %}</small><strong>0046 70 03 91 611</strong></span><b aria-hidden="true">→</b></a>
-        <a href="https://wa.me/46700391611" target="_blank" rel="noopener"><span class="home-hero-contact-icon home-hero-contact-icon-whatsapp" aria-hidden="true"><svg viewBox="0 0 32 32" role="img"><path fill="currentColor" d="M16.04 4A11.8 11.8 0 0 0 5.8 21.67L4.23 27.4l5.86-1.54A11.8 11.8 0 1 0 16.04 4Zm0 21.6c-1.9 0-3.76-.51-5.38-1.47l-.42-.25-3.48.91.93-3.39-.27-.44A9.8 9.8 0 1 1 16.04 25.6Zm5.37-7.34c-.3-.15-1.74-.86-2.01-.96-.27-.1-.47-.15-.66.15-.2.29-.76.95-.93 1.15-.17.2-.34.22-.64.07-.29-.15-1.24-.46-2.36-1.46a8.84 8.84 0 0 1-1.63-2.02c-.17-.3-.02-.46.13-.6.13-.13.29-.34.44-.51.15-.17.2-.3.29-.49.1-.2.05-.37-.02-.52-.08-.15-.66-1.6-.91-2.18-.24-.58-.49-.5-.66-.51h-.57c-.2 0-.52.07-.79.36-.27.3-1.03 1.01-1.03 2.46 0 1.45 1.06 2.85 1.2 3.05.15.2 2.08 3.18 5.04 4.46.7.3 1.25.49 1.68.62.71.23 1.35.2 1.86.12.57-.08 1.74-.71 1.99-1.4.24-.68.24-1.27.17-1.39-.07-.12-.27-.2-.56-.34Z"/></svg></span><span><small>{% trans "WhatsApp Us" %}</small><strong>0046 70 03 91 611</strong></span><b aria-hidden="true">→</b></a>
+        <a href="tel:+46700391611"><span class="home-hero-contact-icon" aria-hidden="true">☎</span><span><small>{% trans "Call Us" %}</small><strong>0046 70 03 91 611</strong></span></a>
+        <a href="https://wa.me/46700391611" target="_blank" rel="noopener"><span class="home-hero-contact-icon home-hero-contact-icon-whatsapp" aria-hidden="true"><svg viewBox="0 0 32 32" role="img"><path fill="currentColor" d="M16.04 4A11.8 11.8 0 0 0 5.8 21.67L4.23 27.4l5.86-1.54A11.8 11.8 0 1 0 16.04 4Zm0 21.6c-1.9 0-3.76-.51-5.38-1.47l-.42-.25-3.48.91.93-3.39-.27-.44A9.8 9.8 0 1 1 16.04 25.6Zm5.37-7.34c-.3-.15-1.74-.86-2.01-.96-.27-.1-.47-.15-.66.15-.2.29-.76.95-.93 1.15-.17.2-.34.22-.64.07-.29-.15-1.24-.46-2.36-1.46a8.84 8.84 0 0 1-1.63-2.02c-.17-.3-.02-.46.13-.6.13-.13.29-.34.44-.51.15-.17.2-.3.29-.49.1-.2.05-.37-.02-.52-.08-.15-.66-1.6-.91-2.18-.24-.58-.49-.5-.66-.51h-.57c-.2 0-.52.07-.79.36-.27.3-1.03 1.01-1.03 2.46 0 1.45 1.06 2.85 1.2 3.05.15.2 2.08 3.18 5.04 4.46.7.3 1.25.49 1.68.62.71.23 1.35.2 1.86.12.57-.08 1.74-.71 1.99-1.4.24-.68.24-1.27.17-1.39-.07-.12-.27-.2-.56-.34Z"/></svg></span><span><small>{% trans "WhatsApp Us" %}</small><strong>0046 70 03 91 611</strong></span></a>
       </div>
       <div class="home-hero-promises"><span>{% trans "Fast Response" %}</span><i></i><span>{% trans "Professional Advice" %}</span><i></i><span>{% trans "Available When You Need Us" %}</span></div>
       <a class="home-hero-scroll" href="#our-services" aria-label="{% trans 'View our services' %}">
@@ -305,7 +305,7 @@
         <div class="home-cleaning-kicker"><span></span>{% trans "Also Serving Your Home Needs" %}</div>
         <p>{% trans "Professional cleaning and" %} {% trans "everyday home assistance" %}<br>{% trans "through" %} <strong>Hembla Experten</strong> — {% trans "the same care and reliability you expect from us." %}</p>
         <a class="home-cleaning-link" href="https://hembla-experten.se/" target="_blank" rel="noopener">
-          {% trans "Explore Hembla Experten" %}<span aria-hidden="true">→</span>
+          {% trans "Explore Hembla Experten" %}
         </a>
       </div>
       <a class="home-cleaning-brand" href="https://hembla-experten.se/" target="_blank" rel="noopener" aria-label="{% trans 'Visit Hembla Experten' %}">

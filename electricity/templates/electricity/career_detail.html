@@ -22,7 +22,7 @@
       {% if job.responsibility_items %}<section><h2>{% trans "Key responsibilities" %}</h2><ul>{% for item in job.responsibility_items %}<li>{{ item }}</li>{% endfor %}</ul></section>{% endif %}
       {% if job.requirement_items %}<section><h2>{% trans "Who we are looking for" %}</h2><ul>{% for item in job.requirement_items %}<li>{{ item }}</li>{% endfor %}</ul></section>{% endif %}
       {% if job.offer_items %}<section><h2>{% trans "What we offer" %}</h2><div class="career-offers">{% for offer in job.offer_items %}<article><span aria-hidden="true">✓</span><h3>{{ offer.title }}</h3><p>{{ offer.description }}</p></article>{% endfor %}</div></section>{% endif %}
-      <a class="career-back" href="{% url 'electricity:careers' %}#openings">← {% trans "Back to all opportunities" %}</a>
+      <a class="career-back" href="{% url 'electricity:careers' %}#openings"> {% trans "Back to all opportunities" %}</a>
     </div>
 
     <aside class="career-apply-card" id="apply">

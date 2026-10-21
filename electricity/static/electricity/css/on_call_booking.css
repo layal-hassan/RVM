@@ -1095,3 +1095,261 @@ textarea.form-control {
   background: #7a5719;
   box-shadow: 0 16px 28px rgba(31, 20, 6, 0.22);
 }
+
+/* Match the booking flow to the dark gold On-Call site theme. */
+body.electricity-body.on-call-booking-page {
+  --oc-bg: linear-gradient(160deg, #071008 0%, #0b120b 48%, #10150d 100%);
+  --oc-ink: #f5edda;
+  --oc-muted: #b9b5aa;
+  --oc-border: rgba(209, 164, 44, 0.3);
+  --oc-card: #10180f;
+  --oc-soft: #131c12;
+  --oc-warning: #e8b92e;
+  background: var(--oc-bg) !important;
+  color: var(--oc-ink);
+}
+
+.on-call-booking-page::before {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(218, 174, 54, 0.12), transparent 38%),
+    radial-gradient(circle at 88% 20%, rgba(134, 109, 38, 0.1), transparent 42%);
+}
+
+.on-call-booking-page .booking-progress-card,
+.on-call-booking-page .oncall-hero,
+.on-call-booking-page .form-block,
+.on-call-booking-page .form-card,
+.on-call-booking-page .summary-card,
+.on-call-booking-page .entity-card,
+.on-call-booking-page .oc-modal {
+  color: var(--oc-ink);
+  background: linear-gradient(145deg, rgba(18, 27, 17, 0.98), rgba(9, 16, 10, 0.98));
+  border-color: var(--oc-border);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.35);
+}
+
+.on-call-booking-page .booking-step-label,
+.on-call-booking-page .booking-step-percent,
+.on-call-booking-page .oncall-header,
+.on-call-booking-page .oncall-header p,
+.on-call-booking-page .oncall-hero p,
+.on-call-booking-page .block-title,
+.on-call-booking-page .section-title,
+.on-call-booking-page .form-card-title,
+.on-call-booking-page .form-card-subtitle,
+.on-call-booking-page .choice-title,
+.on-call-booking-page .entity-body h4,
+.on-call-booking-page .summary-title,
+.on-call-booking-page .summary-row strong,
+.on-call-booking-page .review-row strong,
+.on-call-booking-page .toggle-row strong,
+.on-call-booking-page label {
+  color: #f5edda;
+}
+
+.on-call-booking-page .oncall-hero h1,
+.on-call-booking-page .oncall-hero h1 span,
+.on-call-booking-page .section-label,
+.on-call-booking-page .hero-badge {
+  color: #e7b936;
+}
+
+.on-call-booking-page .hero-badge,
+.on-call-booking-page .choice-pill,
+.on-call-booking-page .oc-modal-ref {
+  background: rgba(219, 175, 55, 0.14);
+  border: 1px solid rgba(219, 175, 55, 0.28);
+}
+
+.on-call-booking-page .booking-progress-bar {
+  background: #273023;
+}
+
+.on-call-booking-page .booking-progress-fill {
+  background: linear-gradient(90deg, #bd8b1e, #f0c94d);
+}
+
+.on-call-booking-page .choice-card,
+.on-call-booking-page .pill {
+  color: #eee6d4;
+  background: #0d170d;
+  border-color: rgba(218, 174, 54, 0.24);
+}
+
+.on-call-booking-page .choice-card:hover,
+.on-call-booking-page .pill:hover,
+.on-call-booking-page .entity-card:hover {
+  background: #151f13;
+  border-color: rgba(235, 190, 61, 0.72);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.32);
+}
+
+.on-call-booking-page .choice-card:has(input:checked),
+.on-call-booking-page .pill:has(input:checked),
+.on-call-booking-page .entity-card:has(input:checked) {
+  background: linear-gradient(145deg, #1b2516, #111b10);
+  border-color: #e1b438;
+  box-shadow: 0 0 0 2px rgba(225, 180, 56, 0.14);
+}
+
+.on-call-booking-page .choice-card input:checked ~ .choice-content,
+.on-call-booking-page .choice-card input:checked ~ .choice-content .choice-title {
+  color: #fff7e5;
+}
+
+.on-call-booking-page .choice-card input:checked ~ .choice-content .choice-note {
+  color: #c8c0ad;
+}
+
+.on-call-booking-page .choice-card input:checked ~ .choice-content .choice-pill,
+.on-call-booking-page .pill input:checked + span {
+  color: #efc44c;
+}
+
+.on-call-booking-page .choice-note,
+.on-call-booking-page .entity-body p,
+.on-call-booking-page .summary-row span,
+.on-call-booking-page .review-row span,
+.on-call-booking-page .toggle-row p,
+.on-call-booking-page .oc-modal-note,
+.on-call-booking-page .oc-modal-summary-row span {
+  color: var(--oc-muted);
+}
+
+.on-call-booking-page .form-control,
+.on-call-booking-page select,
+.on-call-booking-page textarea.form-control {
+  color: #f8f1df !important;
+  background-color: #0a140c !important;
+  border-color: rgba(218, 174, 54, 0.3) !important;
+}
+
+.on-call-booking-page .form-control::placeholder,
+.on-call-booking-page textarea.form-control::placeholder {
+  color: #817f76;
+}
+
+.on-call-booking-page select option {
+  color: #f8f1df;
+  background: #0a140c;
+}
+
+.on-call-booking-page .form-control:focus,
+.on-call-booking-page select:focus {
+  border-color: #e1b438 !important;
+  box-shadow: 0 0 0 4px rgba(225, 180, 56, 0.14) !important;
+}
+
+/* Keep Chrome autofill consistent with the dark theme. */
+.on-call-booking-page input.form-control:-webkit-autofill,
+.on-call-booking-page input.form-control:-webkit-autofill:hover,
+.on-call-booking-page input.form-control:-webkit-autofill:focus,
+.on-call-booking-page textarea.form-control:-webkit-autofill,
+.on-call-booking-page select:-webkit-autofill {
+  -webkit-text-fill-color: #f8f1df !important;
+  caret-color: #f8f1df;
+  border-color: rgba(218, 174, 54, 0.42) !important;
+  box-shadow: 0 0 0 1000px #0a140c inset !important;
+  transition: background-color 9999s ease-out 0s;
+}
+
+.on-call-booking-page .summary-note,
+.on-call-booking-page .notice,
+.on-call-booking-page .summary-availability,
+.on-call-booking-page .form-errors {
+  color: #ddd4c1;
+  background: rgba(219, 175, 55, 0.09);
+  border-color: rgba(219, 175, 55, 0.28);
+}
+
+.on-call-booking-page .summary-row,
+.on-call-booking-page .review-row,
+.on-call-booking-page .toggle-row,
+.on-call-booking-page .form-card-divider,
+.on-call-booking-page .oc-modal-summary,
+.on-call-booking-page .oc-modal-summary-row {
+  border-color: rgba(219, 175, 55, 0.2);
+}
+
+.on-call-booking-page .booking-actions .btn.btn-light,
+.on-call-booking-page .review-actions .btn.btn-light,
+.on-call-booking-page .oc-modal-actions .btn-light {
+  color: #f4ecd9;
+  background: transparent;
+  border-color: rgba(232, 217, 181, 0.45);
+}
+
+.on-call-booking-page .booking-actions .btn.btn-light:hover,
+.on-call-booking-page .review-actions .btn.btn-light:hover,
+.on-call-booking-page .oc-modal-actions .btn-light:hover {
+  color: #171105;
+  background: #d7aa35;
+  border-color: #d7aa35;
+}
+
+.on-call-booking-page .booking-actions .btn.btn-primary,
+.on-call-booking-page .review-actions .btn.btn-primary,
+.on-call-booking-page .summary-card .btn-primary,
+.on-call-booking-page .oc-modal-actions .btn-primary {
+  color: #171105;
+  background: linear-gradient(90deg, #c99627, #ebc551);
+  border-color: #d9aa36;
+  box-shadow: 0 12px 26px rgba(197, 143, 25, 0.2);
+}
+
+.on-call-booking-page .oc-modal-actions {
+  background: #0b140c;
+}
+
+.on-call-booking-page .form-card > label,
+.on-call-booking-page .form-grid > div > label {
+  display: block;
+  margin: 0 0 9px;
+  line-height: 1.4;
+}
+
+.on-call-booking-page .form-card > .form-control + label,
+.on-call-booking-page .form-card > .site-date-shell + label,
+.on-call-booking-page .form-card > .toggle-row + label {
+  margin-top: 20px;
+}
+
+.on-call-booking-page .form-card-title,
+.on-call-booking-page .form-card-subtitle {
+  margin-bottom: 22px;
+}
+
+.on-call-booking-page .oncall-hero {
+  display: grid;
+  min-height: 330px;
+  padding: 64px 28px;
+  place-content: center;
+  isolation: isolate;
+  background:
+    linear-gradient(90deg, rgba(3, 8, 5, 0.86), rgba(4, 10, 6, 0.48) 52%, rgba(3, 8, 5, 0.72)),
+    linear-gradient(180deg, rgba(3, 8, 5, 0.12), rgba(3, 8, 5, 0.8)),
+    url("../img/oncall-hero-stockholm-logo-v3.png") center / cover no-repeat;
+}
+
+.on-call-booking-page .oncall-hero::before {
+  z-index: -1;
+  background: radial-gradient(circle at 50% 45%, rgba(216, 172, 53, 0.13), transparent 48%);
+}
+
+.on-call-booking-page .oncall-hero::after {
+  display: none;
+}
+
+.on-call-booking-page .oncall-hero > * {
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+}
+
+@media (max-width: 680px) {
+  .on-call-booking-page .oncall-hero {
+    min-height: 280px;
+    padding: 44px 20px;
+    background-position: 58% center;
+  }
+}

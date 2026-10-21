@@ -12,11 +12,12 @@
   {% if CURRENT_LANGUAGE == "ar" %}
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
   {% endif %}
-  <link rel="stylesheet" href="{% static 'electricity/css/electricity.css' %}?v=20261020-9">
+  <link rel="stylesheet" href="{% static 'electricity/css/electricity.css' %}?v=20261021-15">
   <link rel="stylesheet" href="{% static 'electricity/css/select-system.css' %}?v=20261019-2">
+  <link rel="stylesheet" href="{% static 'electricity/css/site_calendar.css' %}?v=20261021-3">
   {% block extra_head %}{% endblock %}
   <link rel="stylesheet" href="{% static 'electricity/css/global_header.css' %}?v=20261020-3">
-  <link rel="stylesheet" href="{% static 'electricity/css/typography.css' %}?v=20261019-2">
+  <link rel="stylesheet" href="{% static 'electricity/css/typography.css' %}?v=20261021-7">
   <link rel="stylesheet" href="{% static 'electricity/css/responsive.css' %}?v=20261020-2">
 </head>
 <body class="electricity-body {% block body_class %}{% endblock %}">
@@ -72,6 +73,7 @@
   </footer>
   <script defer src="{% static 'electricity/vendor/tom-select/tom-select.complete.min.js' %}"></script>
   <script defer src="{% static 'electricity/js/global.js' %}"></script>
+  <script defer src="{% static 'electricity/js/site_calendar.js' %}?v=20261021-2"></script>
   <script defer src="{% static 'electricity/js/global_header.js' %}?v=20261020-3"></script>
   {% block extra_js %}{% endblock %}
 </body>

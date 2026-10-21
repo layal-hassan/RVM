@@ -49,6 +49,7 @@ from .forms import (
     FAQEntryForm,
     HomeHeroPricingForm,
     ProviderProfileForm,
+    ProviderShiftBulkForm,
     ProviderShiftForm,
     ServiceCategoryFAQForm,
     ServiceCategoryContentBlockForm,
@@ -359,6 +360,62 @@ def _on_call_coverage_scope_labels():
         "critical_systems": "Critical systems",
         "general_faults": "General faults",
     }
+
+
+def _send_on_call_company_notification_email(*, booking, booking_reference, currency="SEK"):
+    company_email = getattr(settings, "CONTACT_TO_EMAIL", None) or "info@rwmel.se"
+    from_email = (
+        getattr(settings, "BOOKING_FROM_EMAIL", None)
+        or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+        or "services@rwmel.se"
+    )
+    coverage_times = ", ".join(
+        _on_call_coverage_time_labels().get(item, item)
+        for item in (booking.coverage_times or [])
+    ) or "-"
+    coverage_scope = ", ".join(
+        _on_call_coverage_scope_labels().get(item, item)
+        for item in (booking.coverage_scope or [])
+    ) or "-"
+    lines = [
+        "A new On-Call service application has been submitted.",
+        "",
+        f"Reference: {booking_reference}",
+        f"Organization: {booking.organization_name or '-'}",
+        f"Organization number: {booking.organization_number or '-'}",
+        f"Contact person: {booking.contact_person or '-'}",
+        f"Email: {booking.email or '-'}",
+        f"Phone: {booking.phone or '-'}",
+        f"Address: {booking.site_address or '-'}",
+        f"ZIP code: {booking.zip_code or '-'}",
+        f"Coverage times: {coverage_times}",
+        f"Coverage scope: {coverage_scope}",
+        f"Response speed: {booking.get_response_speed_display() or '-'}",
+        f"Property type: {booking.property_type or '-'}",
+        f"Assets/properties: {booking.assets_count}",
+        f"Primary region: {booking.primary_region or '-'}",
+        f"Shared critical systems: {'Yes' if booking.shared_critical_systems else 'No'}",
+        f"Last electrical issue: {booking.last_issue_date or '-'}",
+        f"Active provider contract: {'Yes' if booking.active_contract else 'No'}",
+        f"Estimated emergency hours: {booking.emergency_hours}",
+        f"Estimated total: {_format_currency_amount(booking.estimated_total, currency) or '-'}",
+        "",
+        "Recurring electrical issues:",
+        booking.recurring_issues or "-",
+        "",
+        "Additional notes:",
+        booking.additional_notes or "-",
+    ]
+    try:
+        EmailMessage(
+            subject=f"New On-Call application {booking_reference} - {booking.organization_name or booking.contact_person}",
+            body="\n".join(lines),
+            from_email=from_email,
+            to=[company_email],
+            reply_to=[booking.email] if booking.email else None,
+        ).send(fail_silently=False)
+    except Exception:
+        logger.exception("On-Call company notification failed for booking %s.", booking.pk)
 
 
 def _send_custom_booking_confirmation_email(
@@ -961,7 +1018,7 @@ def pricing(request):
         "base_total": base_total,
         "rot_deduction": rot_deduction,
         "rot_labor_rate": labor_rate - rot_deduction,
-        "rot_first_hour": base_total - rot_deduction,
+        "rot_first_hour": labor_rate - rot_deduction,
     })
 
 
@@ -2212,8 +2269,9 @@ def legacy_consultation_booking_thank_you(request):
 
 def _electrician_pricing_breakdown(data):
     pricing = _get_active_pricing()
-    hourly_rate = Decimal("550.40")
-    transport_fee = Decimal("400.00")
+    # Dashboard rates are customer-facing prices and already include VAT.
+    hourly_rate = Decimal("688.00")
+    transport_fee = Decimal("500.00")
     currency = "SEK"
     rot_percent = Decimal("30.00")
     if pricing:
@@ -2238,10 +2296,10 @@ def _electrician_pricing_breakdown(data):
     additional_total = additional_hours * effective_hourly_rate
     labor_total = (minimum_callout + additional_total).quantize(money, ROUND_HALF_UP)
     transport_fee = transport_fee.quantize(money, ROUND_HALF_UP)
-    subtotal_ex_vat = (labor_total + transport_fee).quantize(money, ROUND_HALF_UP)
     vat_percent = Decimal("25.00")
-    vat_amount = (subtotal_ex_vat * vat_percent / Decimal("100")).quantize(money, ROUND_HALF_UP)
-    total_inc_vat = (subtotal_ex_vat + vat_amount).quantize(money, ROUND_HALF_UP)
+    total_inc_vat = (labor_total + transport_fee).quantize(money, ROUND_HALF_UP)
+    subtotal_ex_vat = (total_inc_vat / (Decimal("1") + vat_percent / Decimal("100"))).quantize(money, ROUND_HALF_UP)
+    vat_amount = (total_inc_vat - subtotal_ex_vat).quantize(money, ROUND_HALF_UP)
     use_rot = all((
         bool(data.get("use_rot")),
         data.get("customer_type") == ElectricianBooking.CustomerType.PRIVATE,
@@ -2250,7 +2308,7 @@ def _electrician_pricing_breakdown(data):
         bool(data.get("rot_owner_confirm")),
         bool(data.get("electronic_invoice_confirm")),
     ))
-    labor_inc_vat = (labor_total * (Decimal("1") + vat_percent / Decimal("100"))).quantize(money, ROUND_HALF_UP)
+    labor_inc_vat = labor_total
     rot_discount = (
         labor_inc_vat * (rot_percent / Decimal("100")) if use_rot else Decimal("0")
     ).quantize(money, ROUND_HALF_UP)
@@ -2296,11 +2354,11 @@ def _electrician_pricing_from_booking(booking):
     additional_total = additional_hours * effective_hourly_rate
     labor_total = (effective_hourly_rate + additional_total).quantize(money, ROUND_HALF_UP)
     transport_fee = transport_fee.quantize(money, ROUND_HALF_UP)
-    subtotal_ex_vat = (labor_total + transport_fee).quantize(money, ROUND_HALF_UP)
     vat_percent = Decimal("25.00")
-    vat_amount = (subtotal_ex_vat * vat_percent / Decimal("100")).quantize(money, ROUND_HALF_UP)
-    total_inc_vat = (subtotal_ex_vat + vat_amount).quantize(money, ROUND_HALF_UP)
-    labor_inc_vat = (labor_total * (Decimal("1") + vat_percent / Decimal("100"))).quantize(money, ROUND_HALF_UP)
+    total_inc_vat = (labor_total + transport_fee).quantize(money, ROUND_HALF_UP)
+    subtotal_ex_vat = (total_inc_vat / (Decimal("1") + vat_percent / Decimal("100"))).quantize(money, ROUND_HALF_UP)
+    vat_amount = (total_inc_vat - subtotal_ex_vat).quantize(money, ROUND_HALF_UP)
+    labor_inc_vat = labor_total
     rot_discount = (
         labor_inc_vat * (rot_percent / Decimal("100")) if booking.rot_requested else Decimal("0")
     ).quantize(money, ROUND_HALF_UP)
@@ -3333,6 +3391,11 @@ def on_call_booking_step(request, step):
                         "Our team will review your requested coverage and response profile.",
                         "We will contact you to finalize activation details if needed.",
                     ],
+                )
+                _send_on_call_company_notification_email(
+                    booking=booking,
+                    booking_reference=booking_id,
+                    currency=pricing.currency if pricing else "SEK",
                 )
                 _create_and_queue_invoice(booking)
                 request.session["on_call_booking_id"] = booking_id
@@ -6322,9 +6385,10 @@ def dashboard_provider_shifts_add(request):
     guard = _dashboard_access_or_redirect(request)
     if guard:
         return guard
-    form = ProviderShiftForm(request.POST or None)
+    form = ProviderShiftBulkForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
-        form.save()
+        with transaction.atomic():
+            form.save()
         return redirect("electricity:dashboard_provider_shifts")
     return render(
         request,

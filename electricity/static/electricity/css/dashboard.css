@@ -557,6 +557,45 @@ body {
     padding-right: 12px;
 }
 
+.dash-form .provider-weekday-checkboxes > div {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(130px, 1fr));
+    gap: 10px;
+}
+
+.dash-form .provider-weekday-checkboxes > div > div {
+    min-width: 0;
+}
+
+.dash-form .provider-weekday-checkboxes label {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid #e6dccb;
+    border-radius: 12px;
+    background: #fffaf0;
+    cursor: pointer;
+}
+
+.dash-form .provider-weekday-checkboxes input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    margin: 0;
+    padding: 0;
+    accent-color: #c99a24;
+}
+
+@media (max-width: 760px) {
+    .dash-form .provider-weekday-checkboxes > div {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 .dash-form input[type="time"]::-webkit-calendar-picker-indicator {
     opacity: 1;
     display: inline-block;

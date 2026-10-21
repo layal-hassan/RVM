@@ -494,8 +494,21 @@ body.electricity-body.electrician-booking-page {
 }
 
 .eb-service-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   font-weight: 600;
   margin-bottom: 4px;
+}
+
+.eb-service-icon {
+  display: inline-grid;
+  width: 20px;
+  flex: 0 0 20px;
+  place-items: center;
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+  font-size: 16px;
+  line-height: 1;
 }
 
 .eb-service-sub {
@@ -1902,6 +1915,24 @@ body.electrician-booking-page .ts-dropdown .option.active {
 body.electrician-booking-page .ts-dropdown .option.selected {
   background: rgba(202, 161, 61, 0.18);
   color: #f2ca63;
+}
+
+/* Keep browser autofill in the booking page's green-black theme. */
+.electrician-booking-page .eb-card input:-webkit-autofill,
+.electrician-booking-page .eb-card input:-webkit-autofill:hover,
+.electrician-booking-page .eb-card input:-webkit-autofill:focus,
+.electrician-booking-page .eb-card input:-webkit-autofill:active,
+.electrician-booking-page .eb-card textarea:-webkit-autofill,
+.electrician-booking-page .eb-card textarea:-webkit-autofill:hover,
+.electrician-booking-page .eb-card textarea:-webkit-autofill:focus,
+.electrician-booking-page .eb-card textarea:-webkit-autofill:active,
+.electrician-booking-page .eb-card select:-webkit-autofill {
+  -webkit-text-fill-color: #f5f1e6 !important;
+  caret-color: #f5f1e6 !important;
+  background-color: #1b1e13 !important;
+  -webkit-box-shadow: 0 0 0 1000px #1b1e13 inset !important;
+  box-shadow: 0 0 0 1000px #1b1e13 inset !important;
+  transition: background-color 9999s ease-out 0s;
 }
 
 @media (max-width: 700px) {

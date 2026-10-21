@@ -1,5 +1,5 @@
-﻿{% extends "electricity/base.html" %}
-{% load static i18n %}
+{% extends "electricity/base.html" %}
+{% load static i18n electricity_extras %}
 
 {% block title %}{% trans "On-Call & Emergency Service" %}{% endblock %}
 {% block body_class %}on-call-page{% endblock %}
@@ -20,7 +20,7 @@
         </a>
         <a class="btn btn-secondary oncall-chat-button" href="https://wa.me/46700391611" target="_blank" rel="noopener">
           <span class="oncall-button-icon" aria-hidden="true">◉</span>
-          <span>{% trans "Chat on WhatsApp" %}</span><span aria-hidden="true">→</span>
+          <span>{% trans "Chat on WhatsApp" %}</span>
         </a>
       </div>
       <div class="oncall-trust-row" aria-label="{% trans 'Service benefits' %}">
@@ -164,7 +164,7 @@
       <p>{% trans "Priority electrical support for businesses, BRF, and property managers. Get immediate access to qualified electricians with an on-call agreement tailored to your site." %}</p>
     </div>
     <div class="oncall-priority-action">
-      <a class="btn" href="{% url 'electricity:on_call_booking_step' 1 %}">{% trans "Apply for on-call service" %}<span aria-hidden="true">→</span></a>
+      <a class="btn" href="{% url 'electricity:on_call_booking_step' 1 %}">{% trans "Apply for on-call service" %}</a>
       <small>{% trans "Response windows confirmed in writing." %}</small>
     </div>
   </div>
@@ -190,11 +190,18 @@
         <div class="oncall-ecosystem-body">
           <h3>{{ service.title }}</h3>
           {% if service.short_description %}
-          <p>{{ service.short_description|truncatechars:145 }}</p>
+          <ul class="oncall-ecosystem-points">
+            {% for line in service.short_description|split_lines %}
+            <li>{{ line|truncatechars:70 }}</li>
+            {% endfor %}
+          </ul>
           {% elif service.bullet_points %}
-          <p>{{ service.bullet_points|truncatechars:145|linebreaksbr }}</p>
+          <ul class="oncall-ecosystem-points">
+            {% for line in service.bullet_points|split_lines %}
+            <li>{{ line|truncatechars:70 }}</li>
+            {% endfor %}
+          </ul>
           {% endif %}
-          <a class="btn btn-primary" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Book this service" %}<span aria-hidden="true">→</span></a>
         </div>
       </article>
       {% endfor %}
@@ -217,7 +224,7 @@
         </div>
       </div>
       <div class="oncall-project-cta">
-        <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a consultation" %}<span aria-hidden="true">→</span></a>
+        <a class="btn btn-primary" href="{% url 'electricity:booking_step_1' %}">{% trans "Schedule a consultation" %}</a>
         <small>{% trans "Expert advice. Real solutions." %}</small>
       </div>
     </article>
@@ -227,19 +234,19 @@
         <span class="oncall-project-icon" aria-hidden="true">▤</span>
         <h3>{% trans "Plan Your Electrical Project" %}</h3>
         <p>{% trans "Get expert guidance to design the right electrical solution for your home or property." %}</p>
-        <a href="{% url 'electricity:booking_step_1' %}">{% trans "Request a consultation" %}<span aria-hidden="true">→</span></a>
+        <a href="{% url 'electricity:booking_step_1' %}">{% trans "Request a consultation" %}</a>
       </article>
       <article class="oncall-project-option">
         <span class="oncall-project-icon" aria-hidden="true">ϟ</span>
         <h3>{% trans "Book a Licensed Electrician" %}</h3>
         <p>{% trans "Professional installations, repairs and troubleshooting — done safely, efficiently and to code." %}</p>
-        <a href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}<span aria-hidden="true">→</span></a>
+        <a href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}</a>
       </article>
       <article class="oncall-project-option">
         <span class="oncall-project-icon" aria-hidden="true">◯</span>
         <h3>{% trans "Get Expert Advice" %}</h3>
         <p>{% trans "Have a question? Speak with our team for clear, honest advice tailored to your needs." %}</p>
-        <a href="{% url 'electricity:contact' %}">{% trans "Speak with our team" %}<span aria-hidden="true">→</span></a>
+        <a href="{% url 'electricity:contact' %}">{% trans "Speak with our team" %}</a>
       </article>
     </div>
   </div>

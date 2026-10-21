@@ -3,10 +3,12 @@
   const form = document.querySelector("#request-flow-form");
   const drawer = document.querySelector("[data-cart-drawer]");
   const drawerBackdrop = document.querySelector("[data-cart-backdrop]");
+  const cartFab = document.querySelector("[data-cart-fab]");
   if (!dialog || !form || !drawer || typeof dialog.showModal !== "function") return;
 
   let step = 2;
   let cart = [];
+  let parkedCart = null;
   let files = [];
   let lastAdded = null;
   const fileUrls = new WeakMap();
@@ -50,10 +52,17 @@
     cartNode.innerHTML = cartMarkup;
     drawer.querySelector("[data-drawer-cart]").innerHTML = cartMarkup;
     drawer.querySelector("[data-cart-continue]").disabled = !cart.length;
+    if (cartFab) cartFab.hidden = !cart.some(item => item.cartEligible);
     dialog.querySelectorAll("[data-summary-services], [data-review-services]").forEach(node => node.innerHTML = cart.map(item => serviceRow(item)).join(""));
   }
   function openDrawer() { drawer.classList.add("is-open"); drawerBackdrop.classList.add("is-open"); drawer.setAttribute("aria-hidden", "false"); }
   function closeDrawer() { drawer.classList.remove("is-open"); drawerBackdrop.classList.remove("is-open"); drawer.setAttribute("aria-hidden", "true"); }
+  function restoreParkedCart() {
+    if (parkedCart === null) return;
+    cart = parkedCart;
+    parkedCart = null;
+    renderCart();
+  }
   function handleCartControls(event) {
     const row = event.target.closest("[data-cart-id]");
     if (!row) return false;
@@ -94,12 +103,24 @@
     const card = button.closest("[data-project-config]");
     const quantity = Number(card?.querySelector("[data-quantity]")?.textContent || 1);
     const key = `${button.dataset.source}:${button.dataset.itemId}`;
+    const cartEligible = button.dataset.cartTrigger === "true";
+    if (!cartEligible) {
+      parkedCart = cart;
+      cart = [{ key, id: button.dataset.itemId, source: button.dataset.source, title: button.dataset.title, description: button.dataset.description, price: button.dataset.price, unitPrice: numericPrice(button.dataset.price), mode: button.dataset.mode || "quote", image: button.dataset.image || "", quantity, cartEligible: false }];
+      lastAdded = cart[0];
+      dialog.querySelector("[data-added-service]").innerHTML = serviceRow(lastAdded);
+      renderCart();
+      show(4);
+      dialog.showModal();
+      return;
+    }
     const existing = cart.find(item => item.key === key);
-    if (existing) existing.quantity = Math.min(99, existing.quantity + quantity);
-    else cart.push({ key, id: button.dataset.itemId, source: button.dataset.source, title: button.dataset.title, description: button.dataset.description, price: button.dataset.price, unitPrice: numericPrice(button.dataset.price), mode: button.dataset.mode || "fixed", image: button.dataset.image || "", quantity });
+    if (existing) { existing.quantity = Math.min(99, existing.quantity + quantity); existing.cartEligible ||= cartEligible; }
+    else cart.push({ key, id: button.dataset.itemId, source: button.dataset.source, title: button.dataset.title, description: button.dataset.description, price: button.dataset.price, unitPrice: numericPrice(button.dataset.price), mode: button.dataset.mode || "fixed", image: button.dataset.image || "", quantity, cartEligible });
     lastAdded = cart.find(item => item.key === key);
     dialog.querySelector("[data-added-service]").innerHTML = serviceRow(lastAdded);
-    renderCart(); openDrawer();
+    renderCart();
+    openDrawer();
   }));
   dialog.addEventListener("click", event => {
     const go = event.target.closest("[data-go]");
@@ -111,7 +132,9 @@
     const downloadFile = event.target.closest("[data-file-download]"); if (downloadFile) { const file = files[Number(downloadFile.dataset.fileDownload)]; const link = document.createElement("a"); link.href = URL.createObjectURL(file); link.download = file.name; link.click(); setTimeout(() => URL.revokeObjectURL(link.href), 1000); }
   });
   drawer.addEventListener("click", event => { if (handleCartControls(event)) return; if (event.target.closest("[data-cart-close]")) closeDrawer(); if (event.target.closest("[data-cart-continue]") && cart.length) { closeDrawer(); renderCart(); show(3); dialog.showModal(); } });
+  if (cartFab) cartFab.addEventListener("click", openDrawer);
   drawerBackdrop.addEventListener("click", closeDrawer);
+  dialog.addEventListener("close", restoreParkedCart);
   dialog.querySelector(".request-flow-close").addEventListener("click", () => dialog.close());
   form.elements.attachments.addEventListener("change", event => { files = [...files, ...event.target.files].slice(0, 10); updateFiles(); });
   form.elements.preferred_timeframe.addEventListener("change", () => { dialog.querySelector("[data-timeframe-error]").textContent = ""; clearErrors(); });
@@ -123,8 +146,8 @@
     event.preventDefault(); clearErrors();
     if (!dialog.querySelector("[data-confirm]").checked) return setError("Please confirm that the information is correct.");
     syncHidden(); const submit = dialog.querySelector("[data-submit]"); submit.disabled = true; const original = submit.textContent; submit.textContent = "Sending…";
-    try { const response = await fetch(form.dataset.submitUrl, { method: "POST", body: new FormData(form), headers: { "X-Requested-With": "XMLHttpRequest" } }); const result = await response.json(); if (!response.ok) throw new Error(result.error || "Could not send your request."); dialog.querySelector("[data-reference]").textContent = result.reference; cart = []; files = []; show(6); }
+    try { const response = await fetch(form.dataset.submitUrl, { method: "POST", body: new FormData(form), headers: { "X-Requested-With": "XMLHttpRequest" } }); const result = await response.json(); if (!response.ok) throw new Error(result.error || "Could not send your request."); dialog.querySelector("[data-reference]").textContent = result.reference; cart = []; files = []; renderCart(); show(6); }
     catch (error) { setError(error.message); } finally { submit.disabled = false; submit.textContent = original; }
   });
-  dialog.querySelector("[data-finish]").addEventListener("click", () => { dialog.close(); form.reset(); renderCart(); updateFiles(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+  dialog.querySelector("[data-finish]").addEventListener("click", () => { restoreParkedCart(); dialog.close(); form.reset(); renderCart(); updateFiles(); window.scrollTo({ top: 0, behavior: "smooth" }); });
 })();

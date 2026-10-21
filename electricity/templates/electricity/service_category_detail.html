@@ -1,5 +1,5 @@
 {% extends "electricity/base.html" %}
-{% load electricity_extras i18n %}
+{% load electricity_extras i18n static %}
 
 {% block title %}{{ page.name }} | Hembla experten{% endblock %}
 {% block body_class %}service-category-page service-category-theme-{{ page.theme }}{% endblock %}
@@ -189,6 +189,33 @@
              data-pricing-mode="{{ item.pricing_mode }}"
              data-project-config
              data-price-text="{{ item.price_text|default:'' }}">
+          <div class="category-review-notes" data-review-notes>
+            <div class="category-review-note">
+              <button class="category-review-trigger" type="button" aria-expanded="false" aria-controls="rot-note-{{ item.id }}" data-review-trigger>
+                <span class="category-review-check" aria-hidden="true">✓</span>
+                <span>{% trans "ROT reviewed" %}</span>
+                <span class="category-review-info" aria-hidden="true">i</span>
+              </button>
+              <div class="category-review-popover" id="rot-note-{{ item.id }}" role="region" hidden data-review-popover>
+                <button class="category-review-close" type="button" aria-label="{% trans 'Close' %}" data-review-close>×</button>
+                <h4>{% trans "ROT may apply" %}</h4>
+                <p>{% trans "We review whether this service and your property qualify for ROT. ROT applies only to eligible labour costs, not materials or travel. The final deduction is confirmed with your quote." %}</p>
+                <button class="category-review-learn" type="button" data-rot-modal-open>{% trans "Learn more" %} ↗</button>
+              </div>
+            </div>
+            <div class="category-review-note">
+              <button class="category-review-trigger" type="button" aria-expanded="false" aria-controls="materials-note-{{ item.id }}" data-review-trigger>
+                <span class="category-review-check" aria-hidden="true">✓</span>
+                <span>{% trans "Materials reviewed" %}</span>
+                <span class="category-review-info" aria-hidden="true">i</span>
+              </button>
+              <div class="category-review-popover" id="materials-note-{{ item.id }}" role="region" hidden data-review-popover>
+                <button class="category-review-close" type="button" aria-label="{% trans 'Close' %}" data-review-close>×</button>
+                <h4>{% trans "Materials needed" %}</h4>
+                <p>{% trans "We check whether any fixtures, cable, mounting hardware or other materials are required. If RWM needs to supply anything, the material cost is confirmed before work begins." %}</p>
+              </div>
+            </div>
+          </div>
           {% if item.pricing_mode == "quote" %}
           <div class="category-quote-heading">
             <span class="category-quote-kicker">{% trans "Pricing" %}</span>
@@ -221,7 +248,7 @@
             <a class="category-card-cta category-card-cta-primary js-request-flow" href="#request-flow" data-item-id="{{ item.id }}" data-source="{% if page.parent_category_id %}detail{% else %}category{% endif %}" data-title="{{ item.title|escape }}" data-description="{{ item.description|default:item.subtitle|escape }}" data-mode="quote" data-price="" {% if item.image %}data-image="{{ item.image.url }}"{% endif %}>
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7zM14 3v5h5M10 12h5M10 16h5"/></svg>
               <span>{% trans "Request a quote" %}</span>
-              <span class="category-cta-arrow" aria-hidden="true">→</span>
+              
             </a>
           </div>
           <div class="category-quote-benefits" aria-label="{% trans 'Quote benefits' %}">
@@ -236,13 +263,13 @@
               <output data-quantity>1</output>
               <button type="button" data-quantity-plus aria-label="{% trans 'Increase quantity' %}">+</button>
             </div>
-            <a class="category-card-cta category-card-cta-outline js-request-flow" href="#request-flow" data-item-id="{{ item.id }}" data-source="{% if page.parent_category_id %}detail{% else %}category{% endif %}" data-title="{{ item.title|escape }}" data-description="{{ item.description|default:item.subtitle|escape }}" data-mode="fixed" data-price="{{ item.price_text|escape }}" {% if item.image %}data-image="{{ item.image.url }}"{% endif %}>
+            <a class="category-card-cta category-card-cta-outline js-request-flow" href="#request-flow" data-cart-trigger="true" data-item-id="{{ item.id }}" data-source="{% if page.parent_category_id %}detail{% else %}category{% endif %}" data-title="{{ item.title|escape }}" data-description="{{ item.description|default:item.subtitle|escape }}" data-mode="fixed" data-price="{{ item.price_text|escape }}" {% if item.image %}data-image="{{ item.image.url }}"{% endif %}>
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L20 8H7M10 20h.01M17 20h.01"/></svg>
               <span>{% trans "Add to request" %}</span>
             </a>
           </div>
           <div class="category-booking-action">
-            <a class="category-card-cta category-card-cta-primary js-request-flow" href="#request-flow" data-item-id="{{ item.id }}" data-source="{% if page.parent_category_id %}detail{% else %}category{% endif %}" data-title="{{ item.title|escape }}" data-description="{{ item.description|default:item.subtitle|escape }}" data-mode="fixed" data-price="{{ item.price_text|escape }}" {% if item.image %}data-image="{{ item.image.url }}"{% endif %}>
+            <a class="category-card-cta category-card-cta-primary" href="{% url 'electricity:service_booking_step' 1 %}">
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5h14v16H5zM8 3v4M16 3v4M5 9h14M9 13h2M13 13h2M9 17h2M13 17h2"/></svg>
               <span>{% trans "Book service" %}</span>
             </a>
@@ -256,6 +283,67 @@
   </div>
 </section>
 {% endfor %}
+
+<div class="rot-info-modal" role="dialog" aria-modal="true" aria-labelledby="rot-modal-title" hidden data-rot-modal>
+  <div class="rot-info-backdrop" data-rot-modal-close></div>
+  <div class="rot-info-dialog">
+    <button class="rot-info-close" type="button" aria-label="{% trans 'Close' %}" data-rot-modal-close>×</button>
+    <div class="rot-info-content">
+      <div class="rot-info-copy">
+        <span class="rot-info-kicker">{% trans "Good to know" %}</span>
+        <h2 id="rot-modal-title">{% trans "ROT deduction" %}</h2>
+        <p>{% trans "ROT is available for eligible private residential work. It is not a discount for business premises or work ordered by a company. To use ROT, you must meet Skatteverket's requirements, including owning the home where the work is carried out and using it as your own or your parents' home." %}</p>
+
+        <section class="rot-info-section">
+          <h3>{% trans "You may qualify if:" %}</h3>
+          <ul>
+            <li>{% trans "You are a private individual, not booking the work for a business." %}</li>
+            <li>{% trans "You own the house, apartment or other qualifying home where the work is carried out." %}</li>
+            <li>{% trans "You or your parents use the property as a home." %}</li>
+            <li>{% trans "The work itself qualifies for ROT." %}</li>
+            <li>{% trans "You have sufficient ROT allowance and tax available to use the deduction." %}</li>
+          </ul>
+        </section>
+
+        <section class="rot-info-section">
+          <h3>{% trans "What ROT covers" %}</h3>
+          <ul>
+            <li>{% trans "ROT applies only to the eligible labour cost." %}</li>
+            <li>{% trans "Materials, travel, equipment and other costs are not included in the deduction and are paid in full." %}</li>
+          </ul>
+        </section>
+
+        <section class="rot-info-section rot-info-steps">
+          <h3>{% trans "How it works with RWM EL" %}</h3>
+          <ol>
+            <li>{% trans "You tell us that you would like to use ROT." %}</li>
+            <li>{% trans "We review the work and identify the eligible labour portion." %}</li>
+            <li>{% trans "We show the expected ROT deduction on the invoice." %}</li>
+            <li>{% trans "You pay your part of the invoice." %}</li>
+            <li>{% trans "After the work has been completed and paid, RWM EL applies to Skatteverket for the ROT amount." %}</li>
+          </ol>
+        </section>
+
+        <aside class="rot-info-important">
+          <strong>{% trans "Important" %}</strong>
+          <p>{% trans "ROT is subject to approval by Skatteverket. If the deduction is rejected or reduced, you are responsible for paying the remaining amount to RWM EL." %}</p>
+        </aside>
+      </div>
+      <div class="rot-info-media">
+        {# Photo by Anete Lusina via Pexels: https://www.pexels.com/photo/4792521/ #}
+        <img src="{% static 'electricity/img/rot-deduction-electrician-crop.jpg' %}" alt="{% trans 'Electrician installing a ceiling light in a home' %}">
+        <div class="rot-info-media-caption">
+          <span aria-hidden="true">⌂</span>
+          <div><strong>{% trans "A safer and brighter home" %}</strong><p>{% trans "Professional electrical work with the possibility to use ROT for eligible labour costs." %}</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="rot-info-actions">
+      <button class="category-card-cta category-card-cta-primary" type="button" data-rot-modal-close>{% trans "Continue" %}</button>
+      <a class="category-card-cta category-card-cta-outline" href="https://www.skatteverket.se/privat/fastigheterochbostad/rotarbeteochrutarbete/safungerarrotavdraget?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer">↗ {% trans "Read more on Skatteverket" %}</a>
+    </div>
+  </div>
+</div>
 
 {% if spec_rows %}
 <section class="category-section category-section-specs">
@@ -384,7 +472,64 @@
       });
     });
 
+    const closeReviewNotes = (except = null) => {
+      document.querySelectorAll("[data-review-popover]:not([hidden])").forEach((popover) => {
+        if (popover === except) return;
+        popover.hidden = true;
+        popover.closest(".category-review-note")?.querySelector("[data-review-trigger]")?.setAttribute("aria-expanded", "false");
+      });
+    };
+
+    document.querySelectorAll("[data-review-trigger]").forEach((trigger) => {
+      const note = trigger.closest(".category-review-note");
+      const popover = note?.querySelector("[data-review-popover]");
+      if (!popover) return;
+      trigger.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const willOpen = popover.hidden;
+        closeReviewNotes(willOpen ? popover : null);
+        popover.hidden = !willOpen;
+        trigger.setAttribute("aria-expanded", String(willOpen));
+      });
+      note.querySelector("[data-review-close]")?.addEventListener("click", () => {
+        popover.hidden = true;
+        trigger.setAttribute("aria-expanded", "false");
+        trigger.focus();
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest(".category-review-note")) closeReviewNotes();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeReviewNotes();
+        closeRotModal();
+      }
+    });
+
+    const rotModal = document.querySelector("[data-rot-modal]");
+    let rotModalReturnFocus = null;
+    const closeRotModal = () => {
+      if (!rotModal || rotModal.hidden) return;
+      rotModal.hidden = true;
+      document.body.classList.remove("rot-modal-open");
+      rotModalReturnFocus?.focus();
+    };
+
+    document.querySelectorAll("[data-rot-modal-open]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!rotModal) return;
+        closeReviewNotes();
+        rotModalReturnFocus = button;
+        rotModal.hidden = false;
+        document.body.classList.add("rot-modal-open");
+        rotModal.querySelector(".rot-info-close")?.focus();
+      });
+    });
+    rotModal?.querySelectorAll("[data-rot-modal-close]").forEach((button) => button.addEventListener("click", closeRotModal));
+
   })();
 </script>
-{% load static %}<script src="{% static 'electricity/js/request_flow.js' %}?v=20261020-6"></script>
+{% load static %}<script src="{% static 'electricity/js/request_flow.js' %}?v=20261021-3"></script>
 {% endblock %}

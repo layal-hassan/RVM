@@ -919,9 +919,9 @@ class ServiceRequestOutsideArea(models.Model):
 
 class ServicePricing(models.Model):
     name = models.CharField(max_length=120, default="Default Pricing")
-    labor_rate = models.DecimalField(max_digits=10, decimal_places=2, default=1250)
-    transport_fee = models.DecimalField(max_digits=10, decimal_places=2, default=400)
-    hourly_rate_electrician = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("550.40"))
+    labor_rate = models.DecimalField(max_digits=10, decimal_places=2, default=688)
+    transport_fee = models.DecimalField(max_digits=10, decimal_places=2, default=500)
+    hourly_rate_electrician = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("688.00"))
     hourly_rate_emergency = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     consultation_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     rot_percent = models.DecimalField(max_digits=5, decimal_places=2, default=30)

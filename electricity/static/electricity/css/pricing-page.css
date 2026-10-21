@@ -4,7 +4,7 @@
 .pp-main .container { width: min(1740px, 94%); max-width: none; }
 .pp-main h1,.pp-main h2,.pp-main h3 { font-family: Georgia, "Times New Roman", serif; }
 .pp-main em { color: #e4b835; font-style: normal; }
-.pp-hero { position: relative; min-height: 650px; display: grid; align-items: center; background: url("../img/pricing-hero-electrician-v3.png") center/cover no-repeat; }
+.pp-hero { position: relative; min-height: 774px; display: grid; align-items: center; background: url("../img/pricing-hero-electrician-v3.png") center/cover no-repeat; }
 .pp-hero-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(3,10,7,.78) 0%, rgba(3,10,7,.58) 38%, rgba(3,10,7,.08) 65%, rgba(3,10,7,.16)), linear-gradient(180deg, rgba(0,0,0,.08), rgba(3,11,7,.42)); }
 .pp-hero-inner { position: relative; z-index: 1; padding-top: 70px; padding-bottom: 65px; }
 .pp-eyebrow,.pp-section-label { color: #dfb229; font: 700 11px/1.2 Arial,sans-serif; letter-spacing: .24em; text-transform: uppercase; }

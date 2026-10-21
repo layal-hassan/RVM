@@ -768,7 +768,9 @@ def invoice_pdf_token_data(token):
 
 
 def invoice_pdf_public_url(invoice):
-    base_url = getattr(settings, "INVOICE_PUBLIC_BASE_URL", "https://www.rwmel.se").rstrip("/")
+    base_url = getattr(settings, "INVOICE_PUBLIC_BASE_URL", "").strip().rstrip("/")
+    if not base_url:
+        return ""
     path = reverse("electricity:public_invoice_pdf", kwargs={"token": invoice_pdf_token(invoice)})
     return f"{base_url}{path}"
 
@@ -793,6 +795,7 @@ def send_invoice_email(invoice):
         "logo_url": f"{public_base_url}/static/electricity/img/electricity_logo.jpg",
         "qr_url": f"{public_base_url}/static/electricity/img/invoice-payment-qr.jpg",
     }
+    pdf_link_text = f"Öppna fakturan: {pdf_url}\n\n" if pdf_url else ""
     text_body = (
         f"Hej {customer_name},\n\n"
         "Tack för att du valde RWM EL – vi uppskattar verkligen ditt förtroende!\n\n"
@@ -801,7 +804,7 @@ def send_invoice_email(invoice):
         f"Förfallodatum: {invoice.due_date.isoformat()}\n"
         "Bankgiro: 5192-1302\n"
         f"Betalningsreferens: {invoice.invoice_number}\n\n"
-        f"Öppna fakturan: {pdf_url}\n\n"
+        f"{pdf_link_text}"
         "Vänliga hälsningar,\nRWM EL\nRWM Helservice AB"
     )
     message = EmailMultiAlternatives(

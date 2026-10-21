@@ -36,7 +36,7 @@
         <h2>{% trans "Find the Right Solution" %}</h2>
         <p>{% trans "Explore our main service areas and discover how we can help." %}</p>
       </div>
-      <a href="#popular-services">{% trans "View all services" %} <span aria-hidden="true">→</span></a>
+      <a href="#popular-services">{% trans "View all services" %} </a>
     </header>
     <div class="solution-card-grid">
       {% for category_page in category_pages %}
@@ -94,7 +94,7 @@
       {% if services|length > 4 %}
       <button class="services-toggle" type="button" aria-expanded="false" aria-controls="all-popular-services">
         <span class="services-toggle-label">{% trans "View all services" %}</span>
-        <span aria-hidden="true">→</span>
+        
       </button>
       {% endif %}
     </header>
@@ -204,7 +204,7 @@
       <h2>{% trans "Need Urgent Assistance?" %}</h2>
       <p>{% trans "Experiencing an electrical fault or power issue? Our team is ready to help." %}</p>
       <div class="services-trust-actions">
-        <a class="btn btn-primary" href="{% url 'electricity:on_call_booking_step' 1 %}">{% trans "Contact us" %} <span aria-hidden="true">→</span></a>
+        <a class="btn btn-primary" href="{% url 'electricity:on_call_booking_step' 1 %}">{% trans "Contact us" %} </a>
         <a class="services-phone" href="tel:+46700391611"><span aria-hidden="true">☎</span> 0046 70 03 91 611</a>
       </div>
     </div>
@@ -230,8 +230,8 @@
       <h2>{% trans "Book a Service or" %}<br>{% trans "Request a Quote" %}</h2>
       <p>{% trans "Tell us what you need and we'll get back to you quickly with the next steps." %}</p>
       <div class="services-trust-actions">
-        <a class="btn btn-primary" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Book a service" %} <span aria-hidden="true">→</span></a>
-        <a class="btn btn-secondary" href="{% url 'electricity:quote_request_step' 1 %}">{% trans "Get a quote" %} <span aria-hidden="true">→</span></a>
+        <a class="btn btn-primary" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Book a service" %} </a>
+        <a class="btn btn-secondary" href="{% url 'electricity:quote_request_step' 1 %}">{% trans "Get a quote" %} </a>
       </div>
       <div class="services-booking-notes">
         <span>▣ {% trans "Flexible appointments" %}</span>
@@ -264,8 +264,8 @@
         <div class="oncall-safety-cta">
           <h3>{% trans "Professional electrical services" %}</h3>
           <p>{% trans "Our licensed electricians are available for both residential and commercial work, delivering fast response, clear communication and high-quality results." %}</p>
-          <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}<span aria-hidden="true">→</span></a>
-          <a class="btn btn-secondary" href="{% url 'electricity:contact' %}">{% trans "Request a free quote" %}<span aria-hidden="true">→</span></a>
+          <a class="btn btn-primary" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}</a>
+          <a class="btn btn-secondary" href="{% url 'electricity:contact' %}">{% trans "Request a free quote" %}</a>
         </div>
       </div>
       <div class="oncall-safety-trust" aria-label="{% trans 'Service guarantees' %}">
@@ -315,17 +315,17 @@
     <div class="mini-cta-card">
       <h3>{% trans "PLAN YOUR HOME SYSTEMS" %}</h3>
       <p>{% trans "Work with our team to plan, design, or upgrade electrical and home systems—tailored to your property, needs, and future use." %}</p>
-      <a class="card-link" href="{% url 'electricity:booking_step_1' %}">{% trans "REQUEST A CONSULTATION →" %}</a>
+      <a class="card-link" href="{% url 'electricity:booking_step_1' %}">{% trans "REQUEST A CONSULTATION " %}</a>
     </div>
     <div class="mini-cta-card">
       <h3>{% trans "BOOK A LICENSED ELECTRICIAN" %}</h3>
       <p>{% trans "Fast, professional help for installations, repairs, troubleshooting, and essential electrical work—done safely and to code." %}</p>
-      <a class="card-link" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN →" %}</a>
+      <a class="card-link" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "BOOK AN ELECTRICIAN " %}</a>
     </div>
     <div class="mini-cta-card">
       <h3>{% trans "START PLANNING" %}</h3>
       <p>{% trans "Planning upgrades or new installations? Get clear professional advice before deciding on next steps and timelines." %}</p>
-      <a class="card-link" href="{% url 'electricity:booking_step_1' %}">{% trans "START PLANNING →" %}</a>
+      <a class="card-link" href="{% url 'electricity:booking_step_1' %}">{% trans "START PLANNING " %}</a>
     </div>
   </div>
 </section>

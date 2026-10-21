@@ -79,6 +79,45 @@ h4,
   font-size: var(--site-type-heading) !important;
 }
 
+/* Prominent safety statement and guarantees on the services page. */
+.services-page #services-safety-title {
+  font-size: clamp(34px, 2.5vw, 44px) !important;
+  line-height: 1.08 !important;
+}
+
+.services-page .oncall-safety-trust span {
+  font-size: 14px !important;
+}
+
+.services-page .oncall-safety-trust b {
+  font-size: 22px !important;
+}
+
+.for-brf-page .brf-partner-copy h2 {
+  font-size: clamp(30px, 2.25vw, 42px) !important;
+}
+
+.for-brf-page .brf-partner-copy > p {
+  font-size: 13px !important;
+}
+
+.for-brf-page .brf-partner-list li {
+  font-size: 12px !important;
+}
+
+.for-brf-page .brf-quote-form h3 {
+  font-size: 18px !important;
+}
+
+.for-brf-page .brf-quote-form input,
+.for-brf-page .brf-quote-form select,
+.for-brf-page .brf-quote-form textarea,
+.for-brf-page .brf-quote-form button,
+.for-brf-page .brf-quote-form header p,
+.for-brf-page .brf-quote-form > small {
+  font-size: 11px !important;
+}
+
 .landing-title,
 .hero-title,
 .about-hero-title,
@@ -97,15 +136,21 @@ h4,
   font-size: inherit !important;
 }
 
-/* The on-call hero is intentionally display-sized, not the compact site type scale. */
+@media (max-width: 640px) {
+  .services-page #services-safety-title {
+    font-size: clamp(32px, 9vw, 40px) !important;
+  }
+}
+
+/* Keep the on-call hero aligned with the pricing page across navigation. */
 .on-call-page .oncall-title {
-  font-size: clamp(64px, 6.3vw, 98px) !important;
-  line-height: .96 !important;
+  font-size: clamp(64px, 5vw, 76px) !important;
+  line-height: .98 !important;
 }
 
 .on-call-page .oncall-subtitle {
-  font-size: 19px !important;
-  line-height: 1.6 !important;
+  font-size: 18px !important;
+  line-height: 1.7 !important;
 }
 
 .on-call-page .oncall-actions .btn {
@@ -136,8 +181,8 @@ h4,
 
 /* Pricing is a presentation page and needs a comfortable reading scale. */
 .pricing-page .pp-hero h1 {
-  font-size: clamp(52px, 5vw, 76px) !important;
-  line-height: 1.02 !important;
+  font-size: clamp(64px, 5vw, 76px) !important;
+  line-height: .98 !important;
 }
 
 .pricing-page .pp-hero p {
