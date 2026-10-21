@@ -397,7 +397,7 @@
     </div>
     <div class="category-faq-list">
       {% for faq in faq_items %}
-      <details class="category-faq-item"{% if forloop.first %} open{% endif %}>
+      <details class="category-faq-item">
         <summary>{{ faq.question }}</summary>
         <div class="category-faq-answer">{{ faq.answer|linebreaksbr }}</div>
       </details>
