@@ -22,6 +22,79 @@
 @media(max-width:600px){.contact-v2-cta{min-height:330px;padding:48px 5vw;background-position:64% center}.contact-v2-cta h2{font-size:25px}.contact-v2-cta-content{gap:20px}.contact-v2-cta a{min-height:54px;font-size:10px;letter-spacing:.16em}}
 @media(prefers-reduced-motion:reduce){.contact-v2-cta a{transition:none}.contact-v2-cta a:hover{transform:none}}
 
+/* The mobile emulator can be wider than 600px. Keep the contact layout
+   mobile-first through tablet widths so the content never hugs one side. */
+@media (max-width: 768px){
+  html,
+  body.electricity-body.contact-page-v2,
+  body.electricity-body.contact-page-v2 > main.contact-v2{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    margin-inline:0;
+    padding-inline:0;
+    overflow-x:clip;
+  }
+  body.electricity-body.contact-page-v2 > main.contact-v2 > section{
+    width:100%;
+    max-width:100%;
+    margin-inline:0;
+  }
+  .contact-page-v2 .contact-v2-hero{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    margin-inline:0;
+    place-items:center;
+  }
+  .contact-page-v2 .contact-v2-hero-content{
+    width:min(calc(100% - 32px), 560px);
+    max-width:560px;
+    margin-inline:auto;
+    padding:48px 0;
+    text-align:center;
+  }
+  .contact-page-v2 .contact-v2-hero h1,
+  .contact-page-v2 .contact-v2-hero p{
+    width:100%;
+    margin-inline:auto;
+    text-align:center;
+  }
+  .contact-page-v2 .contact-v2-hero h1{
+    font-size:clamp(42px, 9vw, 58px)!important;
+  }
+  .contact-page-v2 .contact-v2-hero-actions{
+    width:min(100%, 320px);
+    margin-inline:auto;
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .contact-page-v2 .contact-v2-hero-actions a{
+    width:100%;
+    min-width:0;
+    text-align:center;
+  }
+  .contact-page-v2 .contact-v2-shell{
+    width:calc(100% - 32px);
+    max-width:none;
+    margin-inline:auto;
+  }
+  .contact-page-v2 .contact-v2-types{
+    display:grid;
+    gap:10px;
+  }
+  .contact-page-v2 .contact-v2-actions,
+  .contact-page-v2 .contact-v2-layout,
+  .contact-page-v2 .contact-v2-layout.has-success,
+  .contact-page-v2 .contact-v2-step-grid{
+    grid-template-columns:1fr;
+  }
+  .contact-page-v2 .contact-v2-row,
+  .contact-page-v2 .contact-v2-customer-options{
+    grid-template-columns:1fr;
+  }
+}
+
 /* Larger contact details for improved readability. */
 .contact-v2-info{padding:34px 28px}
 .contact-v2-info h2{font-size:25px;line-height:1.25;margin-bottom:13px}

@@ -95,14 +95,21 @@
     color: #7b8492;
 }
 
-.ts-hidden-accessible {
+/* Page form styles must not resize the native control hidden by Tom Select.
+   Clipping alone does not prevent an absolute control from widening the page. */
+select.ts-hidden-accessible {
     clip: rect(0 0 0 0);
     clip-path: inset(50%);
-    height: 1px;
+    height: 1px !important;
+    min-height: 0 !important;
+    min-width: 0 !important;
+    max-width: 1px !important;
+    padding: 0 !important;
+    border: 0 !important;
     overflow: hidden;
     position: absolute;
     white-space: nowrap;
-    width: 1px;
+    width: 1px !important;
 }
 
 /* ===== REMOVE DOUBLE FIELD EFFECT ===== */
