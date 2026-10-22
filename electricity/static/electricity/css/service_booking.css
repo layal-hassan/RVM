@@ -24,6 +24,27 @@
   color: #f5f1e6 !important;
 }
 
+/* Text fields and enhanced selects must have identical dimensions. */
+.service-booking-page .form-grid input.form-control,
+.service-booking-page .form-grid select.form-control,
+.service-booking-page .form-grid select:not(.ts-hidden-accessible),
+.service-booking-page .form-grid .ts-wrapper,
+.service-booking-page .form-grid .ts-control {
+  width: 100% !important;
+  height: 56px !important;
+  min-height: 56px !important;
+  box-sizing: border-box !important;
+}
+
+.service-booking-page .form-grid input.form-control,
+.service-booking-page .form-grid select.form-control,
+.service-booking-page .form-grid .ts-control {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  display: flex;
+  align-items: center;
+}
+
 .service-booking-page input:-webkit-autofill,
 .service-booking-page input:-webkit-autofill:hover,
 .service-booking-page input:-webkit-autofill:focus,
@@ -1372,7 +1393,7 @@ body.electricity-body.service-booking-page {
 }
 
 .info-map {
-  height: 140px;
+  height: 190px;
   border-radius: 12px;
   background: #f1ece4;
   border: 1px solid var(--sb-line);
@@ -1385,7 +1406,23 @@ body.electricity-body.service-booking-page {
   height: 100%;
   object-fit: cover;
   display: block;
-  filter: grayscale(1) contrast(0.95);
+  object-position: center 52%;
+  filter: saturate(0.82) contrast(1.06) brightness(0.72);
+  transform: scale(1.015);
+  transition: transform 0.45s ease, filter 0.45s ease;
+}
+
+.info-map::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 38%, rgba(4, 8, 4, 0.72) 100%);
+  pointer-events: none;
+}
+
+.info-map:hover img {
+  transform: scale(1.045);
+  filter: saturate(0.92) contrast(1.08) brightness(0.78);
 }
 
 .map-label {
@@ -1398,6 +1435,7 @@ body.electricity-body.service-booking-page {
   padding: 4px 10px;
   font-size: 11px;
   color: var(--sb-navy);
+  z-index: 1;
 }
 
 .info-caption {
