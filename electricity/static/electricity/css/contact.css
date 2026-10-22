@@ -109,10 +109,19 @@
 
 /* Compact project-information card on phones. */
 @media(max-width:600px){
+  html,
+  body.electricity-body.contact-page-v2{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    margin:0;
+    overflow-x:hidden;
+  }
   .contact-page-v2 .contact-v2{
     width:100%;
     max-width:none;
     margin:0;
+    overflow-x:hidden;
   }
   .contact-page-v2 .contact-v2-hero{
     width:100%;
