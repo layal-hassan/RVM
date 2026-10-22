@@ -2,3 +2,17 @@
 @media(max-width:800px){.faq-page .container{width:calc(100% - 30px)}.faq-hero{padding-top:40px}.faq-note{display:none}.faq-help-actions{grid-template-columns:1fr 1fr}.faq-hours{grid-column:1/-1;padding:12px 0 0;border-left:0;border-top:1px solid rgba(255,255,255,.1)}.faq-cta>.container{grid-template-columns:1fr}.faq-trust{border-top:1px solid rgba(255,255,255,.1);padding-top:20px}}
 @media(max-width:520px){.faq-hero h1{font-size:36px}.faq-help-actions{grid-template-columns:1fr}.faq-hours{grid-column:auto}.faq-cta-copy>div:last-child{flex-direction:column}.faq-trust{grid-template-columns:1fr}.faq-item summary{font-size:11px}.faq-answer{padding-right:18px}}
 .faq-page .faq-icon{display:grid;width:28px;height:28px;flex:0 0 28px;place-items:center;color:var(--fq-gold);border:1px solid rgba(221,177,58,.58);border-radius:50%;background:rgba(221,177,58,.035);font-size:0;transform:none;transition:background .2s ease,border-color .2s ease}.faq-page .faq-icon svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .22s ease}.faq-page .faq-item:hover .faq-icon{border-color:var(--fq-gold);background:rgba(221,177,58,.1)}.faq-page .faq-item[open] .faq-icon{color:#181308;background:var(--fq-gold);border-color:var(--fq-gold);transform:none}.faq-page .faq-item[open] .faq-icon svg{transform:rotate(180deg)}
+
+@media(max-width:520px){
+  .faq-page .faq-content{padding-top:14px}
+  .faq-page .faq-list{gap:9px}
+  .faq-page .faq-list .faq-item{padding:0;border-radius:11px;overflow:hidden}
+  .faq-page .faq-list .faq-item>summary{min-height:62px;display:grid!important;grid-template-columns:minmax(0,1fr) 34px;align-items:center!important;justify-content:initial;gap:12px;padding:10px 12px 10px 16px;text-align:left}
+  .faq-page .faq-list .faq-item>summary>span:first-child{min-width:0;font-size:13px!important;line-height:1.35}
+  .faq-page .faq-list .faq-icon{justify-self:end;width:34px;height:34px;flex-basis:34px;background:rgba(221,177,58,.06)}
+  .faq-page .faq-list .faq-icon svg{width:16px;height:16px}
+  .faq-page .faq-list .faq-answer{padding:0 16px 16px;color:#b8c2bc;font-size:11.5px;line-height:1.65}
+  .faq-page .faq-item[open] .faq-answer{padding-top:14px;border-top:1px solid rgba(221,177,58,.14)}
+  html[dir="rtl"] .faq-page .faq-list .faq-item>summary{text-align:right;padding-right:16px;padding-left:12px}
+  html[dir="rtl"] .faq-page .faq-list .faq-icon{justify-self:start}
+}

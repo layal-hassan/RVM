@@ -55,3 +55,79 @@
   .feedback-page .feedback-success h2 { font-size: 42px !important; }
   .feedback-page .feedback-success p { font-size: 16px !important; }
 }
+
+/* Compact, touch-friendly feedback layout on phones. */
+@media (max-width: 640px) {
+  .feedback-hero { padding-top: 28px; }
+  .feedback-shell { width: min(100% - 28px, 520px); gap: 22px; }
+  .feedback-page .feedback-copy h1 { font-size: clamp(38px, 11vw, 48px) !important; }
+  .feedback-page .feedback-copy > p { font-size: 14px !important; line-height: 1.55; }
+
+  .feedback-benefits {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+    margin: 22px 0 0;
+  }
+
+  .feedback-page .feedback-benefits li {
+    min-width: 0;
+    min-height: 88px;
+    padding: 12px 9px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(218,171,42,.24);
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(25,34,17,.92), rgba(8,16,10,.96));
+    font-size: 11px !important;
+    text-align: center;
+  }
+
+  .feedback-page .feedback-benefits li:last-child {
+    grid-column: 1 / -1;
+    min-height: 62px;
+    flex-direction: row;
+  }
+
+  .feedback-benefits li > span {
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+  }
+
+  .feedback-card {
+    margin-bottom: 36px;
+    padding: 20px 15px;
+    border-radius: 12px;
+  }
+
+  .feedback-grid { gap: 17px; }
+  .feedback-page .feedback-field .form-control { min-height: 52px; }
+
+  .feedback-page .feedback-stars {
+    width: 100%;
+    min-height: 58px;
+    justify-content: space-between;
+    gap: 4px;
+    padding: 2px 4px;
+  }
+
+  .feedback-page .feedback-stars label {
+    width: 52px;
+    height: 54px;
+    font-size: 48px !important;
+    line-height: 1 !important;
+    filter: drop-shadow(0 2px 5px rgba(232,181,49,.18));
+  }
+
+  .feedback-page .feedback-rating small {
+    margin-top: 0;
+    font-size: 11px !important;
+  }
+
+  .feedback-page .feedback-btn {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+  }
+}

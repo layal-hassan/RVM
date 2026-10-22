@@ -204,8 +204,41 @@
   .for-brf-page .brf-hero-copy > p { font-size: 14px !important; }
   .brf-hero-actions { display: grid; grid-template-columns: 1fr; gap: 11px; }
   .brf-hero-actions .btn { width: 100%; min-width: 0; }
-  .brf-benefits { grid-template-columns: 1fr; gap: 0; margin-top: 30px; }
-  .brf-benefits > div, .brf-benefits > div:first-child { padding: 13px 0; border-left: 0; border-top: 1px solid rgba(226,181,55,.25); }
+  .brf-benefits {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 26px;
+  }
+  .brf-benefits > div,
+  .brf-benefits > div:first-child {
+    min-width: 0;
+    min-height: 106px;
+    padding: 14px 10px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(226,181,55,.28);
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(24,33,18,.92), rgba(6,13,8,.94));
+    box-shadow: 0 12px 25px rgba(0,0,0,.2);
+    text-align: center;
+  }
+  .brf-benefits > div:last-child {
+    grid-column: 1 / -1;
+    min-height: 76px;
+    flex-direction: row;
+  }
+  .brf-benefit-icon {
+    flex-basis: 34px;
+  }
+  .brf-benefit-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+  .for-brf-page .brf-benefits strong {
+    font-size: 11px !important;
+    line-height: 1.35;
+  }
   .brf-services { padding: 52px 0 62px; }
   .for-brf-page .brf-services-header h2 { font-size: 34px !important; }
   .brf-services-grid { grid-template-columns: 1fr; }
