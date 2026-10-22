@@ -366,7 +366,7 @@ def _on_call_coverage_scope_labels():
 
 
 def _send_on_call_company_notification_email(*, booking, booking_reference, currency="SEK"):
-    company_email = getattr(settings, "CONTACT_TO_EMAIL", None) or "info@rwmel.se"
+    company_email = getattr(settings, "BOOKING_TO_EMAIL", None) or "services@rwmel.se"
     from_email = (
         getattr(settings, "BOOKING_FROM_EMAIL", None)
         or getattr(settings, "DEFAULT_FROM_EMAIL", None)
@@ -1248,7 +1248,7 @@ def support(request):
                     subject,
                     body,
                     from_email,
-                    ["support@rwmel.se"],
+                    [getattr(settings, "SUPPORT_TO_EMAIL", "support@rwmel.se")],
                     connection=support_email_connection(),
                 )
                 if data.get("email"):

@@ -6,6 +6,35 @@
     --muted: #6b7280;
 }
 
+/* Keep every consultation field consistent with the black booking theme. */
+.booking-flow input.booking-input,
+.booking-flow textarea.booking-input,
+.booking-flow select.booking-input,
+.booking-flow input.form-control,
+.booking-flow textarea.form-control,
+.booking-flow select.form-control,
+.booking-flow .ts-control,
+.booking-flow .review-field-wrap input,
+.booking-flow .review-field-wrap select {
+    background-color: #000 !important;
+    background-image: none !important;
+    color: #f5f1e6 !important;
+}
+
+.booking-flow input:-webkit-autofill,
+.booking-flow input:-webkit-autofill:hover,
+.booking-flow input:-webkit-autofill:focus,
+.booking-flow input:-webkit-autofill:active,
+.booking-flow textarea:-webkit-autofill,
+.booking-flow textarea:-webkit-autofill:hover,
+.booking-flow textarea:-webkit-autofill:focus,
+.booking-flow select:-webkit-autofill {
+    -webkit-text-fill-color: #f5f1e6 !important;
+    caret-color: #f5f1e6 !important;
+    -webkit-box-shadow: 0 0 0 1000px #000 inset !important;
+    box-shadow: 0 0 0 1000px #000 inset !important;
+}
+
 /* RWM EL dark consultation flow */
 .booking-flow {
     --navy: #f5ead0;
@@ -1062,6 +1091,18 @@ html[dir="rtl"] .booking-input {
         flex-direction: column;
         align-items: stretch;
     }
+}
+
+.booking-flow :is(input.booking-input, textarea.booking-input, select.booking-input, input.form-control, textarea.form-control, select.form-control, .ts-control),
+.booking-flow .review-field-wrap :is(input, select) {
+    background-color: #000 !important;
+    background-image: none !important;
+    color: #f5f1e6 !important;
+}
+.booking-flow :is(input, textarea, select):-webkit-autofill {
+    -webkit-text-fill-color: #f5f1e6 !important;
+    -webkit-box-shadow: 0 0 0 1000px #000 inset !important;
+    box-shadow: 0 0 0 1000px #000 inset !important;
 }
 
 /* ===== Booking Flow Theme Refresh ===== */

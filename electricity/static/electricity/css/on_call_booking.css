@@ -15,6 +15,32 @@
   --oc-gold-soft: #e4c176;
 }
 
+/* Keep every field consistent with the black booking theme. */
+.on-call-booking-page input.form-control,
+.on-call-booking-page textarea.form-control,
+.on-call-booking-page select.form-control,
+.on-call-booking-page input:not([type="radio"]):not([type="checkbox"]):not([type="hidden"]):not([type="file"]),
+.on-call-booking-page textarea,
+.on-call-booking-page select {
+  background-color: #000 !important;
+  background-image: none !important;
+  color: #f8f1df !important;
+}
+
+.on-call-booking-page input:-webkit-autofill,
+.on-call-booking-page input:-webkit-autofill:hover,
+.on-call-booking-page input:-webkit-autofill:focus,
+.on-call-booking-page input:-webkit-autofill:active,
+.on-call-booking-page textarea:-webkit-autofill,
+.on-call-booking-page textarea:-webkit-autofill:hover,
+.on-call-booking-page textarea:-webkit-autofill:focus,
+.on-call-booking-page select:-webkit-autofill {
+  -webkit-text-fill-color: #f8f1df !important;
+  caret-color: #f8f1df !important;
+  -webkit-box-shadow: 0 0 0 1000px #000 inset !important;
+  box-shadow: 0 0 0 1000px #000 inset !important;
+}
+
 .on-call-booking-page {
   background: var(--oc-bg);
   color: var(--oc-ink);
@@ -1352,4 +1378,16 @@ body.electricity-body.on-call-booking-page {
     padding: 44px 20px;
     background-position: 58% center;
   }
+}
+
+.on-call-booking-page :is(input.form-control, textarea.form-control, select.form-control),
+.on-call-booking-page input:not([type="radio"]):not([type="checkbox"]):not([type="hidden"]):not([type="file"]) {
+  background-color: #000 !important;
+  background-image: none !important;
+  color: #f8f1df !important;
+}
+.on-call-booking-page :is(input, textarea, select):-webkit-autofill {
+  -webkit-text-fill-color: #f8f1df !important;
+  -webkit-box-shadow: 0 0 0 1000px #000 inset !important;
+  box-shadow: 0 0 0 1000px #000 inset !important;
 }
