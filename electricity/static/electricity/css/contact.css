@@ -109,6 +109,43 @@
 
 /* Compact project-information card on phones. */
 @media(max-width:600px){
+  .contact-page-v2 .contact-v2{
+    width:100%;
+    max-width:none;
+    margin:0;
+  }
+  .contact-page-v2 .contact-v2-hero{
+    width:100vw;
+    max-width:none;
+    margin-inline:calc(50% - 50vw);
+    place-items:center;
+    background-position:57% center;
+  }
+  .contact-page-v2 .contact-v2-hero-content{
+    width:min(100% - 32px,430px);
+    margin-inline:auto;
+    padding:46px 0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+  .contact-page-v2 .contact-v2-hero h1,
+  .contact-page-v2 .contact-v2-hero p{
+    width:100%;
+    margin-inline:auto;
+    text-align:center;
+  }
+  .contact-page-v2 .contact-v2-hero-actions{
+    width:min(100%,300px);
+    margin-inline:auto;
+    align-items:stretch;
+  }
+  .contact-page-v2 .contact-v2-hero-actions a{
+    width:100%;
+    min-width:0;
+    text-align:center;
+  }
   .contact-v2-workspace{padding:24px 0 38px;background-attachment:scroll}
   .contact-v2-layout{gap:12px}
   .contact-page-v2 .contact-v2-info{padding:20px 16px;border-radius:12px}
