@@ -1,7 +1,7 @@
 {% extends "electricity/base.html" %}
 {% load static i18n %}
 {% block title %}{% trans "Contact RWM EL" %}{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/contact.css' %}?v=20261022-11">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/contact.css' %}?v=20261022-12">{% endblock %}
 {% block body_class %}contact-page contact-page-v2{% endblock %}
 {% block content %}
 <style>
@@ -23,9 +23,9 @@
   }
   body.contact-page-v2 .contact-v2-hero {
     display: grid !important;
-    width: 100vw !important;
-    max-width: 100vw !important;
-    min-width: 100vw !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
     margin: 0 !important;
     flex: none !important;
     padding-right: 0 !important;
