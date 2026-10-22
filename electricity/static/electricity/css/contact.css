@@ -115,7 +115,7 @@
     margin:0;
   }
   .contact-page-v2 .contact-v2-hero{
-    width:100%;
+    width:calc(100% + 32px);
     max-width:none;
     margin-inline:0;
     place-items:center;
@@ -123,7 +123,7 @@
   }
   .contact-page-v2 .contact-v2-hero-content{
     width:min(100% - 32px,430px);
-    margin-inline:auto;
+    margin-inline:0 32px;
     padding:46px 0;
     display:flex;
     flex-direction:column;
