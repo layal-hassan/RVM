@@ -1,9 +1,40 @@
 {% extends "electricity/base.html" %}
 {% load static i18n %}
 {% block title %}{% trans "Contact RWM EL" %}{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/contact.css' %}?v=20261022-5">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/contact.css' %}?v=20261022-6">{% endblock %}
 {% block body_class %}contact-page contact-page-v2{% endblock %}
 {% block content %}
+<style>
+@media (max-width: 600px) {
+  body.contact-page-v2,
+  body.contact-page-v2 .contact-v2 {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+  body.contact-page-v2 .contact-v2-hero {
+    display: grid !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    place-items: center !important;
+    background-size: cover !important;
+  }
+  body.contact-page-v2 .contact-v2-hero-content {
+    width: calc(100% - 32px) !important;
+    max-width: 430px !important;
+    margin: 0 auto !important;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+}
+</style>
 <main class="contact-v2">
   <section class="contact-v2-hero" aria-labelledby="contact-hero-title">
     <div class="contact-v2-hero-content">
