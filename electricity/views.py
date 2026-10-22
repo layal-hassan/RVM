@@ -477,6 +477,57 @@ def _send_custom_booking_confirmation_email(
         logger.exception("Booking confirmation email failed to send to %s.", to_email)
 
 
+def _send_booking_company_notification_email(
+    *,
+    booking_reference,
+    booking_type_label,
+    customer_name,
+    customer_email,
+    customer_phone,
+    address,
+    summary_lines=None,
+):
+    """Notify the company mailbox when a customer completes a booking."""
+    company_email = (
+        getattr(settings, "BOOKING_TO_EMAIL", None)
+        or "services@rwmel.se"
+    )
+    from_email = (
+        getattr(settings, "BOOKING_FROM_EMAIL", None)
+        or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+        or "support@rwmel.se"
+    )
+    lines = [
+        "A new booking has been submitted.",
+        "",
+        f"Reference: {booking_reference}",
+        f"Booking type: {booking_type_label}",
+        f"Customer: {customer_name or '-'}",
+        f"Email: {customer_email or '-'}",
+        f"Phone: {customer_phone or '-'}",
+        f"Address: {address or '-'}",
+    ]
+    if summary_lines:
+        lines.extend(["", "Booking details:"])
+        lines.extend(f"- {line}" for line in summary_lines if line)
+    lines.extend(["", "The complete booking is available in the RWM EL dashboard."])
+
+    try:
+        EmailMessage(
+            subject=f"New {booking_type_label} - {booking_reference}",
+            body="\n".join(lines),
+            from_email=from_email,
+            to=[company_email],
+            reply_to=[customer_email] if customer_email else None,
+            connection=support_email_connection(),
+        ).send(fail_silently=False)
+    except Exception:
+        logger.exception(
+            "Company notification email failed for booking %s.",
+            booking_reference,
+        )
+
+
 def home(request):
     testimonials = CustomerFeedback.objects.filter(is_approved=True).order_by("-created_at")[:4]
     hero_pricing = HomeHeroPricing.objects.first()
@@ -2240,6 +2291,23 @@ def booking_step_7(request):
                 "If we need more project details, our team will contact you using the information you submitted.",
             ],
         )
+        _send_booking_company_notification_email(
+            booking_reference=f"CB-{booking.id:06d}",
+            booking_type_label="Consultation Booking",
+            customer_name=booking.full_name,
+            customer_email=booking.email,
+            customer_phone=booking.phone,
+            address=", ".join(
+                part for part in [booking.street_address, booking.postal_code, booking.city] if part
+            ),
+            summary_lines=[
+                f"Consultation type: {booking.consultation_type or '-'}",
+                f"Property type: {booking.property_type or '-'}",
+                f"Requested date: {booking.preferred_date or '-'}",
+                f"Requested time: {booking.preferred_time_slot or '-'}",
+                f"Consultation fee: {'Free first consultation' if booking.is_first_free else _format_currency_amount(booking.consultation_price, pricing.currency if pricing else 'SEK')}",
+            ],
+        )
         _create_and_queue_invoice(booking)
         request.session.pop(BOOKING_SESSION_KEY, None)
         return redirect("electricity:booking_thank_you")
@@ -2699,6 +2767,23 @@ def electrician_booking_step(request, step):
                         "You will be contacted if we need access details or scheduling adjustments.",
                     ],
                 )
+                _send_booking_company_notification_email(
+                    booking_reference=f"RWM-{booking.id:06d}",
+                    booking_type_label="Electrician Booking",
+                    customer_name=booking.full_name,
+                    customer_email=booking.email,
+                    customer_phone=booking.phone,
+                    address=", ".join(
+                        part for part in [booking.street_address, booking.zip_code, booking.city] if part
+                    ),
+                    summary_lines=[
+                        f"Service type: {_electrician_service_type_label(booking.property_type)}",
+                        f"Requested date: {booking.preferred_date or '-'}",
+                        f"Arrival window: {booking.arrival_window or '-'}",
+                        f"Estimated duration: {booking.hours} hour(s)",
+                        f"Estimated total: {_format_currency_amount(booking.estimated_total, booking.currency or 'SEK')}",
+                    ],
+                )
                 _create_and_queue_invoice(booking)
                 request.session.pop(ELECTRICIAN_BOOKING_SESSION_KEY, None)
                 request.session["electrician_booking_id"] = booking.id
@@ -3135,6 +3220,23 @@ def service_booking_step(request, step):
                 next_steps=[
                     "We will review provider availability for your selected time.",
                     "Your assigned team will contact you if any change is needed before arrival.",
+                ],
+            )
+            _send_booking_company_notification_email(
+                booking_reference=f"SB-{booking.id:06d}",
+                booking_type_label="Service Booking",
+                customer_name=booking.full_name,
+                customer_email=booking.email,
+                customer_phone=booking.phone,
+                address=", ".join(
+                    part for part in [booking.street_address, booking.zip_code, booking.city] if part
+                ),
+                summary_lines=[
+                    f"Selected services: {', '.join(_service_titles_for_ids(booking.services)) or 'Custom service request'}",
+                    f"Requested date: {booking.preferred_date or '-'}",
+                    f"Requested time: {booking.preferred_time_slot or '-'}",
+                    f"Pricing model: {booking.get_pricing_type_display()}",
+                    f"Estimated total: {_format_currency_amount(booking.estimated_total, booking.currency or 'SEK')}",
                 ],
             )
             _create_and_queue_invoice(booking)

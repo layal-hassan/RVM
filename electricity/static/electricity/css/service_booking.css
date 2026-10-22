@@ -1873,10 +1873,38 @@ body.electricity-body.service-booking-page {
 .service-booking-page select.form-control,
 .service-booking-page input:not([type="radio"]):not([type="checkbox"]):not([type="hidden"]),
 .service-booking-page textarea,
-.service-booking-page select {
-  background: rgba(247, 244, 237, 0.05);
+.service-booking-page select,
+.service-booking-page .ts-control,
+.service-booking-page .ts-wrapper.single .ts-control,
+.service-booking-page .ts-wrapper.single.input-active .ts-control {
+  background-color: #000;
+  background-image: none;
   color: #f5f1e6;
   border: 1px solid rgba(202, 161, 61, 0.16);
+}
+
+/* Prevent Chrome autofill from replacing the black fields with blue. */
+.service-booking-page input:-webkit-autofill,
+.service-booking-page input:-webkit-autofill:hover,
+.service-booking-page input:-webkit-autofill:focus,
+.service-booking-page textarea:-webkit-autofill,
+.service-booking-page textarea:-webkit-autofill:hover,
+.service-booking-page textarea:-webkit-autofill:focus,
+.service-booking-page select:-webkit-autofill,
+.service-booking-page select:-webkit-autofill:hover,
+.service-booking-page select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #f5f1e6;
+  caret-color: #f5f1e6;
+  box-shadow: 0 0 0 1000px #000 inset;
+  transition: background-color 9999s ease-out 0s;
+}
+
+.service-booking-page select option,
+.service-booking-page .ts-dropdown,
+.service-booking-page .ts-dropdown .option,
+.service-booking-page .ts-dropdown .optgroup-header {
+  background: #000;
+  color: #f5f1e6;
 }
 
 .service-booking-page .form-control::placeholder,

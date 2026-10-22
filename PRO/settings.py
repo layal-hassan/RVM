@@ -455,6 +455,7 @@ INVOICE_PUBLIC_BASE_URL = os.getenv("INVOICE_PUBLIC_BASE_URL", "https://www.rwme
 INVOICE_LINK_MAX_AGE = int(os.getenv("INVOICE_LINK_MAX_AGE", str(60 * 60 * 24 * 90)))
 SERVER_EMAIL = os.getenv("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
 BOOKING_FROM_EMAIL = os.getenv("BOOKING_FROM_EMAIL", DEFAULT_FROM_EMAIL)
+BOOKING_TO_EMAIL = os.getenv("BOOKING_TO_EMAIL", "services@rwmel.se")
 CONTACT_TO_EMAIL = os.getenv("CONTACT_TO_EMAIL", "info@rwmel.se")
 EMAIL_HOST = os.getenv("EMAIL_HOST", "")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
