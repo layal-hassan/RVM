@@ -167,6 +167,22 @@
   }
 }
 
+/* Keep the application submit control from stretching across the form grid. */
+.careers-page .careers-form > button[type="submit"] {
+  width: min(100%, 270px) !important;
+  height: 52px !important;
+  min-height: 52px !important;
+  max-height: 52px !important;
+  grid-column: 1;
+  align-self: start;
+  justify-self: start;
+  flex: 0 0 auto;
+}
+
+.careers-page .careers-form > input[type="hidden"] {
+  display: none !important;
+}
+
 .careers-page .careers-job-card__apply:hover {
   color: #151005;
   background: #e3b527;
