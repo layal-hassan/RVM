@@ -618,7 +618,21 @@ html[dir="rtl"] .category-line-list {
 }
 
 .category-card-body {
+  display: flex;
+  flex-direction: column;
   flex: 1;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Keep the package accordions aligned even when cards have different metadata. */
+.category-card-intro-meta {
+  min-height: 7em;
+}
+
+.category-card-intro-meta .category-line-list {
+  line-height: 1.6;
 }
 
 .category-card-subtitle {
@@ -1505,6 +1519,15 @@ html[dir="rtl"] .category-cta-arrow {
 }
 
 .request-flow { width:min(1500px,calc(100vw - 64px)); max-width:none; height:min(820px,calc(100vh - 48px)); max-height:none; padding:0; color:#f5f2e9; background:linear-gradient(145deg,#07151d,#0b1118 55%,#111318); border:1px solid rgba(226,180,54,.5); border-radius:16px; box-shadow:0 30px 100px rgba(0,0,0,.8); overflow-x:hidden; overflow-y:auto; font-family:Arial,sans-serif; font-size:13px; line-height:1.4; box-sizing:border-box; }
+.request-flow.is-added-step { width:min(540px,calc(100vw - 32px)); height:auto !important; min-height:0; max-height:calc(100vh - 32px); }
+.request-flow.is-added-step form { min-height:0 !important; padding:22px 24px 24px; }
+.request-flow.is-added-step .request-flow-progress { display:flex; align-items:center; gap:6px; margin:0 42px 20px 0; }
+.request-flow.is-added-step .request-flow-progress span { flex:0 0 auto; font-size:0; }
+.request-flow.is-added-step .request-flow-progress span.is-active { font-size:11px; }
+.request-flow.is-added-step .request-flow-progress span:not(:last-child)::after { width:18px; flex:0 0 18px; }
+.request-flow.is-added-step .request-flow-progress b { flex-basis:26px; width:26px; height:26px; font-size:11px; }
+.request-flow.is-added-step .request-flow-service { margin-inline:auto; }
+.request-flow.is-added-step .request-flow-actions { margin-top:22px; }
 .request-flow * { box-sizing:border-box; min-width:0; }
 .request-flow::backdrop { background:rgba(1,5,8,.84); backdrop-filter:blur(7px); }
 .request-flow form { width:100%; min-height:100%; padding:22px 34px 28px; overflow:hidden; }
@@ -5478,10 +5501,11 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 .oncall-ecosystem-points li::before { content: ""; position: absolute; inset-inline-start: 0; top: .52em; width: 5px; height: 5px; border-radius: 50%; background: #e0b533; box-shadow: 0 0 7px rgba(224,181,51,.45); }
 
 .oncall-project-support { padding: 62px 0 72px; background: radial-gradient(circle at 45% 25%, rgba(67,80,29,.15), transparent 44%), #0b1009; color: #f6f0e2; }
-.oncall-project-banner { position: relative; overflow: hidden; display: grid; grid-template-columns: 1.25fr .75fr; align-items: center; min-height: 300px; padding: 38px 46px; border: 1px solid rgba(210,170,58,.3); border-radius: 8px; background: linear-gradient(90deg, rgba(8,11,8,.3) 0%, rgba(8,11,8,.16) 48%, rgba(8,11,8,.08) 100%), url("../img/project-support-electrician-v2.png") center/cover; box-shadow: 0 24px 54px rgba(0,0,0,.28); }
-.oncall-project-copy { position: relative; z-index: 1; max-width: 620px; }.oncall-project-copy > span { color: #d8ad33; font: 700 10px/1.2 Arial, sans-serif; letter-spacing: .2em; text-transform: uppercase; }.oncall-project-copy h2 { margin: 10px 0 12px; color: #f7f1e5; font-size: clamp(32px, 3.6vw, 50px); line-height: .98; }.oncall-project-copy > p { max-width: 540px; margin: 0; color: rgba(247,241,229,.72); font: 12px/1.55 Arial, sans-serif; }
-.oncall-project-badges { display: flex; flex-wrap: wrap; gap: 0; margin-top: 25px; }.oncall-project-badges span { display: inline-flex; align-items: center; gap: 9px; min-height: 30px; padding: 0 24px; border-left: 1px solid rgba(213,174,54,.35); color: rgba(255,255,255,.82); font: 700 9px/1.35 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }.oncall-project-badges span:first-child { padding-left: 0; border-left: 0; }.oncall-project-badges b { color: #dcb234; font-size: 18px; }
-.oncall-project-cta { position: relative; z-index: 1; display: grid; justify-items: center; gap: 10px; }.oncall-project-cta .btn { display: inline-flex; align-items: center; gap: 16px; min-width: 260px; justify-content: center; border-radius: 999px; }.oncall-project-cta small { color: #d9b249; font: 700 8px/1.3 Arial, sans-serif; letter-spacing: .18em; text-transform: uppercase; }
+.oncall-project-banner { --project-overlay-alpha: 0; --project-shift: 0px; position: relative; isolation: isolate; overflow: hidden; display: grid; grid-template-columns: 1fr; justify-items: center; align-items: center; width: 100vw; min-height: 500px; margin-inline: calc(50% - 50vw); padding: 72px max(46px, calc((100vw - 1120px) / 2)) 46px; border: 0; border-radius: 0; text-align: center; background-image: linear-gradient(115deg, rgba(5,9,5,.08), rgba(10,14,8,.02) 48%, rgba(5,8,5,.08)), url("../img/project-support-electrician-v2.png"); background-position: center, calc(100% + var(--project-shift)) 42%; background-size: cover, 180% auto; background-repeat: no-repeat; background-attachment: scroll, fixed; box-shadow: 0 28px 65px rgba(0,0,0,.4), inset 0 0 70px rgba(0,0,0,.2); }
+.oncall-project-banner::before { position: absolute; z-index: -1; inset: 0; content: ""; background: rgba(0,0,0,var(--project-overlay-alpha)); pointer-events: none; transition: background .18s linear; }
+.oncall-project-copy { position: relative; z-index: 1; max-width: 760px; padding-top: 42px; }.oncall-project-copy::before, .oncall-project-copy::after { position: absolute; top: 11px; width: 118px; height: 1px; content: ""; background: linear-gradient(90deg, transparent, rgba(224,183,58,.72)); }.oncall-project-copy::before { left: calc(50% - 150px); }.oncall-project-copy::after { right: calc(50% - 150px); transform: scaleX(-1); }.oncall-project-copy > span { color: #d8ad33; font: 700 10px/1.2 Arial, sans-serif; letter-spacing: .2em; text-shadow: 0 2px 9px rgba(0,0,0,.9); text-transform: uppercase; }.oncall-project-copy h2 { margin: 10px 0 14px; color: #fff7e4; font-size: clamp(30px, 3vw, 42px); line-height: 1.12; letter-spacing: .035em; text-shadow: 0 2px 18px rgba(0,0,0,.9); text-transform: uppercase; }.oncall-project-copy > p { max-width: 720px; margin: 0 auto; color: rgba(255,250,235,.9); font: 400 15px/1.75 Arial, sans-serif; letter-spacing: .01em; text-shadow: 0 1px 8px rgba(0,0,0,.95); }
+.oncall-project-badges { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.2); }.oncall-project-badges span { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 30px; padding: 0 24px; border-left: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.92); font: 700 9px/1.35 Arial, sans-serif; letter-spacing: .08em; text-shadow: 0 2px 7px rgba(0,0,0,.95); text-transform: uppercase; }.oncall-project-badges span:first-child { padding-left: 0; border-left: 0; }.oncall-project-badges b { color: #dcb234; font-size: 18px; text-shadow: 0 2px 7px rgba(0,0,0,.8); }
+.oncall-project-cta { position: relative; z-index: 1; display: grid; justify-items: center; gap: 10px; margin-top: 30px; }.oncall-project-cta .btn { display: inline-flex; align-items: center; gap: 16px; min-width: 260px; justify-content: center; border-radius: 999px; }.oncall-project-cta small { color: #d9b249; font: 700 8px/1.3 Arial, sans-serif; letter-spacing: .18em; text-shadow: 0 2px 7px rgba(0,0,0,.9); text-transform: uppercase; }
 .oncall-project-options { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px; margin-top: 42px; }
 .oncall-project-option { min-height: 230px; padding: 25px 26px 23px; border: 1px solid rgba(205,163,45,.24); border-radius: 7px; background: linear-gradient(145deg, rgba(25,32,16,.94), rgba(10,15,8,.96)); }.oncall-project-icon { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 18px; border: 1px solid rgba(213,174,54,.5); border-radius: 50%; color: #e0b638; font-size: 21px; }.oncall-project-option h3 { margin: 0 0 9px; color: #f2dfac; font-size: 22px; }.oncall-project-option p { min-height: 48px; margin: 0 0 20px; color: rgba(245,240,228,.68); font: 11px/1.55 Arial, sans-serif; }.oncall-project-option a { color: #dcb235; font: 700 10px/1.4 Arial, sans-serif; letter-spacing: .14em; text-decoration: none; text-transform: uppercase; }.oncall-project-option a:hover { color: #f5d476; }
 
@@ -5954,7 +5978,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   .oncall-priority-inner { grid-template-columns: 1fr; gap: 22px; }
   .oncall-priority-action { justify-items: start; padding: 20px 0 0; border-left: 0; border-top: 1px solid rgba(64,47,9,.3); }
   .oncall-ecosystem-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .oncall-project-banner { grid-template-columns: 1fr; gap: 30px; background-position: 62% center; }
+  .oncall-project-banner { grid-template-columns: 1fr; gap: 30px; background-position: center, right center; background-size: cover, 180% auto; }
   .oncall-project-cta { justify-items: start; }
   .oncall-project-options { grid-template-columns: 1fr; }
   .oncall-project-option { min-height: 0; }
@@ -6053,7 +6077,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   .oncall-ecosystem-grid { grid-template-columns: 1fr; }
   .oncall-ecosystem-media { height: 190px; }
   .oncall-project-support { padding: 46px 0 52px; }
-  .oncall-project-banner { min-height: 500px; padding: 30px 22px; align-content: end; background-image: linear-gradient(180deg, rgba(8,11,8,.18), rgba(8,11,8,.96) 67%), url("../img/project-support-electrician-v2.png"); background-position: 67% center; }
+  .oncall-project-banner { min-height: 560px; padding: 30px 22px; align-content: end; background-image: linear-gradient(180deg, rgba(8,11,8,.04), rgba(8,11,8,.12)), url("../img/project-support-electrician-v2.png"); background-position: center, right center; background-size: cover, 180% auto; }
   .oncall-project-copy h2 { font-size: 35px; }
   .oncall-project-badges { display: grid; grid-template-columns: 1fr; gap: 8px; }
   .oncall-project-badges span, .oncall-project-badges span:first-child { padding: 5px 0; border-left: 0; }
@@ -6096,6 +6120,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
     padding: 30px 22px;
   }
 }
+
 
 @media (max-width: 480px) {
   .oncall-hero {
@@ -7096,5 +7121,98 @@ select:autofill {
     min-height: 46px;
     justify-content: center;
     text-align: center;
+  }
+}
+[class~="services-booking-content"] h2 {
+  max-width: 540px;
+  margin: 0 0 14px;
+  line-height: 1.04 !important;
+}
+
+[class~="services-booking-content"] > p {
+  max-width: 520px;
+  margin: 0 0 27px;
+  line-height: 1.55;
+}
+
+.services-booking-content .services-trust-actions {
+  margin-top: 0;
+}
+
+.services-booking-content .service-section-kicker {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .2em;
+}
+
+.services-booking-content h2 {
+  font-size: clamp(32px, 3vw, 45px) !important;
+  font-weight: 400 !important;
+  letter-spacing: -.018em;
+}
+
+.services-booking-content > p {
+  color: rgba(245, 239, 225, .68);
+  font-size: 13px !important;
+  font-weight: 400;
+}
+
+.services-booking-content .services-trust-actions .btn {
+  min-height: 46px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .18em;
+}
+
+.services-booking-content .services-booking-notes {
+  color: rgba(245, 239, 225, .58);
+  font-size: 10px;
+  font-weight: 400;
+}
+
+/* Full-bleed booking CTA: image behind the copy with a readable transparent veil. */
+.services-booking-split {
+  position: relative;
+  display: block;
+  min-height: 455px;
+  overflow: hidden;
+}
+
+.services-booking-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background-position: center;
+}
+
+.services-booking-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 455px;
+  box-sizing: border-box;
+  padding: 64px 7% 64px 58%;
+  background: linear-gradient(90deg, rgba(7, 13, 7, .08) 0%, rgba(7, 13, 7, .38) 42%, rgba(7, 13, 7, .88) 67%, rgba(7, 13, 7, .95) 100%);
+}
+
+@media (max-width: 980px) {
+  .services-booking-content {
+    min-height: 455px;
+    padding: 56px 8% 56px 48%;
+  }
+}
+
+@media (max-width: 640px) {
+  .services-booking-split {
+    min-height: 600px;
+  }
+
+  .services-booking-content {
+    min-height: 600px;
+    padding: 52px 24px;
+    background: linear-gradient(180deg, rgba(7, 13, 7, .76), rgba(7, 13, 7, .92));
   }
 }

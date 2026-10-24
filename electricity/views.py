@@ -1064,7 +1064,11 @@ def pricing(request):
     active_pricing = ServicePricing.objects.filter(is_active=True).order_by("-created_at").first()
     labor_rate = active_pricing.labor_rate if active_pricing else Decimal("688")
     transport_fee = active_pricing.transport_fee if active_pricing else Decimal("500")
-    rot_percent = active_pricing.rot_percent if active_pricing else Decimal("30")
+    rot_percent = (
+        active_pricing.rot_percent
+        if active_pricing and active_pricing.rot_percent is not None
+        else Decimal("30")
+    )
     currency = active_pricing.currency if active_pricing else "SEK"
     base_total = labor_rate + transport_fee
     rot_deduction = labor_rate * rot_percent / Decimal("100")

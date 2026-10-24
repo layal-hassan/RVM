@@ -29,7 +29,7 @@
         <div><span class="oncall-trust-icon" aria-hidden="true">♢</span><span>{% trans "Safe & certified" %}<br>{% trans "Professional service" %}</span></div>
       </div>
     </div>
-    <div class="oncall-hero-card">
+      <div class="oncall-hero-card">
       <span class="oncall-card-bolt" aria-hidden="true">ϟ</span>
       <div>
         <strong>{% trans "ON-CALL" %}</strong>
@@ -251,6 +251,36 @@
     </div>
   </div>
 </section>
+
+<script>
+  (() => {
+    const banner = document.querySelector('.oncall-project-banner');
+    if (!banner) return;
+
+    let ticking = false;
+    const updateBannerScroll = () => {
+      const rect = banner.getBoundingClientRect();
+      const viewport = window.innerHeight || document.documentElement.clientHeight;
+      const progress = Math.max(0, Math.min(1, (viewport - rect.top) / (viewport + rect.height)));
+      const shift = Math.round((progress - 0.5) * 28);
+      const overlay = Math.max(0, 0.12 - progress * 0.16).toFixed(3);
+      banner.style.setProperty('--project-shift', `${shift}px`);
+      banner.style.setProperty('--project-overlay-alpha', overlay);
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateBannerScroll);
+        ticking = true;
+      }
+    };
+
+    updateBannerScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', updateBannerScroll, { passive: true });
+  })();
+</script>
 
 <section class="oncall-section light oncall-section-audience">
   <div class="container">

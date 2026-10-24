@@ -140,13 +140,15 @@
           <p>{{ item.description }}</p>
           {% endif %}
 
-          {% if item.meta_lines %}
-          <ul class="category-line-list">
-            {% for line in item.meta_lines|split_lines %}
-            <li>{{ line }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
+          <div class="category-card-intro-meta">
+            {% if item.meta_lines %}
+            <ul class="category-line-list">
+              {% for line in item.meta_lines|split_lines %}
+              <li>{{ line }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
 
           {% if item.included_title or item.included_lines %}
           <details class="category-package-accordion is-included" open>
@@ -245,7 +247,7 @@
 
           {% if item.pricing_mode == "quote" %}
           <div class="category-card-footer category-quote-footer">
-            <a class="category-card-cta category-card-cta-primary js-request-flow" href="#request-flow" data-item-id="{{ item.id }}" data-source="{% if page.parent_category_id %}detail{% else %}category{% endif %}" data-title="{{ item.title|escape }}" data-description="{{ item.description|default:item.subtitle|escape }}" data-mode="quote" data-price="" {% if item.image %}data-image="{{ item.image.url }}"{% endif %}>
+            <a class="category-card-cta category-card-cta-primary" href="{% url 'electricity:quote_request_step' 1 %}?item={{ item.id }}&amp;source={% if page.parent_category_id %}detail{% else %}category{% endif %}">
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7zM14 3v5h5M10 12h5M10 16h5"/></svg>
               <span>{% trans "Request a quote" %}</span>
               

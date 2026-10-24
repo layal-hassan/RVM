@@ -37,6 +37,7 @@
   }
   function show(next) {
     step = next;
+    dialog.classList.toggle("is-added-step", next === 2);
     dialog.querySelectorAll("[data-step]").forEach(node => node.classList.toggle("is-active", Number(node.dataset.step) === step));
     updateProgress(); clearErrors(); dialog.scrollTop = 0;
   }
@@ -120,7 +121,8 @@
     lastAdded = cart.find(item => item.key === key);
     dialog.querySelector("[data-added-service]").innerHTML = serviceRow(lastAdded);
     renderCart();
-    openDrawer();
+    show(2);
+    dialog.showModal();
   }));
   dialog.addEventListener("click", event => {
     const go = event.target.closest("[data-go]");

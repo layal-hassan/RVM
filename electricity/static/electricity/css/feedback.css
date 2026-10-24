@@ -4,6 +4,10 @@
 .feedback-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}.feedback-form-error{margin-bottom:16px}.feedback-stars input:focus-visible+label,.feedback-btn:focus-visible{outline:2px solid #fff;outline-offset:4px}
 @media(prefers-reduced-motion:reduce){.feedback-stars label,.feedback-btn{transition:none}.feedback-btn:hover{transform:none}}
 
+.feedback-page .feedback-card:has(.feedback-success) { padding: 0; }
+.feedback-page .feedback-success { min-height: 0; padding: 42px 30px 38px; }
+.feedback-page .feedback-home-btn { min-width: 250px; min-height: 52px; justify-content: space-between; margin-top: 8px; }
+
 /* Match the stronger typography proportions shown in the feedback reference. */
 .feedback-page .feedback-kicker { font-size: 13px !important; }
 .feedback-page .feedback-copy h1 { font-size: clamp(54px, 4.8vw, 72px) !important; }
@@ -31,6 +35,40 @@
 .feedback-page .feedback-success h2 { font-size: clamp(46px, 4.5vw, 64px) !important; }
 .feedback-page .feedback-success p { font-size: 18px !important; }
 .feedback-success .feedback-btn { min-width: 310px; }
+
+/* Keep the supporting paragraphs and section labels visually balanced. */
+.feedback-page .feedback-copy > p,
+.feedback-page .feedback-thanks p {
+  font-size: 17px !important;
+  line-height: 1.55;
+}
+
+.feedback-page .feedback-kicker,
+.feedback-page .feedback-thanks > div {
+  font-size: 13px !important;
+  min-height: 16px;
+  line-height: 1.2 !important;
+}
+
+.feedback-page .feedback-form > .feedback-btn::after {
+  content: none;
+}
+
+.feedback-page .feedback-btn-arrow {
+  width: 21px;
+  height: 21px;
+  flex: 0 0 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .2s ease;
+}
+
+.feedback-page .feedback-btn:hover .feedback-btn-arrow {
+  transform: translateX(3px);
+}
 
 /* Keep the enlarged copy and artwork in normal flow so they never overlap. */
 .feedback-page .feedback-copy { min-height: 0; }
@@ -129,5 +167,14 @@
     width: 100%;
     min-width: 0;
     justify-content: center;
+  }
+}
+
+@media (min-width: 641px) {
+  .feedback-page .feedback-home-btn {
+    min-width: 200px;
+    min-height: 48px;
+    padding: 12px 18px;
+    gap: 16px;
   }
 }
