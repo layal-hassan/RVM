@@ -195,6 +195,16 @@ body.rwm-mobile-menu-open {
   background: rgba(199, 164, 91, 0.18);
 }
 
+/* Keep Linguise's automatic language control fixed at the viewport's bottom-right. */
+body > .linguise_switcher,
+body > [class*="linguise_switcher"] {
+  position: fixed !important;
+  right: 16px !important;
+  bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+  max-width: calc(100vw - 32px) !important;
+  z-index: 45 !important;
+}
+
 @media (max-width: 1700px) and (min-width: 981px) {
   .rwm-electricity-global-header .rwm-electricity-global-header__inner {
     padding-inline: 24px;

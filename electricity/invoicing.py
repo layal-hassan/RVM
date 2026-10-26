@@ -539,7 +539,8 @@ def invoice_pdf_bytes(invoice):
     display_total_label = "FAKTURABELOPP" if invoice.status == Invoice.Status.PAID else "SUMMA ATT BETALA"
     total_bar = Table(
         [[display_total_label, f"{display_total} {display_currency}"]],
-        colWidths=[125 * mm, 61 * mm],
+        # Keep the total bar on the same 180 mm grid as the line-items table.
+        colWidths=[120 * mm, 60 * mm],
     )
     total_bar.setStyle(TableStyle([
         ("BOX", (0, 0), (-1, -1), 1.2, gold),
@@ -733,8 +734,10 @@ def invoice_pdf_bytes(invoice):
 
     summary_block = Table(
         [[rot_information or "", summary]],
-        colWidths=[88 * mm, 93 * mm],
-        hAlign="RIGHT",
+        # ``summary`` is 108 mm wide. The previous 93 mm second cell made it
+        # overflow its parent table and appear too far to the right.
+        colWidths=[72 * mm, 108 * mm],
+        hAlign="LEFT",
     )
     summary_block.setStyle(TableStyle([
         ("VALIGN", (0, 0), (-1, -1), "TOP"),

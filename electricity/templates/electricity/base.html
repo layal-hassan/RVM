@@ -26,6 +26,7 @@
   {% include "electricity/partials/global_header.html" %}
   {% block content %}{% endblock %}
 
+  {% block site_footer %}
   <footer class="site-footer footer-ref footer-v2">
     <div class="container footer-grid footer-grid-v2">
       <div class="footer-brand">
@@ -72,6 +73,7 @@
       <div class="footer-lang">{% trans "Sweden (EN)" %}</div>
     </div>
   </footer>
+  {% endblock %}
   <script defer src="{% static 'electricity/vendor/tom-select/tom-select.complete.min.js' %}"></script>
   <script defer src="{% static 'electricity/js/global.js' %}"></script>
   <script defer src="{% static 'electricity/js/site_calendar.js' %}?v=20261021-2"></script>
