@@ -171,20 +171,20 @@ body.rwm-mobile-menu-open {
 
 /* Keep the desktop navigation and action group in separate, non-overlapping lanes. */
 .rwm-electricity-global-header .rwm-egh-nav {
-  gap: clamp(8px, 1.05vw, 20px);
+  gap: clamp(7px, 0.75vw, 14px);
   max-width: 100%;
 }
 
 .rwm-electricity-global-header .rwm-egh-link {
-  padding-inline: clamp(4px, 0.5vw, 10px);
-  font-size: clamp(10px, 0.625vw, 12px);
-  letter-spacing: clamp(0.1em, 0.16vw, 0.22em);
+  padding-inline: clamp(3px, 0.35vw, 7px);
+  font-size: clamp(10px, 0.57vw, 11px);
+  letter-spacing: clamp(0.08em, 0.12vw, 0.16em);
 }
 
 .rwm-electricity-global-header .rwm-egh-btn {
-  padding-inline: clamp(14px, 1.35vw, 26px);
-  font-size: clamp(10px, 0.625vw, 12px);
-  letter-spacing: clamp(0.12em, 0.16vw, 0.24em);
+  padding-inline: clamp(12px, 0.95vw, 19px);
+  font-size: clamp(10px, 0.57vw, 11px);
+  letter-spacing: clamp(0.1em, 0.12vw, 0.16em);
 }
 
 /* Keep the Linguise control visible and aligned with the shared header actions. */
@@ -192,9 +192,9 @@ body.rwm-mobile-menu-open {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  min-width: 108px;
-  min-height: 42px;
-  padding: 4px 10px;
+  min-width: 98px;
+  min-height: 40px;
+  padding: 3px 8px;
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
@@ -267,7 +267,7 @@ body > [class*="linguise_switcher"] {
 .rwm-electricity-global-header .rwm-egh-nav {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: clamp(7px, 0.75vw, 14px);
   flex-wrap: nowrap;
   justify-content: flex-start;
   flex: 0 1 auto;
@@ -285,9 +285,9 @@ body > [class*="linguise_switcher"] {
   color: var(--rwmh-text);
   text-decoration: none;
   text-transform: uppercase;
-  letter-spacing: 0.22em;
-  padding-inline: 10px;
-  font-size: 12px;
+  letter-spacing: clamp(0.08em, 0.12vw, 0.16em);
+  padding-inline: clamp(3px, 0.35vw, 7px);
+  font-size: clamp(10px, 0.57vw, 11px);
   font-weight: 600;
   font-family: "Vesper Libre", serif;
   transition: color 0.2s ease;
@@ -596,12 +596,12 @@ body > [class*="linguise_switcher"] {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  padding: 12px 26px;
+  padding: 10px clamp(12px, 0.95vw, 19px);
   min-height: var(--rwmh-item-height);
-  font-size: 12px;
+  font-size: clamp(10px, 0.57vw, 11px);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.24em;
+  letter-spacing: clamp(0.1em, 0.12vw, 0.16em);
   text-decoration: none;
   font-family: "Vesper Libre", serif;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
@@ -623,9 +623,9 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
 }
 
 .rwm-electricity-global-header .rwm-egh-btn-compact {
-  padding: 12px 28px;
-  font-size: 12px;
-  letter-spacing: 0.18em;
+  padding: 10px clamp(14px, 1vw, 20px);
+  font-size: clamp(10px, 0.57vw, 11px);
+  letter-spacing: clamp(0.1em, 0.12vw, 0.15em);
 }
 
 .rwm-electricity-global-header .rwm-egh-btn-primary {
