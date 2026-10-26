@@ -197,8 +197,8 @@ body.rwm-mobile-menu-open {
   padding: 3px 8px;
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  background: rgba(32, 34, 39, 0.96);
+  color: #fff !important;
   overflow: visible;
   flex: 0 0 auto;
   z-index: 8;
@@ -206,6 +206,12 @@ body.rwm-mobile-menu-open {
 
 .rwm-electricity-global-header .linguise_switcher_root > * {
   margin: 0 !important;
+}
+
+.rwm-electricity-global-header .linguise_switcher_root,
+.rwm-electricity-global-header .linguise_switcher_root * {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
 }
 
 .rwm-electricity-global-header .linguise_switcher_root:hover,
