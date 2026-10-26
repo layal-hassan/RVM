@@ -167,6 +167,33 @@ body.rwm-mobile-menu-open {
   gap: 16px;
 }
 
+/* Keep the Linguise control visible and aligned with the shared header actions. */
+.rwm-electricity-global-header .linguise_switcher_root {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 122px;
+  min-height: 42px;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  overflow: visible;
+  flex: 0 0 auto;
+  z-index: 8;
+}
+
+.rwm-electricity-global-header .linguise_switcher_root > * {
+  margin: 0 !important;
+}
+
+.rwm-electricity-global-header .linguise_switcher_root:hover,
+.rwm-electricity-global-header .linguise_switcher_root:focus-within {
+  border-color: rgba(239, 201, 111, 0.95);
+  background: rgba(199, 164, 91, 0.18);
+}
+
 .rwm-electricity-global-header .rwm-egh-nav {
   display: flex;
   align-items: center;
@@ -848,6 +875,12 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
 
   .rwm-electricity-global-header .rwm-egh-right {
     gap: 12px;
+  }
+
+  .rwm-electricity-global-header .linguise_switcher_root {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
   }
 
   .rwm-electricity-global-header .rwm-egh-nav-item {
