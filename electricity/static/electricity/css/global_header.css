@@ -895,9 +895,16 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
   .rwm-electricity-global-header .rwm-egh-left,
   .rwm-electricity-global-header .rwm-egh-right {
     width: 100%;
+    flex: 0 0 auto;
     justify-content: flex-start;
     flex-direction: column;
     align-items: stretch;
+  }
+
+  /* Do not let the desktop overflow rule collapse the navigation in the drawer. */
+  .rwm-electricity-global-header .rwm-egh-left {
+    min-height: max-content;
+    overflow: visible;
   }
 
   .rwm-electricity-global-header.is-open .rwm-egh-navwrap {
@@ -911,6 +918,8 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
+    width: 100%;
+    flex: 0 0 auto;
   }
 
   .rwm-electricity-global-header .rwm-egh-link,
