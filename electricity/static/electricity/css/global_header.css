@@ -160,12 +160,31 @@ body.rwm-mobile-menu-open {
   flex: 1 1 0;
   justify-content: flex-start;
   min-width: 0;
+  overflow: hidden;
 }
 
 .rwm-electricity-global-header .rwm-egh-right {
   flex: 0 0 auto;
   justify-content: flex-end;
-  gap: 16px;
+  gap: clamp(8px, 0.8vw, 16px);
+}
+
+/* Keep the desktop navigation and action group in separate, non-overlapping lanes. */
+.rwm-electricity-global-header .rwm-egh-nav {
+  gap: clamp(8px, 1.05vw, 20px);
+  max-width: 100%;
+}
+
+.rwm-electricity-global-header .rwm-egh-link {
+  padding-inline: clamp(4px, 0.5vw, 10px);
+  font-size: clamp(10px, 0.625vw, 12px);
+  letter-spacing: clamp(0.1em, 0.16vw, 0.22em);
+}
+
+.rwm-electricity-global-header .rwm-egh-btn {
+  padding-inline: clamp(14px, 1.35vw, 26px);
+  font-size: clamp(10px, 0.625vw, 12px);
+  letter-spacing: clamp(0.12em, 0.16vw, 0.24em);
 }
 
 /* Keep the Linguise control visible and aligned with the shared header actions. */
