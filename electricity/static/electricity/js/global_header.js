@@ -36,7 +36,21 @@
   dropdowns.forEach((dropdown) => {
     const trigger = dropdown.querySelector("[data-rwmh-dropdown-trigger]");
     if (!trigger) return;
+    const linkButton = dropdown.querySelector(".rwm-egh-link-button");
     let hoverCloseTimer = null;
+
+    const toggleDropdown = (event) => {
+      event.preventDefault();
+      const willOpen = !dropdown.classList.contains("is-open");
+      dropdowns.forEach((item) => {
+        item.classList.remove("is-open");
+        item.classList.remove("is-hover-open");
+        const itemTrigger = item.querySelector("[data-rwmh-dropdown-trigger]");
+        if (itemTrigger) itemTrigger.setAttribute("aria-expanded", "false");
+      });
+      dropdown.classList.toggle("is-open", willOpen);
+      trigger.setAttribute("aria-expanded", willOpen ? "true" : "false");
+    };
 
     const keepDropdownOpen = () => {
       if (window.innerWidth <= 980) return;
@@ -55,18 +69,8 @@
     dropdown.addEventListener("mouseenter", keepDropdownOpen);
     dropdown.addEventListener("mouseleave", scheduleDropdownClose);
 
-    trigger.addEventListener("click", (event) => {
-      event.preventDefault();
-      const willOpen = !dropdown.classList.contains("is-open");
-      dropdowns.forEach((item) => {
-        item.classList.remove("is-open");
-        item.classList.remove("is-hover-open");
-        const itemTrigger = item.querySelector("[data-rwmh-dropdown-trigger]");
-        if (itemTrigger) itemTrigger.setAttribute("aria-expanded", "false");
-      });
-      dropdown.classList.toggle("is-open", willOpen);
-      trigger.setAttribute("aria-expanded", willOpen ? "true" : "false");
-    });
+    trigger.addEventListener("click", toggleDropdown);
+    linkButton?.addEventListener("click", toggleDropdown);
   });
 
   toggle.addEventListener("click", () => {
