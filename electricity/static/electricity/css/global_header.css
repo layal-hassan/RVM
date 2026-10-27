@@ -839,7 +839,7 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
   .rwm-electricity-global-header .rwm-egh-mobile-quicklinks {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 9px;
     margin-inline-start: auto;
     min-width: 0;
   }
@@ -848,27 +848,41 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 34px;
-    padding: 0 9px;
+    min-height: 40px;
+    padding: 0 12px;
     border-radius: 999px;
     white-space: nowrap;
     text-decoration: none;
-    font: 700 10px/1 "Vesper Libre", serif;
-    letter-spacing: 0.08em;
+    font: 700 11px/1 "Vesper Libre", serif;
+    letter-spacing: 0.1em;
   }
 
   .rwm-electricity-global-header .rwm-egh-mobile-quicklink-jour {
+    min-width: 52px;
     color: #ffe17c;
-    border: 1px solid rgba(239, 196, 78, 0.72);
-    background: rgba(239, 196, 78, 0.13);
-    box-shadow: 0 0 12px rgba(239, 196, 78, 0.28);
+    border: 1px solid rgba(255, 225, 124, 0.9);
+    background: radial-gradient(circle at 50% 35%, rgba(255, 225, 124, 0.3), rgba(239, 196, 78, 0.08));
+    box-shadow: 0 0 10px rgba(239, 196, 78, 0.48), inset 0 0 10px rgba(239, 196, 78, 0.16);
     text-shadow: 0 0 7px rgba(255, 225, 124, 0.9);
+    animation: rwm-jour-quick-glow 1.35s ease-in-out infinite;
   }
 
   .rwm-electricity-global-header .rwm-egh-mobile-quicklink-hembla {
+    min-width: 66px;
     color: #17150f;
     border: 1px solid #f5c94f;
     background: linear-gradient(135deg, #f5c94f, #c99a32);
+    box-shadow: 0 5px 14px rgba(201, 154, 50, 0.22);
+    letter-spacing: 0.08em;
+  }
+
+  @keyframes rwm-jour-quick-glow {
+    0%, 100% { box-shadow: 0 0 8px rgba(239, 196, 78, 0.35), inset 0 0 8px rgba(239, 196, 78, 0.12); }
+    50% { box-shadow: 0 0 20px rgba(255, 225, 124, 0.95), 0 0 34px rgba(239, 196, 78, 0.42), inset 0 0 13px rgba(255, 225, 124, 0.24); }
+  }
+
+  .rwm-electricity-global-header .rwm-egh-toggle {
+    margin-inline-start: 0;
   }
 
   .rwm-electricity-global-header.is-open .rwm-egh-mobile-quicklinks {

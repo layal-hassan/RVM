@@ -3178,6 +3178,16 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 .services-emergency-content {
   padding-top: 58px;
   padding-bottom: 58px;
+  text-align: center;
+}
+
+.services-emergency-content > p {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.services-trust-actions {
+  justify-content: center;
 }
 
 .services-emergency h2,

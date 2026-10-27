@@ -38,3 +38,18 @@
   </div><aside>{% include "electricity/partials/quote_side.html" %}</aside></section>{% endif %}
   <footer>♙ Your information is safe with us &nbsp;&nbsp;&nbsp; ▤ Free to request a quote &nbsp;&nbsp;&nbsp; ♢ No obligation &nbsp;&nbsp;&nbsp; ⌖ We operate in Stockholm and surrounding areas</footer>
 </main>{% endblock %}
+
+<script>
+  (() => {
+    const fallback = "{% static 'electricity/img/electricity_logo.jpg' %}";
+    document.querySelectorAll(".quote-request-page img").forEach((image) => {
+      const useFallback = () => {
+        if (image.dataset.fallbackApplied) return;
+        image.dataset.fallbackApplied = "1";
+        image.src = fallback;
+      };
+      image.addEventListener("error", useFallback, { once: true });
+      if (!image.getAttribute("src") || (image.complete && image.naturalWidth === 0)) useFallback();
+    });
+  })();
+</script>
