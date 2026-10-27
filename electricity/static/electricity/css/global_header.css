@@ -99,6 +99,10 @@
   object-fit: cover;
 }
 
+.rwm-egh-mobile-quicklinks {
+  display: none;
+}
+
 body.electricity-body,
 body.dash-body {
   padding-top: var(--rwmh-height);
@@ -830,6 +834,45 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
   .rwm-electricity-global-header .rwm-egh-toggle span:nth-child(2) {
     width: 15px;
     margin-inline-start: auto;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-mobile-quicklinks {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-inline-start: auto;
+    min-width: 0;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-mobile-quicklink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+    text-decoration: none;
+    font: 700 10px/1 "Vesper Libre", serif;
+    letter-spacing: 0.08em;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-mobile-quicklink-jour {
+    color: #ffe17c;
+    border: 1px solid rgba(239, 196, 78, 0.72);
+    background: rgba(239, 196, 78, 0.13);
+    box-shadow: 0 0 12px rgba(239, 196, 78, 0.28);
+    text-shadow: 0 0 7px rgba(255, 225, 124, 0.9);
+  }
+
+  .rwm-electricity-global-header .rwm-egh-mobile-quicklink-hembla {
+    color: #17150f;
+    border: 1px solid #f5c94f;
+    background: linear-gradient(135deg, #f5c94f, #c99a32);
+  }
+
+  .rwm-electricity-global-header.is-open .rwm-egh-mobile-quicklinks {
+    display: none;
   }
 
   .rwm-electricity-global-header.is-open .rwm-egh-toggle span:first-child {
