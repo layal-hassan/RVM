@@ -507,6 +507,7 @@ body > [class*="linguise_switcher"] {
 }
 
 .rwm-electricity-global-header .rwm-egh-lang {
+  display: none !important;
   position: relative;
   margin-inline-start: 0;
   padding-inline-start: 0;

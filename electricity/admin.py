@@ -1,5 +1,9 @@
 from django.contrib import admin
-from modeltranslation.admin import TranslationAdmin
+from modeltranslation.admin import (
+    TranslationAdmin,
+    TranslationStackedInline,
+    TranslationTabularInline,
+)
 from .admin_site import electricity_admin_site
 from .models import (
     AcceptedZipCode,
@@ -153,27 +157,27 @@ class CustomerFeedbackAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
 
 
-class ServiceCategoryItemInline(admin.StackedInline):
+class ServiceCategoryItemInline(TranslationStackedInline):
     model = ServiceCategoryItem
     extra = 0
 
 
-class ServiceCategorySectionInline(admin.StackedInline):
+class ServiceCategorySectionInline(TranslationStackedInline):
     model = ServiceCategorySection
     extra = 0
 
 
-class ServiceCategoryContentBlockInline(admin.StackedInline):
+class ServiceCategoryContentBlockInline(TranslationStackedInline):
     model = ServiceCategoryContentBlock
     extra = 0
 
 
-class ServiceCategorySpecRowInline(admin.TabularInline):
+class ServiceCategorySpecRowInline(TranslationTabularInline):
     model = ServiceCategorySpecRow
     extra = 0
 
 
-class ServiceCategoryFAQInline(admin.StackedInline):
+class ServiceCategoryFAQInline(TranslationStackedInline):
     model = ServiceCategoryFAQ
     extra = 0
 
@@ -198,27 +202,27 @@ class ServiceCategoryPageAdmin(TranslationAdmin):
     inlines = [ServiceCategoryContentBlockInline, ServiceCategorySectionInline, ServiceCategorySpecRowInline, ServiceCategoryFAQInline]
 
 
-class ServiceDetailItemInline(admin.StackedInline):
+class ServiceDetailItemInline(TranslationStackedInline):
     model = ServiceDetailItem
     extra = 0
 
 
-class ServiceDetailSectionInline(admin.StackedInline):
+class ServiceDetailSectionInline(TranslationStackedInline):
     model = ServiceDetailSection
     extra = 0
 
 
-class ServiceDetailContentBlockInline(admin.StackedInline):
+class ServiceDetailContentBlockInline(TranslationStackedInline):
     model = ServiceDetailContentBlock
     extra = 0
 
 
-class ServiceDetailSpecRowInline(admin.TabularInline):
+class ServiceDetailSpecRowInline(TranslationTabularInline):
     model = ServiceDetailSpecRow
     extra = 0
 
 
-class ServiceDetailFAQInline(admin.StackedInline):
+class ServiceDetailFAQInline(TranslationStackedInline):
     model = ServiceDetailFAQ
     extra = 0
 

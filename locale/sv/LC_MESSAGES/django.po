@@ -19,13 +19,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Email or username"
-msgstr ""
+msgstr "E-post eller användarnamn"
 
 msgid "This account does not have an email address configured for password reset."
-msgstr ""
+msgstr "Det här kontot har ingen e-postadress konfigurerad för lösenordsåterställning."
 
 msgid "Evenings"
-msgstr ""
+msgstr "Kvällar"
 
 msgid "Nights"
 msgstr "Nätter"
@@ -34,19 +34,19 @@ msgid "Weekends & holidays"
 msgstr "Helger och helgdagar"
 
 msgid "Power outages"
-msgstr ""
+msgstr "Strömavbrott"
 
 msgid "Fuse boards"
-msgstr ""
+msgstr "Elcentraler"
 
 msgid "Common areas"
-msgstr ""
+msgstr "Gemensamma utrymmen"
 
 msgid "Critical systems"
 msgstr "Kritiska system"
 
 msgid "General faults"
-msgstr ""
+msgstr "Allmänna fel"
 
 msgid "Mon"
 msgstr "Mån"
@@ -93,7 +93,7 @@ msgid "Maintenance"
 msgstr "Underhåll"
 
 msgid "Enter one item per line."
-msgstr ""
+msgstr "Ange en post per rad."
 
 msgid "On-site Visit"
 msgstr "Besök på plats"
@@ -183,7 +183,7 @@ msgid "Evening"
 msgstr "Kväll"
 
 msgid "Please enter your personal ID in the format yyyymmdd-xxxx."
-msgstr ""
+msgstr "Ange ditt personnummer i formatet ååååmmdd-xxxx."
 
 msgid "Please enter a valid Swedish ZIP code (e.g. 114 44)."
 msgstr "Vänligen ange ett giltigt svenskt postnummer (t.ex. 114 44)."
@@ -200,7 +200,7 @@ msgid "About RWM EL"
 msgstr "Om RWM EL"
 
 msgid "Because electrical work is a responsibility — not a shortcut."
-msgstr ""
+msgstr "Elarbete är ett ansvar – ingen genväg."
 
 msgid "BOOK AN ELECTRICIAN"
 msgstr "BOKA EN ELEKTRIKER"
@@ -236,7 +236,7 @@ msgid "We do this because a home should be a sanctuary, not a source of technica
 msgstr "We do this because a home should be a sanctuary, not a source of technical anxiety. We do this because we believe in the longevity of quality. When we leave a site, we leave behind more than just working lights—we leave behind the peace of mind that your family or business is protected by a system designed to endure."
 
 msgid "More Than Just Today’s Installation"
-msgstr ""
+msgstr "Mer än bara dagens installation"
 
 msgid "The modern home is changing. Energy consumption, smart integration, and high-demand appliances require a forward-thinking electrical foundation."
 msgstr "The modern home is changing. Energy consumption, smart integration, and high-demand appliances require a forward-thinking electrical foundation."
@@ -248,16 +248,16 @@ msgid "Smart home ecosystem planning and integration"
 msgstr "Planering och integration av smarta hem-ekosystem"
 
 msgid "Energy usage optimization and monitoring"
-msgstr ""
+msgstr "Optimering och övervakning av energiförbrukningen"
 
 msgid "Safe-load management for EV charging stations"
 msgstr "Säker laststyrning för laddstationer till elfordon"
 
 msgid "The RWM EL Standard"
-msgstr ""
+msgstr "RWM EL-standarden"
 
 msgid "Compliance"
-msgstr ""
+msgstr "Efterlevnad"
 
 msgid "Rigorous adherence to every Swedish electrical safety standard."
 msgstr "Strikt efterlevnad av varje svensk elsäkerhetsstandard."
@@ -275,7 +275,7 @@ msgid "Transparent documentation and straightforward communication."
 msgstr "Transparent dokumentation och rak kommunikation."
 
 msgid "Modern planning"
-msgstr ""
+msgstr "Modern planering"
 
 msgid "Anticipating your future energy needs before they arise."
 msgstr "Att förutse dina framtida energibehov innan de uppstår."
@@ -287,10 +287,10 @@ msgid "Done right the first time, ensuring no corrections are ever required."
 msgstr "Gjort rätt från början, så att inga korrigeringar någonsin behövs."
 
 msgid "Electrical work should be done right — not corrected later."
-msgstr ""
+msgstr "Elarbete ska utföras rätt från början – inte korrigeras senare."
 
 msgid "Contact RWM EL"
-msgstr ""
+msgstr "Kontakta RWM EL"
 
 #, fuzzy
 #| msgid "Password"
@@ -303,7 +303,7 @@ msgid "Password updated"
 msgstr "Lösenord"
 
 msgid "Your password has been changed successfully. You can sign in now."
-msgstr ""
+msgstr "Ditt lösenord har ändrats. Du kan logga in nu."
 
 #, fuzzy
 #| msgid "Sign in"
@@ -311,13 +311,13 @@ msgid "Go to sign in"
 msgstr "Logga in"
 
 msgid "Choose New Password"
-msgstr ""
+msgstr "Välj ett nytt lösenord"
 
 msgid "Set a new password"
-msgstr ""
+msgstr "Ange ett nytt lösenord"
 
 msgid "Enter your new password below."
-msgstr ""
+msgstr "Ange ditt nya lösenord nedan."
 
 #, fuzzy
 #| msgid "Password"
@@ -340,10 +340,10 @@ msgid "Update password"
 msgstr "Lösenord"
 
 msgid "Reset link is invalid"
-msgstr ""
+msgstr "Återställningslänken är ogiltig"
 
 msgid "This password reset link is no longer valid. Request a new one."
-msgstr ""
+msgstr "Den här länken för lösenordsåterställning är inte längre giltig. Begär en ny."
 
 #, fuzzy
 #| msgid "Request Consultation"
@@ -351,19 +351,19 @@ msgid "Request new link"
 msgstr "Skicka konsultationsförfrågan"
 
 msgid "Reset Email Sent"
-msgstr ""
+msgstr "Återställningsmejl skickat"
 
 msgid "Check your email"
-msgstr ""
+msgstr "Kontrollera din e-post"
 
 msgid "If an account exists for that email, a password reset link has been sent."
-msgstr ""
+msgstr "Om det finns ett konto för den e-postadressen har en länk för lösenordsåterställning skickats."
 
 msgid "Back to sign in"
-msgstr ""
+msgstr "Tillbaka till inloggning"
 
 msgid "Hello,"
-msgstr ""
+msgstr "Hej,"
 
 #, fuzzy
 #| msgid "Create a strong password to protect your account."
@@ -371,10 +371,10 @@ msgid "You requested a password reset for your account."
 msgstr "Skapa ett starkt lösenord för att skydda ditt konto."
 
 msgid "Open the link below to choose a new password:"
-msgstr ""
+msgstr "Öppna länken nedan för att välja ett nytt lösenord:"
 
 msgid "If you did not request this, you can ignore this message."
-msgstr ""
+msgstr "Om du inte begärde detta kan du ignorera meddelandet."
 
 #, fuzzy
 #| msgid "Password"
@@ -392,13 +392,13 @@ msgid "Password Reset"
 msgstr "Lösenord"
 
 msgid "Secure account recovery"
-msgstr ""
+msgstr "Säker kontoåterställning"
 
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Glömt lösenordet?"
 
 msgid "Enter your account email and we will send you a reset link."
-msgstr ""
+msgstr "Ange e-postadressen för ditt konto så skickar vi en återställningslänk."
 
 #, fuzzy
 #| msgid "Send request"
@@ -411,7 +411,7 @@ msgid "Reset your password"
 msgstr "Bekräfta lösenord"
 
 msgid "Electrical & Smart Home"
-msgstr ""
+msgstr "El och smarta hem"
 
 msgid "Electrical &amp; Infrastructure Solutions"
 msgstr "Elektriska &amp; infrastrukturlösningar"
@@ -450,7 +450,7 @@ msgid "Address"
 msgstr "Adress"
 
 msgid "Kikarvägen 18, 175 46 Järfälla, Stockholm"
-msgstr ""
+msgstr "Kikarvägen 18, 175 46 Järfälla, Stockholm"
 
 msgid "Phone"
 msgstr "Telefon"
@@ -474,7 +474,7 @@ msgid "Sweden (EN)"
 msgstr "Sverige (EN)"
 
 msgid "Consultation Booking"
-msgstr ""
+msgstr "Boka konsultation"
 
 #, python-format
 msgid "Step %(step)s of %(total)s"
@@ -482,7 +482,7 @@ msgstr "Steg %(step)s av %(total)s"
 
 #, python-format
 msgid "%(percent)s%%%% Complete"
-msgstr ""
+msgstr "%(percent)s%%%% klart"
 
 msgid "Licensed electrical work, upgrades, and system installations — built right and built to last."
 msgstr "Licensed electrical work, upgrades, and system installations — built right and built to last."
@@ -554,7 +554,7 @@ msgid "Is this urgent?"
 msgstr "Är detta brådskande?"
 
 msgid "Select \\"
-msgstr ""
+msgstr "Välj \\"
 
 msgid "The more detail you share, the better we can prepare."
 msgstr "Ju mer information du delar, desto bättre kan vi förbereda oss."
@@ -575,7 +575,7 @@ msgid "Photos or videos help us assess faster. Your data is encrypted and secure
 msgstr "Photos or videos help us assess faster. Your data is encrypted and secure."
 
 msgid "Photo"
-msgstr ""
+msgstr "Foto"
 
 msgid "Browse Files"
 msgstr "Bläddra bland filer"
@@ -610,7 +610,7 @@ msgstr "Inga filer har valts ännu. Du kan hoppa över detta steg och lägga til
 
 #, python-format
 msgid "Remove %(name)s"
-msgstr ""
+msgstr "Ta bort %(name)s"
 
 msgid "Next Step"
 msgstr "Nästa steg"
@@ -628,10 +628,10 @@ msgid "Personal ID number"
 msgstr "Personnummer"
 
 msgid "Full Name"
-msgstr ""
+msgstr "Fullständigt namn"
 
 msgid "Phone Number"
-msgstr ""
+msgstr "Telefonnummer"
 
 msgid "When are you available for a call?"
 msgstr "När är du tillgänglig för ett samtal?"
@@ -646,7 +646,7 @@ msgid "Contact Information"
 msgstr "Kontaktuppgifter"
 
 msgid "Email Address"
-msgstr ""
+msgstr "E-postadress"
 
 msgid "Consultation Topics"
 msgstr "Konsultationsämnen"
@@ -655,13 +655,13 @@ msgid "Type"
 msgstr "Typ"
 
 msgid "Services"
-msgstr ""
+msgstr "Tjänster"
 
 msgid "Urgent"
 msgstr "Brådskande"
 
 msgid "Preferred Schedule"
-msgstr ""
+msgstr "Önskad tid"
 
 msgid "Preferred Date"
 msgstr "Föredraget datum"
@@ -670,7 +670,7 @@ msgid "Time Slot"
 msgstr "Tidsintervall"
 
 msgid "Consultation Pricing"
-msgstr ""
+msgstr "Konsultationspriser"
 
 msgid "Status"
 msgstr "Status"
@@ -682,7 +682,7 @@ msgid "Paid"
 msgstr "Betald"
 
 msgid "Price"
-msgstr ""
+msgstr "Pris"
 
 msgid "Request Consultation"
 msgstr "Skicka konsultationsförfrågan"
@@ -712,13 +712,13 @@ msgid "How Can We Help You?"
 msgstr "Hur kan vi hjälpa dig?"
 
 msgid "New service bookings"
-msgstr ""
+msgstr "Nya servicebokningar"
 
 msgid "Professional consultations"
-msgstr ""
+msgstr "Professionella konsultationer"
 
 msgid "Technical questions &amp; support"
-msgstr ""
+msgstr "Tekniska frågor och support"
 
 msgid "Speak with our expert dispatch team for immediate assistance."
 msgstr "Prata med vårt expertteam för omedelbar hjälp."
@@ -727,16 +727,16 @@ msgid "Send us project plans or detailed inquiries for a formal quote."
 msgstr "Skicka oss projektplaner eller detaljerade förfrågningar för en formell offert."
 
 msgid "Contact Form"
-msgstr ""
+msgstr "Kontaktformulär"
 
 msgid "Quickly submit your details and we will respond within 24 hours."
-msgstr ""
+msgstr "Skicka dina uppgifter snabbt så återkommer vi inom 24 timmar."
 
 msgid "Submit Inquiry"
-msgstr ""
+msgstr "Skicka förfrågan"
 
 msgid "Start Your Project Journey"
-msgstr ""
+msgstr "Påbörja ditt projekt"
 
 msgid "Our certified engineers are ready to assist with residential, commercial, and industrial electrical needs across Sweden."
 msgstr "Our certified engineers are ready to assist with residential, commercial, and industrial electrical needs across Sweden."
@@ -745,7 +745,7 @@ msgid "Operating Hours"
 msgstr "Öppettider"
 
 msgid "Mon - Fri 07:00 - 17:00"
-msgstr ""
+msgstr "Mån–fre 07:00–17:00"
 
 msgid "Headquarters"
 msgstr "Huvudkontor"
@@ -757,7 +757,7 @@ msgid "john@example.com"
 msgstr "john@example.com"
 
 msgid "Project Address"
-msgstr ""
+msgstr "Projektadress"
 
 msgid "Street name, City"
 msgstr "Gatunamn, stad"
@@ -766,25 +766,25 @@ msgid "Type of Request"
 msgstr "Typ av förfrågan"
 
 msgid "Residential"
-msgstr ""
+msgstr "Bostad"
 
 msgid "Commercial"
-msgstr ""
+msgstr "Företag"
 
 msgid "Your Message"
-msgstr ""
+msgstr "Ditt meddelande"
 
 msgid "Tell us more about your needs..."
-msgstr ""
+msgstr "Berätta mer om dina behov..."
 
 msgid "I consent to the processing of my personal data for the purpose of this inquiry in accordance with GDPR regulations."
 msgstr "I consent to the processing of my personal data for the purpose of this inquiry in accordance with GDPR regulations."
 
 msgid "Send Message"
-msgstr ""
+msgstr "Skicka meddelande"
 
 msgid "Thank you! We have received your request."
-msgstr ""
+msgstr "Tack! Vi har tagit emot din förfrågan."
 
 msgid "We could not send your message right now. Please try again."
 msgstr "Vi kunde inte skicka ditt meddelande just nu. Försök igen."
@@ -925,7 +925,7 @@ msgid "You can update your cookie settings at any time through your browser or t
 msgstr "You can update your cookie settings at any time through your browser or the preferences banner when available."
 
 msgid "Cookie Inventory"
-msgstr ""
+msgstr "Cookie-översikt"
 
 msgid "Category"
 msgstr "Kategori"
@@ -983,7 +983,7 @@ msgstr "Framsteg"
 
 #, python-format
 msgid "Step %(step)s of 8"
-msgstr ""
+msgstr "Steg %(step)s av 8"
 
 msgid "Customer type"
 msgstr "Kundtyp"
@@ -1020,7 +1020,7 @@ msgid "Date & time"
 msgstr "Datum & tid"
 
 msgid "Company & invoice details"
-msgstr ""
+msgstr "Företags- och fakturauppgifter"
 
 #, fuzzy
 #| msgid "Contact"
@@ -1051,7 +1051,7 @@ msgid "Who is this booking for?"
 msgstr "Vem gäller bokningen för?"
 
 msgid "Choose your customer type so we can show the right booking path."
-msgstr ""
+msgstr "Välj kundtyp så visar vi rätt bokningsväg."
 
 #, fuzzy
 #| msgid "Private Customer"
@@ -1059,10 +1059,10 @@ msgid "Private customer"
 msgstr "Privatkund"
 
 msgid "Electrical work for your home or private property."
-msgstr ""
+msgstr "Elarbete för ditt hem eller din privata fastighet."
 
 msgid "Electrical work for a company or organization."
-msgstr ""
+msgstr "Elarbete för ett företag eller en organisation."
 
 #, fuzzy
 #| msgid "Continue to Step 2 ->"
@@ -1088,10 +1088,10 @@ msgid "Troubleshooting, faulty outlets, switches and power issues."
 msgstr "Felsökning, eluttag, belysning och hemuppgraderingar."
 
 msgid "Install outlets or switches"
-msgstr ""
+msgstr "Installera uttag eller strömbrytare"
 
 msgid "Installation or replacement of outlets, switches and dimmers."
-msgstr ""
+msgstr "Installation eller byte av uttag, strömbrytare och dimmers."
 
 #, fuzzy
 #| msgid "Lighting Solutions"
@@ -1099,7 +1099,7 @@ msgid "Lighting installation"
 msgstr "Belysningslösningar"
 
 msgid "Indoor and outdoor lighting, spotlights and ceiling lights."
-msgstr ""
+msgstr "Inomhus- och utomhusbelysning, spotlights och taklampor."
 
 #, fuzzy
 #| msgid "Electrical Upgrades"
@@ -1107,13 +1107,13 @@ msgid "Electrical panel"
 msgstr "Eluppgraderingar"
 
 msgid "Replacement, upgrade or inspection of the electrical panel."
-msgstr ""
+msgstr "Byte, uppgradering eller kontroll av elcentralen."
 
 msgid "Kitchen & appliance connection"
-msgstr ""
+msgstr "Kök och anslutning av apparater"
 
 msgid "Ovens, hobs, dishwashers and other appliances."
-msgstr ""
+msgstr "Ugnar, spishällar, diskmaskiner och andra apparater."
 
 #, fuzzy
 #| msgid "EV Charging"
@@ -1121,7 +1121,7 @@ msgid "EV charger"
 msgstr "Laddning av elfordon"
 
 msgid "Installation of home electric vehicle charging stations."
-msgstr ""
+msgstr "Installation av laddstationer för elfordon i hemmet."
 
 #, fuzzy
 #| msgid "Home station installation"
@@ -1129,7 +1129,7 @@ msgid "Renovation or new installation"
 msgstr "Installation av hemmaladdare"
 
 msgid "Renovations, extensions and new construction."
-msgstr ""
+msgstr "Renoveringar, tillbyggnader och nybyggnationer."
 
 #, fuzzy
 #| msgid "Electrical Upgrades"
@@ -1137,7 +1137,7 @@ msgid "Electrical inspection"
 msgstr "Eluppgraderingar"
 
 msgid "Safety inspections, fault finding and condition reports."
-msgstr ""
+msgstr "Säkerhetskontroller, felsökning och tillståndsrapporter."
 
 #, fuzzy
 #| msgid "Master electricians only"
@@ -1145,13 +1145,13 @@ msgid "Other electrical work"
 msgstr "Endast behöriga elektriker"
 
 msgid "Tell us what you need and we'll find the right solution."
-msgstr ""
+msgstr "Berätta vad du behöver så hittar vi rätt lösning."
 
 msgid "Not sure which service to choose? You can describe your need in the next step."
-msgstr ""
+msgstr "Osäker på vilken tjänst du ska välja? Beskriv ditt behov i nästa steg."
 
 msgid "Continue to work details"
-msgstr ""
+msgstr "Fortsätt till arbetsuppgifter"
 
 #, fuzzy
 #| msgid "Tell us about the property"
@@ -1159,13 +1159,13 @@ msgid "Tell us more about the work"
 msgstr "Berätta om fastigheten"
 
 msgid "Tell us more about the project so we can prepare the right solution for your business."
-msgstr ""
+msgstr "Berätta mer om projektet så kan vi förbereda rätt lösning för ditt företag."
 
 msgid "Help us understand what needs to be done."
-msgstr ""
+msgstr "Hjälp oss att förstå vad som behöver göras."
 
 msgid "How much time should we reserve?"
-msgstr ""
+msgstr "Hur mycket tid ska vi reservera?"
 
 #, fuzzy
 #| msgid "How many hours do you want to book?"
@@ -1176,10 +1176,10 @@ msgid "Hours"
 msgstr "Timmar"
 
 msgid "This is the maximum time reserved, not the final amount charged."
-msgstr ""
+msgstr "Detta är den maximala reserverade tiden, inte det slutliga debiterade beloppet."
 
 msgid "You only pay for the actual time worked, subject to the minimum call-out charge."
-msgstr ""
+msgstr "Du betalar bara för den faktiska arbetstiden, med förbehåll för minsta utryckningsavgift."
 
 #, fuzzy
 #| msgid "Describe the work"
@@ -1190,7 +1190,7 @@ msgid "Describe the work"
 msgstr "Beskriv arbetet"
 
 msgid "Please describe what needs to be repaired, installed or checked."
-msgstr ""
+msgstr "Beskriv vad som behöver repareras, installeras eller kontrolleras."
 
 #, fuzzy
 #| msgid "Add photos or documents (optional)"
@@ -1198,7 +1198,7 @@ msgid "Add attachments (optional)"
 msgstr "Lägg till bilder eller dokument (valfritt)"
 
 msgid "Attachment upload will be added after the booking paths are finalized."
-msgstr ""
+msgstr "Uppladdning av bilagor läggs till när bokningsvägarna är färdigställda."
 
 #, fuzzy
 #| msgid "Continue to Step 2 ->"
@@ -1206,7 +1206,7 @@ msgid "Continue to location"
 msgstr "Fortsätt till steg 2 →"
 
 msgid "Where should we come to carry out the work?"
-msgstr ""
+msgstr "Var ska vi utföra arbetet?"
 
 msgid "Street address"
 msgstr "Gatuadress"
@@ -1218,10 +1218,10 @@ msgid "City"
 msgstr "Stad"
 
 msgid "Apartment, floor, door code, etc. (optional)"
-msgstr ""
+msgstr "Lägenhet, våning, portkod med mera (valfritt)"
 
 msgid "Important:"
-msgstr ""
+msgstr "Viktigt:"
 
 #, fuzzy
 #| msgid "Provide the job site address so we can plan the visit."
@@ -1254,7 +1254,7 @@ msgid "Select time window"
 msgstr "Välj tidsintervall"
 
 msgid "Any time"
-msgstr ""
+msgstr "Valfri tid"
 
 #, fuzzy
 #| msgid "Add photos or documents (optional)"
@@ -1272,10 +1272,10 @@ msgid "Contact & ROT information"
 msgstr "Kontaktuppgifter"
 
 msgid "Add your company details and invoice preferences."
-msgstr ""
+msgstr "Lägg till företagsuppgifter och fakturainställningar."
 
 msgid "Add your contact details and confirm your ROT eligibility."
-msgstr ""
+msgstr "Lägg till dina kontaktuppgifter och bekräfta din ROT-behörighet."
 
 #, fuzzy
 #| msgid "Your contact details"
@@ -1298,7 +1298,7 @@ msgid "Email address"
 msgstr "Företagsadress"
 
 msgid "We'll use these details for booking updates, site access and the day of the visit."
-msgstr ""
+msgstr "Vi använder dessa uppgifter för bokningsuppdateringar, tillträde och besöksdagen."
 
 #, fuzzy
 #| msgid "Company address"
@@ -1336,7 +1336,7 @@ msgid "Payment method"
 msgstr "Betalningsvillkor"
 
 msgid "Invoice"
-msgstr ""
+msgstr "Faktura"
 
 #, fuzzy
 #| msgid "Payment Terms"
@@ -1344,10 +1344,10 @@ msgid "Payment terms"
 msgstr "Betalningsvillkor"
 
 msgid "Will be confirmed by email"
-msgstr ""
+msgstr "Bekräftas via e-post"
 
 msgid "The invoice will be issued after the work has been completed. The applicable payment terms will be confirmed with you by email."
-msgstr ""
+msgstr "Fakturan skickas när arbetet är slutfört. Tillämpliga betalningsvillkor bekräftas via e-post."
 
 #, fuzzy
 #| msgid "Your first consultation is free."
@@ -1355,7 +1355,7 @@ msgid "Your information is secure"
 msgstr "Din första konsultation är kostnadsfri."
 
 msgid "We only use your details to manage this booking and for invoicing."
-msgstr ""
+msgstr "Vi använder endast dina uppgifter för att hantera bokningen och faktureringen."
 
 msgid "Full name"
 msgstr "Fullständigt namn"
@@ -1366,13 +1366,13 @@ msgid "ROT information"
 msgstr "Bekräftelse"
 
 msgid "Yes, apply ROT"
-msgstr ""
+msgstr "Ja, använd ROT"
 
 msgid "I am the homeowner and eligible for ROT."
-msgstr ""
+msgstr "Jag är fastighetsägare och berättigad till ROT."
 
 msgid "No, do not apply ROT"
-msgstr ""
+msgstr "Nej, använd inte ROT"
 
 #, fuzzy
 #| msgid "Personal Identity Number (SSN)"
@@ -1385,7 +1385,7 @@ msgid "Type of housing"
 msgstr "Typ av förfrågan"
 
 msgid "Villa / House"
-msgstr ""
+msgstr "Villa / hus"
 
 #, fuzzy
 #| msgid "Property Details"
@@ -1393,7 +1393,7 @@ msgid "Property designation"
 msgstr "Fastighetsuppgifter"
 
 msgid "Housing association organisation number"
-msgstr ""
+msgstr "Bostadsrättsföreningens organisationsnummer"
 
 #, fuzzy
 #| msgid "Apartment Number"
@@ -1401,13 +1401,13 @@ msgid "Apartment number"
 msgstr "Lägenhetsnummer"
 
 msgid "I confirm that I own the property where the work will be carried out."
-msgstr ""
+msgstr "Jag bekräftar att jag äger fastigheten där arbetet ska utföras."
 
 msgid "I confirm that I will pay the invoice electronically."
-msgstr ""
+msgstr "Jag bekräftar att jag betalar fakturan elektroniskt."
 
 msgid "Continue to access & commercial information"
-msgstr ""
+msgstr "Fortsätt till tillträde och företagsuppgifter"
 
 #, fuzzy
 #| msgid "Business details"
@@ -1415,7 +1415,7 @@ msgid "Continue to access details"
 msgstr "Företagsuppgifter"
 
 msgid "Help us prepare the visit and give you the best possible service."
-msgstr ""
+msgstr "Hjälp oss att förbereda besöket och ge dig bästa möjliga service."
 
 #, fuzzy
 #| msgid "Site Access"
@@ -1423,28 +1423,28 @@ msgid "Site access"
 msgstr "Tillträde till arbetsplats"
 
 msgid "Let us know how we can access the property when the work starts."
-msgstr ""
+msgstr "Berätta hur vi får tillträde till fastigheten när arbetet börjar."
 
 msgid "Someone will be on site"
-msgstr ""
+msgstr "Någon finns på plats"
 
 msgid "A contact person will be available to open and guide."
-msgstr ""
+msgstr "En kontaktperson finns tillgänglig för att öppna och visa vägen."
 
 msgid "Key / code access"
-msgstr ""
+msgstr "Tillträde med nyckel eller kod"
 
 msgid "We will receive a code or key."
-msgstr ""
+msgstr "Vi får en kod eller nyckel."
 
 msgid "Access to be arranged later"
-msgstr ""
+msgstr "Tillträde ordnas senare"
 
 msgid "We will confirm access closer to the visit."
-msgstr ""
+msgstr "Vi bekräftar tillträdet närmare besöket."
 
 msgid "Site contact on arrival (optional)"
-msgstr ""
+msgstr "Kontaktperson på plats vid ankomst (valfritt)"
 
 #, fuzzy
 #| msgid "Alternative Choice (Optional)"
@@ -1462,13 +1462,13 @@ msgid "Additional information (optional)"
 msgstr "Lägg till bilder eller dokument (valfritt)"
 
 msgid "Share anything else that can help us plan the work."
-msgstr ""
+msgstr "Dela annat som kan hjälpa oss att planera arbetet."
 
 msgid "Site rules, security requirements, special equipment, previous installations or other important details."
-msgstr ""
+msgstr "Platsregler, säkerhetskrav, specialutrustning, tidigare installationer eller andra viktiga detaljer."
 
 msgid "Special requirements"
-msgstr ""
+msgstr "Särskilda krav"
 
 #, fuzzy
 #| msgid "Drag and drop files here"
@@ -1476,7 +1476,7 @@ msgid "Drag and drop files here or click to browse"
 msgstr "Dra och släpp filer här"
 
 msgid "Images, PDFs or Word documents (max 100 MB per file)"
-msgstr ""
+msgstr "Bilder, PDF- eller Word-dokument (max 100 MB per fil)"
 
 #, fuzzy
 #| msgid "Select Date"
@@ -1484,19 +1484,19 @@ msgid "Selected attachments"
 msgstr "Välj datum"
 
 msgid "Remove file"
-msgstr ""
+msgstr "Ta bort fil"
 
 msgid "Good to know"
-msgstr ""
+msgstr "Bra att veta"
 
 msgid "We prepare everything in advance to work efficiently and safely on site."
-msgstr ""
+msgstr "Vi förbereder allt i förväg för att arbeta effektivt och säkert på plats."
 
 msgid "Final details and payment terms will be confirmed by email."
-msgstr ""
+msgstr "Slutliga detaljer och betalningsvillkor bekräftas via e-post."
 
 msgid "Door code, key location, parking, floor, elevator or anything else the electrician should know."
-msgstr ""
+msgstr "Portkod, nyckelns plats, parkering, våning, hiss eller annat elektrikern bör känna till."
 
 #, fuzzy
 #| msgid "I confirm that the service professional will have full access to the work area at the scheduled time."
@@ -1514,7 +1514,7 @@ msgid "This is an estimate. Final pricing is based on actual time and material c
 msgstr "I understand this is an estimate. Final pricing is based on actual time spent on site and any material costs incurred."
 
 msgid "Continue to final review"
-msgstr ""
+msgstr "Fortsätt till slutlig granskning"
 
 #, fuzzy
 #| msgid "Review & Confirm"
@@ -1522,7 +1522,7 @@ msgid "Final review & confirmation"
 msgstr "Granska & bekräfta"
 
 msgid "Please review all details below before confirming your booking."
-msgstr ""
+msgstr "Granska alla uppgifter nedan innan du bekräftar bokningen."
 
 #, fuzzy
 #| msgid "Work Summary"
@@ -1558,10 +1558,10 @@ msgid "Instructions"
 msgstr "Byggår"
 
 msgid "Purchase order number"
-msgstr ""
+msgstr "Beställningsnummer"
 
 msgid "The invoice will be issued after the work has been completed."
-msgstr ""
+msgstr "Fakturan skickas när arbetet är slutfört."
 
 #, fuzzy
 #| msgid "Contact Information"
@@ -1599,7 +1599,7 @@ msgid "Subtotal (excl. VAT)"
 msgstr "850 SEK (exkl. moms)"
 
 msgid "VAT"
-msgstr ""
+msgstr "Moms"
 
 #, fuzzy
 #| msgid "Estimated Total"
@@ -1617,7 +1617,7 @@ msgid "Final price may vary based on actual time on site and any material costs 
 msgstr "Slutpriset kan variera beroende på faktisk tid och material."
 
 msgid "I have read and agree to the"
-msgstr ""
+msgstr "Jag har läst och godkänner"
 
 msgid "Terms & Conditions"
 msgstr "Allmänna villkor"
@@ -1633,7 +1633,7 @@ msgid "Name"
 msgstr "Stadsnamn"
 
 msgid "ROT"
-msgstr ""
+msgstr "ROT"
 
 #, fuzzy
 #| msgid "Personal Identity Number (SSN)"
@@ -1646,14 +1646,14 @@ msgid "I own the property"
 msgstr "Berätta om fastigheten"
 
 msgid "I will pay electronically"
-msgstr ""
+msgstr "Jag betalar elektroniskt"
 
 #, python-format
 msgid "ROT may reduce eligible labour costs by up to 30%%. Approval depends on your eligibility and available tax deduction. Materials, transport and other costs are not included."
-msgstr ""
+msgstr "ROT kan minska berättigade arbetskostnader med upp till 30%%. Godkännandet beror på din behörighet och tillgängligt skatteavdrag. Material, transport och andra kostnader ingår inte."
 
 msgid "Hourly rate after ROT"
-msgstr ""
+msgstr "Timpris efter ROT"
 
 #, fuzzy
 #| msgid "Minimum Callout Fee (1st hr)"
@@ -1681,7 +1681,7 @@ msgid "Total estimated booking"
 msgstr "Totalt uppskattad bokning"
 
 msgid "including ROT, if applied"
-msgstr ""
+msgstr "inklusive ROT, om det tillämpas"
 
 #, fuzzy
 #| msgid "Parking details"
@@ -1689,10 +1689,10 @@ msgid "Payment details"
 msgstr "Parkeringsinformation"
 
 msgid "Invoice sent to"
-msgstr ""
+msgstr "Faktura skickas till"
 
 msgid "By checking this box and confirming your booking, you agree to our Terms & Conditions and Privacy Policy."
-msgstr ""
+msgstr "Genom att markera rutan och bekräfta bokningen godkänner du våra villkor och vår integritetspolicy."
 
 #, fuzzy
 #| msgid "Confirm Booking ->"
@@ -1705,7 +1705,7 @@ msgid "Booking confirmed!"
 msgstr "Din bokning är bekräftad."
 
 msgid "Thank you! Your booking request has been received. We will review the details and contact you shortly to confirm the exact appointment time."
-msgstr ""
+msgstr "Tack! Vi har tagit emot din bokningsförfrågan. Vi granskar uppgifterna och kontaktar dig snart för att bekräfta den exakta tiden."
 
 msgid "Booking Reference"
 msgstr "Bokningsreferens"
@@ -1732,7 +1732,7 @@ msgid "Reference"
 msgstr "Bokningsreferens"
 
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 msgid "Booking Details"
 msgstr "Bokningsdetaljer"
@@ -1759,7 +1759,7 @@ msgid "Minimum Callout Fee (1st hr)"
 msgstr "Minimiutryckningsavgift (1:a timmen)"
 
 msgid "Evening / Night rate multiplier"
-msgstr ""
+msgstr "Prisfaktor för kväll/natt"
 
 msgid "Transport Fee"
 msgstr "Transportavgift"
@@ -1776,10 +1776,10 @@ msgstr ""
 
 #, python-format
 msgid "ROT deduction (%(percent)s%% of labor cost)"
-msgstr ""
+msgstr "ROT-avdrag (%(percent)s%% av arbetskostnaden)"
 
 msgid "Total Estimated Booking (incl. VAT and ROT, if applied)"
-msgstr ""
+msgstr "Beräknad bokningskostnad totalt (inkl. moms och ROT, om tillämpligt)"
 
 msgid "Final pricing may vary based on actual time and materials."
 msgstr "Slutpriset kan variera beroende på faktisk tid och material."
@@ -1793,7 +1793,7 @@ msgid "Request review"
 msgstr "Förfrågan mottagen"
 
 msgid "Our team will review the requested service, work description, location, and preferred appointment time."
-msgstr ""
+msgstr "Vårt team granskar den önskade tjänsten, arbetsbeskrivningen, platsen och önskad tid."
 
 #, fuzzy
 #| msgid "Confirmation"
@@ -1801,7 +1801,7 @@ msgid "Booking confirmation"
 msgstr "Bekräftelse"
 
 msgid "We will confirm electrician availability and send the confirmed appointment details to your email or phone."
-msgstr ""
+msgstr "Vi bekräftar elektrikerns tillgänglighet och skickar bokningsuppgifterna till din e-post eller telefon."
 
 #, fuzzy
 #| msgid "Electrical Upgrades"
@@ -1809,7 +1809,7 @@ msgid "Electrician arrival"
 msgstr "Eluppgraderingar"
 
 msgid "The assigned electrician will contact you before arrival. The final price is based on the actual work time and materials used."
-msgstr ""
+msgstr "Den tilldelade elektrikern kontaktar dig före ankomst. Slutpriset baseras på faktisk arbetstid och använda material."
 
 msgid "Need assistance?"
 msgstr "Behöver du hjälp?"
@@ -1840,16 +1840,16 @@ msgid "Tell Us How The Job Went"
 msgstr "Berätta om fastigheten"
 
 msgid "Send your opinion directly to our team. Your review stays pending until the admin approves it, then it can appear on the website."
-msgstr ""
+msgstr "Skicka din åsikt direkt till vårt team. Recensionen väntar på godkännande och kan sedan visas på webbplatsen."
 
 msgid "Thank You"
-msgstr ""
+msgstr "Tack"
 
 msgid "Your feedback was submitted successfully and is now waiting for admin approval."
-msgstr ""
+msgstr "Din feedback har skickats och väntar nu på administratörens godkännande."
 
 msgid "Send Another Review"
-msgstr ""
+msgstr "Skicka en ny recension"
 
 #, fuzzy
 #| msgid "Submit Ticket"
@@ -1964,7 +1964,7 @@ msgid "Electrical & Smart Home | The Gold Standard"
 msgstr "El & Smart Home | Guldstandarden"
 
 msgid "Content for this"
-msgstr ""
+msgstr "Innehåll för detta"
 
 msgid "Integrated Electrical &amp; Infrastructure Solutions"
 msgstr "Integrerade el- och infrastrukturl?sningar"
@@ -1979,7 +1979,7 @@ msgid "SCHEDULE A CONSULTATION"
 msgstr "BOKA EN KONSULTATION"
 
 msgid "Access the website"
-msgstr ""
+msgstr "Öppna webbplatsen"
 
 msgid "Fully operational today. Our standards are not negotiable."
 msgstr "Fullt operativa redan idag. V?ra standarder ?r inte f?rhandlingsbara."
@@ -1990,13 +1990,13 @@ msgid "Licensed Electricians | Home Solutions"
 msgstr "Behöriga elektriker. Tydliga råd. Inget krav."
 
 msgid "We Don't Just Fix Problems."
-msgstr ""
+msgstr "Vi löser inte bara problem."
 
 msgid "We Prevent Them."
-msgstr ""
+msgstr "Vi förebygger dem."
 
 msgid "Experienced electricians delivering safe, lasting solutions, so you never have to call twice."
-msgstr ""
+msgstr "Erfarna elektriker som levererar säkra och hållbara lösningar, så att du aldrig behöver ringa två gånger."
 
 #, fuzzy
 #| msgid "Service type"
@@ -2014,13 +2014,13 @@ msgid "incl. VAT"
 msgstr "Inkl. moms"
 
 msgid "First-hour visit"
-msgstr ""
+msgstr "Besökets första timme"
 
 msgid "With eligible ROT"
-msgstr ""
+msgstr "Med berättigad ROT"
 
 msgid "First-hour price includes a 500 kr call-out fee. Materials extra. ROT applies only to eligible labour."
-msgstr ""
+msgstr "Priset för den första timmen inkluderar en utryckningsavgift på 500 kr. Material tillkommer. ROT gäller endast berättigat arbete."
 
 #, fuzzy
 #| msgid "Book an Electrician"
@@ -2028,7 +2028,7 @@ msgid "Book a Licensed Electrician"
 msgstr "Boka en elektriker"
 
 msgid "Get a Free Quote"
-msgstr ""
+msgstr "Få en kostnadsfri offert"
 
 #, fuzzy
 #| msgid "Jour"
@@ -2046,7 +2046,7 @@ msgid "Call Us"
 msgstr "Ring"
 
 msgid "WhatsApp Us"
-msgstr ""
+msgstr "Kontakta oss på WhatsApp"
 
 #, fuzzy
 #| msgid "Coverage & Response"
@@ -2054,10 +2054,10 @@ msgid "Fast Response"
 msgstr "Täckning & respons"
 
 msgid "Professional Advice"
-msgstr ""
+msgstr "Professionell rådgivning"
 
 msgid "Available When You Need Us"
-msgstr ""
+msgstr "Tillgängliga när du behöver oss"
 
 #, fuzzy
 #| msgid "Review your request"
@@ -2070,7 +2070,7 @@ msgid "Our Services"
 msgstr "Tjänst"
 
 msgid "Expert solutions for all your electrical needs, delivered with precision and care."
-msgstr ""
+msgstr "Expertlösningar för alla dina elbehov, utförda med precision och omsorg."
 
 #, fuzzy
 #| msgid "New Installations"
@@ -2078,13 +2078,13 @@ msgid "Safe & Reliable Installations"
 msgstr "Nya installationer"
 
 msgid "Advanced wiring and circuit installs ensuring your home is shielded from electrical faults and system overloads."
-msgstr ""
+msgstr "Avancerad kabeldragning och kretsinstallationer som skyddar hemmet mot elfel och överbelastning."
 
 msgid "Smart & Efficient Lighting"
-msgstr ""
+msgstr "Smart och effektiv belysning"
 
 msgid "Tailored lighting solutions from smart home automation to ambient architecture that sets the mood of your living space."
-msgstr ""
+msgstr "Skräddarsydda belysningslösningar från smart hemautomation till stämningsfull arkitekturbelysning."
 
 #, fuzzy
 #| msgid "Lighting Solutions"
@@ -2092,19 +2092,19 @@ msgid "EV Charging Solutions"
 msgstr "Belysningslösningar"
 
 msgid "Rapid performance residential wallboxes that ensure your electric vehicle is ready for the future of mobility."
-msgstr ""
+msgstr "Snabba wallboxar för hemmet som gör ditt elfordon redo för framtidens mobilitet."
 
 msgid "Heating & Smart Home"
-msgstr ""
+msgstr "Uppvärmning och smarta hem"
 
 msgid "HVAC, thermostats, and sensor integrations for ultimate comfort and energy records across your entire household."
-msgstr ""
+msgstr "HVAC, termostater och sensorintegrationer för maximal komfort och energikontroll i hela hemmet."
 
 msgid "Appliance & White Goods Installation"
-msgstr ""
+msgstr "Installation av apparater och vitvaror"
 
 msgid "From ovens to washing machines, we provide seamless setups for all major appliance brands."
-msgstr ""
+msgstr "Från ugnar till tvättmaskiner erbjuder vi smidiga installationer för alla större varumärken."
 
 #, fuzzy
 #| msgid "Troubleshooting"
@@ -2112,25 +2112,25 @@ msgid "Troubleshooting & Repairs"
 msgstr "Felsökning"
 
 msgid "Fast, accurate fault detection and rectifying to ensure your home's electrical system is back to peak performance."
-msgstr ""
+msgstr "Snabb och noggrann felsökning och åtgärd så att hemmets elsystem åter fungerar optimalt."
 
 msgid "Get a Quote"
-msgstr ""
+msgstr "Begär offert"
 
 msgid "Need a"
-msgstr ""
+msgstr "Behöver du en"
 
 msgid "quick quote?"
-msgstr ""
+msgstr "snabb offert?"
 
 msgid "Tell us a few details and we’ll get back to you shortly."
-msgstr ""
+msgstr "Berätta några detaljer så återkommer vi snart."
 
 msgid "Fast response"
-msgstr ""
+msgstr "Snabb respons"
 
 msgid "Usually within 24 hours"
-msgstr ""
+msgstr "Vanligtvis inom 24 timmar"
 
 #, fuzzy
 #| msgid "View Pricing"
@@ -2138,7 +2138,7 @@ msgid "Clear pricing"
 msgstr "Visa priser"
 
 msgid "No hidden costs"
-msgstr ""
+msgstr "Inga dolda kostnader"
 
 #, fuzzy
 #| msgid "Admin-defined electrician rate"
@@ -2146,7 +2146,7 @@ msgid "Licensed electricians"
 msgstr "Administratörsdefinierad timtaxa för elektriker"
 
 msgid "Safe, compliant and insured"
-msgstr ""
+msgstr "Säkert, godkänt och försäkrat"
 
 #, fuzzy
 #| msgid "Request Received"
@@ -2154,13 +2154,13 @@ msgid "Quote request received!"
 msgstr "Förfrågan mottagen"
 
 msgid "Thank you for contacting RWM EL."
-msgstr ""
+msgstr "Tack för att du kontaktar RWM EL."
 
 msgid "We’ve received your request and will review the details. Our team will contact you using the information you provided."
-msgstr ""
+msgstr "Vi har tagit emot din förfrågan och granskar uppgifterna. Vårt team kontaktar dig via informationen du angav."
 
 msgid "A confirmation will be sent to your email."
-msgstr ""
+msgstr "En bekräftelse skickas till din e-post."
 
 #, fuzzy
 #| msgid "Send request"
@@ -2173,10 +2173,10 @@ msgid "Quick Quote Request"
 msgstr "Skicka förfrågan"
 
 msgid "Same great service. A faster start."
-msgstr ""
+msgstr "Samma fantastiska service. En snabbare start."
 
 msgid "I am a..."
-msgstr ""
+msgstr "Jag är..."
 
 #, fuzzy
 #| msgid "Postal code"
@@ -2199,7 +2199,7 @@ msgid "Tell us about your project or what you need help with..."
 msgstr "Berätta om ditt projekt eller din förfrågan..."
 
 msgid "Please check the information and try again."
-msgstr ""
+msgstr "Kontrollera uppgifterna och försök igen."
 
 #, fuzzy
 #| msgid "Request Logged"
@@ -2207,25 +2207,25 @@ msgid "Request Quick Quote"
 msgstr "Förfrågan registrerad"
 
 msgid "Simple, fast, no obligation."
-msgstr ""
+msgstr "Enkelt, snabbt och utan förpliktelser."
 
 msgid "Why Choose Us?"
-msgstr ""
+msgstr "Varför välja oss?"
 
 msgid "The difference is in how we care for every job."
-msgstr ""
+msgstr "Skillnaden ligger i hur vi tar hand om varje uppdrag."
 
 msgid "Licensed & Insured"
-msgstr ""
+msgstr "Auktoriserade och försäkrade"
 
 msgid "Fully compliant with the latest safety standards for your peace of mind."
-msgstr ""
+msgstr "Fullt förenliga med de senaste säkerhetsstandarderna för din trygghet."
 
 msgid "Punctual & Reliable"
-msgstr ""
+msgstr "Punktliga och pålitliga"
 
 msgid "We respect your time. Our team arrives promptly and completes work efficiently."
-msgstr ""
+msgstr "Vi respekterar din tid. Vårt team kommer i tid och utför arbetet effektivt."
 
 #, fuzzy
 #| msgid "Pricing"
@@ -2233,7 +2233,7 @@ msgid "Upfront Pricing"
 msgstr "Priser"
 
 msgid "No hidden fees. We provide clear, itemized quotes before any work begins."
-msgstr ""
+msgstr "Inga dolda avgifter. Vi ger tydliga, specificerade offerter innan arbetet börjar."
 
 #, fuzzy
 #| msgid "Guaranteed Pro"
@@ -2241,13 +2241,13 @@ msgid "Guaranteed Workmanship"
 msgstr "Certifierad fackman"
 
 msgid "All our work is backed by a 12-month satisfaction guarantee for your total security."
-msgstr ""
+msgstr "Allt vårt arbete omfattas av en 12 månaders nöjdhetsgaranti för din trygghet."
 
 msgid "Clean & Respectful"
-msgstr ""
+msgstr "Rena och respektfulla"
 
 msgid "We leave your home as we found it. No mess, just perfect electrical work."
-msgstr ""
+msgstr "Vi lämnar ditt hem som vi fann det. Ingen röra, bara perfekt elarbete."
 
 #, fuzzy
 #| msgid "Project scope"
@@ -2255,37 +2255,37 @@ msgid "Our Projects"
 msgstr "Projektomfattning"
 
 msgid "Every project is different, but the goal is always the same: safe, lasting solutions."
-msgstr ""
+msgstr "Varje projekt är unikt, men målet är alltid detsamma: säkra och hållbara lösningar."
 
 msgid "Modern Home Asset Refit"
-msgstr ""
+msgstr "Modernisering av hemmet"
 
 msgid "Installed smart LED lighting throughout a suburban home, creating a premium atmosphere while saving energy costs."
-msgstr ""
+msgstr "Installerade smart LED-belysning i ett villaområde och skapade en exklusiv atmosfär samtidigt som energikostnaderna minskade."
 
 msgid "Powering Local Business Growth"
-msgstr ""
+msgstr "Driver lokala företag framåt"
 
 msgid "Upgraded two distribution boards for a local warehouse, giving them the capacity to support more tech and machinery."
-msgstr ""
+msgstr "Uppgraderade två elcentraler i ett lokalt lager så att de kunde hantera mer teknik och fler maskiner."
 
 msgid "EV Ready - Future Study"
-msgstr ""
+msgstr "EV-redo – framtidslösning"
 
 msgid "Setup a fast-charging wallbox for a client's brand-new EV, ensuring a full and safe top-up before the electric car commute."
-msgstr ""
+msgstr "Installerade en snabbladdande wallbox för kundens nya elbil och säkerställde full och trygg laddning inför pendlingen."
 
 msgid "When The Lights Went Out"
-msgstr ""
+msgstr "När lamporna slocknade"
 
 msgid "Diagnosed and resolved a faulty wiring for a family that left part of their home working only at half capacity."
-msgstr ""
+msgstr "Vi felsökte och åtgärdade ett kabelproblem som gjorde att delar av familjens hem bara fungerade med halv kapacitet."
 
 msgid "Also Serving Your Home Needs"
-msgstr ""
+msgstr "Vi hjälper även till i hemmet"
 
 msgid "Professional cleaning and"
-msgstr ""
+msgstr "Professionell städning och"
 
 #, fuzzy
 #| msgid "Need assistance?"
@@ -2293,10 +2293,10 @@ msgid "everyday home assistance"
 msgstr "Behöver du hjälp?"
 
 msgid "through"
-msgstr ""
+msgstr "med"
 
 msgid "the same care and reliability you expect from us."
-msgstr ""
+msgstr "samma omsorg och pålitlighet som du förväntar dig av oss."
 
 #, fuzzy
 #| msgid "Back to Hembla Experten"
@@ -2309,13 +2309,13 @@ msgid "Visit Hembla Experten"
 msgstr "Tillbaka till Hembla Experten"
 
 msgid "Cleaning & Home Services"
-msgstr ""
+msgstr "Städning och tjänster för hemmet"
 
 msgid "What Our Customers Say"
-msgstr ""
+msgstr "Vad våra kunder säger"
 
 msgid "\"Professional service, clear communication, and neat work from start to finish.\""
-msgstr ""
+msgstr "\"Professionell service, tydlig kommunikation och noggrant arbete från början till slut.\""
 
 #, fuzzy
 #| msgid "RWM EL Home"
@@ -2323,10 +2323,10 @@ msgid "RWM EL Customer"
 msgstr "RWM EL – Startsida"
 
 msgid "Ready To Get Start?"
-msgstr ""
+msgstr "Redo att komma igång?"
 
 msgid "Book an electrician today or request a free, no-obligation quote. We're here to help light up your world."
-msgstr ""
+msgstr "Boka en elektriker idag eller begär en kostnadsfri offert utan förpliktelser. Vi hjälper dig att lysa upp din vardag."
 
 #, fuzzy
 #| msgid "Book an Electrician"
@@ -2334,10 +2334,10 @@ msgid "Book an Electrician Today"
 msgstr "Boka en elektriker"
 
 msgid "Close"
-msgstr ""
+msgstr "Stäng"
 
 msgid "Before you begin"
-msgstr ""
+msgstr "Innan du börjar"
 
 #, fuzzy
 #| msgid "Choose the category that best matches your booking."
@@ -2363,7 +2363,7 @@ msgid "in Stockholm"
 msgstr "Stockholm"
 
 msgid "Power outages, electrical faults or urgent safety concerns? RWM EL provides professional on-call electrical assistance in Järfälla and across Stockholm."
-msgstr ""
+msgstr "Strömavbrott, elfel eller akuta säkerhetsproblem? RWM EL erbjuder professionell jourhjälp i Järfälla och hela Stockholm."
 
 #, fuzzy
 #| msgid "Hourly Electrician"
@@ -2371,7 +2371,7 @@ msgid "Call our on-call electrician"
 msgstr "Elektriker per timme"
 
 msgid "Chat on WhatsApp"
-msgstr ""
+msgstr "Chatta på WhatsApp"
 
 #, fuzzy
 #| msgid "Service Selection"
@@ -2379,16 +2379,16 @@ msgid "Service benefits"
 msgstr "Val av tjänst"
 
 msgid "Available"
-msgstr ""
+msgstr "Tillgänglig"
 
 msgid "24/7"
 msgstr "24/7"
 
 msgid "Based in Järfälla"
-msgstr ""
+msgstr "Baserade i Järfälla"
 
 msgid "Serving all of Stockholm"
-msgstr ""
+msgstr "Vi servar hela Stockholm"
 
 #, fuzzy
 #| msgid "Certified"
@@ -2411,7 +2411,7 @@ msgid "ELECTRICAL SERVICE"
 msgstr "ELEKTRISK GRUND"
 
 msgid "For homes, businesses and properties."
-msgstr ""
+msgstr "För hem, företag och fastigheter."
 
 #, fuzzy
 #| msgid "What do you need help with?"
@@ -2449,16 +2449,16 @@ msgid "Registered with Elsäkerhetsverket"
 msgstr "Licensierad av Elsäkerhetsverket"
 
 msgid "Local and reliable"
-msgstr ""
+msgstr "Lokala och pålitliga"
 
 msgid "Järfälla & across Stockholm"
-msgstr ""
+msgstr "Järfälla och hela Stockholm"
 
 msgid "Homes, businesses & properties"
-msgstr ""
+msgstr "Hem, företag och fastigheter"
 
 msgid "We work with private customers, companies and property managers."
-msgstr ""
+msgstr "Vi arbetar med privatkunder, företag och fastighetsförvaltare."
 
 #, fuzzy
 #| msgid "Safety Compliance"
@@ -2481,7 +2481,7 @@ msgid "Power that works exactly when and how it should. From lighting and heatin
 msgstr "Power that works exactly when and how it should. From lighting and heating to appliances and smart controls, we create electrical systems that run smoothly every day—without interruptions, flickering, or guesswork."
 
 msgid "Efficiency & Future Readiness"
-msgstr ""
+msgstr "Effektivitet och framtidsberedskap"
 
 #, fuzzy
 #| msgid "Smarter energy use, lower costs, and systems ready for tomorrow. We design and install energy-efficient solutions, EV charging, and modern electrical systems that reduce waste, lower bills, and adapt as your needs grow."
@@ -2545,10 +2545,10 @@ msgid "Specialized Service Categories"
 msgstr "Fast servicepris"
 
 msgid "Each premium category has its own dedicated presentation page, while remaining fully manageable from the admin panel."
-msgstr ""
+msgstr "Varje premiumkategori har en egen presentationssida och kan samtidigt hanteras fullt ut från adminpanelen."
 
 msgid "Open category page"
-msgstr ""
+msgstr "Öppna kategorisidan"
 
 #, fuzzy
 #| msgid "Electrical Services"
@@ -2556,13 +2556,13 @@ msgid "Integrated Electrical Services"
 msgstr "Elservice"
 
 msgid "Coordinated electrical solutions for homes, BRF associations, and property-focused projects. From planning and installation to ongoing support, we deliver safe, reliable and future-ready electrical systems with a focus on long-term value."
-msgstr ""
+msgstr "Samordnade ellösningar för hem, bostadsrättsföreningar och fastighetsprojekt. Från planering och installation till löpande support levererar vi säkra, pålitliga och framtidsklara elsystem med fokus på långsiktigt värde."
 
 msgid "Tailored planning"
-msgstr ""
+msgstr "Skräddarsydd planering"
 
 msgid "Professional execution"
-msgstr ""
+msgstr "Professionellt utförande"
 
 #, fuzzy
 #| msgid "Long-term safety"
@@ -2609,13 +2609,13 @@ msgid "Reliable Electrical Support"
 msgstr "Elektrisk reparation för bostad"
 
 msgid "for Every Stage of Your Project"
-msgstr ""
+msgstr "för varje steg i ditt projekt"
 
 msgid "From initial planning to expert installations, we deliver safe, efficient and future-ready electrical solutions for your home or property."
-msgstr ""
+msgstr "Från den första planeringen till expertinstallationer levererar vi säkra, effektiva och framtidsklara ellösningar för ditt hem eller din fastighet."
 
 msgid "Quality workmanship"
-msgstr ""
+msgstr "Kvalitetsarbete"
 
 #, fuzzy
 #| msgid "Businesses"
@@ -2623,13 +2623,13 @@ msgid "Homes & businesses"
 msgstr "Företag"
 
 msgid "Expert advice. Real solutions."
-msgstr ""
+msgstr "Expertråd. Verkliga lösningar."
 
 msgid "Plan Your Electrical Project"
-msgstr ""
+msgstr "Planera ditt elprojekt"
 
 msgid "Get expert guidance to design the right electrical solution for your home or property."
-msgstr ""
+msgstr "Få expertråd för att utforma rätt ellösning för ditt hem eller din fastighet."
 
 #, fuzzy
 #| msgid "Request Consultation"
@@ -2647,10 +2647,10 @@ msgid "Get Expert Advice"
 msgstr "Expertgranskning"
 
 msgid "Have a question? Speak with our team for clear, honest advice tailored to your needs."
-msgstr ""
+msgstr "Har du en fråga? Prata med vårt team för tydliga och ärliga råd anpassade efter dina behov."
 
 msgid "Speak with our team"
-msgstr ""
+msgstr "Prata med vårt team"
 
 msgid "Enterprise Partnerships"
 msgstr "Företagspartnerskap"
@@ -2746,7 +2746,7 @@ msgid "Fixed night rates"
 msgstr "Fasta nattpriser"
 
 msgid "Ready to Book Your Home?"
-msgstr ""
+msgstr "Redo att boka hjälp för hemmet?"
 
 #, fuzzy
 #| msgid "From electrical upgrades to modern home systems, our licensed electricians are ready to help—whether you’re planning ahead or need support now."
@@ -2768,10 +2768,10 @@ msgid "We need a few details:"
 msgstr "Vi behöver några uppgifter:"
 
 msgid "Enterprise Grade"
-msgstr ""
+msgstr "Företagsklass"
 
 msgid "On-Call Electrical Service"
-msgstr ""
+msgstr "Elektrisk jourtjänst"
 
 msgid "Jour"
 msgstr "Jour"
@@ -2780,7 +2780,7 @@ msgid "Priority access to a licensed electrician for urgent electrical issues. A
 msgstr "Priority access to a licensed electrician for urgent electrical issues. Available through a service agreement for businesses, property owners, and housing associations."
 
 msgid "When do you need on-call coverage?"
-msgstr ""
+msgstr "När behöver du jourtäckning?"
 
 msgid "Extended coverage 17:00 - 22:00"
 msgstr "Utökad täckning 17:00 - 22:00"
@@ -2795,10 +2795,10 @@ msgid "How quickly do you need a response?"
 msgstr "Hur snabbt behöver du en respons?"
 
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 msgid "Standard response"
-msgstr ""
+msgstr "Standardsvar"
 
 msgid "Service response within 4-8 hours of the reported incident."
 msgstr "Serviceinsats inom 4–8 timmar efter den rapporterade incidenten."
@@ -2807,7 +2807,7 @@ msgid "Premium"
 msgstr "Premium"
 
 msgid "Priority response"
-msgstr ""
+msgstr "Prioriterad respons"
 
 msgid "Guaranteed technician on-site within 1-2 hours 24/7."
 msgstr "Garanterad tekniker på plats inom 1–2 timmar dygnet runt."
@@ -2816,10 +2816,10 @@ msgid "What should the on-call service cover?"
 msgstr "Vad ska jourtjänsten omfatta?"
 
 msgid "Service Summary"
-msgstr ""
+msgstr "Tjänstesammanfattning"
 
 msgid "Coverage Type"
-msgstr ""
+msgstr "Typ av täckning"
 
 msgid "B2B Service Agreement"
 msgstr "B2B-serviceavtal"
@@ -2831,7 +2831,7 @@ msgid "Final pricing and conditions are subject to technical audit and individua
 msgstr "Final pricing and conditions are subject to technical audit and individual facility complexity."
 
 msgid "Technicians available now"
-msgstr ""
+msgstr "Tekniker tillgängliga nu"
 
 msgid "Registration Progress"
 msgstr "Registreringsstatus"
@@ -2840,10 +2840,10 @@ msgid "Who is applying?"
 msgstr "Vem ansöker?"
 
 msgid "Select the entity type for your registration."
-msgstr ""
+msgstr "Välj vilken typ av enhet du registrerar."
 
 msgid "Note:"
-msgstr ""
+msgstr "Obs:"
 
 msgid "Our smart on-call service is available for professional entities only. Private individuals are not eligible."
 msgstr "Our smart on-call service is available for professional entities only. Private individuals are not eligible."
@@ -2855,46 +2855,46 @@ msgid "For corporate entities and startups."
 msgstr "För företag och startups."
 
 msgid "Housing Association"
-msgstr ""
+msgstr "Bostadsrättsförening"
 
 msgid "For property owners and co-ops."
 msgstr "För fastighetsägare och bostadsrättsföreningar."
 
 msgid "Organization Information"
-msgstr ""
+msgstr "Organisationsuppgifter"
 
 msgid "Organization Name"
-msgstr ""
+msgstr "Organisationens namn"
 
 msgid "e.g. Acme Corp"
 msgstr "t.ex. Acme Corp"
 
 msgid "Org Number"
-msgstr ""
+msgstr "Organisationsnummer"
 
 msgid "556XXX-XXXX"
 msgstr "556XXX-XXXX"
 
 msgid "Contact Person"
-msgstr ""
+msgstr "Kontaktperson"
 
 msgid "0046760355633"
 msgstr "0046760355633"
 
 msgid "contact@organization.com"
-msgstr ""
+msgstr "kontakt@organisation.se"
 
 msgid "Address Details"
-msgstr ""
+msgstr "Adressuppgifter"
 
 msgid "Company Address"
-msgstr ""
+msgstr "Företagsadress"
 
 msgid "Street Name 123"
 msgstr "Gatunamn 123"
 
 msgid "ZIP Code"
-msgstr ""
+msgstr "Postnummer"
 
 msgid "123 45"
 msgstr "123 45"
@@ -2903,7 +2903,7 @@ msgid "Stockholm"
 msgstr "Stockholm"
 
 msgid "Continue to Next Step"
-msgstr ""
+msgstr "Fortsätt till nästa steg"
 
 msgid "Registration Flow"
 msgstr "Registreringsflöde"
@@ -2915,10 +2915,10 @@ msgid "Tell us about the physical infrastructure we’ll be supporting."
 msgstr "Berätta om den fysiska infrastrukturen vi ska stödja."
 
 msgid "Property Type"
-msgstr ""
+msgstr "Fastighetstyp"
 
 msgid "Select property type"
-msgstr ""
+msgstr "Välj fastighetstyp"
 
 msgid "Industrial"
 msgstr "Industriell"
@@ -2933,10 +2933,10 @@ msgid "e.g. 12"
 msgstr "t.ex. 12"
 
 msgid "Primary City / Region"
-msgstr ""
+msgstr "Huvudort / region"
 
 msgid "Search region..."
-msgstr ""
+msgstr "Sök region..."
 
 msgid "Shared Critical Systems"
 msgstr "Delade kritiska system"
@@ -2945,7 +2945,7 @@ msgid "Are HVAC, plumbing, or electrical systems shared?"
 msgstr "Är HVAC-, VVS- eller elsystem delade?"
 
 msgid "Review & Finalize"
-msgstr ""
+msgstr "Granska och slutför"
 
 msgid "Application received."
 msgstr "Ansökan mottagen."
@@ -2978,7 +2978,7 @@ msgid "Review and complete the last few steps to activate your on-call electrica
 msgstr "Review and complete the last few steps to activate your on-call electrical service."
 
 msgid "Current electrical situation"
-msgstr ""
+msgstr "Nuvarande elsituation"
 
 msgid "When was your last electrical issue?"
 msgstr "När var din senaste elstörning?"
@@ -2996,40 +2996,40 @@ msgid "e.g., Occasional flickering in the main hall..."
 msgstr "t.ex. Ibland flimrar det i huvudhallen..."
 
 msgid "Additional notes (Optional)"
-msgstr ""
+msgstr "Ytterligare anteckningar (valfritt)"
 
 msgid "Enter any additional details here..."
 msgstr "Ange eventuella ytterligare detaljer här..."
 
 msgid "Emergency pricing estimate"
-msgstr ""
+msgstr "Prisuppskattning för jour"
 
 msgid "Estimated emergency hours"
-msgstr ""
+msgstr "Beräknade jourtimmar"
 
 msgid "Estimated total:"
-msgstr ""
+msgstr "Beräknat totalt:"
 
 msgid "Review & Submit"
-msgstr ""
+msgstr "Granska och skicka"
 
 msgid "On-Call Pro (Monthly)"
 msgstr "Jour Pro (månad)"
 
 msgid "Service Plan"
-msgstr ""
+msgstr "Serviceplan"
 
 msgid "123 Industrial Way"
 msgstr "Industrivägen 123"
 
 msgid "Site Address"
-msgstr ""
+msgstr "Besöksadress"
 
 msgid "Notice of Activation: By clicking \\"
-msgstr ""
+msgstr "Meddelande om aktivering: Genom att klicka \\"
 
 msgid "Submit Application"
-msgstr ""
+msgstr "Skicka ansökan"
 
 msgid "Outside Coverage | Hembla experten"
 msgstr "Utanför täckningsområde | Hembla experten"
@@ -3250,7 +3250,7 @@ msgid "18. Complaints"
 msgstr "18. Klagomål"
 
 msgid "Data Controller"
-msgstr ""
+msgstr "Personuppgiftsansvarig"
 
 msgid "RWM EL is the designated data controller for all processing activities described herein. We are a registered Swedish electrical service provider operating with full technical compliance."
 msgstr "RWM EL is the designated data controller for all processing activities described herein. We are a registered Swedish electrical service provider operating with full technical compliance."
@@ -3262,7 +3262,7 @@ msgid "Direct Line"
 msgstr "Direktlinje"
 
 msgid "Scope of Policy"
-msgstr ""
+msgstr "Policyomfattning"
 
 msgid "This policy applies to all customers, website visitors, and partners of RWM EL. It covers data collected via our website, on-site electrical service visits, telephone inquiries, and digital communications."
 msgstr "This policy applies to all customers, website visitors, and partners of RWM EL. It covers data collected via our website, on-site electrical service visits, telephone inquiries, and digital communications."
@@ -3376,10 +3376,10 @@ msgid "RWM EL primarily processes data within the EU/EEA. If data is transferred
 msgstr "RWM EL primarily processes data within the EU/EEA. If data is transferred outside this zone, we ensure Standard Contractual Clauses (SCCs) are in place to maintain GDPR levels of protection."
 
 msgid "Your GDPR Rights"
-msgstr ""
+msgstr "Dina GDPR-rättigheter"
 
 msgid "Right to Access"
-msgstr ""
+msgstr "Rätt till tillgång"
 
 msgid "Request a full extract of all personal data we hold about you."
 msgstr "Begär ett fullständigt utdrag av alla personuppgifter vi har om dig."
@@ -3397,7 +3397,7 @@ msgid "Request deletion where data is no longer necessary for legal reasons."
 msgstr "Begär radering när data inte längre behövs av juridiska skäl."
 
 msgid "Data Portability"
-msgstr ""
+msgstr "Dataportabilitet"
 
 msgid "Receive your data in a structured, machine-readable format."
 msgstr "Få dina data i ett strukturerat, maskinläsbart format."
@@ -3409,7 +3409,7 @@ msgid "Object to data processing based on our legitimate interests."
 msgstr "Invänd mot databehandling som grundar sig på vårt berättigade intresse."
 
 msgid "Restriction"
-msgstr ""
+msgstr "Begränsning"
 
 msgid "Request the limitation of how we process your personal data."
 msgstr "Begär begränsning av hur vi behandlar dina personuppgifter."
@@ -3422,13 +3422,13 @@ msgid "We use technical and analytical cookies to optimize website performance. 
 msgstr "We use technical and analytical cookies to optimize website performance. For detailed information, please refer to our dedicated <a class=\"text-primary font-bold hover:underline\" href=\"%(url)s\">Cookie Policy</a>."
 
 msgid "On-Site Service Protocols"
-msgstr ""
+msgstr "Protokoll för service på plats"
 
 msgid "During physical site visits, our electricians may document technical installations with photographs. These are used solely for technical documentation, safety audits, and quality assurance."
 msgstr "During physical site visits, our electricians may document technical installations with photographs. These are used solely for technical documentation, safety audits, and quality assurance."
 
 msgid "Marketing Communications"
-msgstr ""
+msgstr "Marknadskommunikation"
 
 msgid "You will only receive marketing emails if you have explicitly opted in. You can unsubscribe at any time via the link provided in every communication."
 msgstr "You will only receive marketing emails if you have explicitly opted in. You can unsubscribe at any time via the link provided in every communication."
@@ -3440,19 +3440,19 @@ msgid "RWM EL does not use automated decision-making or profiling systems that p
 msgstr "RWM EL does not use automated decision-making or profiling systems that produce legal effects concerning you."
 
 msgid "Children's Privacy"
-msgstr ""
+msgstr "Barns integritet"
 
 msgid "Our services are designed for property owners and businesses. We do not knowingly collect or process data from individuals under the age of 18."
 msgstr "Our services are designed for property owners and businesses. We do not knowingly collect or process data from individuals under the age of 18."
 
 msgid "Policy Updates"
-msgstr ""
+msgstr "Policyuppdateringar"
 
 msgid "We periodically update this policy to reflect changes in our technical practices or legal requirements. Updates are effective immediately upon posting."
 msgstr "We periodically update this policy to reflect changes in our technical practices or legal requirements. Updates are effective immediately upon posting."
 
 msgid "Complaints"
-msgstr ""
+msgstr "Klagomål"
 
 msgid "If you believe we have mishandled your data, you have the right to lodge a complaint with the Swedish Authority for Privacy Protection (Integritetsskyddsmyndigheten - IMY)."
 msgstr "If you believe we have mishandled your data, you have the right to lodge a complaint with the Swedish Authority for Privacy Protection (Integritetsskyddsmyndigheten - IMY)."
@@ -3501,10 +3501,10 @@ msgid "We'll send your booking confirmation and estimate to this address."
 msgstr "Vi skickar bokningsbekräftelse och kostnadsuppskattning till denna adress."
 
 msgid "Visual Documentation"
-msgstr ""
+msgstr "Visuell dokumentation"
 
 msgid "Please upload photos of the area or existing electrical cabinet."
-msgstr ""
+msgstr "Ladda upp bilder på området eller den befintliga elcentralen."
 
 msgid "This allows our experts to bring the correct parts and reduces site time."
 msgstr "This allows our experts to bring the correct parts and reduces site time."
@@ -3519,37 +3519,37 @@ msgid "or click to browse from your computer"
 msgstr "eller klicka för att bläddra från din dator"
 
 msgid "Choose Files"
-msgstr ""
+msgstr "Välj filer"
 
 msgid "Service Details"
-msgstr ""
+msgstr "Serviceuppgifter"
 
 msgid "Service Type"
-msgstr ""
+msgstr "Typ av tjänst"
 
 msgid "Licensed Master Electrician"
-msgstr ""
+msgstr "Auktoriserad elinstallatör"
 
 msgid "Tasks"
 msgstr "Uppgifter"
 
 msgid "Hourly electrician booking"
-msgstr ""
+msgstr "Boka elektriker per timme"
 
 msgid "Priority"
-msgstr ""
+msgstr "Prioritet"
 
 msgid "Standard (Next Available)"
 msgstr "Standard (nästa tillgängliga)"
 
 msgid "Arrival Information"
-msgstr ""
+msgstr "Ankomstinformation"
 
 msgid "Date & Time"
 msgstr "Datum & tid"
 
 msgid "Service Address"
-msgstr ""
+msgstr "Serviceadress"
 
 msgid ""
 "\n"
@@ -3574,37 +3574,37 @@ msgid "The price below reflects the fixed services you selected."
 msgstr "Priset nedan speglar de fasta tjänster du har valt."
 
 msgid "Hourly booking"
-msgstr ""
+msgstr "Timdebiterad bokning"
 
 msgid "Hourly Rate"
-msgstr ""
+msgstr "Timpris"
 
 msgid "Estimated Hours"
-msgstr ""
+msgstr "Beräknade timmar"
 
 msgid "hr"
-msgstr ""
+msgstr "tim"
 
 msgid "Fixed service price"
-msgstr ""
+msgstr "Fast servicepris"
 
 msgid "Fixed Services Total"
-msgstr ""
+msgstr "Totalt för fasta tjänster"
 
 msgid "Book Electrician →"
-msgstr ""
+msgstr "Boka elektriker →"
 
 msgid "Secure encrypted checkout"
 msgstr "Säker krypterad checkout"
 
 msgid "Guaranteed Safety"
-msgstr ""
+msgstr "Garanterad säkerhet"
 
 msgid "Background checked & certified"
 msgstr "Bakgrundskontrollerad och certifierad"
 
 msgid "Booking Received!"
-msgstr ""
+msgstr "Bokning mottagen!"
 
 #, python-format
 msgid ""
@@ -3619,7 +3619,7 @@ msgstr ""
 "      "
 
 msgid "Confirmation ID"
-msgstr ""
+msgstr "Bekräftelse-ID"
 
 msgid "Time Assigned"
 msgstr "Tilldelad tid"
@@ -3628,10 +3628,10 @@ msgid "Add to Calendar"
 msgstr "Lägg till i kalender"
 
 msgid "Go To Home"
-msgstr ""
+msgstr "Gå till startsidan"
 
 msgid "Where will the work be done?"
-msgstr ""
+msgstr "Var ska arbetet utföras?"
 
 msgid "We need your exact location for compliance and technician dispatching."
 msgstr "Vi behöver din exakta plats för efterlevnad och teknikerutskick."
@@ -3676,7 +3676,7 @@ msgid "Service area map"
 msgstr "Serviceområdeskarta"
 
 msgid "Service Area: Skåne"
-msgstr ""
+msgstr "Serviceområde: Skåne"
 
 msgid "Nessafe is currently operating across southern Sweden with 24/7 support."
 msgstr "Nessafe is currently operating across southern Sweden with 24/7 support."
@@ -3793,13 +3793,13 @@ msgid "Primary Choice"
 msgstr "Förstahandsval"
 
 msgid "Availability is shown for a 1-hour window. Select services or hours to refine the time slots."
-msgstr ""
+msgstr "Tillgänglighet visas för ett tidsfönster på en timme. Välj tjänster eller antal timmar för att förfina tiderna."
 
 msgid "Select Date"
 msgstr "Välj datum"
 
 msgid "Open calendar"
-msgstr ""
+msgstr "Öppna kalendern"
 
 msgid "Select Time Slot"
 msgstr "Välj tidsintervall"
@@ -3808,7 +3808,7 @@ msgid "Select time slot"
 msgstr "Välj tidsintervall"
 
 msgid "No availability for the selected date."
-msgstr ""
+msgstr "Ingen tillgänglighet för valt datum."
 
 msgid "Alternative Choice (Optional)"
 msgstr "Alternativt val (valfritt)"
@@ -3910,16 +3910,16 @@ msgid "e.g. 1102 (4 digits)"
 msgstr "t.ex. 1102 (4 siffror)"
 
 msgid "Included in package"
-msgstr ""
+msgstr "Ingår i paketet"
 
 msgid "Not included in package"
-msgstr ""
+msgstr "Ingår inte i paketet"
 
 msgid "With install"
-msgstr ""
+msgstr "Med installation"
 
 msgid "Panel only"
-msgstr ""
+msgstr "Endast elcentral"
 
 #, fuzzy
 #| msgid "With ROT Deduction"
@@ -3927,25 +3927,25 @@ msgid "With ROT"
 msgstr "Med ROT-avdrag"
 
 msgid "No ROT"
-msgstr ""
+msgstr "Ingen ROT"
 
 msgid "Total investment"
-msgstr ""
+msgstr "Total investering"
 
 msgid "Panel + install (with ROT)"
-msgstr ""
+msgstr "Elcentral + installation (med ROT)"
 
 msgid "Quantity"
-msgstr ""
+msgstr "Antal"
 
 msgid "Decrease quantity"
-msgstr ""
+msgstr "Minska antal"
 
 msgid "Increase quantity"
-msgstr ""
+msgstr "Öka antal"
 
 msgid "Add to project"
-msgstr ""
+msgstr "Lägg till i projektet"
 
 #, fuzzy
 #| msgid "Technical Documentation"
@@ -3963,7 +3963,7 @@ msgid "Home and personal electrical services"
 msgstr "Elservice"
 
 msgid "Companies, organizations, and BRF"
-msgstr ""
+msgstr "Företag, organisationer och bostadsrättsföreningar"
 
 msgid "Electrical Services | Hembla experten"
 msgstr "Eltjänster | Hembla experten"
@@ -4008,7 +4008,7 @@ msgid "Smarter energy use, lower costs, and systems ready for tomorrow. We desig
 msgstr "Smarter energy use, lower costs, and systems ready for tomorrow. We design and install energy-efficient solutions, EV charging, and modern electrical systems that reduce waste, lower bills, and adapt as your needs grow."
 
 msgid "Each premium category now has its own dedicated presentation page, while remaining fully manageable from the admin panel."
-msgstr ""
+msgstr "Varje premiumkategori har nu en egen presentationssida och kan fortfarande hanteras fullt ut från adminpanelen."
 
 msgid "TECHNICAL CATALOG INTEGRATION"
 msgstr "TEKNISK KATALOGINTEGRATION"
@@ -4372,7 +4372,7 @@ msgid "Dispatch Definitions"
 msgstr "Definition av utryckning"
 
 msgid "A \\"
-msgstr ""
+msgstr "En \\"
 
 msgid "Dispatch fees are non-refundable once the technician has departed for the site, regardless of whether work can be performed due to site-specific restrictions."
 msgstr "Dispatch fees are non-refundable once the technician has departed for the site, regardless of whether work can be performed due to site-specific restrictions."
@@ -4566,10 +4566,10 @@ msgid "We never share your information. This step only checks coverage."
 msgstr "Vi delar aldrig dina uppgifter. Detta steg kontrollerar endast täckning."
 
 msgid "Fast coverage validation"
-msgstr ""
+msgstr "Snabb kontroll av täckning"
 
 msgid "No commitment required"
-msgstr ""
+msgstr "Ingen bindning krävs"
 
 msgid "Sign In"
 msgstr "Logga in"
@@ -4703,25 +4703,25 @@ msgid "Already have an account?"
 msgstr "Har du redan ett konto? Logga in"
 
 msgid "Feature"
-msgstr ""
+msgstr "Funktion"
 
 msgid "Option 1"
-msgstr ""
+msgstr "Alternativ 1"
 
 msgid "Option 2"
-msgstr ""
+msgstr "Alternativ 2"
 
 msgid "Option 3"
-msgstr ""
+msgstr "Alternativ 3"
 
 msgid "Option 4"
-msgstr ""
+msgstr "Alternativ 4"
 
 msgid "Option 5"
-msgstr ""
+msgstr "Alternativ 5"
 
 msgid "Option 6"
-msgstr ""
+msgstr "Alternativ 6"
 
 msgid "Residential Electrical Repair"
 msgstr "Elektrisk reparation för bostad"
@@ -4763,7 +4763,7 @@ msgid "Phone number is required."
 msgstr "Organisationsnummer krävs."
 
 msgid "Please select at least one available day."
-msgstr ""
+msgstr "Välj minst en tillgänglig dag."
 
 #, fuzzy
 #| msgid "Preferred time window"
@@ -4828,7 +4828,7 @@ msgid "First, we need to know who we are working with to provide the correct pri
 msgstr "First, we need to know who we are working with to provide the correct pricing and tax options."
 
 msgid "Engineering details help us prepare the right equipment."
-msgstr ""
+msgstr "Tekniska detaljer hjälper oss att förbereda rätt utrustning."
 
 msgid "Select all services that apply to your request."
 msgstr "Välj alla tjänster som gäller för din förfrågan."
@@ -4867,7 +4867,7 @@ msgid "Entity Selection & Organization Info"
 msgstr "Val av juridisk enhet & organisationsuppgifter"
 
 msgid "To discuss"
-msgstr ""
+msgstr "Bestäms senare"
 
 #, fuzzy
 #| msgid "Account type"
@@ -4880,7 +4880,7 @@ msgid "Coverage times"
 msgstr "Täckningskontroll"
 
 msgid "Response speed"
-msgstr ""
+msgstr "Svarstid"
 
 #, fuzzy
 #| msgid "Coverage check"

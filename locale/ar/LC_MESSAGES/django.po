@@ -448,7 +448,7 @@ msgstr "العنوان"
 #: .\electricity\templates\electricity\booking\base_booking.html:81
 #: .\electricity\templates\electricity\contact.html:109
 msgid "Kikarvägen 18, 175 46 Järfälla, Stockholm"
-msgstr ""
+msgstr "Kikarvägen 18، 175 46 يارفالا، ستوكهولم"
 
 #: .\electricity\templates\electricity\base.html:56
 #: .\electricity\templates\electricity\booking\base_booking.html:82
@@ -678,7 +678,7 @@ msgstr ""
 #: .\electricity\templates\electricity\booking\step_5.html:10
 #: .\electricity\views.py:707
 msgid "Photo"
-msgstr ""
+msgstr "صورة"
 
 #: .\electricity\templates\electricity\booking\step_5.html:16
 msgid "Browse Files"
@@ -1830,7 +1830,7 @@ msgstr "رقم مرجع الحجز"
 
 #: .\electricity\templates\electricity\electrician_booking\thank_you.html:40
 msgid "Date"
-msgstr ""
+msgstr "التاريخ"
 
 #: .\electricity\templates\electricity\electrician_booking\thank_you.html:47
 msgid "Booking Details"
@@ -2273,7 +2273,7 @@ msgstr "ما مدى سرعة الاستجابة المطلوبة؟"
 
 #: .\electricity\templates\electricity\on_call_booking\step_1.html:64
 msgid "Normal"
-msgstr ""
+msgstr "عادي"
 
 #: .\electricity\templates\electricity\on_call_booking\step_1.html:65
 msgid "Standard response"
@@ -3662,7 +3662,7 @@ msgstr "الخيار الأساسي"
 msgid ""
 "Availability is shown for a 1-hour window. Select services or hours to "
 "refine the time slots."
-msgstr ""
+msgstr "تظهر المواعيد ضمن نافذة مدتها ساعة واحدة. اختر الخدمات أو عدد الساعات لتحسين الفترات المتاحة."
 
 #: .\electricity\templates\electricity\service_booking\step_6.html:116
 #: .\electricity\templates\electricity\service_booking\step_6.html:180
@@ -3677,7 +3677,7 @@ msgstr "اختر الفترة الزمنية"
 #: .\electricity\templates\electricity\service_booking\step_6.html:134
 #: .\electricity\templates\electricity\service_booking\step_6.html:198
 msgid "No availability for the selected date."
-msgstr ""
+msgstr "لا توجد مواعيد متاحة للتاريخ المحدد."
 
 #: .\electricity\templates\electricity\service_booking\step_6.html:152
 msgid "Alternative Choice (Optional)"
@@ -5179,7 +5179,7 @@ msgstr "رقم السجل مطلوب."
 
 #: .\electricity\views.py:910
 msgid "Please select at least one available day."
-msgstr ""
+msgstr "يرجى اختيار يوم متاح واحد على الأقل."
 
 #: .\electricity\views.py:912
 #, fuzzy
@@ -5328,7 +5328,7 @@ msgstr "نوع التغطية"
 
 #: .\electricity\views.py:2062 .\electricity\views.py:2108
 msgid "Response speed"
-msgstr ""
+msgstr "سرعة الاستجابة"
 
 #: .\electricity\views.py:2066 .\electricity\views.py:2104
 #, fuzzy
