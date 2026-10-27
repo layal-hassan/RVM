@@ -5463,7 +5463,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 .services-page .oncall-safety-media { border-left: 0; border-radius: 0 8px 8px 0; }
 .oncall-safety-media img { width: 100%; height: 100%; object-fit: cover; object-position: 53% center; }
 .oncall-safety-content { min-width: 0; }
-.services-page .oncall-safety-content { padding: 0 5vw 0 2.5vw; }
+.services-page .oncall-safety-content { padding: 0 0 0 2.5vw; }
 .oncall-safety-eyebrow { display: flex; align-items: center; gap: 11px; color: #d4a82f; font: 700 9px/1.2 Arial, sans-serif; letter-spacing: .25em; text-transform: uppercase; }
 .oncall-safety-eyebrow i { width: 28px; height: 1px; background: #a77d16; }
 .oncall-safety-content h2 { margin: 13px 0 10px; color: #f5f0e5; font: 400 clamp(35px, 4vw, 55px)/.98 Georgia, serif; }
