@@ -220,10 +220,14 @@ body.rwm-mobile-menu-open {
   background: rgba(199, 164, 91, 0.18);
 }
 
-/* Linguise is rendered in the header; keep one language control and state. */
+/* Keep Linguise's automatic language control fixed at the viewport's bottom-right. */
 body > .linguise_switcher,
 body > [class*="linguise_switcher"] {
-  display: none !important;
+  position: fixed !important;
+  right: 16px !important;
+  bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+  max-width: calc(100vw - 32px) !important;
+  z-index: 45 !important;
 }
 
 @media (max-width: 1700px) and (min-width: 981px) {
@@ -968,7 +972,12 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
   /* Keep Linguise's automatic mobile control compact and away from form edges. */
   body > .linguise_switcher,
   body > [class*="linguise_switcher"] {
-    display: none !important;
+    right: 12px !important;
+    bottom: calc(14px + env(safe-area-inset-bottom)) !important;
+    max-width: calc(100vw - 24px) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.38) !important;
+    z-index: 45 !important;
   }
 
   .rwm-electricity-global-header .rwm-egh-nav-item {

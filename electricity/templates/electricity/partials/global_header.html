@@ -79,24 +79,6 @@
       </div>
       <div class="rwm-egh-right">
         <div class="linguise_switcher_root linguise_menu_root" aria-label="{% trans 'Language' %}"></div>
-        <div class="rwm-egh-lang">
-          <button class="rwm-egh-lang-trigger" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{% trans 'Change language' %}">
-            <span class="rwm-egh-lang-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                <path d="M3 12h18M12 3c3.5 3.5 3.5 14 0 18M12 3c-3.5 3.5-3.5 14 0 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </span>
-            <span class="rwm-egh-lang-caret">&#9662;</span>
-          </button>
-          <form class="rwm-egh-lang-menu" action="{% url 'set_language' %}" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ request.get_full_path }}">
-            <button class="rwm-egh-lang-option{% if CURRENT_LANGUAGE == 'en' %} is-active{% endif %}" type="submit" name="language" value="en">{% trans "English" %}</button>
-            <button class="rwm-egh-lang-option{% if CURRENT_LANGUAGE == 'sv' %} is-active{% endif %}" type="submit" name="language" value="sv">{% trans "Swedish" %}</button>
-            <button class="rwm-egh-lang-option{% if CURRENT_LANGUAGE == 'ar' %} is-active{% endif %}" type="submit" name="language" value="ar">{% trans "Arabic" %}</button>
-          </form>
-        </div>
         <a class="rwm-egh-btn rwm-egh-btn-primary rwm-egh-btn-compact" href="http://hembla-experten.se/" target="_blank" rel="noopener">
           {% trans "Back to Hembla Experten" %}
         </a>
