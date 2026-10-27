@@ -271,7 +271,7 @@
             </a>
           </div>
           <div class="category-booking-action">
-            <a class="category-card-cta category-card-cta-primary" href="{% url 'electricity:service_booking_step' 1 %}">
+            <a class="category-card-cta category-card-cta-primary js-request-flow" href="#request-flow" data-cart-trigger="false" data-mode="fixed" data-item-id="{{ item.id }}" data-source="{% if page.parent_category_id %}detail{% else %}category{% endif %}" data-title="{{ item.title|escape }}" data-description="{{ item.description|default:item.subtitle|escape }}" data-price="{{ item.price_text|escape }}" {% if item.image %}data-image="{{ item.image.url }}"{% endif %}>
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5h14v16H5zM8 3v4M16 3v4M5 9h14M9 13h2M13 13h2M9 17h2M13 17h2"/></svg>
               <span>{% trans "Book service" %}</span>
             </a>
@@ -533,5 +533,5 @@
 
   })();
 </script>
-{% load static %}<script src="{% static 'electricity/js/request_flow.js' %}?v=20261021-3"></script>
+{% load static %}<script src="{% static 'electricity/js/request_flow.js' %}?v=20261027-1"></script>
 {% endblock %}

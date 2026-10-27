@@ -842,6 +842,10 @@ def quote_request_step(request, step):
                 "service_title": item.title,
                 "service_description": item.description or item.subtitle,
                 "service_image": item.image.url if item.image else "",
+                "service_url": reverse(
+                    "electricity:service_detail" if source == "detail" else "electricity:service_category_detail",
+                    kwargs={"slug": item.section.page.slug},
+                ),
             }
             request.session[QUOTE_SESSION_KEY] = data
 

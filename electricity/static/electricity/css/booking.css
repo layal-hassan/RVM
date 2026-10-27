@@ -187,6 +187,20 @@ html[dir="rtl"] .booking-input {
     margin-bottom: 20px;
 }
 
+.booking-flow .booking-choice-section {
+    min-width: 0;
+    margin: 0 0 24px;
+    padding: 22px 20px 4px;
+    border: 1px solid rgba(214, 170, 56, .16);
+    border-radius: 18px;
+}
+
+.booking-flow .booking-choice-section > .form-label {
+    width: auto;
+    margin: 0 0 14px;
+    padding: 0 8px;
+}
+
 .booking-errors,
 .booking-field-error {
     color: #a12626;

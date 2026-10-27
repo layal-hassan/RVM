@@ -1989,14 +1989,17 @@ msgstr "Fullt operativa redan idag. V?ra standarder ?r inte f?rhandlingsbara."
 msgid "Licensed Electricians | Home Solutions"
 msgstr "Behöriga elektriker. Tydliga råd. Inget krav."
 
-msgid "We Don't Just Fix Problems."
-msgstr "Vi löser inte bara problem."
+msgid "Safe electrical installations."
+msgstr "Trygga elinstallationer."
 
-msgid "We Prevent Them."
-msgstr "Vi förebygger dem."
+msgid "Fair prices."
+msgstr "Ärliga priser."
 
-msgid "Experienced electricians delivering safe, lasting solutions, so you never have to call twice."
-msgstr "Erfarna elektriker som levererar säkra och hållbara lösningar, så att du aldrig behöver ringa två gånger."
+msgid "Quality that lasts."
+msgstr "Kvalitet som håller."
+
+msgid "We help with everything from small electrical jobs to larger installations. With personal service, transparent pricing, and work carried out with care, you can feel confident with your electrician."
+msgstr "Vi hjälper dig med allt från mindre elarbeten till större installationer. Med personlig service, tydliga priser och noggrant utfört arbete gör vi det enkelt att känna sig trygg med sin elektriker."
 
 #, fuzzy
 #| msgid "Service type"

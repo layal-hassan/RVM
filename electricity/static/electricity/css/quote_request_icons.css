@@ -1,0 +1,124 @@
+/* Make the visual markers easy to recognize throughout the quote flow. */
+.quote-request-page .progress-step b,
+.quote-request-page legend>b {
+  width: 42px;
+  height: 42px;
+  font-size: 21px;
+}
+
+.quote-request-page .progress-step span {
+  font-size: 13px;
+}
+
+.quote-request-page .choice-grid label {
+  font-size: 32px;
+  gap: 14px;
+}
+
+.quote-request-page .choice-grid input {
+  width: 22px;
+  height: 22px;
+}
+
+.quote-request-page .upload {
+  font-size: 50px;
+}
+
+.quote-request-page .selected-service a {
+  font-size: 14px;
+}
+
+.quote-request-page .details-card h3::first-letter,
+.quote-request-page .review-row>b::first-letter {
+  font-size: 26px;
+}
+
+.quote-request-page .next-card>p::first-letter {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.quote-request-page footer {
+  font-size: 12px;
+}
+
+/* Slightly larger type across the complete quote journey. */
+.quote-request-page {
+  font-size: 15px;
+}
+
+.quote-request-page .lead {
+  font-size: 18px;
+}
+
+.quote-request-page legend span {
+  font-size: 18px;
+}
+
+.quote-request-page legend small,
+.quote-request-page .choice-grid small,
+.quote-request-page .next-card small,
+.quote-request-page .side-service p {
+  font-size: 13px;
+}
+
+.quote-request-page .choice-grid label span {
+  font-size: 15px;
+}
+
+.quote-request-page textarea,
+.quote-request-page input {
+  font-size: 14px;
+}
+
+.quote-request-page .upload strong {
+  font-size: 14px;
+}
+
+.quote-request-page .upload small,
+.quote-request-page .upload-meta {
+  font-size: 11px;
+}
+
+.quote-request-page .selected-service p {
+  font-size: 13px;
+}
+
+.quote-request-page .btn {
+  font-size: 14px;
+}
+
+.quote-request-page .next-card p b {
+  font-size: 14px;
+}
+
+.quote-request-page .quote-success .success-mark {
+  margin-bottom: 22px;
+}
+
+/* Align the success sidebar with the main success card on desktop. */
+.quote-request-page .quote-success-grid {
+  align-items: stretch;
+}
+
+.quote-request-page .quote-success-grid > aside {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+}
+
+.quote-request-page .quote-success-grid > aside > * {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 800px) {
+  .quote-request-page .quote-success-grid > aside {
+    display: grid;
+    height: auto;
+  }
+}
+
+/* The global base template supplies the shared site footer. */
+.quote-request-page .quote-shell > footer {
+  display: none;
+}

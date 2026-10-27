@@ -1,7 +1,7 @@
 {% extends "electricity/base.html" %}
 {% load static i18n %}
 {% block title %}Request a Quote | RWM EL{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/quote_request.css' %}"><link rel="stylesheet" href="{% static 'electricity/css/quote_request_theme.css' %}">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/quote_request.css' %}?v=20261027-1"><link rel="stylesheet" href="{% static 'electricity/css/quote_request_theme.css' %}?v=20261027-1"><link rel="stylesheet" href="{% static 'electricity/css/quote_request_icons.css' %}?v=20261027-5">{% endblock %}
 {% block body_class %}quote-request-page{% endblock %}
 {% block content %}<main class="quote-shell">
   <div class="quote-progress">
@@ -17,14 +17,14 @@
     <div class="success-three"><div>▣<b>What happens now?</b><small>We review your project and contact you within 1–2 business days.</small></div><div>✉<b>Keep an eye on your email</b><small>We may contact you by email or phone if we need any additional information.</small></div><div>▤<b>Tailored quotation</b><small>You'll receive a clear and detailed quotation with next steps.</small></div></div>
     <h3 class="summary-title">Request summary</h3><div class="service-summary"><img src="{{ data.service_image }}" alt=""><div><b>{{ data.service_title }}</b><span>⌂ {{ data.customer_type|title }}</span><span>⌖ {{ data.street_address }}, {{ data.postcode }} {{ data.city }}</span><span>♧ {{ data.attachments|length }} files attached</span><span>⬡ Include materials: {{ data.materials|title }}</span></div></div>
     <p class="confirmation">A confirmation email has been sent to<br><b>{{ data.email }}</b></p>
-    <div class="quote-actions"><a class="btn secondary" href="{% url 'electricity:home' %}"> Back to home</a><a class="btn primary" href="{% url 'electricity:services' %}">Submit another request </a></div>
+    <div class="quote-actions"><a class="btn secondary" href="{% url 'electricity:home' %}"> Back to home</a><a class="btn primary" href="{{ data.service_url|default:'/services/' }}">Submit another request </a></div>
   </div><aside>{% include "electricity/partials/quote_side.html" with success=True %}</aside></section>
   {% else %}
   <section class="quote-layout"><div class="quote-main">
     <a class="quote-back" href="{% if step == 1 %}javascript:history.back(){% else %}{% url 'electricity:quote_request_step' step|add:'-1' %}{% endif %}"> &nbsp;Back{% if step == 1 %} to service{% endif %}</a>
     {% if step == 1 %}<h1>Request a <em>Quote</em></h1><p class="lead">Tell us what you need. We'll take care of the rest.</p>
     <form method="post" enctype="multipart/form-data">{% csrf_token %}<div class="quote-card">
-      <div class="selected-service"><img src="{{ data.service_image }}" alt=""><div><small>SELECTED SERVICE</small><h3>{{ data.service_title }}</h3><p>{{ data.service_description }}</p></div><a href="{% url 'electricity:services' %}">✎ Change service</a></div>
+      <div class="selected-service"><img src="{{ data.service_image }}" alt=""><div><small>SELECTED SERVICE</small><h3>{{ data.service_title }}</h3><p>{{ data.service_description }}</p></div><a href="{{ data.service_url|default:'/services/' }}">✎ Change service</a></div>
       <fieldset><legend><b>1</b><span>Who is requesting the quote?<small>This helps us provide the right solution and quotation.</small></span></legend><div class="choice-grid"><label>⌂ <span><strong>Private individual</strong><small>For my home or private property</small></span><input type="radio" name="customer_type" value="private" required {% if data.customer_type == 'private' %}checked{% endif %}></label><label>▥ <span><strong>Business</strong><small>For a company or commercial property</small></span><input type="radio" name="customer_type" value="business" {% if data.customer_type == 'business' %}checked{% endif %}></label></div></fieldset>
       <fieldset><legend><b>2</b><span>What do you need help with?<small>Describe your project. You can include quantities, location or any specific requests.</small></span></legend><textarea name="project_details" maxlength="1000" required placeholder="E.g. I want to install six spotlights in my kitchen.">{{ data.project_details }}</textarea></fieldset>
       <fieldset><legend><b>3</b><span>Add photos, videos or documents (optional)<small>You can upload anything that helps us understand your project.</small></span></legend><label class="upload">☁<strong>Click to upload files</strong><small>or drag and drop them here</small><input type="file" name="attachments" multiple accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx"></label><div class="upload-meta">Images (JPG, PNG, HEIC) &nbsp; Videos (MP4, MOV) &nbsp; Documents (PDF, DOC, DOCX, XLSX) <b>Max 10 files (50 MB each)</b></div></fieldset>

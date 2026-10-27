@@ -104,6 +104,12 @@ a {
   color: var(--home-gold);
 }
 
+.home-hero-title strong {
+  display: block;
+  color: inherit;
+  font-weight: inherit;
+}
+
 .home-hero-copy {
   width: min(620px, 92vw);
   margin: 0 auto;
@@ -1473,4 +1479,8 @@ a {
   .home-booking-option {
     min-height: 0;
   }
+}
+/* Use the shared footer from the global base template on the landing page. */
+.landing-body .home-footer {
+  display: none;
 }

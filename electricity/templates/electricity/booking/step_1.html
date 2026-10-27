@@ -8,8 +8,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="form-row">
-    <label class="form-label">{% trans "Are you a private individual or a business?" %}</label>
+<fieldset class="form-row booking-choice-section">
+    <legend class="form-label">{% trans "Are you a private individual or a business?" %}</legend>
     <div class="option-grid">
         {% for choice in form.contact_type %}
             <label class="option-card">
@@ -20,9 +20,9 @@
         {% endfor %}
     </div>
     {% if form.contact_type.errors %}<div class="booking-field-error">{{ form.contact_type.errors|join:", " }}</div>{% endif %}
-</div>
-<div class="form-row">
-    <label class="form-label">{% trans "How would you like to start?" %}</label>
+</fieldset>
+<fieldset class="form-row booking-choice-section">
+    <legend class="form-label">{% trans "How would you like to start?" %}</legend>
 <div class="option-grid">
     {% for choice in form.consultation_type %}
         <label class="option-card option-card-large">
@@ -65,7 +65,8 @@
         </label>
     {% endfor %}
 </div>
-</div>
+    {% if form.consultation_type.errors %}<div class="booking-field-error">{{ form.consultation_type.errors|join:", " }}</div>{% endif %}
+</fieldset>
 {% endblock %}
 
 {% block actions %}

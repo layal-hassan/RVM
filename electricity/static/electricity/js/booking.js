@@ -3,9 +3,15 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(selector).forEach((label) => {
             const input = label.querySelector("input");
             if (!input) return;
+            const radioGroup = input.type === "radio" ? input.name : null;
             const update = () => {
                 if (input.type === "radio") {
-                    document.querySelectorAll(selector).forEach((item) => item.classList.remove("is-active"));
+                    document.querySelectorAll(selector).forEach((item) => {
+                        const itemInput = item.querySelector("input");
+                        if (itemInput?.type === "radio" && itemInput.name === radioGroup) {
+                            item.classList.remove("is-active");
+                        }
+                    });
                 }
                 if (input.checked) {
                     label.classList.add("is-active");

@@ -27,5 +27,6 @@ urlpatterns = [
     path('', include('electricity.urls')),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Serve uploaded service and career images through the app as well. The live
+# deployment uses Gunicorn without a separate web-server media location.
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
