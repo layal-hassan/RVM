@@ -92,9 +92,6 @@
             {% endif %}
             <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:logout' %}">{% trans "Sign out" %}</a>
           {% endif %}
-        {% else %}
-          <a class="rwm-egh-btn rwm-egh-btn-ghost" href="{% url 'electricity:login' %}">{% trans "Sign in" %}</a>
-          <a class="rwm-egh-btn rwm-egh-btn-primary" href="{% url 'electricity:signup' %}">{% trans "Sign up" %}</a>
         {% endif %}
       </div>
       <div class="linguise_switcher_root linguise_menu_root" aria-label="{% trans 'Language' %}"></div>
