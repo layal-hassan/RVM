@@ -157,6 +157,37 @@ _AUTOMATED_EMAIL_DEFAULTS = {
         "customer_subject": "Your quote request {reference} has been received",
         "customer_body": "Hello {name},\n\nThank you! We received your request. Our team will review it and get back to you with a tailored quotation.\n\nService: {service}\nReference: {reference}\n\nKind regards,\nRWM EL",
     },
+    "consultation": {
+        "company_subject": "New consultation booking {reference} - {name}",
+        "company_body": "Reference: {reference}\nCustomer: {name}\nEmail: {email}\nPhone: {phone}\nRequested date: {preferred_date}\nRequested time: {preferred_time}\n\nDetails:\n{details}",
+        "customer_subject": "Consultation booking received - {reference}",
+        "customer_body": "Hello {name},\n\nWe received your consultation booking.\n\nReference: {reference}\nRequested date: {preferred_date}\nRequested time: {preferred_time}\n\nOur team will contact you to confirm the details.\n\nKind regards,\nRWM EL",
+    },
+    "electrician": {
+        "company_subject": "New electrician booking {reference} - {name}",
+        "company_body": "Reference: {reference}\nCustomer: {name}\nEmail: {email}\nPhone: {phone}\nAddress: {address}\nRequested date: {preferred_date}\nRequested time: {preferred_time}\n\nDetails:\n{details}",
+        "customer_subject": "Electrician booking received - {reference}",
+        "customer_body": "Hello {name},\n\nWe received your electrician booking successfully.\n\nReference: {reference}\nRequested date: {preferred_date}\nRequested time: {preferred_time}\n\nOur team will review your request and contact you if anything needs to be confirmed.\n\nKind regards,\nRWM EL",
+    },
+    "service": {
+        "company_subject": "New service booking {reference} - {name}",
+        "company_body": "Reference: {reference}\nCustomer: {name}\nEmail: {email}\nPhone: {phone}\nAddress: {address}\nRequested date: {preferred_date}\nRequested time: {preferred_time}\n\nDetails:\n{details}",
+        "customer_subject": "Service booking received - {reference}",
+        "customer_body": "Hello {name},\n\nWe received your service booking successfully.\n\nReference: {reference}\nRequested date: {preferred_date}\nRequested time: {preferred_time}\n\nSummary:\n{details}\n\nNext steps:\nOur team will contact you with the next steps.\n\nKind regards,\nRWM EL",
+    },
+    "on_call": {
+        "company_subject": "New on-call application {reference} - {name}",
+        "company_body": "Reference: {reference}\nOrganization: {name}\nEmail: {email}\nPhone: {phone}\nAddress: {address}\n\nDetails:\n{details}",
+        "customer_subject": "On-call application received - {reference}",
+        "customer_body": "Hello {name},\n\nWe received your on-call service application.\n\nReference: {reference}\n\nOur team will review the information and contact you with the next steps.\n\nKind regards,\nRWM EL",
+    },
+}
+
+_BOOKING_EMAIL_WORKFLOWS = {
+    "Consultation Booking": "consultation",
+    "Electrician Booking": "electrician",
+    "Service Booking": "service",
+    "On-Call Booking": "on_call",
 }
 
 
@@ -231,20 +262,21 @@ def _invoice_email_error_message(exc):
     return "Invoice was saved, but email delivery failed. Check the SMTP settings."
 
 
-def _create_and_queue_invoice(booking):
+def _create_and_queue_invoice(booking, send_email=True):
     try:
         invoice = create_invoice_for_booking(booking)
     except Exception:
         logger.exception("Could not create invoice for %s #%s", type(booking).__name__, booking.pk)
         return None
 
-    def _send():
-        try:
-            send_invoice_email(invoice)
-        except Exception:
-            logger.exception("Could not email invoice %s", invoice.invoice_number)
+    if send_email:
+        def _send():
+            try:
+                send_invoice_email(invoice)
+            except Exception:
+                logger.exception("Could not email invoice %s", invoice.invoice_number)
 
-    transaction.on_commit(_send)
+        transaction.on_commit(_send)
     return invoice
 
 
@@ -409,10 +441,27 @@ def _send_on_call_company_notification_email(*, booking, booking_reference, curr
         "Additional notes:",
         booking.additional_notes or "-",
     ]
+    template = AutomatedEmailTemplate.objects.filter(workflow="on_call").first()
+    template_context = {
+        "name": booking.organization_name or booking.contact_person or "-",
+        "email": booking.email or "-",
+        "phone": booking.phone or "-",
+        "reference": booking_reference,
+        "booking_type": "On-Call Booking",
+        "address": booking.site_address or "-",
+        "preferred_date": "-",
+        "preferred_time": "-",
+        "details": "\n".join(lines),
+    }
+    subject = f"New On-Call application {booking_reference} - {booking.organization_name or booking.contact_person}"
+    body = "\n".join(lines)
+    if template and template.company_enabled:
+        subject = _render_automated_email(template.company_subject, template_context)
+        body = _render_automated_email(template.company_body, template_context)
     try:
         EmailMessage(
-            subject=f"New On-Call application {booking_reference} - {booking.organization_name or booking.contact_person}",
-            body="\n".join(lines),
+            subject=subject,
+            body=body,
             from_email=from_email,
             to=[company_email],
             reply_to=[booking.email] if booking.email else None,
@@ -437,7 +486,25 @@ def _send_custom_booking_confirmation_email(
     if not to_email:
         return
 
-    subject = f"Booking Confirmation - {booking_reference}"
+    workflow = _BOOKING_EMAIL_WORKFLOWS.get(booking_type_label)
+    template = AutomatedEmailTemplate.objects.filter(workflow=workflow).first() if workflow else None
+    context = {
+        "name": customer_name,
+        "email": to_email,
+        "reference": booking_reference,
+        "booking_type": booking_type_label,
+        "team_name": team_name,
+        "preferred_date": preferred_date or "-",
+        "preferred_time": preferred_time or "-",
+        "details": "\n".join(summary_lines or []),
+    }
+    if template and template.customer_enabled:
+        subject = _render_automated_email(template.customer_subject, context)
+        body = _render_automated_email(template.customer_body, context)
+    else:
+        subject = f"Booking Confirmation - {booking_reference}"
+        body = ""
+
     lines = [
         f"Hello {customer_name or 'Valued Customer'},",
         "",
@@ -466,13 +533,17 @@ def _send_custom_booking_confirmation_email(
             ]
         )
     lines.extend(["", "Regards,", "RWM EL"])
+    if template and template.customer_enabled:
+        body = _render_automated_email(template.customer_body, context)
+    else:
+        body = "\n".join(lines)
     try:
         from_email = (
             getattr(settings, "BOOKING_FROM_EMAIL", None)
             or getattr(settings, "DEFAULT_FROM_EMAIL", None)
             or "services@rwmel.se"
         )
-        send_mail(subject, "\n".join(lines), from_email, [to_email], connection=support_email_connection())
+        send_mail(subject, body, from_email, [to_email], connection=support_email_connection())
     except Exception:
         logger.exception("Booking confirmation email failed to send to %s.", to_email)
 
@@ -497,25 +568,44 @@ def _send_booking_company_notification_email(
         or getattr(settings, "DEFAULT_FROM_EMAIL", None)
         or "support@rwmel.se"
     )
-    lines = [
-        "A new booking has been submitted.",
-        "",
-        f"Reference: {booking_reference}",
-        f"Booking type: {booking_type_label}",
-        f"Customer: {customer_name or '-'}",
-        f"Email: {customer_email or '-'}",
-        f"Phone: {customer_phone or '-'}",
-        f"Address: {address or '-'}",
-    ]
-    if summary_lines:
-        lines.extend(["", "Booking details:"])
-        lines.extend(f"- {line}" for line in summary_lines if line)
-    lines.extend(["", "The complete booking is available in the RWM EL dashboard."])
+    workflow = _BOOKING_EMAIL_WORKFLOWS.get(booking_type_label)
+    template = AutomatedEmailTemplate.objects.filter(workflow=workflow).first() if workflow else None
+    template_context = {
+        "name": customer_name or "-",
+        "email": customer_email or "-",
+        "phone": customer_phone or "-",
+        "reference": booking_reference,
+        "booking_type": booking_type_label,
+        "address": address or "-",
+        "preferred_date": "-",
+        "preferred_time": "-",
+        "details": "\n".join(summary_lines or []),
+    }
+    if template and template.company_enabled:
+        subject = _render_automated_email(template.company_subject, template_context)
+        body = _render_automated_email(template.company_body, template_context)
+    else:
+        lines = [
+            "A new booking has been submitted.",
+            "",
+            f"Reference: {booking_reference}",
+            f"Booking type: {booking_type_label}",
+            f"Customer: {customer_name or '-'}",
+            f"Email: {customer_email or '-'}",
+            f"Phone: {customer_phone or '-'}",
+            f"Address: {address or '-'}",
+        ]
+        if summary_lines:
+            lines.extend(["", "Booking details:"])
+            lines.extend(f"- {line}" for line in summary_lines if line)
+        lines.extend(["", "The complete booking is available in the RWM EL dashboard."])
+        subject = f"New {booking_type_label} - {booking_reference}"
+        body = "\n".join(lines)
 
     try:
         EmailMessage(
-            subject=f"New {booking_type_label} - {booking_reference}",
-            body="\n".join(lines),
+            subject=subject,
+            body=body,
             from_email=from_email,
             to=[company_email],
             reply_to=[customer_email] if customer_email else None,
@@ -2788,7 +2878,9 @@ def electrician_booking_step(request, step):
                         f"Estimated total: {_format_currency_amount(booking.estimated_total, booking.currency or 'SEK')}",
                     ],
                 )
-                _create_and_queue_invoice(booking)
+                # Keep the invoice as a draft. The booking confirmation is sent
+                # immediately; the invoice is sent later by an administrator.
+                _create_and_queue_invoice(booking, send_email=False)
                 request.session.pop(ELECTRICIAN_BOOKING_SESSION_KEY, None)
                 request.session["electrician_booking_id"] = booking.id
                 request.session["electrician_booking_reference"] = f"RWM-{booking.id:06d}"

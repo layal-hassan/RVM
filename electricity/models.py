@@ -97,6 +97,10 @@ class AutomatedEmailTemplate(models.Model):
         CONTACT = "contact", "Contact Us"
         FEEDBACK = "feedback", "Submit Feedback"
         QUOTE = "quote", "Request a Quote / Send Request"
+        CONSULTATION = "consultation", "Consultation Booking"
+        ELECTRICIAN = "electrician", "Electrician Booking"
+        SERVICE = "service", "Service Booking"
+        ON_CALL = "on_call", "On-Call Booking"
 
     workflow = models.CharField(max_length=20, choices=Workflow.choices, unique=True)
     company_enabled = models.BooleanField(default=True)
