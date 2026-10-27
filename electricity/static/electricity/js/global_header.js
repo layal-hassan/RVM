@@ -70,7 +70,11 @@
     dropdown.addEventListener("mouseleave", scheduleDropdownClose);
 
     trigger.addEventListener("click", toggleDropdown);
-    linkButton?.addEventListener("click", toggleDropdown);
+    linkButton?.addEventListener("click", (event) => {
+      // Desktop: the SERVICES label navigates to the services landing page.
+      // Mobile: use the label as the submenu toggle because the nav is a drawer.
+      if (window.innerWidth <= 980) toggleDropdown(event);
+    });
   });
 
   toggle.addEventListener("click", () => {

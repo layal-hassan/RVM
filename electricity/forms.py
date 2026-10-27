@@ -649,11 +649,14 @@ class CareerApplicationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["job"].queryset = JobOpening.objects.filter(is_active=True)
+        # A CV is required for every public job application.
+        self.fields["cv"].required = True
+        self.fields["cv"].widget.attrs["required"] = "required"
 
     def clean_cv(self):
         cv = self.cleaned_data.get("cv")
         if not cv:
-            return cv
+            raise ValidationError(_("Please upload your CV before submitting the application."))
         extension = cv.name.rsplit(".", 1)[-1].lower() if "." in cv.name else ""
         if extension not in {"pdf", "doc", "docx"}:
             raise ValidationError(_("Please upload a PDF, DOC, or DOCX file."))

@@ -69,7 +69,7 @@
         <div class="careers-field"><label for="career-phone">{% trans "Phone number" %}</label>{{ career_form.phone }}{{ career_form.phone.errors }}</div>
         <div class="careers-field"><label for="career-role">{% trans "Position of interest" %}</label>{{ career_form.position }}{{ career_form.position.errors }}</div>
         <div class="careers-field"><label for="career-experience">{% trans "Years of experience" %}</label>{{ career_form.years_of_experience }}{{ career_form.years_of_experience.errors }}</div>
-        <div class="careers-field careers-field--file"><label for="career-cv">{% trans "Upload your CV" %}</label>{{ career_form.cv }}{{ career_form.cv.errors }}</div>
+        <div class="careers-field careers-field--file"><label for="career-cv">{% trans "Upload your CV" %} *</label>{{ career_form.cv }}{{ career_form.cv.errors }}</div>
         <div class="careers-field careers-field--wide"><label for="career-message">{% trans "Tell us a bit about yourself" %}</label>{{ career_form.message }}{{ career_form.message.errors }}</div>
         <button type="submit">{% trans "Send Application" %}{% include "electricity/partials/arrow_icon.html" %}</button><p class="careers-privacy"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span>{% trans "Your personal data will be handled in accordance with our Privacy Policy and will only be used for recruitment purposes." %}</span></p>
       </form>

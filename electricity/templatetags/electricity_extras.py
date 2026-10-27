@@ -213,6 +213,8 @@ def _service_page_for_object(obj):
 
 @register.simple_tag
 def record_preview_url(obj):
+    if isinstance(obj, ElectricalService):
+        return reverse("electricity:services")
     category_page = _category_page_for_object(obj)
     if category_page and getattr(category_page, "slug", ""):
         return reverse("electricity:service_category_detail", kwargs={"slug": category_page.slug})

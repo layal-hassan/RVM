@@ -626,6 +626,24 @@ html[dir="rtl"] .category-line-list {
   line-height: 1.6;
 }
 
+/* Keep the card content on one visual baseline across the three columns. */
+.category-card-body > h3 {
+  min-height: 2.8em;
+  margin-top: 0;
+  line-height: 1.4;
+}
+
+.category-card-body > .category-card-subtitle {
+  min-height: 2.8em;
+  line-height: 1.6;
+}
+
+.category-card-body > p {
+  min-height: 6.4em;
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
 /* Keep the package accordions aligned even when cards have different metadata. */
 .category-card-intro-meta {
   min-height: 7em;
@@ -1752,6 +1770,13 @@ html[dir="rtl"] .category-spec-table td {
   .category-content-split.is-reversed .category-content-media,
   .category-content-split.is-reversed .category-content-panel {
     order: initial;
+  }
+
+  .category-card-body > h3,
+  .category-card-body > .category-card-subtitle,
+  .category-card-body > p,
+  .category-card-intro-meta {
+    min-height: 0;
   }
 }
 

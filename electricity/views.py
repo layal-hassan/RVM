@@ -191,6 +191,22 @@ _BOOKING_EMAIL_WORKFLOWS = {
 }
 
 
+def _ensure_automated_email_templates():
+    """Keep the dashboard usable when a deployment has not run data migrations yet."""
+    for workflow, defaults in _AUTOMATED_EMAIL_DEFAULTS.items():
+        AutomatedEmailTemplate.objects.get_or_create(
+            workflow=workflow,
+            defaults={
+                "company_enabled": True,
+                "company_subject": defaults["company_subject"],
+                "company_body": defaults["company_body"],
+                "customer_enabled": True,
+                "customer_subject": defaults["customer_subject"],
+                "customer_body": defaults["customer_body"],
+            },
+        )
+
+
 class _EmailContext(dict):
     def __missing__(self, key):
         return ""
@@ -4202,6 +4218,7 @@ def dashboard_email_templates(request):
     guard = _dashboard_access_or_redirect(request)
     if guard:
         return guard
+    _ensure_automated_email_templates()
     templates = AutomatedEmailTemplate.objects.order_by("workflow")
     return render(
         request,
