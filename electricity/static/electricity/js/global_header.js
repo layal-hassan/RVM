@@ -80,7 +80,11 @@
   });
 
   menu.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", closeMenu);
+    link.addEventListener("click", (event) => {
+      // SERVICES is a mobile submenu toggle, not a navigation link.
+      if (link.classList.contains("rwm-egh-link-button")) return;
+      closeMenu();
+    });
   });
 
   document.addEventListener("click", (event) => {

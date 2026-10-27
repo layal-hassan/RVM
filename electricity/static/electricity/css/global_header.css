@@ -160,7 +160,7 @@ body.rwm-mobile-menu-open {
   flex: 1 1 0;
   justify-content: flex-start;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .rwm-electricity-global-header .rwm-egh-right {
