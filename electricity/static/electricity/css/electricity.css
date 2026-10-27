@@ -5478,6 +5478,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 .oncall-safety-cta { padding-left: 27px; border-left: 1px solid rgba(211,170,49,.38); }
 .oncall-safety-cta p { margin: 0 0 15px; color: rgba(255,255,255,.68); font: 10px/1.5 Arial, sans-serif; }
 .oncall-safety-cta .btn { display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; width: 100%; min-width: 0; min-height: 39px; margin-top: 8px; padding: 10px 17px; border-radius: 5px; font-size: 8px; letter-spacing: .15em; text-transform: uppercase; }
+.services-page .oncall-safety-cta .btn { width: min(100%, 370px); justify-content: center; text-align: center; }
 .oncall-safety-cta .btn-primary { color: #201804; background: linear-gradient(110deg, #e4b43a, #f3cd65); }
 .oncall-safety-cta .btn-secondary { color: #e8ba3c; background: transparent; border-color: #a67b17; }
 .oncall-safety-trust { display: flex; justify-content: flex-end; gap: 20px; margin-top: 22px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,.1); }
