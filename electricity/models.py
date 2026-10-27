@@ -1377,6 +1377,8 @@ class Invoice(models.Model):
             self.invoice_number = type(self).next_invoice_number()
         if not self.due_date:
             self.due_date = self.invoice_date + datetime.timedelta(days=self.payment_terms_days)
+        elif self.invoice_date:
+            self.payment_terms_days = max(0, (self.due_date - self.invoice_date).days)
         super().save(*args, **kwargs)
 
     @property

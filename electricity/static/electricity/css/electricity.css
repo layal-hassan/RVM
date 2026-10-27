@@ -3117,6 +3117,24 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   font-size: 19px !important;
 }
 
+.popular-service-card .popular-service-body > p {
+  margin: 0;
+}
+
+.popular-service-bullets {
+  display: grid;
+  gap: 7px;
+  margin: 14px 0 0;
+  padding: 0 0 0 18px;
+  color: rgba(255, 255, 255, .76);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.popular-service-bullets li::marker {
+  color: #d7a82e;
+}
+
 .services-trust-section {
   color: #f5efe1;
   background: #081008;

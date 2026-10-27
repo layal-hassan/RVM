@@ -70,7 +70,7 @@
             </div>
           </div>
           <a class="rwm-egh-link{% if request.resolver_match.url_name == 'pricing' %} is-active{% endif %}" data-rwmh-on-call="pricing" href="{% url 'electricity:pricing' %}">{% trans "Pricing" %}</a>
-          <a class="rwm-egh-link{% if request.resolver_match.url_name == 'on_call' %} is-active{% endif %}" data-rwmh-on-call="jour" href="{% url 'electricity:on_call' %}">{% trans "Jour" %}</a>
+          <a class="rwm-egh-link{% if request.resolver_match.url_name == 'on_call' %} is-active{% endif %}" data-rwmh-on-call="jour" href="{% url 'electricity:on_call' %}"><span translate="no">Jour</span></a>
           <a class="rwm-egh-link{% if request.resolver_match.url_name == 'for_brf' %} is-active{% endif %}" href="{% url 'electricity:for_brf' %}">{% trans "For BRF" %}</a>
           <a class="rwm-egh-link{% if request.resolver_match.url_name == 'feedback' %} is-active{% endif %}" href="{% url 'electricity:feedback' %}">{% trans "Feedback" %}</a>
           <a class="rwm-egh-link{% if request.resolver_match.url_name == 'contact' %} is-active{% endif %}" href="{% url 'electricity:contact' %}">{% trans "Contact" %}</a>
@@ -78,7 +78,6 @@
         </nav>
       </div>
       <div class="rwm-egh-right">
-        <div class="linguise_switcher_root linguise_menu_root" aria-label="{% trans 'Language' %}"></div>
         <a class="rwm-egh-btn rwm-egh-btn-primary rwm-egh-btn-compact" href="http://hembla-experten.se/" target="_blank" rel="noopener">
           {% trans "Back to Hembla Experten" %}
         </a>
@@ -98,6 +97,7 @@
           <a class="rwm-egh-btn rwm-egh-btn-primary" href="{% url 'electricity:signup' %}">{% trans "Sign up" %}</a>
         {% endif %}
       </div>
+      <div class="linguise_switcher_root linguise_menu_root" aria-label="{% trans 'Language' %}"></div>
     </div>
   </div>
 </header>

@@ -59,7 +59,7 @@
       <label>Invoice number {{ form.invoice_number }}{{ form.invoice_number.errors }}</label>
       <label>Invoice date {{ form.invoice_date }}{{ form.invoice_date.errors }}</label>
       <label>Due date {{ form.due_date }}{{ form.due_date.errors }}</label>
-      <label>Payment terms (days) {{ form.payment_terms_days }}{{ form.payment_terms_days.errors }}</label>
+      <label>Payment terms (days) {{ form.payment_terms_days }}{{ form.payment_terms_days.errors }}<small>Calculated automatically from the invoice date and due date.</small></label>
       <label>Invoice type {{ form.invoice_type }}{{ form.invoice_type.errors }}</label>
       <label>Part number {{ form.part_number }}{{ form.part_number.errors }}</label>
       <label>Total parts {{ form.part_total }}{{ form.part_total.errors }}</label>
@@ -220,5 +220,18 @@ if (customerSelect && recipientInput && customerEmailsElement) {
   customerSelect.addEventListener("change", updateRecipient);
   if (!recipientInput.value) updateRecipient();
 }
+const invoiceDateInput = document.getElementById("id_invoice_date");
+const dueDateInput = document.getElementById("id_due_date");
+const paymentTermsInput = document.getElementById("id_payment_terms_days");
+const updatePaymentTerms = () => {
+  if (!invoiceDateInput || !dueDateInput || !paymentTermsInput || !invoiceDateInput.value || !dueDateInput.value) return;
+  const invoiceDate = new Date(`${invoiceDateInput.value}T00:00:00`);
+  const dueDate = new Date(`${dueDateInput.value}T00:00:00`);
+  const days = Math.round((dueDate - invoiceDate) / 86400000);
+  if (days >= 0) paymentTermsInput.value = days;
+};
+invoiceDateInput?.addEventListener("change", updatePaymentTerms);
+dueDateInput?.addEventListener("change", updatePaymentTerms);
+updatePaymentTerms();
 </script>
 {% endblock %}

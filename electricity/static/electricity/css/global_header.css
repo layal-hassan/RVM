@@ -192,16 +192,21 @@ body.rwm-mobile-menu-open {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  min-width: 98px;
-  min-height: 40px;
-  padding: 3px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  min-width: 116px;
+  min-height: 36px;
+  padding: 2px 7px;
+  border: 1px solid rgba(239, 201, 111, 0.5);
   border-radius: 999px;
-  background: rgba(32, 34, 39, 0.96);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(20, 24, 27, 0.94));
   color: #fff !important;
   overflow: visible;
   flex: 0 0 auto;
   z-index: 8;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 5px 16px rgba(0, 0, 0, 0.18);
+}
+
+.rwm-electricity-global-header__inner > .linguise_switcher_root {
+  margin-inline-start: 10px;
 }
 
 .rwm-electricity-global-header .linguise_switcher_root > * {
@@ -217,7 +222,8 @@ body.rwm-mobile-menu-open {
 .rwm-electricity-global-header .linguise_switcher_root:hover,
 .rwm-electricity-global-header .linguise_switcher_root:focus-within {
   border-color: rgba(239, 201, 111, 0.95);
-  background: rgba(199, 164, 91, 0.18);
+  background: linear-gradient(135deg, rgba(239, 201, 111, 0.22), rgba(20, 24, 27, 0.94));
+  transform: translateY(-1px);
 }
 
 /* Keep Linguise's automatic language control fixed at the viewport's bottom-right. */
@@ -780,6 +786,22 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
 }
 
 @media (max-width: 980px) {
+  .rwm-electricity-global-header__inner > .linguise_switcher_root {
+    position: absolute;
+    top: 8px;
+    right: 62px;
+    min-width: 92px;
+    min-height: 34px;
+    margin: 0;
+    padding: 1px 5px;
+    z-index: 20;
+  }
+
+  body > .linguise_switcher,
+  body > [class*="linguise_switcher"] {
+    display: none !important;
+  }
+
   .rwm-electricity-global-header .rwm-electricity-global-header__inner {
     min-height: 72px;
     padding: 8px 18px;

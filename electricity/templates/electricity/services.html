@@ -108,7 +108,14 @@
         {% endif %}
         <div class="popular-service-body">
           <h3>{{ service.title }}</h3>
-          {% if service.short_description %}<p>{{ service.short_description|truncatechars:120 }}</p>{% endif %}
+          {% if service.short_description %}<p>{{ service.short_description }}</p>{% endif %}
+          {% if service.bullet_points %}
+          <ul class="popular-service-bullets">
+            {% for line in service.bullet_points|split_lines %}
+            <li>{{ line }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
         </div>
       </article>
       {% empty %}

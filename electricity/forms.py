@@ -712,6 +712,7 @@ class InvoiceForm(HumanizedJSONModelForm):
         widgets = {
             "invoice_date": forms.DateInput(attrs={"type": "date"}),
             "due_date": forms.DateInput(attrs={"type": "date"}),
+            "payment_terms_days": forms.NumberInput(attrs={"readonly": "readonly", "min": 0}),
             "customer_message": forms.Textarea(attrs={"rows": 3}),
             "payment_instructions": forms.Textarea(attrs={"rows": 3}),
             "internal_notes": forms.Textarea(attrs={"rows": 3}),
@@ -724,6 +725,8 @@ class InvoiceForm(HumanizedJSONModelForm):
             self.add_error("recipient_email", "A recipient email is required to send the invoice.")
         if cleaned.get("due_date") and cleaned.get("invoice_date") and cleaned["due_date"] < cleaned["invoice_date"]:
             self.add_error("due_date", "Due date cannot be earlier than invoice date.")
+        elif cleaned.get("due_date") and cleaned.get("invoice_date"):
+            cleaned["payment_terms_days"] = (cleaned["due_date"] - cleaned["invoice_date"]).days
         if cleaned.get("rot_enabled"):
             if not cleaned.get("rot_personal_number"):
                 self.add_error("rot_personal_number", "Personal number is required for ROT.")
