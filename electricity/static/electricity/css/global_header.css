@@ -972,6 +972,21 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
     background: rgba(199, 164, 91, 0.1);
   }
 
+  /* Keep the emergency JOUR link unmistakable inside the mobile drawer. */
+  .rwm-electricity-global-header .rwm-egh-link[data-rwmh-on-call="jour"],
+  .rwm-electricity-global-header .rwm-egh-link[data-rwmh-on-call="jour"].is-active {
+    color: #ffe17c;
+    border-color: rgba(239, 196, 78, 0.72);
+    background: linear-gradient(90deg, rgba(239, 196, 78, 0.2), rgba(239, 196, 78, 0.07));
+    box-shadow: 0 0 16px rgba(239, 196, 78, 0.2), inset 0 0 0 1px rgba(255, 225, 124, 0.08);
+    text-shadow: 0 0 8px rgba(255, 225, 124, 0.8);
+  }
+
+  .rwm-electricity-global-header .rwm-egh-link[data-rwmh-on-call="jour"]::before {
+    inset: 2px 8px;
+    opacity: 0.55;
+  }
+
   .rwm-electricity-global-header .rwm-egh-link.is-active::after {
     top: 12px;
     right: auto;
@@ -983,6 +998,17 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
 
   .rwm-electricity-global-header .rwm-egh-right {
     gap: 12px;
+  }
+
+  .rwm-electricity-global-header .rwm-egh-btn-site-switch {
+    min-height: 54px;
+    justify-content: center;
+    text-align: center;
+    color: #17150f;
+    background: linear-gradient(135deg, #f5c94f, #c99a32);
+    border-color: #f5c94f;
+    box-shadow: 0 8px 22px rgba(239, 196, 78, 0.22);
+    letter-spacing: 0.1em;
   }
 
   .rwm-electricity-global-header .linguise_switcher_root {
