@@ -5457,11 +5457,13 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 .oncall-specialized-body .btn { margin-top: auto; min-height: 42px; padding: 13px 20px; border-radius: 5px; font-size: 10px; }
 
 .oncall-safety { padding: 70px 0; color: #f5f0e5; background: radial-gradient(circle at 58% 45%, rgba(73,94,35,.18), transparent 42%), #080d07; }
-.services-page .oncall-safety-grid { width: min(1680px, 96%); }
+.services-page .oncall-safety-grid { width: 100%; max-width: none; grid-template-columns: minmax(0, 43%) minmax(0, 57%); gap: 0; }
 .oncall-safety-grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); align-items: center; gap: 52px; }
 .oncall-safety-media { overflow: hidden; height: 470px; border: 1px solid rgba(218,174,48,.62); border-radius: 8px; box-shadow: 0 24px 60px rgba(0,0,0,.38); }
+.services-page .oncall-safety-media { border-left: 0; border-radius: 0 8px 8px 0; }
 .oncall-safety-media img { width: 100%; height: 100%; object-fit: cover; object-position: 53% center; }
 .oncall-safety-content { min-width: 0; }
+.services-page .oncall-safety-content { padding: 0 5vw 0 2.5vw; }
 .oncall-safety-eyebrow { display: flex; align-items: center; gap: 11px; color: #d4a82f; font: 700 9px/1.2 Arial, sans-serif; letter-spacing: .25em; text-transform: uppercase; }
 .oncall-safety-eyebrow i { width: 28px; height: 1px; background: #a77d16; }
 .oncall-safety-content h2 { margin: 13px 0 10px; color: #f5f0e5; font: 400 clamp(35px, 4vw, 55px)/.98 Georgia, serif; }
@@ -5955,7 +5957,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
 }
 
 @media (max-width: 980px) {
-  .oncall-safety-grid { grid-template-columns: 1fr; gap: 34px; }
+  .oncall-safety-grid, .services-page .oncall-safety-grid { grid-template-columns: 1fr; gap: 34px; }
   .oncall-safety-media { height: min(72vw, 520px); }
   .oncall-hero-grid,
   .oncall-grid {
@@ -6008,6 +6010,7 @@ body.electricity-body.about-page .footer-ref.footer-v2 .footer-contact {
   .oncall-safety-media { height: 390px; }
   .oncall-safety-details { grid-template-columns: 1fr; gap: 24px; }
   .oncall-safety-cta { padding: 22px 0 0; border-top: 1px solid rgba(211,170,49,.38); border-left: 0; }
+  .services-page .oncall-safety-content { padding: 0 16px; }
   .oncall-safety-trust { justify-content: flex-start; flex-wrap: wrap; gap: 12px 18px; }
   .services-page .oncall-safety-content h2 { font-size: clamp(32px, 9vw, 40px); }
   .oncall-hero {
