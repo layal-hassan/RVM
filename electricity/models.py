@@ -41,6 +41,14 @@ class ElectricalService(models.Model):
         return self.title
 
 
+class PublicFormSubmissionBucket(models.Model):
+    """Shared submission limits; keys contain hashes, never email addresses or IPs."""
+
+    key = models.CharField(max_length=64, primary_key=True)
+    count = models.PositiveIntegerField(default=0)
+    expires_at = models.DateTimeField(db_index=True)
+
+
 class ConsultationRequest(models.Model):
     class Status(models.TextChoices):
         PENDING = "pending", "Pending"

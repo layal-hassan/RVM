@@ -26,6 +26,7 @@ from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.db import transaction
 from .email_backend import support_email_connection
+from .form_protection import allow_quick_quote
 from .forms import (
     BookingStatusUpdateForm,
     ServiceBookingStatusUpdateForm,
@@ -639,7 +640,13 @@ def home(request):
     hero_pricing = HomeHeroPricing.objects.first()
     quote_form = QuickQuoteForm(request.POST or None)
     quote_received = request.GET.get("quote") == "received"
-    if request.method == "POST" and request.POST.get("form_type") == "quick_quote" and quote_form.is_valid():
+    valid_quote = request.method == "POST" and request.POST.get("form_type") == "quick_quote" and quote_form.is_valid()
+    if valid_quote and not allow_quick_quote(
+        request, quote_form.cleaned_data.get("email", ""), quote_form.cleaned_data["submission_token"],
+    ):
+        quote_form.add_error(None, _("Too many requests. Please try again later or contact us by phone."))
+        valid_quote = False
+    if valid_quote:
         quote = quote_form.save(commit=False)
         customer_type = request.POST.get("customer_type", "private").title()
         postcode = request.POST.get("postcode", "").strip()
@@ -654,7 +661,7 @@ def home(request):
         company_email = getattr(settings, "CONTACT_TO_EMAIL", "info@rwmel.se")
         try:
             company_message = EmailMessage(
-                subject=f"New quick quote request from {quote.full_name}",
+                subject=f"New quick quote request #{quote.pk}",
                 body=(
                     "A new quick quote request was submitted.\n\n"
                     f"Name: {quote.full_name}\n"
@@ -679,7 +686,7 @@ def home(request):
                 send_mail(
                     "RWM EL - Quote request received",
                     (
-                        f"Hello {quote.full_name},\n\n"
+                        "Hello,\n\n"
                         "We have received your quote request and will review the details. "
                         "Our team will contact you shortly.\n\n"
                         f"Your request reference is #{quote.pk}.\n\n"

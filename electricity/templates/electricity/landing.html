@@ -168,6 +168,8 @@
         <form method="post" action="{% url 'electricity:home' %}#quick-quote" class="home-quote-form">
           {% csrf_token %}
           <input type="hidden" name="form_type" value="quick_quote">
+          {{ quote_form.website }}
+          {{ quote_form.submission_token }}
           <fieldset>
             <legend>{% trans "I am a..." %}</legend>
             <div class="home-quote-type">

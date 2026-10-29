@@ -3,8 +3,10 @@
 import smtplib
 
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import get_connection
 from django.core.mail.backends.smtp import EmailBackend as DjangoSMTPBackend
+from django.utils.module_loading import import_string
 
 
 class _ChunkedSendMixin:
@@ -42,8 +44,14 @@ class EmailBackend(DjangoSMTPBackend):
 def _smtp_connection(username, password):
     """Build an authenticated SMTP connection without exposing credentials."""
     backend = getattr(settings, "EMAIL_BACKEND", "")
-    if not getattr(settings, "EMAIL_HOST", "") or "smtp" not in backend.lower():
+    # Custom SMTP backends need not contain "smtp" in their import path.
+    if not issubclass(import_string(backend), DjangoSMTPBackend):
         return None
+    if not username or not password:
+        raise ImproperlyConfigured(
+            "SMTP account requires both a username and a password. "
+            "Configure the matching SUPPORT_EMAIL_HOST_* or INVOICE_EMAIL_HOST_* pair."
+        )
     return get_connection(
         backend=backend,
         host=settings.EMAIL_HOST,
@@ -58,13 +66,13 @@ def _smtp_connection(username, password):
 
 def support_email_connection():
     return _smtp_connection(
-        getattr(settings, "SUPPORT_EMAIL_HOST_USER", ""),
-        getattr(settings, "SUPPORT_EMAIL_HOST_PASSWORD", ""),
+        getattr(settings, "SUPPORT_EMAIL_HOST_USER", settings.EMAIL_HOST_USER),
+        getattr(settings, "SUPPORT_EMAIL_HOST_PASSWORD", settings.EMAIL_HOST_PASSWORD),
     )
 
 
 def invoice_email_connection():
     return _smtp_connection(
-        getattr(settings, "INVOICE_EMAIL_HOST_USER", ""),
-        getattr(settings, "INVOICE_EMAIL_HOST_PASSWORD", ""),
+        getattr(settings, "INVOICE_EMAIL_HOST_USER", settings.EMAIL_HOST_USER),
+        getattr(settings, "INVOICE_EMAIL_HOST_PASSWORD", settings.EMAIL_HOST_PASSWORD),
     )

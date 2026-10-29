@@ -1,5 +1,6 @@
 import json
 import re
+import uuid
 from decimal import Decimal, InvalidOperation
 
 from django import forms
@@ -8,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import PasswordResetForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core import signing
 from .models import (
     AcceptedZipCode,
     AutomatedEmailTemplate,
@@ -546,6 +548,34 @@ class ConsultationRequestForm(HumanizedJSONModelForm):
 
 
 class QuickQuoteForm(forms.ModelForm):
+    website = forms.CharField(required=False, widget=forms.HiddenInput)
+    submission_token = forms.CharField(widget=forms.HiddenInput)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["submission_token"].initial = signing.dumps(
+            uuid.uuid4().hex, salt="quick-quote-form",
+        )
+
+    def clean_website(self):
+        if self.cleaned_data.get("website"):
+            raise ValidationError(_("Please reload the page and try again."))
+        return ""
+
+    def clean_submission_token(self):
+        token = self.cleaned_data["submission_token"]
+        try:
+            signing.loads(token, salt="quick-quote-form", max_age=7200)
+        except signing.BadSignature:
+            raise ValidationError(_("Please reload the page and try again."))
+        return token
+
+    def clean_full_name(self):
+        name = self.cleaned_data["full_name"]
+        if re.search(r"https?://|www\.|\b[\w-]+\.(?:com|net|org|se|io|ru|xyz|top|link)\b|[<>\r\n]", name, re.I):
+            raise ValidationError(_("Please enter your name without links or markup."))
+        return name
+
     class Meta:
         model = ConsultationRequest
         fields = ("full_name", "email", "phone", "message")

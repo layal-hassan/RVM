@@ -17,4 +17,20 @@
   html[dir="rtl"] .faq-page .faq-list .faq-icon{justify-self:start}
 }
 /* Background image keeps the CTA from feeling flat while preserving text contrast. */
-.faq-cta{position:relative;isolation:isolate;background:linear-gradient(90deg,rgba(7,13,10,.70) 0%,rgba(7,13,10,.48) 45%,rgba(7,13,10,.34) 100%),url('../images/faq-cta-background.png') center 58%/cover no-repeat;box-shadow:inset 0 0 90px rgba(0,0,0,.10)}
+.faq-cta{position:relative;isolation:isolate;min-height:420px;padding:96px 0;box-sizing:border-box;background:linear-gradient(90deg,rgba(7,13,10,.70) 0%,rgba(7,13,10,.48) 45%,rgba(7,13,10,.34) 100%),url('../images/faq-cta-background.png') center 58%/cover no-repeat;box-shadow:inset 0 0 90px rgba(0,0,0,.10)}
+.faq-cta .faq-kicker{font-size:16px;gap:14px}
+.faq-cta .faq-kicker>span{width:42px;height:3px}
+.faq-cta h2{font-size:48px;margin:12px 0 10px}
+.faq-cta p{font-size:17px;margin-bottom:26px}
+.faq-cta .faq-btn{min-height:66px;padding:0 30px;font-size:15px}
+.faq-cta .faq-trust{gap:24px}
+.faq-cta .faq-trust span{grid-template-columns:46px 1fr;column-gap:14px;font-size:34px}
+.faq-cta .faq-trust>span>.faq-svg{width:44px;height:44px}
+.faq-cta .faq-trust b{font-size:15px}
+.faq-cta .faq-trust small{font-size:12px}
+@media(max-width:800px){
+  .faq-cta{min-height:360px;padding:72px 0}
+  .faq-cta h2{font-size:34px}
+  .faq-cta p{font-size:14px}
+  .faq-cta .faq-btn{font-size:13px}
+}

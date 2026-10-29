@@ -208,7 +208,7 @@ def invoice_pdf_bytes(invoice):
         leftMargin=12 * mm,
         rightMargin=12 * mm,
         topMargin=10 * mm,
-        bottomMargin=14 * mm,
+        bottomMargin=50 * mm,
     )
     styles = getSampleStyleSheet()
     navy = colors.HexColor("#09255B")
@@ -233,11 +233,13 @@ def invoice_pdf_bytes(invoice):
         ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
     ]))
     story.append(title_block)
-    if invoice.invoice_type == Invoice.InvoiceType.PART and invoice.part_number and invoice.part_total:
+    if invoice.part_number and invoice.part_total:
+        story.append(Spacer(1, 2.5 * mm))
         story.append(Paragraph(
-            f"<para alignment='center'>DEL {invoice.part_number} AV {invoice.part_total}</para>",
+            f"<para alignment='center'><font color='#43536B'><b>PART {invoice.part_number} OF {invoice.part_total}</b></font></para>",
             styles["Normal"],
         ))
+        story.append(Spacer(1, 1.5 * mm))
     story.append(Spacer(1, 8 * mm))
 
     logo_path = settings.BASE_DIR / "electricity" / "static" / "electricity" / "img" / "electricity_logo.jpg"
@@ -746,15 +748,19 @@ def invoice_pdf_bytes(invoice):
         ("TOPPADDING", (0, 0), (-1, -1), 0),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
     ]))
+    fixed_footer = InvoiceFooterBlock()
+
+    def draw_fixed_footer(pdf, _document):
+        fixed_footer.drawOn(pdf, 12 * mm, 14 * mm)
+
     # Keep the financial breakdown close to the item table, matching the
     # approved reference instead of forcing it to the bottom of a sparse page.
     story.extend([
-        CondPageBreak(88 * mm),
+        CondPageBreak(50 * mm),
         summary_block,
         Spacer(1, 3 * mm),
-        InvoiceFooterBlock(),
     ])
-    doc.build(story)
+    doc.build(story, onFirstPage=draw_fixed_footer, onLaterPages=draw_fixed_footer)
     return buffer.getvalue()
 
 
