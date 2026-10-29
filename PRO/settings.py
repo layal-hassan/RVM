@@ -42,15 +42,18 @@ if not SECRET_KEY:
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = _env_bool("DEBUG", False)
+DJANGO_ENV = os.getenv("DJANGO_ENV", "production").strip().lower()
+if DJANGO_ENV not in {"production", "development", "test"}:
+    raise ImproperlyConfigured("DJANGO_ENV must be production, development, or test.")
+# A leftover DEBUG=True in a copied .env must not enable production tracebacks.
+DEBUG = DJANGO_ENV == "development" and _env_bool("DEBUG", False)
 
-ALLOWED_HOSTS = ["45.93.137.166", "rwmel.se", "www.rwmel.se"]
 _default_allowed_hosts = ["127.0.0.1", "localhost"]
 _production_hosts = ["45.93.137.166", "rwmel.se", "www.rwmel.se"]
 _env_allowed_hosts = [
     host.strip() for host in os.getenv("ALLOWED_HOSTS", ",".join(_default_allowed_hosts)).split(",") if host.strip()
 ]
-ALLOWED_HOSTS = list(dict.fromkeys(_env_allowed_hosts + ([] if DEBUG else _production_hosts)))
+ALLOWED_HOSTS = list(dict.fromkeys(_env_allowed_hosts + _production_hosts))
 
 _env_csrf_trusted_origins = [
     origin.strip()

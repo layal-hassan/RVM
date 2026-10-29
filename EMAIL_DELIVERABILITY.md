@@ -1,5 +1,22 @@
 # Email delivery investigation
 
+## Production environment selection
+
+`DJANGO_ENV` defaults to `production`. Debug tracebacks are enabled only when
+both `DJANGO_ENV=development` and `DEBUG=true` are explicitly configured.
+Keep `DJANGO_ENV=development` in the local untracked .env only. Set
+`DJANGO_ENV=production` and `DEBUG=False` in the VPS service environment.
+The known `rwmel.se` and `www.rwmel.se` hosts remain allowed independently of
+any copied development host list. A server .env containing DEBUG=True must
+not turn on development tracebacks. Production settings enable secure cookies
+and SSL redirect, so the trusted reverse proxy must send X-Forwarded-Proto.
+
+For the deployed configuration that rejected rwmel.se with DEBUG=True, a
+systemd drop-in can pin just these environment settings without editing DB
+credentials or changing database records. After adding it, daemon-reload,
+check with service_manage.py, and restart rwmel. Verify the FAQ URL and normal
+navigation. Publish the corresponding settings fix for future deployments.
+
 ## Production deployment: use the service's PostgreSQL settings
 
 The VPS service `rwmel` configures `USE_POSTGRES=true`, `DB_NAME=rwmel`,
