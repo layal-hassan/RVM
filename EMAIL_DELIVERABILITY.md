@@ -1,5 +1,49 @@
 # Email delivery investigation
 
+## Production deployment: use the service's PostgreSQL settings
+
+The VPS service `rwmel` configures `USE_POSTGRES=true`, `DB_NAME=rwmel`,
+`DB_HOST=localhost`, and `DB_PORT=5432` in its systemd Environment. The login
+shell selects SQLite instead. The SQLite snapshot is not a backup of the live
+PostgreSQL database. Do not replace or migrate that SQLite file as part of this
+production update.
+
+`python service_manage.py <command>` reads the service environment in memory,
+checks that its working directory matches this checkout, and invokes Django
+with the same PostgreSQL settings. It never prints passwords or puts them on
+the command line. It refuses unresolved EnvironmentFiles and missing database
+configuration rather than falling back to SQLite.
+
+After publishing the new deployment helpers, run in `/var/www/rwmel` with the
+virtualenv active:
+
+```bash
+git pull --ff-only origin main &&
+python service_manage.py backup_database &&
+python service_manage.py makemigrations --merge --noinput &&
+python service_manage.py apply_spam_protection &&
+python service_manage.py check &&
+python service_manage.py check_email_config &&
+python service_manage.py collectstatic --noinput &&
+sudo systemctl restart rwmel &&
+sudo systemctl is-active rwmel
+```
+
+The backup command creates a private custom-format pg_dump archive in
+`/var/backups`. A failure stops the chain. The VPS has a separate migration
+`0058_merge_20261027_1333` absent from the local checkout, so merge generation
+must occur against the VPS's actual migration graph. Keep the generated merge
+file for later inclusion in the repository; do not remove migration history.
+
+`apply_spam_protection` inspects the pending PostgreSQL migration plan and
+permits only the known PublicFormSubmissionBucket creation and empty merge
+migrations in this app. Pending data updates, other schema changes or any
+rollback stop the command before migration execution. This lets the protection
+table be deployed without silently applying unrelated changes. If it stops,
+inspect `python service_manage.py migrate --plan` rather than using --fake or
+deleting migration records. `pg_dump` must be installed and compatible with
+the server version. The archive must be retained separately from the checkout.
+
 ## Repeated submission protection
 
 `PublicFormSpamProtectionMiddleware` now guards public contact, support, BRF,
