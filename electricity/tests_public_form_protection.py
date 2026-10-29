@@ -12,7 +12,7 @@ from .middleware import PublicFormSpamProtectionMiddleware
 from .models import SupportTicket
 
 
-@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend", SECURE_SSL_REDIRECT=False)
 class PublicFormProtectionTests(TestCase):
     def payload(self, index=0, **overrides):
         data = {

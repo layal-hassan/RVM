@@ -9,7 +9,7 @@ from django.utils import timezone
 from .models import ConsultationRequest
 
 
-@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend", SECURE_SSL_REDIRECT=False)
 class QuickQuoteProtectionTests(TestCase):
     def payload(self, **overrides):
         response = self.client.get(reverse("electricity:home"))
