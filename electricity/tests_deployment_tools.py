@@ -7,6 +7,7 @@ from unittest.mock import patch
 from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.db import migrations
+from django.db.migrations.loader import MigrationLoader
 from django.test import SimpleTestCase, override_settings
 
 import service_manage
@@ -46,6 +47,23 @@ class ServiceManagementTests(SimpleTestCase):
 
 
 class PostgreSQLBackupTests(SimpleTestCase):
+    def test_explicit_dump_path_is_used_when_service_path_is_incomplete(self):
+        configuration = {"default": {"ENGINE": "django.db.backends.postgresql", "NAME": "rwmel"}}
+        executable = "/usr/lib/postgresql/14/bin/pg_dump"
+        with tempfile.TemporaryDirectory() as directory, override_settings(DATABASES=configuration):
+            with patch("shutil.which", return_value=executable) as locate, patch("subprocess.run") as run:
+                call_command("backup_database", directory=directory, pg_dump=executable)
+            locate.assert_called_once_with(executable)
+            self.assertEqual(run.call_args.args[0][0], executable)
+
+    def test_missing_executable_does_not_start_dump_or_create_archive(self):
+        configuration = {"default": {"ENGINE": "django.db.backends.postgresql", "NAME": "rwmel"}}
+        with tempfile.TemporaryDirectory() as directory, override_settings(DATABASES=configuration):
+            with patch("shutil.which", return_value=None), patch("subprocess.run") as run, self.assertRaises(CommandError):
+                call_command("backup_database", directory=directory)
+            run.assert_not_called()
+            self.assertEqual(list(Path(directory).iterdir()), [])
+
     def test_sqlite_is_rejected_without_creating_backup(self):
         with self.assertRaises(CommandError), patch("subprocess.run") as run:
             call_command("backup_database")
@@ -86,9 +104,12 @@ class GuardedSpamMigrationTests(SimpleTestCase):
         with patch(module + ".settings") as settings, patch(module + ".MigrationExecutor") as executor, patch(module + ".call_command") as migrate:
             settings.DATABASES = {"default": {"ENGINE": "django.db.backends.postgresql"}}
             executor.return_value.loader.detect_conflicts.return_value = {}
-            executor.return_value.loader.graph.leaf_nodes.return_value = [("electricity", "0059_merge")]
+            executor.return_value.loader.applied_migrations = {}
             executor.return_value.migration_plan.return_value = plan
             Command().handle()
+            executor.return_value.migration_plan.assert_called_once_with([
+                ("electricity", "0058_publicformsubmissionbucket"),
+            ])
             return migrate.call_args
 
     def test_new_limit_table_and_empty_merge_are_allowed(self):
@@ -96,7 +117,7 @@ class GuardedSpamMigrationTests(SimpleTestCase):
         table.operations = [migrations.CreateModel("PublicFormSubmissionBucket", [])]
         merge = migrations.Migration("0059_merge", "electricity")
         call = self.run_guard([(table, False), (merge, False)])
-        self.assertEqual(call.args, ("migrate", "electricity", "0059_merge"))
+        self.assertEqual(call.args, ("migrate", "electricity", "0058_publicformsubmissionbucket"))
         self.assertFalse(call.kwargs["interactive"])
 
     def test_data_changes_and_rollback_are_rejected(self):
@@ -107,3 +128,26 @@ class GuardedSpamMigrationTests(SimpleTestCase):
         merge = migrations.Migration("0059_merge", "electricity")
         with self.assertRaises(CommandError):
             self.run_guard([(merge, True)])
+
+    def test_table_migration_does_not_depend_on_workflow_or_template_updates(self):
+        loader = MigrationLoader(None)
+        plan = loader.graph.forwards_plan(("electricity", "0058_publicformsubmissionbucket"))
+        self.assertIn(("electricity", "0054_automatedemailtemplate"), plan)
+        for name in (
+            "0055_align_customer_facing_pricing", "0055_expand_automated_email_workflows",
+            "0056_update_service_email_template", "0057_update_service_email_next_steps",
+        ):
+            self.assertNotIn(("electricity", name), plan)
+        self.assertEqual(loader.detect_conflicts(), {})
+
+    def test_already_applied_table_does_not_roll_back_later_migrations(self):
+        from .management.commands.apply_spam_protection import Command
+        module = "electricity.management.commands.apply_spam_protection"
+        with patch(module + ".settings") as settings, patch(module + ".MigrationExecutor") as executor, patch(module + ".call_command") as migrate, patch(module + ".connection") as connection:
+            settings.DATABASES = {"default": {"ENGINE": "django.db.backends.postgresql"}}
+            executor.return_value.loader.detect_conflicts.return_value = {}
+            executor.return_value.loader.applied_migrations = {("electricity", "0058_publicformsubmissionbucket"): object()}
+            connection.introspection.table_names.return_value = ["electricity_publicformsubmissionbucket"]
+            Command().handle()
+            migrate.assert_not_called()
+            executor.return_value.migration_plan.assert_not_called()

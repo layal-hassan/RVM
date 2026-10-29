@@ -2,7 +2,8 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-    dependencies = [("electricity", "0057_update_service_email_next_steps")]
+    # This independent table must not force pending template/data updates.
+    dependencies = [("electricity", "0054_automatedemailtemplate")]
 
     operations = [
         migrations.CreateModel(

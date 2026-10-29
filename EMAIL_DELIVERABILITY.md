@@ -35,11 +35,16 @@ The backup command creates a private custom-format pg_dump archive in
 must occur against the VPS's actual migration graph. Keep the generated merge
 file for later inclusion in the repository; do not remove migration history.
 
-`apply_spam_protection` inspects the pending PostgreSQL migration plan and
-permits only the known PublicFormSubmissionBucket creation and empty merge
-migrations in this app. Pending data updates, other schema changes or any
-rollback stop the command before migration execution. This lets the protection
-table be deployed without silently applying unrelated changes. If it stops,
+`apply_spam_protection` targets `0058_publicformsubmissionbucket` explicitly,
+not the graph's latest merge. The independent table depends on baseline 0054,
+so pending pricing/workflow/template changes on the other branch are not
+included. `0059_merge_spam_protection` joins the repository branches without
+operations; a VPS with additional local merges needs merge generation again.
+The command inspects the targeted PostgreSQL migration plan and permits only
+the known table creation and empty ancestor migrations in this app. Any other
+required schema/data change or rollback stops it before migration execution.
+An already-applied table returns without rolling back descendants. This lets
+the protection table deploy while preserving unrelated pending work. If it stops,
 inspect `python service_manage.py migrate --plan` rather than using --fake or
 deleting migration records. `pg_dump` must be installed and compatible with
 the server version. The archive must be retained separately from the checkout.

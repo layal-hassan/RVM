@@ -16,14 +16,18 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--directory", default="/var/backups")
+        parser.add_argument("--pg-dump", help="Explicit pg_dump executable when the service PATH omits it.")
 
     def handle(self, *args, **options):
         database = settings.DATABASES["default"]
         if database["ENGINE"] != "django.db.backends.postgresql":
             raise CommandError("Expected PostgreSQL. No backup or database changes were attempted.")
-        executable = shutil.which("pg_dump")
+        executable = shutil.which(options.get("pg_dump") or "pg_dump")
         if not executable:
-            raise CommandError("pg_dump is not installed. No database changes were attempted.")
+            raise CommandError(
+                "pg_dump was not found on the service PATH. Supply --pg-dump with its absolute path. "
+                "No database changes were attempted."
+            )
         directory = Path(options["directory"])
         if not directory.is_dir():
             raise CommandError("Backup directory does not exist.")
