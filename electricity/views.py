@@ -3917,10 +3917,12 @@ def external_dashboard(request):
 
     for model in app_config.get_models():
         model_name = model._meta.model_name
-        # Attachment rows are implementation details, not standalone dashboard
-        # resources. Excluding them also keeps the dashboard available during
-        # rolling deployments while a new attachment migration is being applied.
-        if model_name in {"consultationbookingattachment", "electricianbookingattachment", "quoterequestattachment"}:
+        # Attachments and spam limit counters are internal records, not
+        # standalone resources for staff to browse or edit.
+        if model_name in {
+            "consultationbookingattachment", "electricianbookingattachment",
+            "quoterequestattachment", "publicformsubmissionbucket",
+        }:
             continue
         manage_url = None
         if model_name == "electricalservice":
@@ -3963,7 +3965,7 @@ def external_dashboard(request):
         else:
             display_fields = display_fields[:3]
 
-        order_field = "-id"
+        order_field = "-pk"
         if any(f.name == "created_at" for f in model._meta.fields):
             order_field = "-created_at"
         queryset = model.objects.all().order_by(order_field)[:6]
