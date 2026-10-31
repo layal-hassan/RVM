@@ -1,12 +1,10 @@
-from django.http import HttpResponse
-from django.utils.translation import gettext as _
 from django.utils.deprecation import MiddlewareMixin
 
-from .form_protection import public_submission_retry_after
+from .form_protection import reject_public_submission
 
 
 class PublicFormSpamProtectionMiddleware(MiddlewareMixin):
-    """Limit public submissions before views create records or send email."""
+    """Identify public submissions; views reserve limits after validating input."""
 
     direct_forms = {
         "contact", "support", "for_brf", "careers", "career_detail", "feedback",
@@ -34,7 +32,9 @@ class PublicFormSpamProtectionMiddleware(MiddlewareMixin):
             if not QuickQuoteForm(request.POST).is_valid():
                 return None
         elif name == "booking_step_7":
-            data.update(request.session.get("electricity_booking", {}))
+            for key, value in request.session.get("electricity_booking", {}).items():
+                if key in {"email", "phone", "full_name"} or key not in data:
+                    data[key] = value
         elif name in self.final_steps:
             step, session_key = self.final_steps[name]
             if view_kwargs.get("step") != step:
@@ -48,14 +48,14 @@ class PublicFormSpamProtectionMiddleware(MiddlewareMixin):
         elif name not in self.direct_forms:
             return None
 
+        if name == "career_detail":
+            data["job"] = view_kwargs.get("slug", "")
+        if name == "outside_area":
+            data.update(flow=view_kwargs.get("flow", ""), zip_code=view_kwargs.get("zip_code", ""))
         scope = "careers" if name == "career_detail" else name
-        retry_after = public_submission_retry_after(request, scope, data)
-        if not retry_after:
-            return None
-        response = HttpResponse(
-            _("Too many or repeated requests. Please try again later or contact us by phone."),
-            status=429, content_type="text/plain; charset=utf-8",
-        )
-        response["Retry-After"] = str(retry_after)
-        response["Cache-Control"] = "no-store"
-        return response
+        request.public_submission_context = (scope, data)
+        if name == "password_reset":
+            from .forms import UsernameOrEmailPasswordResetForm
+            if UsernameOrEmailPasswordResetForm(request.POST).is_valid():
+                return reject_public_submission(request)
+        return None

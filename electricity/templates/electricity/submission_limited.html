@@ -1,0 +1,13 @@
+﻿{% extends "electricity/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Request submission" %} | RWM EL{% endblock %}
+{% block content %}
+<section class="container" style="padding: 5rem 1.5rem; min-height: 55vh; max-width: 760px;">
+  <h1>{% trans "Please wait before submitting again" %}</h1>
+  <p role="alert">{{ limit_message }}</p>
+  <p>{% blocktrans with minutes=retry_minutes %}You can try again in {{ minutes }} minute(s).{% endblocktrans %}</p>
+  <p>{% trans "If you already received a confirmation, your request has been received and you do not need to submit it again." %}</p>
+  <button type="button" class="btn btn-primary" onclick="window.history.back()">{% trans "Back to form" %}</button>
+  <a class="btn btn-secondary" href="tel:+46700391611">{% trans "Call us" %}</a>
+</section>
+{% endblock %}

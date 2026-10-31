@@ -817,6 +817,7 @@ class OnCallBooking(models.Model):
         REVIEWING = "reviewing", "Reviewing"
         APPROVED = "approved", "Approved"
         ACTIVE = "active", "Active"
+        COMPLETED = "completed", "Completed"
         REJECTED = "rejected", "Rejected"
 
     entity_type = models.CharField(max_length=20, choices=EntityType.choices, blank=True)

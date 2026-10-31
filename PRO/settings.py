@@ -295,3 +295,7 @@ LOGGING = {
         },
     },
 }
+
+# Successful public submissions per shared IP; contact limits are per form.
+FORM_IP_LIMIT = int(os.getenv("FORM_IP_LIMIT", "20"))
+FORM_IP_DAILY_LIMIT = int(os.getenv("FORM_IP_DAILY_LIMIT", "100"))

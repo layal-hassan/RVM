@@ -26,7 +26,7 @@ from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.db import transaction
 from .email_backend import support_email_connection
-from .form_protection import allow_quick_quote
+from .form_protection import allow_quick_quote, reject_public_submission
 from .forms import (
     BookingStatusUpdateForm,
     ServiceBookingStatusUpdateForm,
@@ -279,21 +279,13 @@ def _invoice_email_error_message(exc):
     return "Invoice was saved, but email delivery failed. Check the SMTP settings."
 
 
-def _create_and_queue_invoice(booking, send_email=True):
+def _create_booking_invoice_draft(booking):
     try:
         invoice = create_invoice_for_booking(booking)
     except Exception:
         logger.exception("Could not create invoice for %s #%s", type(booking).__name__, booking.pk)
         return None
 
-    if send_email:
-        def _send():
-            try:
-                send_invoice_email(invoice)
-            except Exception:
-                logger.exception("Could not email invoice %s", invoice.invoice_number)
-
-        transaction.on_commit(_send)
     return invoice
 
 
@@ -641,6 +633,10 @@ def home(request):
     quote_form = QuickQuoteForm(request.POST or None)
     quote_received = request.GET.get("quote") == "received"
     valid_quote = request.method == "POST" and request.POST.get("form_type") == "quick_quote" and quote_form.is_valid()
+    if valid_quote:
+        rejection = reject_public_submission(request)
+        if rejection is not None:
+            return rejection
     if valid_quote and not allow_quick_quote(
         request, quote_form.cleaned_data.get("email", ""), quote_form.cleaned_data["submission_token"],
     ):
@@ -716,6 +712,9 @@ def feedback(request):
     form = CustomerFeedbackForm(request.POST or None)
     submitted = False
     if request.method == "POST" and form.is_valid():
+        rejection = reject_public_submission(request)
+        if rejection is not None:
+            return rejection
         item = form.save()
         AdminNotification.objects.create(
             message=f"New customer feedback from {item.full_name}.",
@@ -859,6 +858,12 @@ def quote_request_step(request, step):
     if step > 1 and not data.get("service_title"):
         return redirect("electricity:services")
 
+    if step > 1 and not all(data.get(key) for key in ("customer_type", "project_details", "materials")):
+        return redirect("electricity:quote_request_step", step=1)
+
+    if step == 3 and not all(data.get(key) for key in ("full_name", "email", "phone", "street_address", "postcode", "city")):
+        return redirect("electricity:quote_request_step", step=2)
+
     if request.method == "POST":
         if step == 1:
             customer_type = request.POST.get("customer_type", "")
@@ -897,6 +902,9 @@ def quote_request_step(request, step):
             if not request.POST.get("confirm"): errors.append("Please confirm that the information is correct.")
             if not request.POST.get("terms"): errors.append("Please accept the Terms and Conditions and Privacy Policy.")
             if not errors:
+                rejection = reject_public_submission(request)
+                if rejection is not None:
+                    return rejection
                 quote = QuoteRequest.objects.create(
                     service_title=data["service_title"], service_description=data.get("service_description", ""), service_image=data.get("service_image", ""),
                     customer_type=data["customer_type"], project_details=data["project_details"], materials=data["materials"],
@@ -1001,6 +1009,9 @@ def request_flow_submit(request):
     service_title = ", ".join(entry["item"].title for entry in verified_services)
     service_title = service_title[:160]
 
+    rejection = reject_public_submission(request)
+    if rejection is not None:
+        return rejection
     quote = QuoteRequest.objects.create(
         service_title=service_title,
         service_description="Multiple services" if len(verified_services) > 1 else (first_item.description or first_item.subtitle),
@@ -1129,6 +1140,9 @@ def careers(request):
     form = CareerApplicationForm(request.POST or None, request.FILES or None, initial={"job": selected_job})
     submitted = False
     if request.method == "POST" and form.is_valid():
+        rejection = reject_public_submission(request)
+        if rejection is not None:
+            return rejection
         application = form.save()
         AdminNotification.objects.create(
             message=f"New career application from {application.full_name}"
@@ -1151,6 +1165,9 @@ def career_detail(request, slug):
     if request.method == "POST" and form.is_valid():
         application = form.save(commit=False)
         application.job = job
+        rejection = reject_public_submission(request)
+        if rejection is not None:
+            return rejection
         application.save()
         AdminNotification.objects.create(message=f"New application for {job.title} from {application.full_name}")
         _send_career_application_emails(application)
@@ -1229,6 +1246,9 @@ def for_brf(request):
                     f"Service: {form_data['request_type']}\n\n"
                     f"Additional information:\n{form_data['message'] or '-'}"
                 )
+                rejection = reject_public_submission(request)
+                if rejection is not None:
+                    return rejection
                 inquiry = ContactInquiry.objects.create(
                     full_name=form_data["full_name"],
                     email=form_data["email"],
@@ -1337,6 +1357,9 @@ def support(request):
             errors.append("Please describe your request.")
 
         if not errors:
+            rejection = reject_public_submission(request)
+            if rejection is not None:
+                return rejection
             ticket = SupportTicket.objects.create(
                 full_name=data["full_name"],
                 email=data["email"],
@@ -1405,6 +1428,9 @@ def contact(request):
             if not (full_name and message and consent and inquiry_type):
                 status = "error"
             else:
+                rejection = reject_public_submission(request)
+                if rejection is not None:
+                    return rejection
                 inquiry = ContactInquiry.objects.create(
                     full_name=full_name,
                     email=email,
@@ -1816,6 +1842,9 @@ def outside_area(request, flow, zip_code):
             item.request_type = ServiceRequestOutsideArea.RequestType.SERVICE
         else:
             item.request_type = ServiceRequestOutsideArea.RequestType.ON_CALL
+        rejection = reject_public_submission(request)
+        if rejection is not None:
+            return rejection
         item.save()
         AdminNotification.objects.create(
             message=f"Outside-area request from {item.full_name} ({item.zip_code}).",
@@ -2366,6 +2395,9 @@ def booking_step_7(request):
             is_first_free=is_free,
         )
 
+        rejection = reject_public_submission(request)
+        if rejection is not None:
+            return rejection
         booking.save()
         temp_uploads = _normalize_temp_uploads(data.get("temp_uploads", {}))
         first_photo = temp_uploads["photo"][0] if temp_uploads["photo"] else None
@@ -2429,7 +2461,7 @@ def booking_step_7(request):
                 f"Consultation fee: {'Free first consultation' if booking.is_first_free else _format_currency_amount(booking.consultation_price, pricing.currency if pricing else 'SEK')}",
             ],
         )
-        _create_and_queue_invoice(booking)
+        _create_booking_invoice_draft(booking)
         request.session.pop(BOOKING_SESSION_KEY, None)
         return redirect("electricity:booking_thank_you")
 
@@ -2842,6 +2874,9 @@ def electrician_booking_step(request, step):
                     additional_notes = "\n".join(
                         part for part in [additional_notes, *identity_notes] if part
                     )
+                rejection = reject_public_submission(request)
+                if rejection is not None:
+                    return rejection
                 booking = ElectricianBooking.objects.create(
                     customer_type=data.get("customer_type") or ElectricianBooking.CustomerType.PRIVATE,
                     full_name=data.get("company_name") or data.get("full_name", ""),
@@ -2907,7 +2942,7 @@ def electrician_booking_step(request, step):
                 )
                 # Keep the invoice as a draft. The booking confirmation is sent
                 # immediately; the invoice is sent later by an administrator.
-                _create_and_queue_invoice(booking, send_email=False)
+                _create_booking_invoice_draft(booking)
                 request.session.pop(ELECTRICIAN_BOOKING_SESSION_KEY, None)
                 request.session["electrician_booking_id"] = booking.id
                 request.session["electrician_booking_reference"] = f"RWM-{booking.id:06d}"
@@ -3259,6 +3294,9 @@ def service_booking_step(request, step):
 
             try:
                 pricing_context = _get_service_pricing_context(data)
+                rejection = reject_public_submission(request)
+                if rejection is not None:
+                    return rejection
                 booking = ServiceBooking.objects.create(
                     account_type=data.get("account_type") or ServiceBooking.AccountType.PRIVATE,
                     full_name=data.get("full_name", ""),
@@ -3362,7 +3400,7 @@ def service_booking_step(request, step):
                     f"Estimated total: {_format_currency_amount(booking.estimated_total, booking.currency or 'SEK')}",
                 ],
             )
-            _create_and_queue_invoice(booking)
+            _create_booking_invoice_draft(booking)
             request.session["service_booking_id"] = f"SB-{booking.id:06d}"
             request.session["service_booking_pk"] = booking.id
             request.session.pop(SERVICE_BOOKING_SESSION_KEY, None)
@@ -3488,6 +3526,24 @@ def on_call_booking_step(request, step):
         return redirect("electricity:on_call_booking_step", step=1)
 
     data = _get_on_call_booking_data(request)
+    # A final-step URL is not proof that the earlier steps are still in session.
+    # Keep the successful redirect available after its draft session was cleared.
+    if not (request.method == "GET" and step == 4 and request.session.get("on_call_booking_success")):
+        prerequisites = (
+            (1, ("coverage_times", "response_speed", "coverage_scope")),
+            (2, ("entity_type", "organization_name", "organization_number", "contact_person", "phone", "email", "company_address", "zip_code", "city")),
+            (3, ("property_type", "assets_count", "primary_region")),
+        )
+        for earlier_step, fields in prerequisites:
+            if step > earlier_step and not all(data.get(field) for field in fields):
+                return redirect("electricity:on_call_booking_step", step=earlier_step)
+        if step == 4:
+            try:
+                assets_count = int(data.get("assets_count", 0))
+            except (TypeError, ValueError):
+                assets_count = 0
+            if not 0 < assets_count <= 2147483647:
+                return redirect("electricity:on_call_booking_step", step=3)
     errors = []
     titles = {
         1: _("On-Call Electrical Service"),
@@ -3553,8 +3609,12 @@ def on_call_booking_step(request, step):
             data["shared_critical_systems"] = bool(request.POST.get("shared_critical_systems"))
             if not data["property_type"]:
                 errors.append("Property type is required.")
-            if not data["assets_count"]:
-                errors.append("Number of assets/properties is required.")
+            try:
+                assets_count = int(data["assets_count"])
+            except (TypeError, ValueError):
+                assets_count = 0
+            if assets_count <= 0 or assets_count > 2147483647:
+                errors.append("Please enter a valid number of assets/properties.")
             if not data["primary_region"]:
                 errors.append("Primary city/region is required.")
         elif step == 4:
@@ -3579,6 +3639,9 @@ def on_call_booking_step(request, step):
                 site_address = ", ".join(
                     [p for p in [data.get("company_address", ""), data.get("city", "")] if p]
                 )
+                rejection = reject_public_submission(request)
+                if rejection is not None:
+                    return rejection
                 booking = OnCallBooking.objects.create(
                     entity_type=data.get("entity_type", ""),
                     organization_name=data.get("organization_name", ""),
@@ -3632,7 +3695,7 @@ def on_call_booking_step(request, step):
                     booking_reference=booking_id,
                     currency=pricing.currency if pricing else "SEK",
                 )
-                _create_and_queue_invoice(booking)
+                _create_booking_invoice_draft(booking)
                 request.session["on_call_booking_id"] = booking_id
                 request.session["on_call_booking_success"] = {
                     "booking_id": booking_id,
@@ -3890,6 +3953,9 @@ def signup(request):
         return redirect("electricity:home")
     form = SignupForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
+        rejection = reject_public_submission(request)
+        if rejection is not None:
+            return rejection
         user = form.save()
         login(request, user)
         return redirect("electricity:home")

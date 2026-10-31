@@ -133,6 +133,8 @@ def create_invoice_for_booking(booking):
     }.get(type(booking))
     if not relation:
         raise ValueError("Unsupported booking type")
+    if isinstance(booking, ConsultationBooking) and booking.consultation_price <= 0:
+        return None
     existing = Invoice.objects.filter(**{relation: booking}).first()
     if existing:
         return existing
@@ -144,7 +146,7 @@ def create_invoice_for_booking(booking):
         recipient_email=customer.email,
         title="Faktura",
         invoice_type=Invoice.InvoiceType.ROT if rot_enabled else Invoice.InvoiceType.STANDARD,
-        status=Invoice.Status.READY,
+        status=Invoice.Status.DRAFT,
         reference=f"BOOKING-{booking.pk}",
         work_address=", ".join(filter(None, [
             str(_value(booking, "street_address", "company_address", "site_address")),
@@ -788,6 +790,19 @@ def invoice_pdf_public_url(invoice):
 def send_invoice_email(invoice):
     if not invoice.recipient_email:
         raise ValueError("The invoice does not have a recipient email address.")
+
+    for relation in ("consultation_booking", "service_booking", "electrician_booking", "on_call_booking"):
+        booking = getattr(invoice, relation)
+        if booking is None:
+            continue
+        if isinstance(booking, ConsultationBooking) and booking.consultation_price <= 0:
+            raise ValueError("Free consultations do not require an invoice.")
+        if booking.status != "completed":
+            raise ValueError("The work must be completed before sending its invoice.")
+
+    invoice.recalculate()
+    if invoice.invoice_total == 0:
+        raise ValueError("An invoice with a zero total cannot be sent.")
     from_email = getattr(settings, "INVOICE_FROM_EMAIL", "Faktura@rwmel.se")
     customer_name = invoice.customer.full_name or "kund"
     currency = "kr" if invoice.currency.upper() == "SEK" else invoice.currency

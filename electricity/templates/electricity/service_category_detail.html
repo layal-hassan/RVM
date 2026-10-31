@@ -123,6 +123,8 @@
     <div class="category-card-grid category-card-grid-{{ section.kind }}">
       {% for item in section.items.all %}
       <article class="category-card{% if item.is_featured %} is-featured{% endif %}">
+        <div class="category-card-body">
+          <div class="category-card-intro">
         {% if item.badge %}
         <div class="category-card-badge">{{ item.badge }}</div>
         {% endif %}
@@ -131,7 +133,6 @@
           <img src="{{ item.image.url }}" alt="{{ item.title }}">
         </div>
         {% endif %}
-        <div class="category-card-body">
           <h3>{{ item.title }}</h3>
           {% if item.subtitle %}
           <div class="category-card-subtitle">{{ item.subtitle }}</div>
@@ -150,6 +151,8 @@
             {% endif %}
           </div>
 
+          </div>
+          <div class="category-package-slot">
           {% if item.included_title or item.included_lines %}
           <details class="category-package-accordion is-included" open>
             <summary>
@@ -168,6 +171,8 @@
           </details>
           {% endif %}
 
+          </div>
+          <div class="category-package-slot">
           {% if item.excluded_title or item.excluded_lines %}
           <details class="category-package-accordion is-excluded">
             <summary>
@@ -185,6 +190,7 @@
             {% endif %}
           </details>
           {% endif %}
+          </div>
         </div>
         {% if item.pricing_mode == "quote" or item.price_text or item.cta_label %}
         <div class="category-project-config{% if item.pricing_mode == 'quote' %} is-quote{% endif %}"

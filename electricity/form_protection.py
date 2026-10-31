@@ -3,13 +3,17 @@
 import datetime
 import ipaddress
 import json
+import logging
 
 from django.conf import settings
+from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
 from django.utils.crypto import salted_hmac
 
 from .models import PublicFormSubmissionBucket
+
+logger = logging.getLogger(__name__)
 
 
 def allow_quick_quote(request, email, token):
@@ -78,12 +82,12 @@ def public_submission_retry_after(request, scope, data):
     email = normalized_email(data.get("email"))
     phone = normalized_phone(data.get("phone"))
     limits = [
-        ("ip", client_ip(request), 5, 600),
-        ("ip-day", client_ip(request), 20, 86400),
+        ("ip", client_ip(request), settings.FORM_IP_LIMIT, 600),
+        ("ip-day", client_ip(request), settings.FORM_IP_DAILY_LIMIT, 86400),
     ]
     for name, value in (("email", email), ("phone", phone)):
         if value:
-            limits.extend([(name, value, 3, 3600), (name + "-day", value, 5, 86400)])
+            limits.extend([(name, f"{scope}:{value}", 3, 3600), (name + "-day", f"{scope}:{value}", 5, 86400)])
 
     # Only meaningful input affects duplicate detection; extra attacker-chosen
     # fields, CSRF masks and fresh form tokens cannot change the fingerprint.
@@ -92,7 +96,11 @@ def public_submission_retry_after(request, scope, data):
         "request_type", "inquiry_type", "service", "services_json", "job",
         "additional_information", "recurring_issues", "additional_notes",
         "preferred_date", "preferred_time", "preferred_time_slot", "street_address",
-        "consent", "confirm", "terms", "website",
+        "customer_type", "postcode", "zip_code", "project_address", "address",
+        "service_title", "service_type", "organization_name", "organization_number",
+        "coverage_times", "coverage_scope", "response_speed", "property_type",
+        "assets_count", "emergency_hours", "preferred_timeframe", "flow",
+        "hours", "hourly_hours", "services", "consultation_type", "project_description",
     )
     content = {key: " ".join(str(data.get(key, "")).casefold().split()) for key in fields}
     content.update(email=email, phone=phone, scope=scope)
@@ -100,14 +108,45 @@ def public_submission_retry_after(request, scope, data):
     # A duplicate bucket expires 10 minutes after the first attempt, avoiding
     # fixed-window boundary replays.
     limits.append(("duplicate", fingerprint, 1, 600))
-    for name, value, maximum, seconds in limits:
-        window = int(now.timestamp()) // seconds if name != "duplicate" else "once"
-        key = salted_hmac("public-form-limit", f"{name}:{window}:{value}", algorithm="sha256").hexdigest()
-        expiry = (
-            datetime.datetime.fromtimestamp((window + 1) * seconds, tz=datetime.timezone.utc)
-            if name != "duplicate" else now + datetime.timedelta(seconds=seconds)
-        )
-        bucket, _ = PublicFormSubmissionBucket.objects.get_or_create(key=key, defaults={"expires_at": expiry})
-        if not PublicFormSubmissionBucket.objects.filter(pk=key, count__lt=maximum).update(count=F("count") + 1):
-            return max(1, int((bucket.expires_at - now).total_seconds()) + 1)
+    # All reservations succeed together. Rejected retries must not use up other
+    # limits or prevent a different, legitimate request from being submitted.
+    with transaction.atomic():
+        for name, value, maximum, seconds in limits:
+            window = int(now.timestamp()) // seconds if name != "duplicate" else "once"
+            key = salted_hmac("public-form-limit", f"{name}:{window}:{value}", algorithm="sha256").hexdigest()
+            expiry = (
+                datetime.datetime.fromtimestamp((window + 1) * seconds, tz=datetime.timezone.utc)
+                if name != "duplicate" else now + datetime.timedelta(seconds=seconds)
+            )
+            bucket, _ = PublicFormSubmissionBucket.objects.get_or_create(key=key, defaults={"expires_at": expiry})
+            if not PublicFormSubmissionBucket.objects.filter(pk=key, count__lt=maximum).update(count=F("count") + 1):
+                transaction.set_rollback(True)
+                logger.warning("Public submission limited: scope=%s limit=%s", scope, name)
+                return max(1, int((bucket.expires_at - now).total_seconds()) + 1)
     return 0
+
+
+def reject_public_submission(request):
+    """Reserve capacity after view validation, immediately before saving/sending."""
+    context = getattr(request, "public_submission_context", None)
+    if context is None:
+        return None
+    scope, data = context
+    retry_after = public_submission_retry_after(request, scope, data)
+    if not retry_after:
+        return None
+    from django.http import JsonResponse
+    from django.shortcuts import render
+    from django.utils.translation import gettext as _
+
+    message = _("A matching request was recently submitted, or the submission limit was reached. Please wait before trying again.")
+    if scope == "request_flow_submit":
+        response = JsonResponse({"ok": False, "error": message, "retry_after": retry_after}, status=429)
+    else:
+        response = render(request, "electricity/submission_limited.html", {
+            "retry_after": retry_after, "retry_minutes": (retry_after + 59) // 60,
+            "limit_message": message,
+        }, status=429)
+    response["Retry-After"] = str(retry_after)
+    response["Cache-Control"] = "no-store"
+    return response

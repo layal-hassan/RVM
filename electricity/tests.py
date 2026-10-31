@@ -536,6 +536,8 @@ class InvoiceSystemTests(TestCase):
             customer=customer, recipient_email=customer.email
         )
 
+        InvoiceLine.objects.create(invoice=invoice, description="Completed work", unit_price_ex_vat="800.00")
+
         self.assertTrue(send_invoice_email(invoice))
         self.assertEqual(mail.outbox[0].from_email, "Faktura@rwmel.se")
 

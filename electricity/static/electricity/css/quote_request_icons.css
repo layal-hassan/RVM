@@ -28,16 +28,6 @@
   font-size: 14px;
 }
 
-.quote-request-page .details-card h3::first-letter,
-.quote-request-page .review-row>b::first-letter {
-  font-size: 26px;
-}
-
-.quote-request-page .next-card>p::first-letter {
-  font-size: 30px;
-  line-height: 1;
-}
-
 .quote-request-page footer {
   font-size: 12px;
 }
@@ -121,4 +111,29 @@
 /* The global base template supplies the shared site footer. */
 .quote-request-page .quote-shell > footer {
   display: none;
+}
+
+/* Size each icon explicitly so shared label/span typography cannot shrink it. */
+.quote-request-page .quote-shell .quote-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 32px;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  font-size: 30px !important;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.quote-request-page .upload > .quote-icon,
+.quote-request-page .success-three .quote-icon,
+.quote-request-page .trust .quote-icon {
+  justify-self: center;
+}
+
+.quote-request-page .next-card > p > .quote-icon {
+  color: #ffcb00;
 }
