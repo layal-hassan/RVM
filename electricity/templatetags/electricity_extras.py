@@ -130,6 +130,11 @@ def _humanize_field_item(field_name, item):
 def display_value(obj, field_name):
     try:
         value = getattr(obj, field_name)
+    except AttributeError:
+        details = getattr(obj, "booking_details", None)
+        if not isinstance(details, dict) or field_name not in details:
+            return "-"
+        value = details[field_name]
     except Exception:
         return "-"
 

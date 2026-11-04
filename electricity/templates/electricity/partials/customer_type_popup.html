@@ -1,0 +1,41 @@
+{% load static i18n %}
+<div class="customer-type-popup" data-customer-popup {% if customer_type_confirmed or request.method == "POST" and selected_customer_type or request.GET.resume == "1" and selected_customer_type %}data-popup-confirmed{% endif %} {% if on_interaction %}data-popup-on-focus{% endif %} {% if manual %}data-popup-manual{% endif %} {% if submit_on_choice %}data-submit-on-choice{% endif %} {% if private_redirect %}data-submit-on-private{% endif %}>
+  {% if on_interaction %}<button type="button" class="contact-type-change" data-customer-start hidden>{% trans "Choose Private or Business" %}</button>{% endif %}
+  <div class="contact-type-summary" data-contact-summary hidden>
+    <span>{% trans "Booking for" %}: <strong data-contact-label></strong></span>
+    <button type="button" class="contact-type-change" data-change-contact>{% trans "Change" %}</button>
+  </div>
+  <dialog class="contact-type-dialog" id="{{ popup_id|default:'booking-customer-dialog' }}" aria-labelledby="{{ popup_id|default:'booking-customer-dialog' }}-title" aria-describedby="{{ popup_id|default:'booking-customer-dialog' }}-description" data-contact-dialog>
+    <h2 id="{{ popup_id|default:'booking-customer-dialog' }}-title">{% trans "Before we get started" %}</h2>
+    <p id="{{ popup_id|default:'booking-customer-dialog' }}-description">{% trans "Choose who you are booking for to continue." %}</p>
+    <div data-contact-options>
+  <fieldset class="customer-type-fields" data-contact-fieldset data-choice-name="{{ choice_name }}">
+    <legend>{% trans "Are you a private individual or a business?" %}</legend>
+    <div class="customer-type-options">
+      <label class="customer-type-option">
+        <input type="radio" required name="{{ choice_name }}" value="private" {% if selected_customer_type == 'private' %}checked{% endif %}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7M5 9v12h5v-7h4v7h5V9"/></svg>
+        <strong class="customer-type-title">{% trans "Private" %}</strong>
+        <span>{% trans "Electrical work for your home or private property." %}</span>
+      </label>
+      <label class="customer-type-option">
+        <input type="radio" required name="{{ choice_name }}" value="business" {% if selected_customer_type == 'business' %}checked{% endif %}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V3h11v18M15 9h5v12M2 21h20M8 7h3M8 11h3M8 15h3"/></svg>
+        <strong class="customer-type-title">{% if allow_brf %}{% trans "Business" %}{% else %}{% trans "Business / BRF" %}{% endif %}</strong>
+        <span>{% trans "Electrical work for a company or organization." %}</span>
+      </label>
+      {% if allow_brf %}<label class="customer-type-option">
+        <input type="radio" required name="{{ choice_name }}" value="brf" {% if selected_customer_type == 'brf' %}checked{% endif %}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V3h16v18M2 21h20M8 7h2M14 7h2M8 11h2M14 11h2M10 21v-6h4v6"/></svg>
+        <strong class="customer-type-title">BRF</strong>
+        <span>{% trans "Housing association" %}</span>
+      </label>{% endif %}
+    </div>
+    {% if popup_errors %}<div class="booking-field-error">{{ popup_errors|join:", " }}</div>{% endif %}
+  </fieldset>
+    </div>
+    {% if manual %}<button type="button" class="contact-type-back" data-popup-dismiss>{% trans "Back" %}</button>{% else %}<a data-site-back class="contact-type-back" href="{% url 'electricity:services' %}">{% trans "Back" %}</a>{% endif %}
+  </dialog>
+
+</div>
+<script src="{% static 'electricity/js/consultation-start.js' %}?v=20261103-8"></script>

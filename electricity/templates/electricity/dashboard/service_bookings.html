@@ -19,7 +19,7 @@
             {% endfor %}
         </div>
         {% for row in items %}
-            <div class="panel-row">
+            <div class="panel-row" id="record-{{ row.pk }}">
                 {% for field in fields %}
                     <span>{{ row|display_value:field }}</span>
                 {% endfor %}

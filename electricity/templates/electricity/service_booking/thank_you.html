@@ -1,0 +1,15 @@
+{% extends "electricity/service_booking/base.html" %}{% load i18n %}
+{% block booking_content %}
+<section class="eb-card">
+  <div class="eb-card-header"><div><h1>{% trans "Your booking request has been received" %}</h1><p>{% trans "Our team will review your request and confirm the schedule and price." %}</p></div></div>
+  <dl class="eb-review-list">
+    <div><dt>{% trans "Reference" %}</dt><dd>SB-{{ booking.pk|stringformat:"06d" }}</dd></div>
+    <div><dt>{% trans "Service" %}</dt><dd>{{ booking.get_service_type_display }}</dd></div>
+    <div><dt>{% trans "Work details" %}</dt><dd>{{ booking.work_description|linebreaksbr }}</dd></div>
+    <div><dt>{% trans "Location" %}</dt><dd>{{ booking.street_address }}, {{ booking.zip_code }} {{ booking.city }}</dd></div>
+    <div><dt>{% trans "Date & time" %}</dt><dd>{{ booking.preferred_date }} ? {{ booking.preferred_time_slot }}</dd></div>
+    <div><dt>{% trans "Price" %}</dt><dd>{{ booking.price_display }}</dd></div>
+  </dl>
+  <a data-site-back class="btn btn-light" href="{% url 'electricity:services' %}">{% trans "Back" %}</a>
+</section>
+{% endblock %}

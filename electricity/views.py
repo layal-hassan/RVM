@@ -25,7 +25,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.db import transaction
-from .email_backend import support_email_connection
+from .email_backend import company_email_recipients, send_company_email, support_email_connection
 from .form_protection import allow_quick_quote, reject_public_submission
 from .forms import (
     BookingStatusUpdateForm,
@@ -88,6 +88,7 @@ from .admin_site import electricity_admin_site
 from .models import (
     AdminNotification,
     AutomatedEmailTemplate,
+    CompanyEmailDelivery,
     BookingStatusUpdate,
     ServiceBookingStatusUpdate,
     ConsultationBooking,
@@ -131,6 +132,7 @@ from .models import (
 from django.contrib.auth.models import User
 from .invoicing import (
     create_invoice_for_booking,
+    create_credit_invoice,
     invoice_pdf_bytes,
     invoice_pdf_token_data,
     send_invoice_email,
@@ -140,6 +142,12 @@ logger = logging.getLogger(__name__)
 
 
 _AUTOMATED_EMAIL_DEFAULTS = {
+    "quick_quote": {
+        "company_subject": "New quick quote request {reference}",
+        "company_body": "A new quick quote request was submitted.\n\nName: {name}\nCustomer type: {customer_type}\nPostcode: {postcode}\nEmail: {email}\nPhone: {phone}\n\nRequest details:\n{details}\n\nDashboard request ID: {request_id}",
+        "customer_subject": "RWM EL - Quote request received",
+        "customer_body": "Hello,\n\nWe have received your quote request and will review the details. Our team will contact you shortly.\n\nYour request reference is {reference}.\n\nRWM EL",
+    },
     "contact": {
         "company_subject": "New contact request from {name}",
         "company_body": "Name: {name}\nEmail: {email}\nPhone: {phone}\nAddress: {address}\nService: {service}\n\nMessage:\n{message}",
@@ -229,11 +237,7 @@ def _send_automated_workflow_emails(workflow, context, attachments=None):
         or getattr(settings, "DEFAULT_FROM_EMAIL", None)
         or "support@rwmel.se"
     )
-    company_recipient = (
-        getattr(template, "company_recipient", "")
-        or getattr(settings, "CONTACT_TO_EMAIL", None)
-        or "info@rwmel.se"
-    )
+    company_recipients = company_email_recipients(workflow, getattr(template, "company_recipient", ""))
     customer_email = context.get("email", "")
     results = {"company": "disabled", "customer": "disabled"}
 
@@ -243,13 +247,12 @@ def _send_automated_workflow_emails(workflow, context, attachments=None):
                 _render_automated_email(getattr(template, "company_subject", "") or defaults["company_subject"], context),
                 _render_automated_email(getattr(template, "company_body", "") or defaults["company_body"], context),
                 from_email,
-                [company_recipient],
+                company_recipients,
                 reply_to=[customer_email] if customer_email else None,
-                connection=support_email_connection(),
             )
             for name, content in attachments or []:
                 message.attach(name, content)
-            message.send(fail_silently=False)
+            send_company_email(message)
             results["company"] = "sent"
         except Exception:
             results["company"] = "failed"
@@ -262,7 +265,7 @@ def _send_automated_workflow_emails(workflow, context, attachments=None):
                 _render_automated_email(getattr(template, "customer_body", "") or defaults["customer_body"], context),
                 from_email,
                 [customer_email],
-                reply_to=[company_recipient],
+                reply_to=company_recipients,
                 connection=support_email_connection(),
             ).send(fail_silently=False)
             results["customer"] = "sent"
@@ -407,7 +410,6 @@ def _on_call_coverage_scope_labels():
 
 
 def _send_on_call_company_notification_email(*, booking, booking_reference, currency="SEK"):
-    company_email = getattr(settings, "BOOKING_TO_EMAIL", None) or "services@rwmel.se"
     from_email = (
         getattr(settings, "BOOKING_FROM_EMAIL", None)
         or getattr(settings, "DEFAULT_FROM_EMAIL", None)
@@ -451,6 +453,9 @@ def _send_on_call_company_notification_email(*, booking, booking_reference, curr
         booking.additional_notes or "-",
     ]
     template = AutomatedEmailTemplate.objects.filter(workflow="on_call").first()
+    if template and not template.company_enabled:
+        return
+    company_recipients = company_email_recipients("on_call", getattr(template, "company_recipient", ""))
     template_context = {
         "name": booking.organization_name or booking.contact_person or "-",
         "email": booking.email or "-",
@@ -468,14 +473,13 @@ def _send_on_call_company_notification_email(*, booking, booking_reference, curr
         subject = _render_automated_email(template.company_subject, template_context)
         body = _render_automated_email(template.company_body, template_context)
     try:
-        EmailMessage(
+        send_company_email(EmailMessage(
             subject=subject,
             body=body,
             from_email=from_email,
-            to=[company_email],
+            to=company_recipients,
             reply_to=[booking.email] if booking.email else None,
-            connection=support_email_connection(),
-        ).send(fail_silently=False)
+        ))
     except Exception:
         logger.exception("On-Call company notification failed for booking %s.", booking.pk)
 
@@ -497,6 +501,8 @@ def _send_custom_booking_confirmation_email(
 
     workflow = _BOOKING_EMAIL_WORKFLOWS.get(booking_type_label)
     template = AutomatedEmailTemplate.objects.filter(workflow=workflow).first() if workflow else None
+    if template and not template.customer_enabled:
+        return
     context = {
         "name": customer_name,
         "email": to_email,
@@ -568,10 +574,6 @@ def _send_booking_company_notification_email(
     summary_lines=None,
 ):
     """Notify the company mailbox when a customer completes a booking."""
-    company_email = (
-        getattr(settings, "BOOKING_TO_EMAIL", None)
-        or "services@rwmel.se"
-    )
     from_email = (
         getattr(settings, "BOOKING_FROM_EMAIL", None)
         or getattr(settings, "DEFAULT_FROM_EMAIL", None)
@@ -590,6 +592,9 @@ def _send_booking_company_notification_email(
         "preferred_time": "-",
         "details": "\n".join(summary_lines or []),
     }
+    if template and not template.company_enabled:
+        return
+    company_recipients = company_email_recipients(workflow or "consultation", getattr(template, "company_recipient", ""))
     if template and template.company_enabled:
         subject = _render_automated_email(template.company_subject, template_context)
         body = _render_automated_email(template.company_body, template_context)
@@ -612,14 +617,13 @@ def _send_booking_company_notification_email(
         body = "\n".join(lines)
 
     try:
-        EmailMessage(
+        send_company_email(EmailMessage(
             subject=subject,
             body=body,
             from_email=from_email,
-            to=[company_email],
+            to=company_recipients,
             reply_to=[customer_email] if customer_email else None,
-            connection=support_email_connection(),
-        ).send(fail_silently=False)
+        ))
     except Exception:
         logger.exception(
             "Company notification email failed for booking %s.",
@@ -653,48 +657,20 @@ def home(request):
             consultation_request=quote,
             message=f"New quick quote request from {quote.full_name}.",
         )
-        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "support@rwmel.se")
-        company_email = getattr(settings, "CONTACT_TO_EMAIL", "info@rwmel.se")
-        try:
-            company_message = EmailMessage(
-                subject=f"New quick quote request #{quote.pk}",
-                body=(
-                    "A new quick quote request was submitted.\n\n"
-                    f"Name: {quote.full_name}\n"
-                    f"Customer type: {customer_type}\n"
-                    f"Postcode: {postcode}\n"
-                    f"Email: {quote.email or '-'}\n"
-                    f"Phone: {quote.phone}\n\n"
-                    f"Request details:\n{details or '-'}\n\n"
-                    f"Dashboard request ID: {quote.pk}"
-                ),
-                from_email=from_email,
-                to=[company_email],
-                reply_to=[quote.email] if quote.email else None,
-                connection=support_email_connection(),
-            )
-            company_message.send(fail_silently=False)
-        except Exception:
-            logger.exception("Quick quote company email failed for request %s", quote.pk)
-
-        if quote.email:
-            try:
-                send_mail(
-                    "RWM EL - Quote request received",
-                    (
-                        "Hello,\n\n"
-                        "We have received your quote request and will review the details. "
-                        "Our team will contact you shortly.\n\n"
-                        f"Your request reference is #{quote.pk}.\n\n"
-                        "RWM EL"
-                    ),
-                    from_email,
-                    [quote.email],
-                    fail_silently=False,
-                    connection=support_email_connection(),
-                )
-            except Exception:
-                logger.exception("Quick quote customer confirmation failed for request %s", quote.pk)
+        _send_automated_workflow_emails(
+            AutomatedEmailTemplate.Workflow.QUICK_QUOTE,
+            {
+                "name": quote.full_name,
+                "email": quote.email,
+                "phone": quote.phone,
+                "customer_type": customer_type,
+                "postcode": postcode,
+                "details": details or "-",
+                "message": details,
+                "reference": f"#{quote.pk}",
+                "request_id": quote.pk,
+            },
+        )
         return redirect(f"{reverse('electricity:home')}?quote=received#quick-quote")
     return render(
         request,
@@ -717,6 +693,7 @@ def feedback(request):
             return rejection
         item = form.save()
         AdminNotification.objects.create(
+            feedback=item,
             message=f"New customer feedback from {item.full_name}.",
         )
         _send_automated_workflow_emails(
@@ -869,7 +846,11 @@ def quote_request_step(request, step):
             customer_type = request.POST.get("customer_type", "")
             project_details = request.POST.get("project_details", "").strip()
             materials = request.POST.get("materials", "")
-            if customer_type not in dict(QuoteRequest.CustomerType.choices): errors.append("Please choose who is requesting the quote.")
+            if customer_type not in dict(QuoteRequest.CustomerType.choices):
+                errors.append("Please choose who is requesting the quote.")
+                data.pop("customer_type", None)
+            else:
+                data["customer_type"] = customer_type
             if not project_details: errors.append("Please describe what you need help with.")
             if materials not in dict(QuoteRequest.MaterialsChoice.choices): errors.append("Please choose a materials option.")
             uploads = request.FILES.getlist("attachments")
@@ -1078,7 +1059,7 @@ def about(request):
 
 def _send_career_application_emails(application):
     from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "Support@rwmel.se")
-    company_email = getattr(settings, "CAREERS_TO_EMAIL", "Support@rwmel.se")
+    company_recipients = company_email_recipients("careers")
 
     confirmation = EmailMessage(
         subject="Thank you for your application to RWM EL",
@@ -1114,9 +1095,8 @@ def _send_career_application_emails(application):
             f"Dashboard record: #{application.pk}"
         ),
         from_email=from_email,
-        to=[company_email],
+        to=company_recipients,
         reply_to=[application.email],
-        connection=support_email_connection(),
     )
     if application.cv:
         try:
@@ -1125,7 +1105,7 @@ def _send_career_application_emails(application):
         finally:
             application.cv.close()
     try:
-        company_message.send(fail_silently=False)
+        send_company_email(company_message)
     except Exception:
         logger.exception("Could not send company career email for application #%s", application.pk)
     else:
@@ -1145,6 +1125,7 @@ def careers(request):
             return rejection
         application = form.save()
         AdminNotification.objects.create(
+            career_application=application,
             message=f"New career application from {application.full_name}"
         )
         _send_career_application_emails(application)
@@ -1169,7 +1150,7 @@ def career_detail(request, slug):
         if rejection is not None:
             return rejection
         application.save()
-        AdminNotification.objects.create(message=f"New application for {job.title} from {application.full_name}")
+        AdminNotification.objects.create(career_application=application, message=f"New application for {job.title} from {application.full_name}")
         _send_career_application_emails(application)
         return redirect(f"{reverse('electricity:career_detail', args=[job.slug])}?submitted=1#apply")
     other_jobs = JobOpening.objects.filter(is_active=True).exclude(pk=job.pk)[:3]
@@ -1260,6 +1241,7 @@ def for_brf(request):
                     consent=True,
                 )
                 AdminNotification.objects.create(
+                    contact_inquiry=inquiry,
                     message=(
                         f"New BRF quote request from {inquiry.full_name} "
                         f"for {form_data['brf_name']}."
@@ -1276,15 +1258,15 @@ def for_brf(request):
                     f"Additional information:\n{form_data['message'] or '-'}\n"
                 )
                 try:
-                    to_email = getattr(settings, "CONTACT_TO_EMAIL", None) or "info@rwmel.se"
+                    company_recipients = company_email_recipients("contact")
                     from_email = (
                         getattr(settings, "SUPPORT_FROM_EMAIL", None)
                         or getattr(settings, "DEFAULT_FROM_EMAIL", None)
                         or "support@rwmel.se"
                     )
-                    email_message = EmailMessage(subject, body, from_email, [to_email], connection=support_email_connection())
+                    email_message = EmailMessage(subject, body, from_email, company_recipients)
                     email_message.reply_to = [form_data["email"]]
-                    email_message.send()
+                    send_company_email(email_message)
 
                     customer_subject = "We received your BRF quote request | RWM EL"
                     customer_body = (
@@ -1310,7 +1292,7 @@ def for_brf(request):
                         [form_data["email"]],
                         connection=support_email_connection(),
                     )
-                    customer_email.reply_to = [to_email]
+                    customer_email.reply_to = company_recipients
                     customer_email.send()
                     status = "sent"
                     form_data = {}
@@ -1370,6 +1352,7 @@ def support(request):
                 message=data.get("message", ""),
             )
             AdminNotification.objects.create(
+                support_ticket=ticket,
                 message=f"New support ticket from {ticket.full_name}.",
             )
             subject = f"Support Request: {data.get('request_type') or 'General'}"
@@ -1392,12 +1375,11 @@ def support(request):
                     subject,
                     body,
                     from_email,
-                    [getattr(settings, "SUPPORT_TO_EMAIL", "support@rwmel.se")],
-                    connection=support_email_connection(),
+                    company_email_recipients("support"),
                 )
                 if data.get("email"):
                     email_message.reply_to = [data.get("email")]
-                email_message.send()
+                send_company_email(email_message)
             except Exception:
                 logger.exception("Support ticket email failed to send.")
             return render(
@@ -1442,6 +1424,7 @@ def contact(request):
                     consent=True,
                 )
                 AdminNotification.objects.create(
+                    contact_inquiry=inquiry,
                     message=f"New contact inquiry from {inquiry.full_name}.",
                 )
                 _send_automated_workflow_emails(
@@ -1487,6 +1470,7 @@ BOOKING_SESSION_KEY = "electricity_booking"
 SERVICE_BOOKING_SESSION_KEY = "electricity_service_booking"
 ON_CALL_BOOKING_SESSION_KEY = "electricity_on_call_booking"
 ELECTRICIAN_BOOKING_SESSION_KEY = "electricity_electrician_booking"
+ELECTRICIAN_CUSTOMER_CONFIRMED_SESSION_KEY = "electricity_electrician_customer_confirmed"
 
 ELECTRICIAN_SERVICE_TYPE_LABELS = {
     "residential": _("Residential Electrical Repair"),
@@ -1847,7 +1831,17 @@ def outside_area(request, flow, zip_code):
             return rejection
         item.save()
         AdminNotification.objects.create(
+            outside_area_request=item,
             message=f"Outside-area request from {item.full_name} ({item.zip_code}).",
+        )
+        _send_booking_company_notification_email(
+            booking_reference=f"OA-{item.pk:06d}",
+            booking_type_label=item.get_request_type_display(),
+            customer_name=item.full_name,
+            customer_email=item.email,
+            customer_phone=item.phone,
+            address=f"Outside service area - ZIP {item.zip_code}",
+            summary_lines=[f"Outside-area request for ZIP {item.zip_code}", item.details],
         )
         submitted = True
     return render(
@@ -2654,9 +2648,19 @@ def _electrician_receipt_context(booking=None, data=None):
 
 def electrician_booking_step(request, step):
     if step < 1 or step > 8:
-        return redirect("electricity:electrician_booking_step", step=1)
+        return redirect("electricity:electrician_booking_step", step=2)
+    # Keep existing entry links working; customer type is now a popup on Service.
+    if step == 1 and request.method != "POST":
+        request.session.pop(ELECTRICIAN_CUSTOMER_CONFIRMED_SESSION_KEY, None)
+        return redirect("electricity:electrician_booking_step", step=2)
 
     data = _get_electrician_booking_data(request)
+    if step == 3 and not data.get("work_description", "").strip():
+        return redirect("electricity:electrician_booking_step", step=2)
+    confirmed_customer_type = (
+        request.session.pop(ELECTRICIAN_CUSTOMER_CONFIRMED_SESSION_KEY, None)
+        if step == 2 and request.method == "GET" else None
+    )
     errors = []
     pricing = _electrician_pricing_breakdown(data)
 
@@ -2668,23 +2672,33 @@ def electrician_booking_step(request, step):
                 errors.append("Please choose Private or Business.")
             if not errors:
                 _set_electrician_booking_data(request, data)
+                request.session[ELECTRICIAN_CUSTOMER_CONFIRMED_SESSION_KEY] = customer_type
                 return redirect("electricity:electrician_booking_step", step=2)
         elif step == 2:
+            customer_type = request.POST.get("customer_type", data.get("customer_type"))
+            if customer_type not in dict(ElectricianBooking.CustomerType.choices):
+                errors.append("Please choose Private or Business.")
+                data.pop("customer_type", None)
+            else:
+                data["customer_type"] = customer_type
             service_type = request.POST.get("service_type")
             data["service_type"] = service_type
+            work_description = request.POST.get("work_description", "").strip()
+            data["work_description"] = work_description
             if not service_type:
                 errors.append("Please select a service type.")
+            if not work_description:
+                errors.append("Please describe the work.")
+            elif len(work_description) > 500:
+                errors.append("Please keep the work description to 500 characters or fewer.")
             if not errors:
                 _set_electrician_booking_data(request, data)
                 return redirect("electricity:electrician_booking_step", step=3)
         elif step == 3:
             hours = request.POST.get("hours")
-            work_description = request.POST.get("work_description", "").strip()
-            data.update({"hours": hours, "work_description": work_description})
+            data["hours"] = hours
             if not hours:
                 errors.append("Please select the number of hours.")
-            if not work_description:
-                errors.append("Please describe the work.")
             if not errors:
                 _set_electrician_booking_data(request, data)
                 return redirect("electricity:electrician_booking_step", step=4)
@@ -2902,6 +2916,7 @@ def electrician_booking_step(request, step):
                 )
                 _create_electrician_attachments(booking, data.get("business_attachments", []))
                 AdminNotification.objects.create(
+                    electrician_booking=booking,
                     message=f"New electrician booking from {booking.full_name}.",
                 )
                 _send_custom_booking_confirmation_email(
@@ -2952,16 +2967,21 @@ def electrician_booking_step(request, step):
             _set_electrician_booking_data(request, data)
 
     pricing = _electrician_pricing_breakdown(data)
-    progress = int((step / 8) * 100)
+    display_step = max(2, step)
+    progress = int(((display_step - 1) / 7) * 100)
     return render(
         request,
-        f"electricity/electrician_booking/step_{step}.html",
+        f"electricity/electrician_booking/step_{display_step}.html",
         {
-            "step": step,
+            "step": display_step,
             "progress_percent": progress,
             "data": data,
             "errors": errors,
             "pricing": pricing,
+            "customer_type_confirmed": bool(
+                confirmed_customer_type in dict(ElectricianBooking.CustomerType.choices)
+                and confirmed_customer_type == data.get("customer_type")
+            ),
         },
     )
 
@@ -2986,6 +3006,8 @@ def electrician_booking_thank_you(request):
 
 
 def service_booking_calendar(request, pk):
+    if not (_require_dashboard_access(request) or request.session.get("service_booking_pk") == pk):
+        raise Http404("Booking not found")
     booking = ServiceBooking.objects.filter(pk=pk).first()
     if not booking:
         raise Http404("Booking not found")
@@ -3013,6 +3035,7 @@ def service_booking_calendar(request, pk):
 
     summary = f"Service Booking {booking.id}"
     description = f"Service booking for {booking.full_name} ({booking.email})."
+    description = description.replace("\\", "\\\\").replace("\r\n", "\n").replace("\r", "\n").replace("\n", "\\n").replace(";", "\\;").replace(",", "\\,")
     ics = "\n".join(
         [
             "BEGIN:VCALENDAR",
@@ -3030,6 +3053,8 @@ def service_booking_calendar(request, pk):
     )
     response = HttpResponse(ics, content_type="text/calendar")
     response["Content-Disposition"] = f'attachment; filename="service-booking-{booking.id}.ics"'
+    response["Cache-Control"] = "private, no-store"
+    response["X-Robots-Tag"] = "noindex, nofollow"
     return response
 
 
@@ -3062,461 +3087,13 @@ def service_booking_slots(request):
 
 
 def service_booking_step(request, step):
-    requested_account_type = request.GET.get("account_type", "").strip()
-    valid_account_types = {choice.value for choice in ServiceBooking.AccountType}
-    if requested_account_type in valid_account_types:
-        booking_data = _get_service_booking_data(request)
-        booking_data["account_type"] = requested_account_type
-        _set_service_booking_data(request, booking_data)
+    from .service_booking_flow import service_booking_step as new_service_booking_step
+    return new_service_booking_step(request, step)
 
-    if not _ensure_zip_verified(request, "service"):
-        return redirect("electricity:zip_check", flow="service")
-    if step < 1 or step > 12:
-        return redirect("electricity:service_booking_step", step=1)
 
-    data = _get_service_booking_data(request)
-    titles = {
-        1: _("Start Your Booking"),
-        2: _("Where will the work be done?"),
-        3: _("Tell us about the property"),
-        4: _("What do you need help with?"),
-        5: _("Describe the work"),
-        6: _("Finalize Schedule & Cost"),
-        7: _("Schedule & Pricing"),
-        8: _("Billing & Documentation"),
-        9: _("Apartment & BRF Details"),
-        10: _("Visual Documentation"),
-        11: _("Final Review"),
-        12: _("Booking Received"),
-    }
-    subtitles = {
-        1: _("Account & Contact"),
-        2: _("Location Details"),
-        3: _("Property Details"),
-        4: _("Service Selection"),
-        5: _("Work Summary"),
-        6: _("Schedule & Pricing"),
-        7: _("Pricing & Savings"),
-        8: _("Identity & Billing"),
-        9: _("Association Details"),
-        10: _("Files & Media"),
-        11: _("Confirm & Submit"),
-        12: _("Confirmation"),
-    }
-    descriptions = {
-        1: _(
-            "First, we need to know who we are working with to provide the correct pricing and tax options."
-        ),
-        2: _("We need your exact location for compliance and technician dispatching."),
-        3: _("Engineering details help us prepare the right equipment."),
-        4: _("Select all services that apply to your request."),
-        5: _("The more detail you share, the better we can prepare."),
-        6: _("Choose your primary and alternative time windows."),
-        7: _("Confirm your pricing options and savings."),
-        8: _("Provide billing identity and documentation details."),
-        9: _("Add association details for multi-unit properties."),
-        10: _("Upload photos of the area or existing electrical cabinet."),
-        11: _("Please confirm your appointment details and secure your booking."),
-        12: _("Your booking is confirmed."),
-    }
-
-    errors = []
-    if request.method == "POST":
-        if step == 1:
-            data["account_type"] = request.POST.get("account_type", "")
-            data["full_name"] = request.POST.get("full_name", "").strip()
-            data["email"] = request.POST.get("email", "").strip()
-            data["phone"] = request.POST.get("phone", "").strip()
-            data["zip_code"] = request.session.get(ZIP_CHECK_SESSION_KEY, {}).get("service", "")
-            if not data["account_type"]:
-                errors.append("Please choose who the booking is for.")
-            if not data["full_name"]:
-                errors.append("Full name is required.")
-            if not data["email"]:
-                errors.append("Email address is required.")
-        elif step == 2:
-            data["street_address"] = request.POST.get("street_address", "").strip()
-            data["city"] = request.POST.get("city", "").strip()
-            data["region"] = request.POST.get("region", "").strip()
-            data["country"] = request.POST.get("country", "").strip() or "Sweden"
-            if not data["street_address"]:
-                errors.append("Street address is required.")
-            if not data["city"]:
-                errors.append("City is required.")
-            if not data["region"]:
-                errors.append("Region is required.")
-        elif step == 3:
-            data["property_type"] = request.POST.get("property_type", "").strip()
-            data["year_built"] = request.POST.get("year_built", "").strip()
-            data["property_size"] = request.POST.get("property_size", "").strip()
-            data["system_upgraded"] = bool(request.POST.get("system_upgraded"))
-            if not data["property_type"]:
-                errors.append("Property type is required.")
-            if not data["year_built"]:
-                errors.append("Year of construction is required.")
-        elif step == 4:
-            data["pricing_type"] = request.POST.get("pricing_type", ServiceBooking.PricingType.FIXED)
-            services = request.POST.getlist("services")
-            if data["pricing_type"] == ServiceBooking.PricingType.HOURLY:
-                data["services"] = []
-                data["service_names"] = ""
-            else:
-                data["services"] = services
-                if not services:
-                    errors.append("Please select at least one service.")
-                else:
-                    eligible = _eligible_services().filter(id__in=services)
-                    if eligible.count() != len(services):
-                        errors.append("Selected services must include price and duration.")
-                    service_names = list(eligible.values_list("title", flat=True))
-                    data["service_names"] = ", ".join(service_names)
-        elif step == 5:
-            data["work_description"] = request.POST.get("work_description", "").strip()
-            data["urgent"] = bool(request.POST.get("urgent"))
-            if not data["work_description"]:
-                errors.append("Please describe the work.")
-        elif step == 6:
-            data["preferred_date"] = request.POST.get("preferred_date", "")
-            data["preferred_time_slot"] = request.POST.get("preferred_time_slot", "")
-            data["alt_date"] = request.POST.get("alt_date", "")
-            data["alt_time_slot"] = request.POST.get("alt_time_slot", "")
-            if (data.get("pricing_type") or ServiceBooking.PricingType.FIXED) == ServiceBooking.PricingType.HOURLY:
-                data["hourly_hours"] = request.POST.get("hourly_hours", "").strip()
-                try:
-                    hours_val = int(data["hourly_hours"])
-                except (TypeError, ValueError):
-                    hours_val = 0
-                if hours_val <= 0:
-                    errors.append("Please select the estimated number of hours.")
-            has_primary_choice = bool(data["preferred_date"] or data["preferred_time_slot"])
-            if has_primary_choice and (not data["preferred_date"] or not data["preferred_time_slot"]):
-                errors.append("Please select a primary date and time slot.")
-            if not errors and has_primary_choice:
-                try:
-                    duration_minutes = _service_booking_duration_minutes(data)
-                except ValidationError as exc:
-                    errors.append(str(exc))
-                else:
-                    zip_code = request.session.get(ZIP_CHECK_SESSION_KEY, {}).get("service", "")
-                    data["zip_code"] = zip_code
-                    preferred_date = _parse_date(data.get("preferred_date"))
-                    preferred_time = _parse_time(data.get("preferred_time_slot"))
-                    if not preferred_date or not preferred_time:
-                        errors.append("Please select a valid date and start time.")
-                    else:
-                        slots = _available_slots(preferred_date, duration_minutes)
-                        slot_labels = {slot.time().strftime("%H:%M") for slot in slots}
-                        if preferred_time.strftime("%H:%M") not in slot_labels:
-                            provider, earliest = _earliest_availability(
-                                duration_minutes, preferred_date
-                            )
-                            if earliest:
-                                provider_name = provider.display_name if provider else "a provider"
-                                minutes = int((earliest - timezone.now()).total_seconds() // 60)
-                                errors.append(
-                                    f"No providers are available at that time. "
-                                    f"Earliest availability with {provider_name} is {earliest:%Y-%m-%d %H:%M} "
-                                    f"({max(minutes, 0)} minutes from now)."
-                                )
-                            else:
-                                errors.append("No available providers for the selected date and duration.")
-        elif step == 7:
-            data["rot_deduction"] = bool(request.POST.get("rot_deduction"))
-            data["pricing_accept"] = bool(request.POST.get("pricing_accept"))
-            _get_service_pricing_context(data)
-            if not data["pricing_accept"]:
-                errors.append("Please confirm the pricing breakdown.")
-        elif step == 8:
-            data["billing_type"] = request.POST.get("billing_type", "")
-            data["personal_id"] = request.POST.get("personal_id", "").strip()
-            data["organization_number"] = request.POST.get("organization_number", "").strip()
-            data["company_name"] = request.POST.get("company_name", "").strip()
-            if not data["billing_type"]:
-                errors.append("Please choose a billing type.")
-            if data["billing_type"] == "private" and not data["personal_id"]:
-                errors.append("Personal identity number is required for private billing.")
-            if data["billing_type"] == "business" and not data["organization_number"]:
-                errors.append("Organization number is required for business billing.")
-            if not data["company_name"]:
-                errors.append("Full legal name is required.")
-        elif step == 9:
-            data["brf_property"] = bool(request.POST.get("brf_property"))
-            data["brf_name"] = request.POST.get("brf_name", "").strip()
-            data["apartment_number"] = request.POST.get("apartment_number", "").strip()
-            if data["brf_property"] and not data["brf_name"]:
-                errors.append("BRF name is required when BRF is selected.")
-            if data["brf_property"] and not data["apartment_number"]:
-                errors.append("Apartment number is required when BRF is selected.")
-        elif step == 10:
-            saved = _save_service_uploads(request)
-            data["uploads"] = data.get("uploads", []) + saved
-        elif step == 11:
-            try:
-                duration_minutes = _service_booking_duration_minutes(data)
-            except ValidationError as exc:
-                errors.append(str(exc))
-                duration_minutes = None
-            preferred_date = _parse_date(data.get("preferred_date"))
-            preferred_time = _parse_time(data.get("preferred_time_slot"))
-            start_at = _combine_date_time(preferred_date, preferred_time) if preferred_date and preferred_time else None
-            end_at = start_at + datetime.timedelta(minutes=duration_minutes) if start_at and duration_minutes else None
-            zip_code = data.get("zip_code") or request.session.get(ZIP_CHECK_SESSION_KEY, {}).get("service", "")
-            if not start_at or not end_at:
-                errors.append("Please select a valid start time.")
-            assigned_provider = None
-            if start_at and end_at and zip_code:
-                assigned_provider = _find_provider_for_slot(start_at, end_at)
-                if not assigned_provider:
-                    provider, earliest = _earliest_availability(duration_minutes, preferred_date)
-                    if earliest:
-                        provider_name = provider.display_name if provider else "a provider"
-                        errors.append(
-                            f"No providers are available at the selected time. "
-                            f"Earliest availability with {provider_name} is {earliest:%Y-%m-%d %H:%M}."
-                        )
-                    else:
-                        errors.append("No available providers for the selected date and duration.")
-
-            if errors:
-                _set_service_booking_data(request, data)
-                cost_context = _get_service_pricing_context(data)
-                context = {
-                    "step": step,
-                    "progress_percent": int((step / 12) * 100),
-                    "title": titles.get(step),
-                    "subtitle": subtitles.get(step),
-                    "description": descriptions.get(step),
-                    "data": data,
-                    "errors": errors,
-                    **cost_context,
-                }
-                return render(request, f"electricity/service_booking/step_{step}.html", context)
-
-            try:
-                pricing_context = _get_service_pricing_context(data)
-                rejection = reject_public_submission(request)
-                if rejection is not None:
-                    return rejection
-                booking = ServiceBooking.objects.create(
-                    account_type=data.get("account_type") or ServiceBooking.AccountType.PRIVATE,
-                    full_name=data.get("full_name", ""),
-                    email=data.get("email", ""),
-                    phone=data.get("phone", ""),
-                    street_address=data.get("street_address", ""),
-                    city=data.get("city", ""),
-                    region=data.get("region", ""),
-                    country=data.get("country", "Sweden"),
-                    property_type=data.get("property_type", ""),
-                    year_built=data.get("year_built", ""),
-                    property_size=data.get("property_size", ""),
-                    system_upgraded=bool(data.get("system_upgraded")),
-                    services=data.get("services", []),
-                    work_description=data.get("work_description", ""),
-                    urgent=bool(data.get("urgent")),
-                    pricing_type=data.get("pricing_type") or ServiceBooking.PricingType.FIXED,
-                    hourly_hours=int(data.get("hourly_hours") or 1),
-                    hourly_rate_snapshot=pricing_context.get("hourly_rate_electrician") or 0,
-                    fixed_services_total=pricing_context.get("fixed_services_total") or 0,
-                    preferred_date=_parse_date(data.get("preferred_date")),
-                    preferred_time_slot=data.get("preferred_time_slot", ""),
-                    alt_date=_parse_date(data.get("alt_date")),
-                    alt_time_slot=data.get("alt_time_slot", ""),
-                    zip_code=zip_code or "",
-                    duration_minutes=duration_minutes or 0,
-                    start_at=start_at,
-                    end_at=end_at,
-                    labor_rate=data.get("labor_rate") or 0,
-                    transport_fee=data.get("transport_fee") or 0,
-                    base_fee=data.get("base_fee") or 0,
-                    service_fee_total=data.get("service_fee_total") or 0,
-                    night_rate=data.get("night_rate") or 0,
-                    currency=data.get("currency") or "SEK",
-                    promo_code=data.get("promo_code", ""),
-                    rot_deduction=bool(data.get("rot_deduction")),
-                    estimated_total=data.get("estimated_total") or 0,
-                    billing_type=data.get("billing_type", ""),
-                    personal_id=data.get("personal_id", ""),
-                    organization_number=data.get("organization_number", ""),
-                    company_name=data.get("company_name", ""),
-                    brf_property=bool(data.get("brf_property")),
-                    brf_name=data.get("brf_name", ""),
-                    apartment_number=data.get("apartment_number", ""),
-                    uploads=data.get("uploads", []),
-                    assigned_provider=assigned_provider,
-                    status=ServiceBooking.Status.SCHEDULED if assigned_provider else ServiceBooking.Status.PENDING,
-                )
-            except ValidationError:
-                errors.append("Selected time overlaps with another booking. Please choose another slot.")
-                _set_service_booking_data(request, data)
-                cost_context = _get_service_pricing_context(data)
-                context = {
-                    "step": step,
-                    "progress_percent": int((step / 12) * 100),
-                    "title": titles.get(step),
-                    "subtitle": subtitles.get(step),
-                    "description": descriptions.get(step),
-                    "data": data,
-                    "errors": errors,
-                    **cost_context,
-                }
-                return render(request, f"electricity/service_booking/step_{step}.html", context)
-            AdminNotification.objects.create(
-                service_booking=booking,
-                message=f"New service booking from {booking.full_name}.",
-            )
-            _send_custom_booking_confirmation_email(
-                to_email=booking.email,
-                customer_name=booking.full_name,
-                booking_reference=f"SB-{booking.id:06d}",
-                booking_type_label="Service Booking",
-                team_name=_booking_team_name(booking.assigned_provider),
-                preferred_date=booking.preferred_date,
-                preferred_time=booking.preferred_time_slot,
-                summary_lines=[
-                    f"Selected services: {', '.join(_service_titles_for_ids(booking.services)) or 'Custom service request'}",
-                    f"Service address: {', '.join(part for part in [booking.street_address, booking.zip_code, booking.city] if part) or '-'}",
-                    f"Pricing model: {booking.get_pricing_type_display()}",
-                    f"Estimated total: {_format_currency_amount(booking.estimated_total, booking.currency or 'SEK')}",
-                ],
-                next_steps=[
-                    "We will review provider availability for your selected time.",
-                    "Your assigned team will contact you if any change is needed before arrival.",
-                ],
-            )
-            _send_booking_company_notification_email(
-                booking_reference=f"SB-{booking.id:06d}",
-                booking_type_label="Service Booking",
-                customer_name=booking.full_name,
-                customer_email=booking.email,
-                customer_phone=booking.phone,
-                address=", ".join(
-                    part for part in [booking.street_address, booking.zip_code, booking.city] if part
-                ),
-                summary_lines=[
-                    f"Selected services: {', '.join(_service_titles_for_ids(booking.services)) or 'Custom service request'}",
-                    f"Requested date: {booking.preferred_date or '-'}",
-                    f"Requested time: {booking.preferred_time_slot or '-'}",
-                    f"Pricing model: {booking.get_pricing_type_display()}",
-                    f"Estimated total: {_format_currency_amount(booking.estimated_total, booking.currency or 'SEK')}",
-                ],
-            )
-            _create_booking_invoice_draft(booking)
-            request.session["service_booking_id"] = f"SB-{booking.id:06d}"
-            request.session["service_booking_pk"] = booking.id
-            request.session.pop(SERVICE_BOOKING_SESSION_KEY, None)
-            return redirect("electricity:service_booking_step", step=12)
-
-        _set_service_booking_data(request, data)
-        if errors:
-            cost_context = _get_service_pricing_context(data)
-            context = {
-                "step": step,
-                "progress_percent": int((step / 12) * 100),
-                "title": titles.get(step),
-                "subtitle": subtitles.get(step),
-                "description": descriptions.get(step),
-                "data": data,
-                "errors": errors,
-                **cost_context,
-            }
-            if step == 4:
-                context["services"] = _eligible_services().order_by("order", "title")
-            if step == 6:
-                zip_code = request.session.get(ZIP_CHECK_SESSION_KEY, {}).get("service", "")
-                preferred_date = _parse_date(data.get("preferred_date"))
-                alt_date = _parse_date(data.get("alt_date"))
-                try:
-                    duration_minutes = _service_booking_duration_minutes(data)
-                except ValidationError:
-                    duration_minutes = None
-                duration_assumed = False
-                duration_for_slots = duration_minutes
-                if not duration_for_slots:
-                    duration_for_slots = 60
-                    duration_assumed = True
-                if not preferred_date and duration_minutes:
-                    earliest_provider, earliest = _earliest_availability(duration_minutes)
-                    if earliest:
-                        preferred_date = earliest.date()
-                        data["preferred_date"] = preferred_date.isoformat()
-                context["available_slots"] = (
-                    _format_slots(preferred_date, duration_for_slots)
-                    if preferred_date and duration_for_slots
-                    else []
-                )
-                context["alt_available_slots"] = (
-                    _format_slots(alt_date, duration_for_slots)
-                    if alt_date and duration_for_slots
-                    else []
-                )
-                context["duration_assumed"] = duration_assumed
-            if step == 12:
-                context["booking_id"] = request.session.get("service_booking_id", "SB-000000")
-            if step == 1:
-                context["kicker"] = _("ONBOARDING")
-                context["note"] = _("Great choice! Let's start with your details.")
-            return render(request, f"electricity/service_booking/step_{step}.html", context)
-        return redirect("electricity:service_booking_step", step=step + 1)
-
-    progress_percent = int((step / 12) * 100)
-    cost_context = _get_service_pricing_context(data)
-    context = {
-        "step": step,
-        "progress_percent": progress_percent,
-        "title": titles.get(step),
-        "subtitle": subtitles.get(step),
-        "description": descriptions.get(step),
-        "data": data,
-        "errors": errors,
-        **cost_context,
-    }
-    if step == 1:
-        context["kicker"] = _("ONBOARDING")
-        context["note"] = _("Great choice! Let's start with your details.")
-    if step == 4:
-        context["services"] = _eligible_services().order_by("order", "title")
-    if step == 6:
-        zip_code = request.session.get(ZIP_CHECK_SESSION_KEY, {}).get("service", "")
-        preferred_date = _parse_date(data.get("preferred_date"))
-        alt_date = _parse_date(data.get("alt_date"))
-        try:
-            duration_minutes = _service_booking_duration_minutes(data)
-        except ValidationError:
-            duration_minutes = None
-        duration_assumed = False
-        duration_for_slots = duration_minutes
-        if not duration_for_slots:
-            duration_for_slots = 60
-            duration_assumed = True
-        if not preferred_date and duration_minutes:
-            earliest_provider, earliest = _earliest_availability(duration_minutes)
-            if earliest:
-                preferred_date = earliest.date()
-                data["preferred_date"] = preferred_date.isoformat()
-        context["available_slots"] = (
-            _format_slots(preferred_date, duration_for_slots)
-            if preferred_date and duration_for_slots
-            else []
-        )
-        context["alt_available_slots"] = (
-            _format_slots(alt_date, duration_for_slots)
-            if alt_date and duration_for_slots
-            else []
-        )
-        context["duration_assumed"] = duration_assumed
-    if step == 12:
-        context["booking_id"] = request.session.get("service_booking_id", "SB-000000")
-        booking_pk = request.session.get("service_booking_pk")
-        if booking_pk:
-            booking = ServiceBooking.objects.filter(pk=booking_pk).first()
-            if booking:
-                context["booking"] = booking
-                context["data"] = {
-                    **data,
-                    "preferred_date": booking.preferred_date,
-                    "preferred_time_slot": booking.preferred_time_slot,
-                }
-    return render(request, f"electricity/service_booking/step_{step}.html", context)
+def service_booking_thank_you(request):
+    from .service_booking_flow import service_booking_thank_you as receipt
+    return receipt(request)
 
 
 def on_call_booking_step(request, step):
@@ -3560,6 +3137,16 @@ def on_call_booking_step(request, step):
 
     if request.method == "POST":
         if step == 1:
+            customer_type = request.POST.get("customer_type", data.get("customer_type", ""))
+            if customer_type == "private":
+                electrician_data = _get_electrician_booking_data(request)
+                electrician_data["customer_type"] = "private"
+                _set_electrician_booking_data(request, electrician_data)
+                request.session[ELECTRICIAN_CUSTOMER_CONFIRMED_SESSION_KEY] = "private"
+                return redirect("electricity:electrician_booking_step", step=2)
+            data["customer_type"] = customer_type
+            if customer_type != "business":
+                errors.append("Please choose Private or Business.")
             data["coverage_times"] = request.POST.getlist("coverage_times")
             data["response_speed"] = request.POST.get("response_speed", "")
             data["coverage_scope"] = request.POST.getlist("coverage_scope")
@@ -3987,7 +3574,7 @@ def external_dashboard(request):
         # standalone resources for staff to browse or edit.
         if model_name in {
             "consultationbookingattachment", "electricianbookingattachment",
-            "quoterequestattachment", "publicformsubmissionbucket",
+            "quoterequestattachment", "publicformsubmissionbucket", "companyemaildelivery",
         }:
             continue
         manage_url = None
@@ -3995,6 +3582,8 @@ def external_dashboard(request):
             manage_url = "electricity:dashboard_services"
         elif model_name == "consultationrequest":
             manage_url = "electricity:dashboard_requests"
+        elif model_name == "contactinquiry":
+            manage_url = "electricity:dashboard_contact_inquiries"
         elif model_name == "consultationbooking":
             manage_url = "electricity:dashboard_bookings"
         elif model_name == "servicebooking":
@@ -4094,6 +3683,7 @@ def admin_notifications_feed(request):
             "message": item.message,
             "created_at": item.created_at.isoformat(),
             "is_read": item.is_read,
+            "url": item.get_target_url(),
         }
         for item in items
     ]
@@ -4299,10 +3889,12 @@ def dashboard_email_templates(request):
         return guard
     _ensure_automated_email_templates()
     templates = AutomatedEmailTemplate.objects.order_by("workflow")
+    for item in templates:
+        item.company_delivery_to = ", ".join(company_email_recipients(item.workflow, item.company_recipient))
     return render(
         request,
         "electricity/dashboard/email_templates.html",
-        {"templates": templates},
+        {"templates": templates, "deliveries": CompanyEmailDelivery.objects.defer("payload").order_by("-created_at")[:20]},
     )
 
 
@@ -4368,6 +3960,18 @@ def dashboard_pricing_delete(request, pk):
         "electricity/dashboard/delete.html",
         {"title": "Delete Pricing", "item": item, "back_url": "electricity:dashboard_pricing"},
     )
+
+
+@login_required
+def dashboard_contact_inquiries(request):
+    guard = _dashboard_access_or_redirect(request)
+    if guard:
+        return guard
+    return render(request, "electricity/dashboard/list.html", {
+        "title": "Contact Inquiries",
+        "items": ContactInquiry.objects.order_by("-created_at"),
+        "fields": ["full_name", "email", "phone", "inquiry_type", "request_type", "address", "message", "created_at"],
+    })
 
 
 @login_required
@@ -4479,6 +4083,8 @@ def dashboard_service_bookings(request):
             "fields": [
                 "full_name",
                 "account_type",
+                "service_type",
+                "price_display",
                 "preferred_date",
                 "preferred_time_slot",
                 "assigned_provider",
@@ -4508,7 +4114,7 @@ def dashboard_service_bookings_add(request):
         return redirect("electricity:dashboard_service_bookings")
     return render(
         request,
-        "electricity/dashboard/form.html",
+        "electricity/dashboard/service_booking_form.html",
         {"title": "Add Service Booking", "form": form, "back_url": "electricity:dashboard_service_bookings"},
     )
 
@@ -4525,7 +4131,7 @@ def dashboard_service_bookings_edit(request, pk):
         return redirect("electricity:dashboard_service_bookings")
     return render(
         request,
-        "electricity/dashboard/form.html",
+        "electricity/dashboard/service_booking_form.html",
         {"title": "Edit Service Booking", "form": form, "back_url": "electricity:dashboard_service_bookings"},
     )
 
@@ -4536,6 +4142,16 @@ def dashboard_service_bookings_assign(request, pk):
     if guard:
         return guard
     booking = ServiceBooking.objects.get(pk=pk)
+    if booking.booking_version == 2:
+        from .forms import ServiceBookingScheduleAssignForm
+        form = ServiceBookingScheduleAssignForm(request.POST or None, instance=booking)
+        if request.method == "POST" and form.is_valid():
+            form.save()
+            return redirect("electricity:dashboard_service_bookings")
+        return render(request, "electricity/dashboard/form.html", {
+            "title": "Assign Provider & Confirm Schedule", "form": form,
+            "back_url": "electricity:dashboard_service_bookings",
+        })
     form = ServiceBookingAssignForm(request.POST or None, instance=booking)
     duration_minutes = booking.duration_minutes
     if not duration_minutes:
@@ -4817,6 +4433,7 @@ def dashboard_electrician_bookings_add(request):
     if request.method == "POST" and form.is_valid():
         item = form.save()
         AdminNotification.objects.create(
+            electrician_booking=item,
             message=f"Electrician booking added from dashboard: {item.full_name}.",
         )
         return redirect("electricity:dashboard_electrician_bookings")
@@ -4943,6 +4560,7 @@ def dashboard_support_tickets_add(request):
     if request.method == "POST" and form.is_valid():
         item = form.save()
         AdminNotification.objects.create(
+            support_ticket=item,
             message=f"Support ticket added from dashboard: {item.full_name}.",
         )
         return redirect("electricity:dashboard_support_tickets")
@@ -6567,27 +6185,12 @@ def dashboard_invoice_credit(request, pk):
     if guard:
         return guard
     if request.method == "POST":
-        source = get_object_or_404(Invoice.objects.prefetch_related("lines"), pk=pk)
-        credit = Invoice.objects.create(
-            customer=source.customer,
-            recipient_email=source.recipient_email,
-            title="Credit Invoice",
-            invoice_type=Invoice.InvoiceType.CREDIT,
-            status=Invoice.Status.READY,
-            reference=f"Credit for invoice {source.invoice_number}",
-            work_address=source.work_address,
-            currency=source.currency,
-            payment_terms_days=source.payment_terms_days,
-        )
-        for line in source.lines.all():
-            InvoiceLine.objects.create(
-                invoice=credit, category=line.category, description=f"Credit: {line.description}",
-                quantity=line.quantity, unit=line.unit, unit_price_ex_vat=-line.unit_price_ex_vat,
-                vat_percent=line.vat_percent, order=line.order,
-            )
-        credit.recalculate()
-        source.status = Invoice.Status.CREDITED
-        source.save(update_fields=["status", "updated_at"])
+        source = get_object_or_404(Invoice, pk=pk)
+        try:
+            credit = create_credit_invoice(source)
+        except ValueError as error:
+            messages.error(request, str(error))
+            return redirect("electricity:dashboard_invoice_detail", pk=pk)
         return redirect("electricity:dashboard_invoice_detail", pk=credit.pk)
     raise Http404
 

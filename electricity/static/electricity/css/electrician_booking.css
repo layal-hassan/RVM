@@ -186,7 +186,7 @@ body.electricity-body.electrician-booking-page {
 
 .eb-stepper {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 12px;
   margin-top: 14px;
 }
@@ -2003,3 +2003,21 @@ body.electrician-booking-page .ts-dropdown .option.selected {
   }
 }
 
+
+/* Separate the schedule notes from the time choices and textarea. */
+.electrician-booking-page .eb-timing-notes-label {
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+.electrician-booking-page .eb-service-details {
+  margin-top: 26px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(202, 161, 61, .16);
+}
+.electrician-booking-page .eb-service-details .eb-label { margin-bottom: 12px; }
+.electrician-booking-page .eb-service-details .eb-textarea + .eb-label { margin-top: 24px; }
+
+@media (min-width: 1001px) { .service-booking-compact .eb-stepper { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.service-booking-compact .eb-review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 900px) { .service-booking-compact .eb-review-grid { grid-template-columns: 1fr; } }

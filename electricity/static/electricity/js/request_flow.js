@@ -40,6 +40,10 @@
     dialog.classList.toggle("is-added-step", next === 2);
     dialog.querySelectorAll("[data-step]").forEach(node => node.classList.toggle("is-active", Number(node.dataset.step) === step));
     updateProgress(); clearErrors(); dialog.scrollTop = 0;
+    if (next === 4) queueMicrotask(() => {
+      if (!dialog.open || form.querySelector('input[name="customer_type"]:checked')) return;
+      form.querySelector("[data-customer-popup]").dispatchEvent(new Event("customer-type-open"));
+    });
   }
   function clearErrors() { dialog.querySelectorAll("[data-error]").forEach(node => node.textContent = ""); }
   function setError(message) { dialog.querySelectorAll("[data-error]").forEach(node => node.textContent = message || ""); }

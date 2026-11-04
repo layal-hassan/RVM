@@ -1,49 +1,31 @@
-﻿{% extends "electricity/service_booking/base.html" %}
-{% load i18n %}
-
-{% block booking_content %}
-<form method="post" class="booking-form">
-  {% csrf_token %}
-
-  <div class="booking-section">
-
-    <div class="section-header">
-      <span class="section-index">6</span>
-      {% trans "Describe the work" %}
-    </div>
-
-    <p class="booking-description left">
-      {% trans "Please provide as much detail as possible to help us give an accurate quote." %}
-    </p>
-
-    <label class="form-label full">
-
-      <textarea class="form-control"
-                name="work_description"
-                rows="6"
-                maxlength="500"
-                placeholder="{% trans 'e.g., The GFCI outlet near the kitchen sink is tripping. I also need a new pendant light installed over the island. There is existing wiring, but the mounting bracket might need replacement.' %}">
-        {{ data.work_description|default:'' }}
-      </textarea>
-
-      <span class="char-count">
-        {% trans "Required" %} • 0 / 500
-      </span>
-
-    </label>
-
+{% extends "electricity/service_booking/base.html" %}{% load i18n %}
+{% block booking_content %}<form method="post" class="eb-form" enctype="multipart/form-data">{% csrf_token %}
+<section class="eb-card"><div class="eb-card-header"><span class="eb-step-badge">5</span><div><h1>{% if data.customer_type == "business" %}{% trans "Access & commercial information" %}{% else %}{% trans "Access details" %}{% endif %}</h1><p>{% trans "Help us prepare the visit and give you the best possible service." %}</p></div></div>
+{% if data.customer_type == "business" %}
+<div class="eb-business-access-grid">
+ <section class="eb-business-panel"><h2>⚿ {% trans "Site access" %}</h2><p>{% trans "Let us know how we can access the property when the work starts." %}</p>
+  <div class="eb-access-options">
+   <label class="eb-radio-card"><input type="radio" name="access_method" value="someone_on_site" {% if data.access_method == "someone_on_site" %}checked{% endif %}><span><strong>{% trans "Someone will be on site" %}</strong><small>{% trans "A contact person will be available to open and guide." %}</small></span></label>
+   <label class="eb-radio-card"><input type="radio" name="access_method" value="key_code" {% if data.access_method == "key_code" %}checked{% endif %}><span><strong>{% trans "Key / code access" %}</strong><small>{% trans "We will receive a code or key." %}</small></span></label>
+   <label class="eb-radio-card"><input type="radio" name="access_method" value="arrange_later" {% if data.access_method == "arrange_later" %}checked{% endif %}><span><strong>{% trans "Access to be arranged later" %}</strong><small>{% trans "We will confirm access closer to the visit." %}</small></span></label>
   </div>
+  <label class="eb-label">{% trans "Site contact on arrival (optional)" %}</label><input class="form-control" name="site_contact" value="{{ data.site_contact|default:'' }}">
+  <label class="eb-label">{% trans "Site contact phone (optional)" %}</label><input class="form-control" name="site_contact_phone" value="{{ data.site_contact_phone|default:'' }}">
+  <label class="eb-label">{% trans "Access instructions" %}</label><textarea class="form-control" name="access_notes" rows="4">{{ data.access_notes|default:'' }}</textarea>
+ </section>
+ <section class="eb-business-panel"><h2>▤ {% trans "Additional information (optional)" %}</h2><p>{% trans "Share anything else that can help us plan the work." %}</p>
+  <textarea class="form-control" name="commercial_notes" rows="7" maxlength="500" placeholder="{% trans 'Site rules, security requirements, special equipment, previous installations or other important details.' %}">{{ data.commercial_notes|default:'' }}</textarea>
+  <label class="eb-label">{% trans "Special requirements" %}</label><textarea class="form-control" name="special_requirements" rows="3">{{ data.special_requirements|default:'' }}</textarea>
+  <label class="eb-upload-placeholder" for="business-attachments">⇧ <strong>{% trans "Drag and drop files here or click to browse" %}</strong><small>{% trans "Images, PDFs or Word documents (max 100 MB per file)" %}</small><input id="business-attachments" type="file" name="attachments" multiple accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx"></label>
+  <div class="eb-upload-list" id="business-attachment-list" {% if not data.business_attachments %}hidden{% endif %}><strong>{% trans "Selected attachments" %}</strong><div class="eb-upload-chips" id="business-attachment-chips">{% for attachment in data.business_attachments %}<span class="eb-upload-chip"><i>●</i><b>{{ attachment.name }}</b><button type="button" class="eb-upload-remove" data-existing-index="{{ forloop.counter0 }}" aria-label="{% trans 'Remove file' %}">×</button></span>{% endfor %}</div></div>
+  <div id="business-attachment-removals"></div>
+ </section>
+</div>
+<div class="eb-business-good">◉ <span><strong>{% trans "Good to know" %}</strong><small>✓ {% trans "We prepare everything in advance to work efficiently and safely on site." %}<br>✓ {% trans "Final details and payment terms will be confirmed by email." %}</small></span></div>
+{% else %}
+<label class="eb-label">{% trans "Access instructions" %}</label><textarea class="form-control eb-textarea" name="access_notes" maxlength="1000" rows="8" placeholder="{% trans 'Door code, key location, parking, floor, elevator or anything else the electrician should know.' %}">{{ data.access_notes|default:'' }}</textarea>
+<label class="eb-checkbox mt-4"><input type="checkbox" name="access_confirm" value="yes" {% if data.access_confirm %}checked{% endif %}><span>{% trans "I confirm that the electrician will have access to the property at the scheduled time." %}</span></label>
 
-  <div class="booking-actions">
-    <a class="btn btn-light"
-       href="{% url 'electricity:service_booking_step' 4 %}">
-       {% trans "Back" %}
-    </a>
-
-    <button class="btn btn-primary" type="submit">
-      {% trans "Continue" %}
-    </button>
-  </div>
-
-</form>
-{% endblock %}
+{% endif %}
+</section><div class="eb-actions"><a class="btn btn-light" href="{% url 'electricity:service_booking_step' 4 %}">{% trans "Back" %}</a><button class="btn btn-primary" type="submit">{% trans "Continue to final review" %}</button></div>
+</form>{% endblock %}

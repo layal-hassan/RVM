@@ -590,7 +590,54 @@ class ConsultationBookingForm(HumanizedJSONModelForm):
 class ServiceBookingForm(HumanizedJSONModelForm):
     class Meta:
         model = ServiceBooking
-        exclude = ("created_at",)
+        exclude = ("created_at", "booking_version", "booking_details")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.instance.pk and kwargs.get("instance") is None:
+            self.instance.booking_version = 2
+        if self.instance.booking_version != 2:
+            return
+        from .service_booking_flow import DETAIL_FIELDS, BOOLEAN_DETAILS
+        self.detail_names = tuple(DETAIL_FIELDS) + BOOLEAN_DETAILS
+        details = self.instance.booking_details or {}
+        multiline = {"location_details", "timing_notes", "access_notes", "commercial_notes", "special_requirements"}
+        for name, limit in DETAIL_FIELDS.items():
+            field_class = forms.EmailField if name == "billing_email" else forms.CharField
+            widget = forms.Textarea(attrs={"rows": 3}) if name in multiline else forms.TextInput()
+            self.fields[name] = field_class(required=False, max_length=limit, label=name.replace("_", " ").title(), widget=widget)
+            self.initial[name] = details.get(name, "")
+        for name in BOOLEAN_DETAILS:
+            self.fields[name] = forms.BooleanField(required=False, label=name.replace("_", " ").title())
+            self.initial[name] = bool(details.get(name))
+        keep = (
+            "account_type", "service_type", "work_description", "full_name", "phone", "email",
+            "company_name", "organization_number", "billing_email", "invoice_reference", "purchase_order_number",
+            "street_address", "zip_code", "city", "location_details", "preferred_date", "preferred_time_slot", "timing_notes",
+            "rot_deduction", "personal_id", "housing_type", "property_designation", "housing_association_number",
+            "apartment_number", "rot_owner_confirm", "electronic_invoice_confirm", "access_method", "site_contact",
+            "site_contact_phone", "access_notes", "access_confirm", "commercial_notes", "special_requirements",
+            "estimated_total", "currency", "assigned_provider", "status", "duration_minutes", "start_at", "end_at",
+        )
+        self.fields = {name: self.fields[name] for name in keep}
+        self.fields["service_type"].required = True
+        self.fields["preferred_time_slot"].label = "Arrival window"
+        self.fields["estimated_total"].help_text = "Leave zero while the price is awaiting review. No customer hours are collected."
+        self.fields["duration_minutes"].help_text = "Internal scheduling duration, set by the team after reviewing the work."
+
+    def _format_json_value(self, field_name, value):
+        if field_name == "uploads" and self.instance.booking_version == 2:
+            # Files are displayed as download links, not an editable JSON field.
+            return ""
+        return super()._format_json_value(field_name, value)
+
+    def save(self, commit=True):
+        if self.instance.booking_version == 2:
+            details = dict(self.instance.booking_details or {})
+            details.update({name: self.cleaned_data.get(name, False if name.endswith("confirm") else "") for name in self.detail_names})
+            self.instance.booking_details = details
+            self.instance.billing_type = self.cleaned_data["account_type"]
+        return super().save(commit=commit)
 
 
 class ElectricianBookingForm(HumanizedJSONModelForm):
@@ -655,6 +702,9 @@ class AutomatedEmailTemplateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         placeholders = "Available placeholders: {name}, {email}, {phone}, {address}, {message}, {reference}, {service}, {rating}, {location}, {customer_type}, {details}."
+        self.fields["company_recipient"].help_text = "Leave blank to use the company mailbox for this request type: info@rwmel.se for enquiries and quotes, or services@rwmel.se for bookings (configured in server settings)."
+        if self.instance.workflow == AutomatedEmailTemplate.Workflow.QUICK_QUOTE:
+            placeholders = "Available placeholders: {name}, {email}, {phone}, {customer_type}, {postcode}, {message}, {details}, {reference}, {request_id}."
         self.fields["company_subject"].help_text = placeholders
         self.fields["company_body"].help_text = placeholders
         self.fields["customer_subject"].help_text = placeholders
@@ -913,6 +963,50 @@ class OnCallBookingAssignForm(HumanizedJSONModelForm):
     class Meta:
         model = OnCallBooking
         fields = ("assigned_provider",)
+
+
+class ServiceBookingScheduleAssignForm(forms.ModelForm):
+    start_at = forms.DateTimeField(required=False, widget=forms.DateTimeInput(format="%Y-%m-%dT%H:%M", attrs={"type": "datetime-local"}))
+    duration_minutes = forms.IntegerField(required=False, min_value=1, label="Internal duration (minutes)")
+
+    class Meta:
+        model = ServiceBooking
+        fields = ("assigned_provider", "start_at", "duration_minutes")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        providers = ProviderProfile.objects.filter(is_active=True)
+        if self.instance.zip_code:
+            providers = providers.filter(zip_code=self.instance.zip_code)
+        self.fields["assigned_provider"].queryset = providers
+        if not self.instance.duration_minutes:
+            self.initial["duration_minutes"] = None
+
+    def clean(self):
+        import datetime
+        from .views import _provider_is_available
+        data = super().clean()
+        provider = data.get("assigned_provider")
+        start = data.get("start_at")
+        duration = data.get("duration_minutes")
+        if provider:
+            if not start:
+                self.add_error("start_at", "Choose the confirmed start time.")
+            if not duration:
+                self.add_error("duration_minutes", "Set the internal scheduling duration.")
+            if start and duration:
+                end = start + datetime.timedelta(minutes=duration)
+                self.instance.end_at = end
+                if not _provider_is_available(provider, start, end, exclude_booking_id=self.instance.pk):
+                    self.add_error("assigned_provider", "Provider is not available for the full duration.")
+        elif not duration:
+            data["duration_minutes"] = 0
+        return data
+
+    def save(self, commit=True):
+        if self.cleaned_data.get("assigned_provider") and self.instance.status == ServiceBooking.Status.PENDING:
+            self.instance.status = ServiceBooking.Status.SCHEDULED
+        return super().save(commit=commit)
 
 
 class ElectricianBookingAssignForm(HumanizedJSONModelForm):

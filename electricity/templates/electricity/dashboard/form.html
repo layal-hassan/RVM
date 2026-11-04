@@ -110,7 +110,7 @@
         {% endif %}
     {% endwith %}
     <div class="form-actions">
-        <a class="dash-btn ghost" href="{% url back_url %}">Back</a>
+        <a data-site-back class="dash-btn ghost" href="{% url back_url %}">Back</a>
         {% if preview_url %}
         <a class="dash-btn ghost" href="{{ preview_url }}" target="_blank" rel="noopener">Open</a>
         {% endif %}
@@ -158,7 +158,7 @@
             </div>
         {% endfor %}
         <div class="form-actions">
-            <a class="dash-btn ghost" href="{% url back_url %}">Back</a>
+            <a data-site-back class="dash-btn ghost" href="{% url back_url %}">Back</a>
             {% if preview_url %}
             <a class="dash-btn ghost" href="{{ preview_url }}" target="_blank" rel="noopener">Open</a>
             {% endif %}

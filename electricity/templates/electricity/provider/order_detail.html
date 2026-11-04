@@ -20,7 +20,7 @@
         </div>
       </div>
       <nav class="dash-nav">
-        <a href="{% url 'electricity:provider_dashboard' %}">Back to Orders</a>
+        <a data-site-back href="{% url 'electricity:provider_dashboard' %}">Back to Orders</a>
       </nav>
     </aside>
 
@@ -173,5 +173,6 @@
       </section>
     </main>
   </div>
+<script defer src="{% static 'electricity/js/site-back.js' %}?v=20261103-1"></script>
 </body>
 </html>

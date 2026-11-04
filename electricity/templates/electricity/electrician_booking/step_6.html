@@ -1,6 +1,6 @@
 {% extends "electricity/electrician_booking/base.html" %}{% load i18n %}
 {% block booking_content %}<form method="post" class="eb-form eb-contact-rot-form">{% csrf_token %}
-<section class="eb-card"><div class="eb-card-header"><span class="eb-step-badge">6</span><div><h1>{% if data.customer_type == "business" %}{% trans "Company & invoice details" %}{% else %}{% trans "Contact & ROT information" %}{% endif %}</h1><p>{% if data.customer_type == "business" %}{% trans "Add your company details and invoice preferences." %}{% else %}{% trans "Add your contact details and confirm your ROT eligibility." %}{% endif %}</p></div></div>
+<section class="eb-card"><div class="eb-card-header"><span class="eb-step-badge">5</span><div><h1>{% if data.customer_type == "business" %}{% trans "Company & invoice details" %}{% else %}{% trans "Contact & ROT information" %}{% endif %}</h1><p>{% if data.customer_type == "business" %}{% trans "Add your company details and invoice preferences." %}{% else %}{% trans "Add your contact details and confirm your ROT eligibility." %}{% endif %}</p></div></div>
 
 {% if data.customer_type == "business" %}
 <div class="eb-business-details-grid">

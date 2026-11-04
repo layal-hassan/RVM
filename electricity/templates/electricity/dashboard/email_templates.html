@@ -11,21 +11,51 @@
             <div class="panel-meta">Each form submission can notify the company and send a separate confirmation to the customer.</div>
         </div>
     </div>
-    <div class="panel-table">
+    <div class="email-workflow-list">
         {% for item in templates %}
-        <div class="panel-row">
-            <span class="row-title">
-                {{ item.get_workflow_display }}
-                <small class="panel-meta">Last updated {{ item.updated_at|date:"Y-m-d H:i" }}</small>
-            </span>
-            <span class="row-meta">
-                Company: {% if item.company_enabled %}Enabled{% else %}Disabled{% endif %}<br>
-                Customer: {% if item.customer_enabled %}Enabled{% else %}Disabled{% endif %}
-            </span>
-            <span><a class="dash-btn primary" href="{% url 'electricity:dashboard_email_template_edit' item.pk %}">Edit email</a></span>
+        <div class="email-workflow-row">
+            <div class="email-workflow-info">
+                <strong>{{ item.get_workflow_display }}</strong>
+                <small>Last updated {{ item.updated_at|date:"Y-m-d H:i" }}</small>
+                <small>Company email: {{ item.company_delivery_to }}</small>
+            </div>
+            <div class="email-workflow-statuses">
+                <div><span>Company</span><span class="status-pill {% if item.company_enabled %}is-ok{% else %}is-bad{% endif %}">{% if item.company_enabled %}Enabled{% else %}Disabled{% endif %}</span></div>
+                <div><span>Customer</span><span class="status-pill {% if item.customer_enabled %}is-ok{% else %}is-bad{% endif %}">{% if item.customer_enabled %}Enabled{% else %}Disabled{% endif %}</span></div>
+            </div>
+            <a class="dash-btn primary email-workflow-edit" href="{% url 'electricity:dashboard_email_template_edit' item.pk %}" aria-label="Edit {{ item.get_workflow_display }} emails">Edit email</a>
         </div>
         {% empty %}
         <div class="panel-row"><span>No email workflows are configured. Run the latest database migrations.</span></div>
+        {% endfor %}
+    </div>
+</section>
+<section class="dash-panel dash-panel-wide dash-section">
+    <div class="panel-header">
+        <div>
+            <h2>Company email delivery</h2>
+            <div class="panel-meta">Latest 20 messages. Pending messages retry automatically when the retry worker is running. Accepted means the mail server accepted the message.</div>
+        </div>
+    </div>
+    <div class="email-workflow-list">
+        {% for delivery in deliveries %}
+        <div class="email-workflow-row">
+            <div class="email-workflow-info">
+                <strong>{{ delivery.subject }}</strong>
+                <small>{{ delivery.recipients|join:", " }}</small>
+                <small>{{ delivery.created_at|date:"Y-m-d H:i" }}</small>
+            </div>
+            <div class="email-workflow-info">
+                <span class="status-pill {% if delivery.status == 'accepted' %}is-ok{% elif delivery.status == 'failed' %}is-bad{% endif %}">{{ delivery.get_status_display }}</span>
+                <small>Attempts: {{ delivery.attempts }}</small>
+            </div>
+            <div class="email-workflow-info">
+                {% if delivery.next_attempt_at and delivery.status == 'pending' %}<small>Next retry: {{ delivery.next_attempt_at|date:"Y-m-d H:i" }}</small>{% endif %}
+                {% if delivery.last_error %}<small>{{ delivery.last_error }}</small>{% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <p class="panel-meta">No company emails have been recorded yet.</p>
         {% endfor %}
     </div>
 </section>

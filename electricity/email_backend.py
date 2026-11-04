@@ -1,12 +1,41 @@
 """SMTP backend tuned for connections that reset on large TLS writes."""
 
 import smtplib
+from email.utils import getaddresses
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.core.validators import validate_email
 from django.core.mail import get_connection
 from django.core.mail.backends.smtp import EmailBackend as DjangoSMTPBackend
 from django.utils.module_loading import import_string
+
+
+def company_email_recipients(workflow, override=""):
+    """Resolve company destinations consistently for each kind of submission."""
+    setting_name, fallback = {
+        "consultation": ("BOOKING_TO_EMAIL", "services@rwmel.se"),
+        "electrician": ("BOOKING_TO_EMAIL", "services@rwmel.se"),
+        "service": ("BOOKING_TO_EMAIL", "services@rwmel.se"),
+        "on_call": ("BOOKING_TO_EMAIL", "services@rwmel.se"),
+        "support": ("SUPPORT_TO_EMAIL", "support@rwmel.se"),
+        "careers": ("CAREERS_TO_EMAIL", "support@rwmel.se"),
+    }.get(workflow, ("CONTACT_TO_EMAIL", "info@rwmel.se"))
+    value = override or getattr(settings, setting_name, "") or fallback
+    addresses = [value] if isinstance(value, str) else list(value)
+    recipients = []
+    for _, address in getaddresses(addresses):
+        validate_email(address)
+        if address.casefold() not in {recipient.casefold() for recipient in recipients}:
+            recipients.append(address)
+    if not recipients:
+        raise ImproperlyConfigured(f"{setting_name} must contain a company email address.")
+    return recipients
+
+
+def send_company_email(message):
+    from .email_outbox import enqueue_company_email
+    return enqueue_company_email(message)
 
 
 class _ChunkedSendMixin:

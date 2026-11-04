@@ -131,7 +131,7 @@
         <h3 id="brf-success-title">{% trans "Request Successfully Submitted!" %}</h3>
         <strong>{% trans "Thank you for contacting RWM EL!" %}</strong>
         <p>{% trans "We've received your BRF quotation request. Our team will review the details and get back to you as soon as possible during our business hours." %}</p>
-        <a class="brf-success-home" href="{% url 'electricity:home' %}">{% trans "Back to home" %}</a>
+        <a data-site-back class="brf-success-home" href="{% url 'electricity:services' %}">{% trans "Back" %}</a>
         <div class="brf-success-contact">
           <small>{% trans "Need assistance sooner?" %}</small>
           <a href="tel:+46700391611">

@@ -34,3 +34,13 @@
   .faq-cta p{font-size:14px}
   .faq-cta .faq-btn{font-size:13px}
 }
+
+/* Give the FAQ support section a more readable type scale. */
+.faq-page .faq-help {
+  --site-type-heading: 24px;
+  --site-type-body: 15px;
+}
+.faq-page .faq-help-heading p { line-height: 1.6; }
+.faq-page .faq-help .faq-btn { font-size: 14px; min-height: 48px; }
+.faq-page .faq-help .faq-hours b { font-size: 14px; }
+.faq-page .faq-help .faq-hours small { font-size: 12px; line-height: 1.6; }

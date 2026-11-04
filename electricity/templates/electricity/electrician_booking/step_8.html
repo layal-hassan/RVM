@@ -6,10 +6,10 @@
   {% csrf_token %}
   {% if data.customer_type == "business" %}
   <section class="eb-card eb-review-card">
-    <div class="eb-card-header"><span class="eb-step-badge">8</span><div><h1>{% trans "Final review & confirmation" %}</h1><p>{% trans "Please review all details below before confirming your booking." %}</p></div></div>
+    <div class="eb-card-header"><span class="eb-step-badge">7</span><div><h1>{% trans "Final review & confirmation" %}</h1><p>{% trans "Please review all details below before confirming your booking." %}</p></div></div>
     <div class="eb-review-grid">
       <div class="eb-review-column">
-       <section class="eb-review-panel"><header><h2>▣ {% trans "Booking summary" %}</h2><a href="{% url 'electricity:electrician_booking_step' 3 %}">✎ {% trans "Edit" %}</a></header><dl class="eb-review-list">
+       <section class="eb-review-panel"><header><h2>▣ {% trans "Booking summary" %}</h2><a href="{% url 'electricity:electrician_booking_step' 2 %}?resume=1">✎ {% trans "Edit" %}</a></header><dl class="eb-review-list">
         <div><dt>{% trans "Customer type" %}</dt><dd>{% trans "Business" %}</dd></div><div><dt>{% trans "Service" %}</dt><dd>{{ data.service_type|title }}</dd></div><div><dt>{% trans "Project details" %}</dt><dd>{{ data.work_description }}</dd></div><div><dt>{% trans "Site location" %}</dt><dd>{{ data.street_address }}, {{ data.zip_code }} {{ data.city }}</dd></div><div><dt>{% trans "Preferred schedule" %}</dt><dd>{{ data.preferred_date }} · {{ data.arrival_window }}</dd></div><div><dt>{% trans "Estimated duration" %}</dt><dd>{{ pricing.hours }} {% trans "hours" %}</dd></div>
        </dl></section>
        <section class="eb-review-panel"><header><h2>⚿ {% trans "Site access" %}</h2><a href="{% url 'electricity:electrician_booking_step' 7 %}">✎ {% trans "Edit" %}</a></header><dl class="eb-review-list eb-review-list-compact"><div><dt>{% trans "Access method" %}</dt><dd>{{ data.access_method|title }}</dd></div><div><dt>{% trans "Site contact" %}</dt><dd>{{ data.site_contact|default:"—" }}</dd></div><div><dt>{% trans "Phone" %}</dt><dd>{{ data.site_contact_phone|default:"—" }}</dd></div><div><dt>{% trans "Instructions" %}</dt><dd>{{ data.access_notes|default:"—" }}</dd></div></dl></section>
@@ -28,7 +28,7 @@
   {% else %}
   <section class="eb-card eb-review-card">
     <div class="eb-card-header">
-      <span class="eb-step-badge">8</span>
+      <span class="eb-step-badge">7</span>
       <div>
         <h1>{% trans "Final review & confirmation" %}</h1>
         <p>{% trans "Please review all details below before confirming your booking." %}</p>
@@ -38,7 +38,7 @@
     <div class="eb-review-grid">
       <div class="eb-review-column">
         <section class="eb-review-panel">
-          <header><h2>▣ {% trans "Booking summary" %}</h2><a href="{% url 'electricity:electrician_booking_step' 1 %}">✎ {% trans "Edit" %}</a></header>
+          <header><h2>▣ {% trans "Booking summary" %}</h2><a href="{% url 'electricity:electrician_booking_step' 2 %}?resume=1">✎ {% trans "Edit" %}</a></header>
           <dl class="eb-review-list">
             <div><dt>♙ {% trans "Customer type" %}</dt><dd>{{ data.customer_type|title }}</dd></div>
             <div><dt>♨ {% trans "Service" %}</dt><dd>{{ data.service_type|title }}</dd></div>

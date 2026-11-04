@@ -4,6 +4,7 @@
 {% block title %}{{ page.name }} | Hembla experten{% endblock %}
 {% block body_class %}service-category-page service-category-theme-{{ page.theme }}{% endblock %}
 
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/consultation-start.css' %}?v=20261103-7">{% endblock %}
 {% block content %}
 <section class="category-hero">
   <div class="category-hero-shell container">
@@ -539,5 +540,5 @@
 
   })();
 </script>
-{% load static %}<script src="{% static 'electricity/js/request_flow.js' %}?v=20261027-1"></script>
+{% load static %}<script src="{% static 'electricity/js/request_flow.js' %}?v=20261103-4"></script>
 {% endblock %}

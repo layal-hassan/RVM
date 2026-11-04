@@ -5,13 +5,17 @@ from email.utils import parseaddr
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.core.mail.backends.smtp import EmailBackend
+from django.core.mail import EmailMessage
 from django.utils.module_loading import import_string
 
-from electricity.email_backend import invoice_email_connection, support_email_connection
+from electricity.email_backend import company_email_recipients, invoice_email_connection, send_company_email, support_email_connection
 
 
 class Command(BaseCommand):
-    help = "Check email accounts and sender routing without sending any messages."
+    help = "Check email routing; optionally send a labelled test to each configured company mailbox."
+
+    def add_arguments(self, parser):
+        parser.add_argument("--send-test", action="store_true", help="Send one test per distinct company mailbox (never to customers).")
 
     def handle(self, *args, **options):
         self.stdout.write(f"Backend: {settings.EMAIL_BACKEND}")
@@ -47,7 +51,33 @@ class Command(BaseCommand):
                     f"{label} ({sender}) differs from the default SMTP account; "
                     "confirm send-as permission or use matching credentials."
                 ))
-        self.stdout.write(self.style.SUCCESS(
-            "Local configuration checked. No SMTP login or email delivery was attempted. "
-            "Verify SPF/DKIM/DMARC results in a received message's headers."
-        ))
+        destinations = {}
+        for workflow, label in (("contact", "Contact/quotes/feedback"), ("service", "Bookings"), ("support", "Support"), ("careers", "Careers")):
+            recipients = company_email_recipients(workflow)
+            self.stdout.write(f"{label} recipient(s): {', '.join(recipients)}")
+            for recipient in recipients:
+                destinations.setdefault(recipient.casefold(), {"address": recipient, "labels": []})["labels"].append(label)
+        if not options["send_test"]:
+            self.stdout.write(self.style.SUCCESS(
+                "Configuration checked. No SMTP login or email delivery was attempted. "
+                "Use --send-test to check company mailbox delivery."
+            ))
+            return
+        for destination in destinations.values():
+            address = destination["address"]
+            try:
+                send_company_email(EmailMessage(
+                    subject="RWM EL - Company notification delivery test",
+                    body=(
+                        "This is a requested delivery test for RWM EL company notifications.\n\n"
+                        f"Company mailbox: {address}\n"
+                        f"Request types: {', '.join(destination['labels'])}\n\n"
+                        "No customer request was created and no customer emails were sent.\n"
+                        "SMTP acceptance confirms submission to the mail server; receipt must be checked in this mailbox."
+                    ),
+                    from_email=settings.SUPPORT_FROM_EMAIL,
+                    to=[address],
+                ))
+            except Exception as error:
+                raise CommandError(f"Company delivery test failed for {address}: {type(error).__name__}: {error}") from error
+            self.stdout.write(self.style.SUCCESS(f"Mail server accepted the test for {address}. Check its inbox/spam folder to confirm receipt."))

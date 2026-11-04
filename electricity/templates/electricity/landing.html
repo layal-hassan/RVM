@@ -4,7 +4,8 @@
 {% block title %}{% trans "Licensed Electricians | Home Solutions" %}{% endblock %}
 {% block body_class %}landing-body{% endblock %}
 {% block extra_head %}
-  <link rel="stylesheet" href="{% static 'electricity/css/landing.css' %}?v=20261027-1">
+<link rel="stylesheet" href="{% static 'electricity/css/consultation-start.css' %}?v=20261103-7">
+  <link rel="stylesheet" href="{% static 'electricity/css/landing.css' %}?v=20261101-1">
 {% endblock %}
 
 {% block content %}
@@ -38,13 +39,13 @@
       </div>
       <div class="home-hero-actions">
         <a class="home-btn home-btn-primary js-electrician-booking-choice" href="{% url 'electricity:electrician_booking_step' 1 %}">
-          {% trans "Book a Licensed Electrician" %} 
+          {% trans "Book a Licensed Electrician" %}
         </a>
         <a class="home-btn home-btn-secondary" href="{% url 'electricity:booking_step_1' %}">
-          {% trans "Get a Free Quote" %} 
+          {% trans "Get a Free Quote" %}
         </a>
         <a class="home-btn home-btn-jour" href="{% url 'electricity:on_call' %}">
-          <span aria-hidden="true">ϟ</span> {% trans "Book" %} <span translate="no">Jour</span> 
+          <span aria-hidden="true">ϟ</span> {% trans "Book" %} <span translate="no">Jour</span>
         </a>
       </div>
       <div class="home-hero-contact-title"><span></span>{% trans "Contact Us Directly" %}<span></span></div>
@@ -170,13 +171,7 @@
           <input type="hidden" name="form_type" value="quick_quote">
           {{ quote_form.website }}
           {{ quote_form.submission_token }}
-          <fieldset>
-            <legend>{% trans "I am a..." %}</legend>
-            <div class="home-quote-type">
-              <label><input type="radio" name="customer_type" value="private" checked><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M6.5 19a5.5 5.5 0 0 1 11 0Z"/></svg>{% trans "Private" %}</span></label>
-              <label><input type="radio" name="customer_type" value="business"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V5h10v16M15 10h4v11M8 8h1M12 8h1M8 12h1M12 12h1M8 16h1M12 16h1M3 21h18"/></svg>{% trans "Business" %}</span></label>
-            </div>
-          </fieldset>
+          {% include "electricity/partials/customer_type_popup.html" with choice_name="customer_type" popup_id="quick-quote-customer-dialog" manual=True on_interaction=True selected_customer_type=request.POST.customer_type %}
           <div class="home-quote-fields">
             <label>{% trans "Postcode" %}<span class="home-quote-input"><input type="text" name="postcode" placeholder="e.g. 114 34" required><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span></label>
             <label>{% trans "Full name" %}<span class="home-quote-input"><input type="text" name="full_name" value="{{ quote_form.full_name.value|default:'' }}" placeholder="{% trans 'Your full name' %}" required><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M6.5 19a5.5 5.5 0 0 1 11 0Z"/></svg></span></label>
@@ -388,49 +383,19 @@
     <div class="home-footer-lang">{% trans "Sweden (EN)" %}</div>
   </div>
 </footer>
-<dialog class="home-booking-dialog" id="home-booking-dialog" aria-labelledby="home-booking-title">
-  <button class="home-booking-close" type="button" aria-label="{% trans 'Close' %}">&times;</button>
-  <div class="home-booking-kicker">{% trans "Before you begin" %}</div>
-  <h2 id="home-booking-title">{% trans "Who is this booking for?" %}</h2>
-  <p>{% trans "Choose the customer type to continue with the correct booking options." %}</p>
-  <div class="home-booking-options">
-    <form method="post" action="{% url 'electricity:electrician_booking_step' 1 %}">
-      {% csrf_token %}
-      <input type="hidden" name="customer_type" value="private">
-      <button class="home-booking-option" type="submit">
-        <span class="home-booking-icon" aria-hidden="true">👤</span>
-        <strong>{% trans "Private customer" %}</strong>
-        <small>{% trans "Electrical work for your home or private property." %}</small>
-      </button>
-    </form>
-    <form method="post" action="{% url 'electricity:electrician_booking_step' 1 %}">
-      {% csrf_token %}
-      <input type="hidden" name="customer_type" value="business">
-      <button class="home-booking-option" type="submit">
-        <span class="home-booking-icon" aria-hidden="true">🏢</span>
-        <strong>{% trans "Business" %}</strong>
-        <small>{% trans "Electrical work for a company or organization." %}</small>
-      </button>
-    </form>
-  </div>
-</dialog>
+<form method="post" action="{% url 'electricity:electrician_booking_step' 1 %}" class="home-customer-popup">
+{% csrf_token %}
+{% include "electricity/partials/customer_type_popup.html" with choice_name="customer_type" popup_id="home-booking-dialog" manual=True submit_on_choice=True %}
+</form>
 <script>
-  (() => {
-    const dialog = document.getElementById("home-booking-dialog");
-    if (!dialog || typeof dialog.showModal !== "function") return;
-
-    document.querySelectorAll(".js-electrician-booking-choice").forEach((button) => {
-      button.addEventListener("click", (event) => {
-        event.preventDefault();
-        dialog.showModal();
-      });
+  document.querySelectorAll(".js-electrician-booking-choice").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const popup = document.querySelector(".home-customer-popup [data-customer-popup]");
+      if (!popup || typeof HTMLDialogElement === "undefined") return;
+      event.preventDefault();
+      popup.dispatchEvent(new Event("customer-type-open"));
     });
-
-    dialog.querySelector(".home-booking-close").addEventListener("click", () => dialog.close());
-    dialog.addEventListener("click", (event) => {
-      if (event.target === dialog) dialog.close();
-    });
-  })();
+  });
 </script>
 {% endblock %}
 

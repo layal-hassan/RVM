@@ -1,102 +1,26 @@
-﻿{% extends "electricity/service_booking/base.html" %}
+{% extends "electricity/service_booking/base.html" %}
 {% load i18n %}
 {% block booking_content %}
-<form method="post" class="booking-form">
-  {% csrf_token %}
-
-  <div class="booking-section">
-    <div class="section-header">
-      <span class="section-index">1</span>
-      {% trans "Who is the booking for?" %}
-    </div>
-
-    <div class="option-grid">
-
-      <label class="option-card">
-        <input type="radio" name="account_type" value="private"
-               {% if data.account_type == "private" %}checked{% endif %} required>
-        <span class="option-check"></span>
-        <div class="option-icon">👤</div>
-        <div>
-          <div class="option-title">{% trans "Private Customer" %}</div>
-          <div class="option-subtitle">
-            {% trans "Individual home services, repairs, and electrical installations for your residence." %}
-          </div>
-          <div class="option-tag">
-            {% trans "Eligible for ROT tax deduction" %}
-          </div>
-        </div>
-      </label>
-
-      <label class="option-card">
-        <input type="radio" name="account_type" value="business"
-               {% if data.account_type == "business" %}checked{% endif %}>
-        <span class="option-check"></span>
-        <div class="option-icon">🏢</div>
-        <div>
-          <div class="option-title">{% trans "Business / BRF" %}</div>
-          <div class="option-subtitle">
-            {% trans "Commercial properties, offices, housing associations (BRF), and organizations." %}
-          </div>
-          <div class="option-tag">
-            {% trans "VAT invoice included" %}
-          </div>
-        </div>
-      </label>
-
-    </div>
-  </div>
-
-  <div class="booking-section">
-    <div class="section-header">
-      <span class="section-index">2</span>
-      {% trans "Your contact details" %}
-    </div>
-
-    <div class="form-grid">
-
-      <label class="form-label">
-        {% trans "Full Name" %}
-        <input class="form-control" type="text"
-               name="full_name"
-               value="{{ data.full_name|default:'' }}"
-               placeholder="{% trans 'e.g. Erik Andersson' %}"
-               required>
-      </label>
-
-      <label class="form-label">
-        {% trans "Phone Number" %}
-        <input class="form-control" type="tel"
-               name="phone"
-               value="{{ data.phone|default:'' }}"
-               placeholder="0046 70 03 91 611">
-      </label>
-
-      <label class="form-label full">
-        {% trans "Email Address" %}
-        <input class="form-control" type="email"
-               name="email"
-               value="{{ data.email|default:'' }}"
-               placeholder="name@company.se"
-               required>
-      </label>
-
-    </div>
-
-    <div class="booking-privacy">
-      {% trans "We'll send your booking confirmation and estimate to this address." %}
-    </div>
-
-  </div>
-
-  <div class="booking-actions">
-    <a class="btn btn-light" href="{% url 'electricity:services' %}">
-      {% trans "Back" %}
-    </a>
-    <button class="btn btn-primary" type="submit">
-      {% trans "Continue" %}
-    </button>
-  </div>
-
-</form>
-{% endblock %}
+<form method="post" class="eb-form eb-service-selection-form">{% csrf_token %}
+{% include "electricity/partials/customer_type_popup.html" with choice_name="customer_type" selected_customer_type=data.customer_type %}
+<section class="eb-card"><div class="eb-card-header"><span class="eb-step-badge">1</span><div>
+<h1>{% trans "What do you need help with?" %}</h1><p>{% trans "Choose the service that best describes your electrical work." %}</p></div></div>
+<div class="eb-service-grid">
+{% with current=data.service_type %}
+  <label class="eb-service-card"><input type="radio" name="service_type" value="electrical_repair" {% if current == "electrical_repair" %}checked{% endif %}><div><div class="eb-service-title"><span class="eb-service-icon" aria-hidden="true">⚡</span>{% trans "Electrical repair" %}</div><div class="eb-service-sub">{% trans "Troubleshooting, faulty outlets, switches and power issues." %}</div></div></label>
+  <label class="eb-service-card"><input type="radio" name="service_type" value="outlets_switches" {% if current == "outlets_switches" %}checked{% endif %}><div><div class="eb-service-title"><span class="eb-service-icon" aria-hidden="true">🔌</span>{% trans "Install outlets or switches" %}</div><div class="eb-service-sub">{% trans "Installation or replacement of outlets, switches and dimmers." %}</div></div></label>
+  <label class="eb-service-card"><input type="radio" name="service_type" value="lighting" {% if current == "lighting" %}checked{% endif %}><div><div class="eb-service-title"><span class="eb-service-icon" aria-hidden="true">💡</span>{% trans "Lighting installation" %}</div><div class="eb-service-sub">{% trans "Indoor and outdoor lighting, spotlights and ceiling lights." %}</div></div></label>
+  <label class="eb-service-card"><input type="radio" name="service_type" value="electrical_panel" {% if current == "electrical_panel" %}checked{% endif %}><div><div class="eb-service-title"><span class="eb-service-icon" aria-hidden="true">⚙️</span>{% trans "Electrical panel" %}</div><div class="eb-service-sub">{% trans "Replacement, upgrade or inspection of the electrical panel." %}</div></div></label>
+  <label class="eb-service-card"><input type="radio" name="service_type" value="kitchen_appliance" {% if current == "kitchen_appliance" %}checked{% endif %}><div><div class="eb-service-title"><span class="eb-service-icon" aria-hidden="true">🍳</span>{% trans "Kitchen & appliance connection" %}</div><div class="eb-service-sub">{% trans "Ovens, hobs, dishwashers and other appliances." %}</div></div></label>
+  <label class="eb-service-card"><input type="radio" name="service_type" value="ev_charger" {% if current == "ev_charger" %}checked{% endif %}><div><div class="eb-service-title"><span class="eb-service-icon" aria-hidden="true">🔋</span>{% trans "EV charger" %}</div><div class="eb-service-sub">{% trans "Installation of home electric vehicle charging stations." %}</div></div></label>
+  <label class="eb-service-card"><input type="radio" name="service_type" value="renovation" {% if current == "renovation" %}checked{% endif %}><div><div class="eb-service-title"><span class="eb-service-icon" aria-hidden="true">🏗️</span>{% trans "Renovation or new installation" %}</div><div class="eb-service-sub">{% trans "Renovations, extensions and new construction." %}</div></div></label>
+  <label class="eb-service-card"><input type="radio" name="service_type" value="inspection" {% if current == "inspection" %}checked{% endif %}><div><div class="eb-service-title"><span class="eb-service-icon" aria-hidden="true">🔍</span>{% trans "Electrical inspection" %}</div><div class="eb-service-sub">{% trans "Safety inspections, fault finding and condition reports." %}</div></div></label>
+  <label class="eb-service-card"><input type="radio" name="service_type" value="other" {% if current == "other" %}checked{% endif %}><div><div class="eb-service-title"><span class="eb-service-icon" aria-hidden="true">🛠️</span>{% trans "Other electrical work" %}</div><div class="eb-service-sub">{% trans "Tell us what you need and we'll find the right solution." %}</div></div></label>
+{% endwith %}</div><div class="eb-inline-note">{% trans "Not sure which service to choose? Describe what you need below." %}</div>
+<div class="eb-service-details">
+<label class="eb-label" for="work_description" data-customer-business="{% trans 'Describe the project' %}" data-customer-private="{% trans 'Describe the work' %}">{% if data.customer_type == "business" %}{% trans "Describe the project" %}{% else %}{% trans "Describe the work" %}{% endif %}</label><textarea class="form-control eb-textarea" name="work_description" id="work_description" required rows="5" maxlength="500" placeholder="{% trans 'Please describe what needs to be repaired, installed or checked.' %}">{{ data.work_description|default:"" }}</textarea>
+<label class="eb-label">{% trans "Add attachments (optional)" %}</label><div class="eb-inline-note">{% trans "Attachment upload will be added after the booking paths are finalized." %}</div>
+</div>
+</section>
+<div class="eb-actions"><a data-site-back class="btn btn-light" href="{% url 'electricity:services' %}">{% trans "Back" %}</a><button class="btn btn-primary" type="submit">{% trans "Continue to location" %}</button></div>
+</form>{% endblock %}

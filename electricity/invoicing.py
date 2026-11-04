@@ -9,6 +9,7 @@ from django.db import transaction
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import escape
 
 from .email_backend import invoice_email_connection
 from .models import (
@@ -38,9 +39,9 @@ def _invoice_category_totals(invoice):
         (line.total_ex_vat - line.discount_amount for line in lines),
         Decimal("0"),
     )
-    invoice_discount = max(invoice.discount_total - sum(
+    invoice_discount = invoice.discount_total - sum(
         (line.discount_amount for line in lines), Decimal("0")
-    ), Decimal("0"))
+    )
     ratio = (
         (base_after_row_discounts - invoice_discount) / base_after_row_discounts
         if base_after_row_discounts else Decimal("1")
@@ -135,6 +136,8 @@ def create_invoice_for_booking(booking):
         raise ValueError("Unsupported booking type")
     if isinstance(booking, ConsultationBooking) and booking.consultation_price <= 0:
         return None
+    if isinstance(booking, ServiceBooking) and booking.booking_version == 2 and booking.estimated_total <= 0:
+        return None
     existing = Invoice.objects.filter(**{relation: booking}).first()
     if existing:
         return existing
@@ -143,7 +146,8 @@ def create_invoice_for_booking(booking):
     rot_enabled = bool(_value(booking, "rot_deduction", "rot_requested", default=False))
     invoice = Invoice.objects.create(
         customer=customer,
-        recipient_email=customer.email,
+        recipient_email=(booking.booking_details.get("billing_email") or customer.email)
+        if isinstance(booking, ServiceBooking) and booking.booking_version == 2 else customer.email,
         title="Faktura",
         invoice_type=Invoice.InvoiceType.ROT if rot_enabled else Invoice.InvoiceType.STANDARD,
         status=Invoice.Status.DRAFT,
@@ -169,6 +173,10 @@ def create_invoice_for_booking(booking):
         labour = Decimal(str(booking.hourly_rate_snapshot or 0)) * booking.hours * multiplier
         _add_line(invoice, InvoiceLine.Category.LABOUR, booking.work_description or "Electrical labour", labour, rot_enabled, booking.hours, "hours")
         _add_line(invoice, InvoiceLine.Category.TRANSPORT, "Transport fee", booking.transport_fee_snapshot)
+    elif isinstance(booking, ServiceBooking) and booking.booking_version == 2:
+        # The team can split this agreed fixed amount into labour/material lines
+        # before issuing the invoice. Never invent hours or ROT-eligible labour.
+        _add_line(invoice, InvoiceLine.Category.OTHER, booking.work_description or booking.get_service_type_display(), booking.estimated_total)
     elif isinstance(booking, ServiceBooking):
         labour = Decimal(str(booking.hourly_rate_snapshot or 0)) * max(booking.hourly_hours, 1)
         service_total = Decimal(str(booking.fixed_services_total or booking.service_fee_total or 0))
@@ -192,6 +200,40 @@ def create_invoice_for_booking(booking):
         )
     invoice.recalculate()
     return invoice
+
+
+@transaction.atomic
+def create_credit_invoice(source):
+    source = Invoice.objects.select_for_update().get(pk=source.pk)
+    if source.invoice_type == Invoice.InvoiceType.CREDIT:
+        raise ValueError("A credit invoice cannot be credited again.")
+    if source.status == Invoice.Status.CREDITED:
+        raise ValueError("This invoice has already been credited.")
+    credit = Invoice.objects.create(
+        customer=source.customer, recipient_email=source.recipient_email,
+        title="Credit Invoice", invoice_type=Invoice.InvoiceType.CREDIT,
+        status=Invoice.Status.READY, reference=f"Credit for invoice {source.invoice_number}",
+        work_address=source.work_address, currency=source.currency,
+        payment_terms_days=source.payment_terms_days,
+        discount_type=source.discount_type, discount_value=source.discount_value,
+        rot_enabled=source.rot_enabled, rot_percent=source.rot_percent,
+        rot_personal_number=source.rot_personal_number,
+        rot_property_designation=source.rot_property_designation,
+        rot_brf_org_number=source.rot_brf_org_number,
+        rot_apartment_number=source.rot_apartment_number,
+        rounding=-source.rounding,
+    )
+    for line in source.lines.all():
+        InvoiceLine.objects.create(
+            invoice=credit, category=line.category, description=f"Credit: {line.description}",
+            quantity=line.quantity, unit=line.unit, unit_price_ex_vat=-line.unit_price_ex_vat,
+            discount_type=line.discount_type, discount_value=line.discount_value,
+            vat_percent=line.vat_percent, rot_eligible=line.rot_eligible, order=line.order,
+        )
+    credit.recalculate()
+    source.status = Invoice.Status.CREDITED
+    source.save(update_fields=["status", "updated_at"])
+    return credit
 
 
 def invoice_pdf_bytes(invoice):
@@ -395,17 +437,16 @@ def invoice_pdf_bytes(invoice):
         ["Summa inkl. moms", f"{_sv_amount(invoice.total_inc_vat)} {display_currency}"],
     ])
     if invoice.discount_total:
-        summary_rows.insert(ex_vat_total_row, ["Rabatt", f"-{_sv_amount(invoice.discount_total)} {display_currency}"])
+        summary_rows.insert(ex_vat_total_row, ["Rabatt", f"{_sv_amount(-invoice.discount_total)} {display_currency}"])
         ex_vat_total_row += 1
         vat_total_row += 1
     total_inc_vat_row = vat_total_row + 1
     if invoice.rot_enabled or invoice.rot_total:
-        rot_prefix = "-" if invoice.rot_total else ""
-        summary_rows.append([f"ROT-avdrag {invoice.rot_percent:g} % (på arbetskostnad)", f"{rot_prefix}{_sv_amount(invoice.rot_total)} {display_currency}"])
+        summary_rows.append([f"ROT-avdrag {invoice.rot_percent:g} % (på arbetskostnad)", f"{_sv_amount(-invoice.rot_total)} {display_currency}"])
     amount_due_row = len(summary_rows)
     total_label = "FAKTURABELOPP" if invoice.status == Invoice.Status.PAID else "SUMMA ATT BETALA"
     summary_rows.append([total_label, f"{_sv_amount(invoice.invoice_total)} {display_currency}"])
-    summary = Table(summary_rows, colWidths=[72 * mm, 36 * mm])
+    summary = Table(summary_rows, colWidths=[64 * mm, 26 * mm])
     summary.setStyle(TableStyle([
         ("ALIGN", (1, 0), (1, -1), "RIGHT"),
         ("TEXTCOLOR", (0, 0), (-1, -1), ink),
@@ -432,22 +473,30 @@ def invoice_pdf_bytes(invoice):
 
     rot_information = None
     if invoice.rot_enabled:
+        rot_value_style = styles["Normal"].clone(
+            "ROTValue", fontSize=8, leading=11, textColor=navy,
+        )
         rot_information = Table(
             [
-                ["UPPGIFTER FÖR ROT-AVDRAG", ""],
-                ["Personnummer:", "Fastighetsbeteckning:"],
-                [invoice.rot_personal_number, invoice.rot_property_designation],
+                ["UPPGIFTER FÖR ROT-AVDRAG", "", ""],
+                ["Personnummer:", "", "Fastighetsbeteckning:"],
+                [
+                    Paragraph(escape(invoice.rot_personal_number or ""), rot_value_style),
+                    "",
+                    Paragraph(escape(invoice.rot_property_designation or ""), rot_value_style),
+                ],
             ],
-            colWidths=[43 * mm, 43 * mm],
+            colWidths=[84 * mm, 6 * mm, 90 * mm],
         )
         rot_information.setStyle(TableStyle([
-            ("SPAN", (0, 0), (1, 0)),
-            ("FONTNAME", (0, 0), (1, 0), "Helvetica-Bold"),
+            ("SPAN", (0, 0), (2, 0)),
+            ("FONTNAME", (0, 0), (2, 0), "Helvetica-Bold"),
             ("TEXTCOLOR", (0, 0), (-1, -1), navy),
             ("FONTSIZE", (0, 0), (-1, -1), 8),
-            ("LINEBELOW", (0, 0), (1, 0), 1, navy),
+            ("LINEBELOW", (0, 0), (2, 0), .6, colors.HexColor("#9AA7BD")),
             ("LINEBELOW", (0, 2), (0, 2), .6, colors.HexColor("#9AA7BD")),
-            ("LINEBELOW", (1, 2), (1, 2), .6, colors.HexColor("#9AA7BD")),
+            ("LINEBELOW", (2, 2), (2, 2), .6, colors.HexColor("#9AA7BD")),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
             ("TOPPADDING", (0, 0), (-1, -1), 3),
             ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
             ("LEFTPADDING", (0, 0), (-1, -1), 0),
@@ -736,11 +785,13 @@ def invoice_pdf_bytes(invoice):
         ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
     ]))
 
+    summary_block_rows = []
+    if rot_information is not None:
+        summary_block_rows.append([rot_information, ""])
+    summary_block_rows.append(["", summary])
     summary_block = Table(
-        [[rot_information or "", summary]],
-        # ``summary`` is 108 mm wide. The previous 93 mm second cell made it
-        # overflow its parent table and appear too far to the right.
-        colWidths=[72 * mm, 108 * mm],
+        summary_block_rows,
+        colWidths=[90 * mm, 90 * mm],
         hAlign="LEFT",
     )
     summary_block.setStyle(TableStyle([
@@ -750,6 +801,11 @@ def invoice_pdf_bytes(invoice):
         ("TOPPADDING", (0, 0), (-1, -1), 0),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
     ]))
+    if rot_information is not None:
+        summary_block.setStyle(TableStyle([
+            ("SPAN", (0, 0), (1, 0)),
+            ("BOTTOMPADDING", (0, 0), (1, 0), 6 * mm),
+        ]))
     fixed_footer = InvoiceFooterBlock()
 
     def draw_fixed_footer(pdf, _document):
@@ -844,7 +900,10 @@ def send_invoice_email(invoice):
     sent_count = message.send(fail_silently=False)
     if sent_count != 1:
         raise RuntimeError("The email backend did not confirm that the invoice was sent.")
-    invoice.status = Invoice.Status.SENT
-    invoice.sent_at = timezone.now()
-    invoice.save(update_fields=["status", "sent_at", "updated_at"])
+    sent_at = timezone.now()
+    Invoice.objects.filter(pk=invoice.pk).exclude(
+        status__in=[Invoice.Status.PAID, Invoice.Status.CREDITED],
+    ).update(status=Invoice.Status.SENT)
+    Invoice.objects.filter(pk=invoice.pk).update(sent_at=sent_at, updated_at=sent_at)
+    invoice.refresh_from_db(fields=["status", "sent_at", "updated_at"])
     return True

@@ -1,5 +1,9 @@
 ﻿{% extends "electricity/booking/base_booking.html" %}
-{% load i18n %}
+{% load static i18n %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'electricity/css/consultation-start.css' %}?v=20261103-7">
+{% endblock %}
 
 {% block subtitle %}
 <p class="booking-subtitle">
@@ -8,19 +12,7 @@
 {% endblock %}
 
 {% block content %}
-<fieldset class="form-row booking-choice-section">
-    <legend class="form-label">{% trans "Are you a private individual or a business?" %}</legend>
-    <div class="option-grid">
-        {% for choice in form.contact_type %}
-            <label class="option-card">
-                {{ choice.tag }}
-                <div class="option-body"><div class="option-title">{{ choice.choice_label }}</div></div>
-                <span class="option-check"></span>
-            </label>
-        {% endfor %}
-    </div>
-    {% if form.contact_type.errors %}<div class="booking-field-error">{{ form.contact_type.errors|join:", " }}</div>{% endif %}
-</fieldset>
+{% include "electricity/partials/customer_type_popup.html" with choice_name="contact_type" selected_customer_type=form.contact_type.value popup_errors=form.contact_type.errors %}
 <fieldset class="form-row booking-choice-section">
     <legend class="form-label">{% trans "How would you like to start?" %}</legend>
 <div class="option-grid">
@@ -41,7 +33,7 @@
                     </svg>
                 {% else %}
                     <svg viewBox="0 0 24 24" class="option-svg">
-                        <path d="M6.6 3.8c.6-.6 1.6-.6 2.2 0l2 2c.6.6.6 1.6 0 2.2l-1 1a14.6 14.6 0 0 0 5.2 5.2l1-1c.6-.6 1.6-.6 2.2 0l2 2c.6.6.6 1.6 0 2.2l-1.2 1.2c-1 .9-2.4 1.2-3.7.8-3.5-1.1-6.8-3.2-9.5-5.8C3 11 1 7.8.8 4.2c-.1-1.2.3-2.4 1.2-3.3l1.2-1.1z"/>
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.79a2 2 0 0 1-.45 2.11L8.09 9.89a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.89.34 1.83.57 2.79.7A2 2 0 0 1 22 16.92Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 {% endif %}
             </div>
@@ -70,8 +62,8 @@
 {% endblock %}
 
 {% block actions %}
-<a class="btn btn-light booking-btn" href="{% url 'electricity:home' %}">
-    {% trans "Back to Home" %}
+<a data-site-back class="btn btn-light booking-btn" href="{% url 'electricity:services' %}">
+    {% trans "Back" %}
 </a>
 <button type="submit" class="btn btn-primary booking-btn">
     {% trans "Continue" %}

@@ -14,7 +14,7 @@ class PublicFormSpamProtectionMiddleware(MiddlewareMixin):
     final_steps = {
         "quote_request_step": (3, "electricity_quote_request"),
         "electrician_booking_step": (8, "electricity_electrician_booking"),
-        "service_booking_step": (11, "electricity_service_booking"),
+        "service_booking_step": (6, "electricity_service_booking"),
         "on_call_booking_step": (4, "electricity_on_call_booking"),
         "legacy_booking_step": (7, "electricity_booking"),
     }

@@ -11,25 +11,25 @@
             <h2>{{ title }}</h2>
             <div class="panel-meta">{{ items|length }} records</div>
         </div>
-        <div class="panel-actions">
+        {% if create_url %}<div class="panel-actions">
             <a class="dash-btn primary" href="{% url create_url %}">Add New</a>
-        </div>
+        </div>{% endif %}
     </div>
     <div class="panel-table">
         <div class="panel-row panel-row-head">
             {% for field in fields %}
                 <span>{{ field|title }}</span>
             {% endfor %}
-            <span>Actions</span>
+            {% if edit_url %}<span>Actions</span>{% endif %}
         </div>
         {% for row in items %}
             {% record_preview_url row as preview_url %}
             {% record_dashboard_section_edit_url row as section_edit_url %}
-            <div class="panel-row">
+            <div class="panel-row" id="record-{{ row.pk }}">
                 {% for field in fields %}
                     <span>{{ row|display_value:field }}</span>
                 {% endfor %}
-                <span class="row-actions">
+                {% if edit_url %}<span class="row-actions">
                     {% if assign_url %}
                       <a href="{% url assign_url row.id %}">Assign</a>
                     {% endif %}
@@ -41,7 +41,7 @@
                     {% endif %}
                     <a href="{% url edit_url row.id %}?view=1">View</a>
                     <a class="danger" href="{% url delete_url row.id %}">Delete</a>
-                </span>
+                </span>{% endif %}
             </div>
         {% empty %}
             <div class="panel-empty">No records yet.</div>

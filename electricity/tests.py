@@ -97,6 +97,7 @@ class HumanizedJSONModelFormTests(TestCase):
         )
 
         form = ServiceBookingForm(
+            instance=ServiceBooking(booking_version=1),
             data={
                 "account_type": ServiceBooking.AccountType.PRIVATE,
                 "full_name": "Test User",
@@ -146,7 +147,9 @@ class HumanizedJSONModelFormTests(TestCase):
         )
 
         self.assertTrue(form.is_valid(), form.errors)
-        self.assertNotIn("short_description_en", form.fields)
+        for field in ("short_description_en", "short_description_ar", "short_description_sv"):
+            self.assertIn(field, form.fields)
+            self.assertFalse(form.fields[field].required)
         item = form.save()
         self.assertEqual(item.short_description, "")
 
@@ -254,6 +257,7 @@ class ElectricianBookingReceiptTests(TestCase):
         self.assertNotContains(response, "Residential Property")
 
 
+@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend", SECURE_SSL_REDIRECT=False)
 class CustomerFeedbackTests(TestCase):
     def test_feedback_submission_creates_pending_record(self):
         response = self.client.post(
@@ -310,14 +314,14 @@ class CustomerFeedbackTests(TestCase):
         self.assertEqual(breakdown["transport_fee"], 495.0)
         self.assertEqual(breakdown["total"], 795.0)
 
-    def test_step_6_rejects_past_dates(self):
+    def test_schedule_step_rejects_past_dates(self):
         session = self.client.session
         session["electricity_electrician_booking"] = {}
         session.save()
 
         yesterday = (timezone.localdate() - datetime.timedelta(days=1)).isoformat()
         response = self.client.post(
-            reverse("electricity:electrician_booking_step", args=[6]),
+            reverse("electricity:electrician_booking_step", args=[5]),
             {
                 "preferred_date": yesterday,
                 "arrival_window": "Morning (08:00 AM - 12:00 PM)",
@@ -334,6 +338,7 @@ class ContactFormTests(TestCase):
         EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
         CONTACT_TO_EMAIL="info@rwmel.se",
         DEFAULT_FROM_EMAIL="support@rwmel.se",
+        SUPPORT_FROM_EMAIL="support@rwmel.se",
     )
     def test_contact_form_sends_to_info_address(self):
         response = self.client.post(
@@ -353,8 +358,10 @@ class ContactFormTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Thank you! We have received your request.")
-        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(mail.outbox[0].to, ["info@rwmel.se"])
+        self.assertEqual(mail.outbox[1].to, ["customer@example.com"])
+        self.assertEqual(mail.outbox[1].reply_to, ["info@rwmel.se"])
         self.assertEqual(mail.outbox[0].from_email, "support@rwmel.se")
         self.assertEqual(mail.outbox[0].reply_to, ["customer@example.com"])
 
@@ -362,6 +369,7 @@ class ContactFormTests(TestCase):
         EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
         CONTACT_TO_EMAIL="info@rwmel.se",
         DEFAULT_FROM_EMAIL="services@rwmel.se",
+        SUPPORT_FROM_EMAIL="support@rwmel.se",
         EMAIL_HOST_USER="support@rwmel.se",
     )
     def test_contact_form_defaults_inquiry_type_and_uses_smtp_user_as_sender(self):
@@ -381,8 +389,10 @@ class ContactFormTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Thank you! We have received your request.")
-        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(mail.outbox[0].to, ["info@rwmel.se"])
+        self.assertEqual(mail.outbox[1].to, ["customer@example.com"])
+        self.assertEqual(mail.outbox[1].reply_to, ["info@rwmel.se"])
         self.assertEqual(mail.outbox[0].from_email, "support@rwmel.se")
 
 
@@ -437,6 +447,7 @@ class InvoiceSystemTests(TestCase):
         response = self.client.post(
             reverse("electricity:dashboard_invoice_paid", args=[invoice.pk]),
             follow=True,
+            secure=True,
         )
 
         invoice.refresh_from_db()
@@ -518,7 +529,7 @@ class InvoiceSystemTests(TestCase):
         self.assertIsNotNone(invoice.sent_at)
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to, ["invoice@example.com"])
-        self.assertEqual(mail.outbox[0].from_email, "services@rwmel.se")
+        self.assertEqual(mail.outbox[0].from_email, "Faktura@rwmel.se")
         self.assertEqual(len(mail.outbox[0].attachments), 1)
 
     @override_settings(
@@ -708,6 +719,10 @@ class BookingEmailTests(TestCase):
         session = self.client.session
         session["electricity_zip_checks"] = {"service": "11144"}
         session["electricity_service_booking"] = {
+            "customer_type": "private",
+            "service_type": "electrical_panel",
+            "arrival_window": "Morning (08:00 AM - 12:00 PM)",
+            "rot_answer": "no", "use_rot": False, "access_confirm": True,
             "account_type": ServiceBooking.AccountType.PRIVATE,
             "full_name": "Service Customer",
             "email": "service@example.com",
@@ -731,8 +746,8 @@ class BookingEmailTests(TestCase):
 
         with patch("electricity.views._send_custom_booking_confirmation_email") as mocked:
             response = self.client.post(
-                reverse("electricity:service_booking_step", args=[11]),
-                {},
+                reverse("electricity:service_booking_step", args=[6]),
+                {"accept_terms": "yes"},
                 secure=True,
             )
 

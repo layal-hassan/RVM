@@ -41,6 +41,23 @@ body {
     gap: 24px;
 }
 
+@media (min-width: 981px) {
+    .dash-sidebar {
+        position: sticky;
+        top: var(--rwmh-height, 64px);
+        align-self: start;
+        height: calc(100vh - var(--rwmh-height, 64px));
+        height: calc(100dvh - var(--rwmh-height, 64px));
+        overflow-y: auto;
+        overscroll-behavior-y: contain;
+        scrollbar-width: thin;
+    }
+
+    .dash-sidebar > * {
+        flex-shrink: 0;
+    }
+}
+
 .dash-brand {
     display: flex;
     gap: 12px;
@@ -829,6 +846,7 @@ body {
 }
 
 .dash-notify-item {
+    text-decoration: none;
     padding: 12px;
     border-radius: 14px;
     background: var(--surface);
@@ -837,6 +855,17 @@ body {
     gap: 6px;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.panel-row[id^="record-"] {
+    scroll-margin-top: calc(var(--rwmh-height, 64px) + 24px);
+}
+
+.panel-row[id^="record-"]:target {
+    background: #fff1cc;
+    outline: 2px solid var(--gold);
+    outline-offset: -2px;
+    box-shadow: inset 4px 0 0 var(--gold);
 }
 
 .dash-notify-item:hover {
@@ -1120,4 +1149,83 @@ body {
     text-decoration: none;
     color: var(--navy);
     font-weight: 600;
+}
+
+.email-workflow-list {
+    display: grid;
+    gap: 12px;
+}
+
+.email-workflow-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 24px;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #fffaf2;
+}
+
+.email-workflow-info {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+}
+
+.email-workflow-info strong {
+    color: var(--navy);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.email-workflow-info small {
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.5;
+}
+
+.email-workflow-statuses {
+    display: grid;
+    gap: 8px;
+}
+
+.email-workflow-statuses > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+.email-workflow-edit {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+
+@media (max-width: 700px) {
+    .email-workflow-row {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .email-workflow-statuses {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .email-workflow-statuses > div {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 6px 10px;
+    }
+
+    .email-workflow-edit {
+        width: 100%;
+    }
 }

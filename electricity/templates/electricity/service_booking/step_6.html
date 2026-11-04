@@ -1,250 +1,99 @@
 {% extends "electricity/service_booking/base.html" %}
-
 {% load i18n %}
 
 {% block booking_content %}
-
-<form method="post" class="booking-form" data-slots-url="{% url 'electricity:service_booking_slots' %}">
+<form method="post" class="eb-form eb-review-form">
   {% csrf_token %}
-
-  <div class="booking-section">
-
-
-
-    <div class="section-header">
-
-      <span class="section-index">7</span>
-
-      {% trans "When would you like us to come?" %}
+  {% if data.customer_type == "business" %}
+  <section class="eb-card eb-review-card">
+    <div class="eb-card-header"><span class="eb-step-badge">6</span><div><h1>{% trans "Final review & confirmation" %}</h1><p>{% trans "Please review all details below before confirming your booking." %}</p></div></div>
+    <div class="eb-review-grid">
+      <div class="eb-review-column">
+       <section class="eb-review-panel"><header><h2>▣ {% trans "Booking summary" %}</h2><a href="{% url 'electricity:service_booking_step' 1 %}?resume=1">✎ {% trans "Edit" %}</a></header><dl class="eb-review-list">
+        <div><dt>{% trans "Customer type" %}</dt><dd>{% trans "Business" %}</dd></div><div><dt>{% trans "Service" %}</dt><dd>{{ data.service_type|title }}</dd></div><div><dt>{% trans "Project details" %}</dt><dd>{{ data.work_description }}</dd></div><div><dt>{% trans "Site location" %}</dt><dd>{{ data.street_address }}, {{ data.zip_code }} {{ data.city }}</dd></div><div><dt>{% trans "Preferred schedule" %}</dt><dd>{{ data.preferred_date }} · {{ data.arrival_window }}</dd></div>
+       </dl></section>
+       <section class="eb-review-panel"><header><h2>⚿ {% trans "Site access" %}</h2><a href="{% url 'electricity:service_booking_step' 5 %}">✎ {% trans "Edit" %}</a></header><dl class="eb-review-list eb-review-list-compact"><div><dt>{% trans "Access method" %}</dt><dd>{{ data.access_method|title }}</dd></div><div><dt>{% trans "Site contact" %}</dt><dd>{{ data.site_contact|default:"—" }}</dd></div><div><dt>{% trans "Phone" %}</dt><dd>{{ data.site_contact_phone|default:"—" }}</dd></div><div><dt>{% trans "Instructions" %}</dt><dd>{{ data.access_notes|default:"—" }}</dd></div></dl></section>
+      </div>
+      <div class="eb-review-column">
+       <section class="eb-review-panel"><header><h2>♙ {% trans "Contact details" %}</h2><a href="{% url 'electricity:service_booking_step' 4 %}">✎ {% trans "Edit" %}</a></header><dl class="eb-review-list eb-review-list-compact"><div><dt>{% trans "Contact person" %}</dt><dd>{{ data.full_name }}</dd></div><div><dt>{% trans "Phone" %}</dt><dd>{{ data.phone }}</dd></div><div><dt>{% trans "Email" %}</dt><dd>{{ data.email }}</dd></div></dl></section>
+       <section class="eb-review-panel"><header><h2>▥ {% trans "Company details" %}</h2><a href="{% url 'electricity:service_booking_step' 4 %}">✎ {% trans "Edit" %}</a></header><dl class="eb-review-list eb-review-list-compact"><div><dt>{% trans "Company name" %}</dt><dd>{{ data.company_name }}</dd></div><div><dt>{% trans "Organisation number" %}</dt><dd>{{ data.organization_number }}</dd></div><div><dt>{% trans "Billing email" %}</dt><dd>{{ data.billing_email }}</dd></div><div><dt>{% trans "Invoice reference" %}</dt><dd>{{ data.invoice_reference|default:"—" }}</dd></div><div><dt>{% trans "Purchase order number" %}</dt><dd>{{ data.purchase_order_number|default:"—" }}</dd></div></dl><p class="eb-review-info">ⓘ {% trans "The invoice will be issued after the work has been completed." %}</p></section>
+       <section class="eb-review-panel"><header><h2>▤ {% trans "Commercial information" %}</h2><a href="{% url 'electricity:service_booking_step' 5 %}">✎ {% trans "Edit" %}</a></header><p class="eb-review-notes">{{ data.commercial_notes|default:"—" }}</p>{% if data.business_attachments %}<div class="eb-review-attachments"><strong>{% trans "Attachments" %}</strong>{% for attachment in data.business_attachments %}<span>✓ {{ attachment.name }}</span>{% endfor %}</div>{% endif %}</section>
+      </div>
 
     </div>
+    <label class="eb-review-consent"><input type="checkbox" name="accept_terms" value="yes" {% if data.accept_terms %}checked{% endif %}><span>{% trans "I have read and agree to the" %} <a href="{% url 'electricity:terms' %}">{% trans "Terms & Conditions" %}</a>.<small>{% trans "I confirm that the information provided is correct and agree to the Privacy Policy." %}</small></span></label>
+  </section>
+  {% else %}
+  <section class="eb-card eb-review-card">
+    <div class="eb-card-header">
+      <span class="eb-step-badge">6</span>
+      <div>
+        <h1>{% trans "Final review & confirmation" %}</h1>
+        <p>{% trans "Please review all details below before confirming your booking." %}</p>
+      </div>
+    </div>
 
+    <div class="eb-review-grid">
+      <div class="eb-review-column">
+        <section class="eb-review-panel">
+          <header><h2>▣ {% trans "Booking summary" %}</h2><a href="{% url 'electricity:service_booking_step' 1 %}?resume=1">✎ {% trans "Edit" %}</a></header>
+          <dl class="eb-review-list">
+            <div><dt>♙ {% trans "Customer type" %}</dt><dd>{{ data.customer_type|title }}</dd></div>
+            <div><dt>♨ {% trans "Service" %}</dt><dd>{{ data.service_type|title }}</dd></div>
+            <div><dt>▤ {% trans "Work details" %}</dt><dd>{{ data.work_description }}</dd></div>
+            <div><dt>⌖ {% trans "Location" %}</dt><dd>{{ data.street_address }}, {{ data.zip_code }} {{ data.city }}</dd></div>
+            <div><dt>◷ {% trans "Date & time" %}</dt><dd>{{ data.preferred_date }} · {{ data.arrival_window }}</dd></div>
 
+          </dl>
+        </section>
 
-    {% if data.pricing_type == "hourly" %}
-
-      <div class="schedule-block">
-
-        <div class="schedule-title">
-
-          <span class="schedule-icon">🕒</span>
-
-          {% trans "Estimated Duration" %}
-
-        </div>
-
-
-
-        <div class="form-grid">
-
-          <label class="form-label">
-
-            {% trans "Estimated hours" %}
-
-            <select name="hourly_hours" id="hourly-hours">
-              <option value="1" {% if data.hourly_hours|stringformat:"s" == "1" %}selected{% endif %}>{% trans "1 hour" %}</option>
-
-              <option value="2" {% if data.hourly_hours|stringformat:"s" == "2" %}selected{% endif %}>{% trans "2 hours" %}</option>
-
-              <option value="3" {% if data.hourly_hours|stringformat:"s" == "3" %}selected{% endif %}>{% trans "3 hours" %}</option>
-
-              <option value="4" {% if data.hourly_hours|stringformat:"s" == "4" %}selected{% endif %}>{% trans "4 hours" %}</option>
-
-              <option value="5" {% if data.hourly_hours|stringformat:"s" == "5" %}selected{% endif %}>{% trans "5 hours" %}</option>
-
-              <option value="6" {% if data.hourly_hours|stringformat:"s" == "6" %}selected{% endif %}>{% trans "6 hours" %}</option>
-
-              <option value="7" {% if data.hourly_hours|stringformat:"s" == "7" %}selected{% endif %}>{% trans "7 hours" %}</option>
-
-              <option value="8" {% if data.hourly_hours|stringformat:"s" == "8" %}selected{% endif %}>{% trans "8 hours" %}</option>
-
-            </select>
-
-          </label>
-
-
-
-          <div class="form-label">
-
-            <span class="input-note">{% trans "Estimated price" %}</span>
-
-            <div class="price-preview">
-
-              <strong id="hourly-price">{{ cost_total }} {{ currency }}</strong>
-
-            </div>
-
-          </div>
-
-        </div>
-
+        <section class="eb-review-panel">
+          <header><h2>⚿ {% trans "Access instructions" %}</h2><a href="{% url 'electricity:service_booking_step' 5 %}">✎ {% trans "Edit" %}</a></header>
+          <p class="eb-review-notes">{{ data.access_notes|default:"—"|linebreaksbr }}</p>
+        </section>
       </div>
 
-    {% endif %}
+      <div class="eb-review-column">
+        <section class="eb-review-panel">
+          <header><h2>♙ {% trans "Contact details" %}</h2><a href="{% url 'electricity:service_booking_step' 4 %}">✎ {% trans "Edit" %}</a></header>
+          <dl class="eb-review-list eb-review-list-compact">
+            <div><dt>{% trans "Name" %}</dt><dd>{{ data.full_name }}</dd></div>
+            <div><dt>{% trans "Phone" %}</dt><dd>{{ data.phone }}</dd></div>
+            <div><dt>{% trans "Email" %}</dt><dd>{{ data.email }}</dd></div>
+          </dl>
+        </section>
 
-
-
-    <div class="schedule-block">
-
-      <div class="schedule-title">
-
-        <span class="schedule-icon" aria-hidden="true">
-          <svg class="booking-calendar-icon" viewBox="0 0 24 24" fill="none">
-            <path d="M7 3v3M17 3v3M4 9h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/>
-            <path d="M8 13h2M14 13h2M8 17h2M14 17h2"/>
-          </svg>
-        </span>
-
-        {% trans "Primary Choice" %}
-
-      </div>
-      {% if duration_assumed %}
-        <div class="schedule-note">
-          {% trans "Availability is shown for a 1-hour window. Select services or hours to refine the time slots." %}
-        </div>
-      {% endif %}
-
-      <div class="form-grid">
-
-        <label class="form-label">
-
-          {% trans "Select Date" %}
-
-          <div class="date-input-shell">
-            <input class="form-control" type="date" name="preferred_date" value="{{ data.preferred_date|default:'' }}">
-            <button class="date-input-trigger" type="button" data-date-trigger aria-label="{% trans 'Open calendar' %}">
-              <svg class="booking-calendar-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M7 3v3M17 3v3M4 9h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/>
-                <path d="M8 13h2M14 13h2M8 17h2M14 17h2"/>
-              </svg>
-            </button>
-          </div>
-
-        </label>
-
-
-
-        <label class="form-label">
-
-          {% trans "Select Time Slot" %}
-
-          <select class="time-slot-select" name="preferred_time_slot">
-            <option value="">{% trans "Select time slot" %}</option>
-
-            {% for slot in available_slots %}
-
-              <option value="{{ slot.start }}" {% if data.preferred_time_slot == slot.start %}selected{% endif %}>
-
-                {{ slot.label }}
-
-              </option>
-
-            {% endfor %}
-
-          </select>
-          <div class="time-slot-note{% if data.preferred_date and not available_slots %} is-empty{% endif %}" data-slot-note="preferred">
-            {% if data.preferred_date and not available_slots %}
-              {% trans "No availability for the selected date." %}
+        <section class="eb-review-panel">
+          <header><h2>⌂ {% trans "ROT information" %}</h2><a href="{% url 'electricity:service_booking_step' 4 %}">✎ {% trans "Edit" %}</a></header>
+          <dl class="eb-review-list eb-review-list-compact">
+            <div><dt>{% trans "ROT" %}</dt><dd>{% if pricing.rot_requested %}{% trans "Yes, apply ROT" %} ({{ pricing.rot_percent|floatformat:0 }}%){% else %}{% trans "No" %}{% endif %}</dd></div>
+            {% if pricing.rot_requested %}
+              <div><dt>{% trans "Personal identity number" %}</dt><dd>{{ data.personal_id }}</dd></div>
+              <div><dt>{% trans "I own the property" %}</dt><dd class="eb-review-yes">✓ {% trans "Yes" %}</dd></div>
+              <div><dt>{% trans "I will pay electronically" %}</dt><dd class="eb-review-yes">✓ {% trans "Yes" %}</dd></div>
             {% endif %}
-          </div>
-
-        </label>
-
+          </dl>
+          <p class="eb-review-info">ⓘ {% trans "ROT may reduce eligible labour costs by up to 30%. Approval depends on your eligibility and available tax deduction. Materials, transport and other costs are not included." %}</p>
+        </section>
       </div>
+
 
     </div>
 
-
-
-    <div class="schedule-block">
-
-      <div class="schedule-title">
-
-        <span class="schedule-icon">🔁</span>
-
-        {% trans "Alternative Choice (Optional)" %}
-
+    <section class="eb-review-panel eb-payment-panel">
+      <header><h2>▤ {% trans "Payment details" %}</h2></header>
+      <div class="eb-payment-grid">
+        <div><b>▧</b><span>{% trans "Payment method" %}<strong>{% trans "Invoice" %}</strong></span></div>
+        <div><b>▣</b><span>{% trans "Payment terms" %}<strong>{% trans "Will be confirmed by email" %}</strong></span></div>
+        <div><b>✉</b><span>{% trans "Invoice sent to" %}<strong>{{ data.email }}</strong></span></div>
+        <p>ⓘ {% trans "The invoice will be issued after the work has been completed. The applicable payment terms will be confirmed with you by email." %}</p>
       </div>
+    </section>
 
-
-
-      <div class="schedule-note">
-
-        {% trans "Adding an alternative window helps us confirm your booking faster." %}
-
-      </div>
-
-
-
-      <div class="form-grid">
-
-        <label class="form-label">
-
-          {% trans "Select Date" %}
-
-          <div class="date-input-shell">
-            <input class="form-control" type="date" name="alt_date" value="{{ data.alt_date|default:'' }}">
-            <button class="date-input-trigger" type="button" data-date-trigger aria-label="{% trans 'Open calendar' %}">
-              <svg class="booking-calendar-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M7 3v3M17 3v3M4 9h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/>
-                <path d="M8 13h2M14 13h2M8 17h2M14 17h2"/>
-              </svg>
-            </button>
-          </div>
-
-        </label>
-
-
-
-        <label class="form-label">
-
-          {% trans "Select Time Slot" %}
-
-          <select class="time-slot-select" name="alt_time_slot">
-            <option value="">{% trans "Select time slot" %}</option>
-
-            {% for slot in alt_available_slots %}
-
-              <option value="{{ slot.start }}" {% if data.alt_time_slot == slot.start %}selected{% endif %}>
-
-                {{ slot.label }}
-
-              </option>
-
-            {% endfor %}
-
-          </select>
-          <div class="time-slot-note{% if data.alt_date and not alt_available_slots %} is-empty{% endif %}" data-slot-note="alt">
-            {% if data.alt_date and not alt_available_slots %}
-              {% trans "No availability for the selected date." %}
-            {% endif %}
-          </div>
-
-        </label>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-
-  <div class="booking-actions">
-
-    <a class="btn btn-light" href="{% url 'electricity:service_booking_step' 5 %}">
-
-      {% trans "Back" %}
-
-    </a>
-
-    <button class="btn btn-primary" type="submit">
-
-      {% trans "Continue" %}
-
-    </button>
-
-  </div>
-
+    <label class="eb-review-consent"><input type="checkbox" name="accept_terms" value="yes" {% if data.accept_terms %}checked{% endif %}><span>{% trans "I have read and agree to the" %} <a href="{% url 'electricity:terms' %}">{% trans "Terms & Conditions" %}</a>.<small>{% trans "By checking this box and confirming your booking, you agree to our Terms & Conditions and Privacy Policy." %}</small></span></label>
+  </section>
+  {% endif %}
+  <div class="eb-note">{% trans "Our team will confirm the price and schedule after reviewing your request." %}</div>
+  <div class="eb-actions eb-review-actions"><a class="btn btn-light" href="{% url 'electricity:service_booking_step' 5 %}"> {% trans "Back" %}</a><button class="btn btn-primary" type="submit">{% trans "Confirm booking" %} </button></div>
 </form>
 {% endblock %}

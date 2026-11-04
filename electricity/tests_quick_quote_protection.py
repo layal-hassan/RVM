@@ -2,11 +2,12 @@ import datetime
 from unittest.mock import patch
 
 from django.core import mail, signing
+from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import ConsultationRequest
+from .models import AutomatedEmailTemplate, ConsultationRequest
 
 
 @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend", SECURE_SSL_REDIRECT=False, FORM_IP_LIMIT=5, FORM_IP_DAILY_LIMIT=20)
@@ -41,6 +42,49 @@ class QuickQuoteProtectionTests(TestCase):
         self.assertTrue(response.context["quote_form"].has_error("full_name"))
         self.assertEqual(ConsultationRequest.objects.count(), 0)
         self.assertEqual(len(mail.outbox), 0)
+
+    def test_dashboard_lists_and_edits_quick_quote_email_used_on_submission(self):
+        staff = get_user_model().objects.create_user(username="email-editor", is_staff=True)
+        self.client.force_login(staff)
+        response = self.client.get(reverse("electricity:dashboard_email_templates"))
+        self.assertContains(response, "Quick Quote (Homepage)")
+        template = AutomatedEmailTemplate.objects.get(workflow="quick_quote")
+        response = self.client.post(
+            reverse("electricity:dashboard_email_template_edit", args=[template.pk]),
+            {
+                "company_enabled": "on", "customer_enabled": "on",
+                "company_recipient": "quotes@example.com",
+                "company_subject": "Homepage request {reference}",
+                "company_body": "{name}: {details} ({customer_type}, {postcode})",
+                "customer_subject": "We received {reference}",
+                "customer_body": "Your request number is {request_id}.",
+            },
+        )
+        self.assertRedirects(response, reverse("electricity:dashboard_email_templates"))
+        self.client.logout()
+        self.assertEqual(self.submit(self.payload(customer_type="business", postcode="11144")).status_code, 302)
+        quote = ConsultationRequest.objects.get()
+        self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(mail.outbox[0].to, ["quotes@example.com"])
+        self.assertEqual(mail.outbox[0].subject, f"Homepage request #{quote.pk}")
+        self.assertIn("Business, 11144", mail.outbox[0].body)
+        self.assertEqual(mail.outbox[1].subject, f"We received #{quote.pk}")
+        self.assertEqual(mail.outbox[1].body, f"Your request number is {quote.pk}.")
+
+    def test_disabled_quick_quote_emails_still_save_the_request(self):
+        AutomatedEmailTemplate.objects.filter(workflow="quick_quote").update(
+            company_enabled=False, customer_enabled=False,
+        )
+        self.assertEqual(self.submit(self.payload()).status_code, 302)
+        self.assertEqual(ConsultationRequest.objects.count(), 1)
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_missing_quick_quote_template_uses_default_confirmation(self):
+        AutomatedEmailTemplate.objects.filter(workflow="quick_quote").delete()
+        self.assertEqual(self.submit(self.payload()).status_code, 302)
+        self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(mail.outbox[1].subject, "RWM EL - Quote request received")
+        self.assertIn(f"Your request reference is #{ConsultationRequest.objects.get().pk}.", mail.outbox[1].body)
 
     def test_honeypot_and_missing_or_forged_tokens_are_rejected(self):
         for overrides in ({"website": "bot"}, {"submission_token": ""}, {"submission_token": "forged"}):

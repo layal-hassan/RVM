@@ -1,11 +1,9 @@
 {% extends "electricity/electrician_booking/base.html" %}{% load i18n %}
 {% block booking_content %}<form method="post" class="eb-form eb-work-details-form">{% csrf_token %}
-<section class="eb-card"><div class="eb-card-header"><span class="eb-step-badge">3</span><div><h1>{% if data.customer_type == "business" %}{% trans "Project details" %}{% else %}{% trans "Tell us more about the work" %}{% endif %}</h1><p>{% if data.customer_type == "business" %}{% trans "Tell us more about the project so we can prepare the right solution for your business." %}{% else %}{% trans "Help us understand what needs to be done." %}{% endif %}</p></div></div>
+<section class="eb-card"><div class="eb-card-header"><span class="eb-step-badge">2</span><div><h1>{% trans "How much time should we reserve?" %}</h1><p>{% trans "Choose the estimated time needed for your electrical work." %}</p></div></div>
 <label class="eb-label">{% if data.customer_type == "business" %}{% trans "How much time should we reserve?" %}{% else %}{% trans "How many hours should we reserve?" %}{% endif %}</label>
 <div class="eb-hours">{% for value in "12345" %}
 <label class="eb-hour-card"><input type="radio" name="hours" value="{{ value }}" {% if data.hours|stringformat:"s" == value %}checked{% endif %}><span class="eb-hour-value">{% if value == "5" %}5+{% else %}{{ value }}{% endif %}</span><span class="eb-hour-label">{% trans "Hours" %}</span></label>{% endfor %}</div>
 <div class="eb-note"><strong>{% trans "This is the maximum time reserved, not the final amount charged." %}</strong> {% trans "You only pay for the actual time worked, subject to the minimum call-out charge." %}</div>
-<label class="eb-label">{% if data.customer_type == "business" %}{% trans "Describe the project" %}{% else %}{% trans "Describe the work" %}{% endif %}</label><textarea class="form-control eb-textarea" name="work_description" rows="5" maxlength="500" placeholder="{% trans 'Please describe what needs to be repaired, installed or checked.' %}">{{ data.work_description|default:"" }}</textarea>
-<label class="eb-label">{% trans "Add attachments (optional)" %}</label><div class="eb-inline-note">{% trans "Attachment upload will be added after the booking paths are finalized." %}</div>
-</section><div class="eb-actions"><a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 2 %}">{% trans "Back" %}</a><button class="btn btn-primary" type="submit">{% trans "Continue to location" %}</button></div>
+</section><div class="eb-actions"><a class="btn btn-light" href="{% url 'electricity:electrician_booking_step' 2 %}?resume=1">{% trans "Back" %}</a><button class="btn btn-primary" type="submit">{% trans "Continue to location" %}</button></div>
 </form>{% endblock %}

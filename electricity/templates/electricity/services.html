@@ -238,7 +238,7 @@
       <p>{% trans "Tell us what you need and we'll get back to you quickly with the next steps." %}</p>
       <div class="services-trust-actions">
         <a class="btn btn-primary" href="{% url 'electricity:service_booking_step' 1 %}">{% trans "Book a service" %} </a>
-        <a class="btn btn-secondary" href="{% url 'electricity:quote_request_step' 1 %}">{% trans "Get a quote" %} </a>
+        <a class="btn btn-secondary" href="{% url 'electricity:zip_check' 'consultation' %}">{% trans "Get a quote" %} </a>
       </div>
       <div class="services-booking-notes">
         <span>▣ {% trans "Flexible appointments" %}</span>

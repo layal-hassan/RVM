@@ -23,7 +23,7 @@
             <h1>{% trans "Thanks - we've received your request" %}</h1>
             <p>{% trans "Our team will review your information and contact you shortly to confirm the consultation and next steps." %}</p>
             <div class="thankyou-actions">
-                <a class="btn btn-primary booking-btn" href="{% url 'electricity:home' %}">{% trans "Back to Home" %}</a>
+                <a data-site-back class="btn btn-primary booking-btn" href="{% url 'electricity:services' %}">{% trans "Back" %}</a>
                 <a class="btn btn-outline-primary booking-btn" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an Electrician" %}</a>
             </div>
             <div class="thankyou-note">
@@ -32,5 +32,6 @@
         </div>
     </div>
 </main>
+<script defer src="{% static 'electricity/js/site-back.js' %}?v=20261103-1"></script>
 </body>
 </html>

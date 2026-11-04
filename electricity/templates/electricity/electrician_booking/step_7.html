@@ -1,6 +1,6 @@
 {% extends "electricity/electrician_booking/base.html" %}{% load i18n %}
 {% block booking_content %}<form method="post" class="eb-form" enctype="multipart/form-data">{% csrf_token %}
-<section class="eb-card"><div class="eb-card-header"><span class="eb-step-badge">7</span><div><h1>{% if data.customer_type == "business" %}{% trans "Access & commercial information" %}{% else %}{% trans "Access details" %}{% endif %}</h1><p>{% trans "Help us prepare the visit and give you the best possible service." %}</p></div></div>
+<section class="eb-card"><div class="eb-card-header"><span class="eb-step-badge">6</span><div><h1>{% if data.customer_type == "business" %}{% trans "Access & commercial information" %}{% else %}{% trans "Access details" %}{% endif %}</h1><p>{% trans "Help us prepare the visit and give you the best possible service." %}</p></div></div>
 {% if data.customer_type == "business" %}
 <div class="eb-business-access-grid">
  <section class="eb-business-panel"><h2>⚿ {% trans "Site access" %}</h2><p>{% trans "Let us know how we can access the property when the work starts." %}</p>

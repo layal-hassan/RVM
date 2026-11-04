@@ -12,7 +12,7 @@
     {% endif %}
     <link rel="stylesheet" href="{% static 'electricity/css/select-system.css' %}?v=20261019-2">
     <link rel="stylesheet" href="{% static 'electricity/css/electricity.css' %}?v=20261018-2">
-    <link rel="stylesheet" href="{% static 'electricity/css/dashboard.css' %}?v=20261021-2">
+    <link rel="stylesheet" href="{% static 'electricity/css/dashboard.css' %}?v=20261104-3">
     <link rel="stylesheet" href="{% static 'electricity/css/global_header.css' %}?v=20261027-6">
     <link rel="stylesheet" href="{% static 'electricity/css/responsive.css' %}?v=20261020-2">
     <link rel="stylesheet" href="{% static 'electricity/css/typography.css' %}">
@@ -72,6 +72,7 @@
 
                 <div class="dash-nav-section">Bookings & Requests</div>
                 <a href="{% url 'electricity:dashboard_requests' %}">Requests</a>
+                <a href="{% url 'electricity:dashboard_contact_inquiries' %}">Contact Inquiries</a>
                 <a href="{% url 'electricity:dashboard_quote_requests' %}">Quote Requests</a>
                 <a href="{% url 'electricity:dashboard_bookings' %}">Bookings</a>
                 <a href="{% url 'electricity:dashboard_service_bookings' %}">Service Bookings</a>
@@ -123,12 +124,8 @@
                             <span class="sr-only">Notifications</span>
                         </button>
                         <div class="dash-notify-panel" id="dash-notify-panel"
-                             data-mark-read-url="{% url 'electricity:admin_notifications_mark_read' %}"
-                             data-url-consultation="{% url 'electricity:dashboard_bookings' %}"
-                             data-url-service="{% url 'electricity:dashboard_service_bookings' %}"
-                             data-url-electrician="{% url 'electricity:dashboard_electrician_bookings' %}"
-                             data-url-oncall="{% url 'electricity:dashboard_on_call_bookings' %}"
-                             data-url-careers="{% url 'electricity:dashboard_career_applications' %}">
+                             data-feed-url="{% url 'electricity:admin_notifications_feed' %}"
+                             data-mark-read-url="{% url 'electricity:admin_notifications_mark_read' %}">
                             <div class="dash-notify-head">
                                 <div>
                                     <div class="dash-notify-title">Notifications</div>
@@ -138,10 +135,10 @@
                             </div>
                             <div class="dash-notify-list">
                                 {% for note in notifications %}
-                                    <div class="dash-notify-item{% if note.is_read %} is-read{% else %} is-unread{% endif %}" data-id="{{ note.id }}" data-message="{{ note.message|default:'' }}">
+                                    <a class="dash-notify-item{% if note.is_read %} is-read{% else %} is-unread{% endif %}" href="{{ note.get_target_url }}" data-id="{{ note.id }}">
                                         <div class="dash-notify-time">{{ note.created_at|date:"M d, H:i" }}</div>
                                         <div class="dash-notify-msg">{{ note.message }}</div>
-                                    </div>
+                                    </a>
                                 {% empty %}
                                     <div class="dash-notify-empty">No notifications yet.</div>
                                 {% endfor %}
@@ -172,6 +169,8 @@
 
     <script defer src="{% static 'electricity/vendor/tom-select/tom-select.complete.min.js' %}"></script>
     <script defer src="{% static 'electricity/js/global.js' %}"></script>
+    <script defer src="{% static 'electricity/js/dashboard-notifications.js' %}?v=20261104-1"></script>
+    <script defer src="{% static 'electricity/js/site-back.js' %}?v=20261103-1"></script>
     <script defer src="{% static 'electricity/js/global_header.js' %}?v=20261027-3"></script>
     <script>
         (() => {
@@ -184,6 +183,34 @@
             if (dashboardLinks.length) {
                 dashboardLinks[0].link.classList.add("is-active");
                 dashboardLinks[0].link.setAttribute("aria-current", "page");
+            }
+
+            const sidebar = document.querySelector(".dash-sidebar");
+            const sidebarScrollKey = "electricity_dashboard_sidebar_scroll";
+            const desktopSidebar = window.matchMedia("(min-width: 981px)");
+            const restoreSidebarScroll = () => {
+                if (!sidebar || !desktopSidebar.matches) return;
+                try {
+                    const savedTop = Number(sessionStorage.getItem(sidebarScrollKey));
+                    if (Number.isFinite(savedTop) && savedTop >= 0) sidebar.scrollTop = savedTop;
+                } catch {
+                    // The menu remains usable when browser storage is unavailable.
+                }
+            };
+            const saveSidebarScroll = () => {
+                if (!sidebar || !desktopSidebar.matches) return;
+                try {
+                    sessionStorage.setItem(sidebarScrollKey, String(sidebar.scrollTop));
+                } catch {
+                    // Storage restrictions must not interrupt navigation.
+                }
+            };
+            restoreSidebarScroll();
+            window.addEventListener("load", restoreSidebarScroll, { once: true });
+            window.addEventListener("pagehide", saveSidebarScroll);
+            if (sidebar) {
+                sidebar.addEventListener("scroll", saveSidebarScroll, { passive: true });
+                sidebar.addEventListener("click", saveSidebarScroll);
             }
 
             const searchInput = document.getElementById("dash-nav-search");

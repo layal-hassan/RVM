@@ -84,7 +84,9 @@ class ConsultationBookingAdmin(admin.ModelAdmin):
 
 
 class ServiceBookingAdmin(admin.ModelAdmin):
-    list_display = ("full_name", "account_type", "pricing_type", "preferred_date", "preferred_time_slot", "status", "created_at")
+    from .forms import ServiceBookingForm
+    form = ServiceBookingForm
+    list_display = ("full_name", "account_type", "service_type", "price_display", "preferred_date", "preferred_time_slot", "status", "created_at")
     list_filter = ("account_type", "status", "created_at")
     search_fields = ("full_name", "email", "phone")
     ordering = ("-created_at",)

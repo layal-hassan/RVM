@@ -101,7 +101,7 @@ class PublicFormProtectionTests(TestCase):
         for route, step, session_key in (
             ("quote_request_step", 3, "electricity_quote_request"),
             ("electrician_booking_step", 8, "electricity_electrician_booking"),
-            ("service_booking_step", 11, "electricity_service_booking"),
+            ("service_booking_step", 6, "electricity_service_booking"),
             ("on_call_booking_step", 4, "electricity_on_call_booking"),
         ):
             for current_step in (1, step):
@@ -176,7 +176,7 @@ class PublicFormProtectionTests(TestCase):
         session.save()
         def post(step, data):
             return self.client.post(reverse("electricity:on_call_booking_step", args=[step]), data)
-        self.assertEqual(post(1, {"coverage_times": ["evenings"], "coverage_scope": ["power_outages"], "response_speed": "standard"}).status_code, 302)
+        self.assertEqual(post(1, {"customer_type": "business", "coverage_times": ["evenings"], "coverage_scope": ["power_outages"], "response_speed": "standard"}).status_code, 302)
         self.assertEqual(post(2, {
             "entity_type": "business", "organization_name": "ACME AB", "organization_number": "556677-8899",
             "contact_person": "Customer", "email": "customer@example.com", "phone": "0701234567",

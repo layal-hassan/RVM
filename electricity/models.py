@@ -1,5 +1,6 @@
 ﻿import datetime
 import re
+import uuid
 from decimal import Decimal
 from django.db import models
 from django.utils.text import slugify
@@ -100,11 +101,40 @@ class ContactInquiry(models.Model):
         return f"{self.full_name} ({self.get_inquiry_type_display()})"
 
 
+class CompanyEmailDelivery(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "Retry scheduled"
+        SENDING = "sending", "Sending"
+        ACCEPTED = "accepted", "Accepted by mail server"
+        FAILED = "failed", "Needs attention"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    subject = models.CharField(max_length=998)
+    from_email = models.CharField(max_length=320)
+    recipients = models.JSONField(default=list)
+    message_id = models.CharField(max_length=255)
+    payload = models.BinaryField(editable=False)
+    status = models.CharField(max_length=12, choices=Status.choices, default=Status.PENDING)
+    attempts = models.PositiveIntegerField(default=0)
+    next_attempt_at = models.DateTimeField(default=timezone.now, null=True, blank=True)
+    locked_until = models.DateTimeField(null=True, blank=True)
+    claim_token = models.UUIDField(null=True, editable=False)
+    last_error = models.CharField(max_length=160, blank=True)
+    accepted_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [models.Index(fields=["status", "next_attempt_at"], name="company_email_due_idx")]
+
+
 class AutomatedEmailTemplate(models.Model):
     class Workflow(models.TextChoices):
         CONTACT = "contact", "Contact Us"
         FEEDBACK = "feedback", "Submit Feedback"
         QUOTE = "quote", "Request a Quote / Send Request"
+        QUICK_QUOTE = "quick_quote", "Quick Quote (Homepage)"
         CONSULTATION = "consultation", "Consultation Booking"
         ELECTRICIAN = "electrician", "Electrician Booking"
         SERVICE = "service", "Service Booking"
@@ -154,6 +184,28 @@ class ServiceBooking(models.Model):
     class PricingType(models.TextChoices):
         HOURLY = "hourly", "Hourly electrician"
         FIXED = "fixed", "Fixed service price"
+
+    booking_version = models.PositiveSmallIntegerField(default=1, editable=False)
+    service_type = models.CharField(max_length=60, blank=True, choices=[
+        ("electrical_repair", "Electrical repair"), ("outlets_switches", "Install outlets or switches"),
+        ("lighting", "Lighting installation"), ("electrical_panel", "Electrical panel"),
+        ("kitchen_appliance", "Kitchen & appliance connection"), ("ev_charger", "EV charger"),
+        ("renovation", "Renovation or new installation"), ("inspection", "Electrical inspection"),
+        ("other", "Other electrical work"),
+    ])
+    booking_details = models.JSONField(default=dict, blank=True)
+
+    @property
+    def price_display(self):
+        if self.booking_version == 2 and not self.estimated_total:
+            return "To be confirmed"
+        return f"{self.estimated_total:.2f} {self.currency}"
+
+    @property
+    def attachment_links(self):
+        from django.core.files.storage import default_storage
+        return [dict(item, url=default_storage.url(item["path"])) for item in self.uploads
+                if isinstance(item, dict) and item.get("path")]
 
     account_type = models.CharField(max_length=20, choices=AccountType.choices)
     full_name = models.CharField(max_length=160)
@@ -1223,6 +1275,24 @@ class BookingStatusUpdate(models.Model):
 
 
 class AdminNotification(models.Model):
+    electrician_booking = models.ForeignKey(
+        "ElectricianBooking", on_delete=models.CASCADE, related_name="admin_notifications", null=True, blank=True
+    )
+    contact_inquiry = models.ForeignKey(
+        "ContactInquiry", on_delete=models.CASCADE, related_name="admin_notifications", null=True, blank=True
+    )
+    feedback = models.ForeignKey(
+        "CustomerFeedback", on_delete=models.CASCADE, related_name="admin_notifications", null=True, blank=True
+    )
+    career_application = models.ForeignKey(
+        "CareerApplication", on_delete=models.CASCADE, related_name="admin_notifications", null=True, blank=True
+    )
+    support_ticket = models.ForeignKey(
+        "SupportTicket", on_delete=models.CASCADE, related_name="admin_notifications", null=True, blank=True
+    )
+    outside_area_request = models.ForeignKey(
+        "ServiceRequestOutsideArea", on_delete=models.CASCADE, related_name="admin_notifications", null=True, blank=True
+    )
     booking = models.ForeignKey(
         ConsultationBooking, on_delete=models.CASCADE, related_name="admin_notifications", null=True, blank=True
     )
@@ -1247,6 +1317,45 @@ class AdminNotification(models.Model):
 
     def __str__(self):
         return self.message
+
+    def get_target_url(self):
+        from django.urls import reverse
+
+        destinations = (
+            ("consultation_request", "dashboard_requests"),
+            ("booking", "dashboard_bookings"),
+            ("service_booking", "dashboard_service_bookings"),
+            ("electrician_booking", "dashboard_electrician_bookings"),
+            ("on_call_booking", "dashboard_on_call_bookings"),
+            ("quote_request", "dashboard_quote_requests"),
+            ("contact_inquiry", "dashboard_contact_inquiries"),
+            ("feedback", "dashboard_feedback"),
+            ("career_application", "dashboard_career_applications"),
+            ("support_ticket", "dashboard_support_tickets"),
+            ("outside_area_request", "dashboard_outside_area_requests"),
+        )
+        for field, route in destinations:
+            record_id = getattr(self, f"{field}_id")
+            if record_id:
+                return f"{reverse('electricity:' + route)}#record-{record_id}"
+        # Historical alerts without a recoverable record still open their own table.
+        message = self.message.lower()
+        for keywords, route in (
+            (("quick quote", "consultation request"), "dashboard_requests"),
+            (("contact inquiry", "brf quote"), "dashboard_contact_inquiries"),
+            (("feedback",), "dashboard_feedback"),
+            (("career", "application for"), "dashboard_career_applications"),
+            (("electrician",), "dashboard_electrician_bookings"),
+            (("support",), "dashboard_support_tickets"),
+            (("outside-area",), "dashboard_outside_area_requests"),
+            (("on-call",), "dashboard_on_call_bookings"),
+            (("quote request", "service request"), "dashboard_quote_requests"),
+            (("service booking",), "dashboard_service_bookings"),
+            (("consultation booking",), "dashboard_bookings"),
+        ):
+            if any(keyword in message for keyword in keywords):
+                return reverse("electricity:" + route)
+        return reverse("electricity:dashboard")
 
 
 class CustomerProfile(models.Model):
@@ -1407,7 +1516,8 @@ class Invoice(models.Model):
         invoice_discount = Decimal("0")
         base_after_rows = subtotal - row_discounts
         if self.discount_type == "fixed":
-            invoice_discount = min(self.discount_value, base_after_rows)
+            sign = Decimal("-1") if base_after_rows < 0 else Decimal("1")
+            invoice_discount = sign * min(abs(self.discount_value), abs(base_after_rows))
         elif self.discount_type == "percent":
             invoice_discount = base_after_rows * self.discount_value / Decimal("100")
         ratio = (base_after_rows - invoice_discount) / base_after_rows if base_after_rows else Decimal("1")
@@ -1467,7 +1577,8 @@ class InvoiceLine(models.Model):
     @property
     def discount_amount(self):
         if self.discount_type == "fixed":
-            return min(self.discount_value, self.total_ex_vat)
+            sign = Decimal("-1") if self.total_ex_vat < 0 else Decimal("1")
+            return sign * min(abs(self.discount_value), abs(self.total_ex_vat))
         if self.discount_type == "percent":
             return self.total_ex_vat * self.discount_value / Decimal("100")
         return Decimal("0")

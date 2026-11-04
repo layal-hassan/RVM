@@ -1,0 +1,10 @@
+{% extends "electricity/dashboard/form.html" %}
+{% block page_subtitle %}Service, location, schedule, billing and site access. Prices and scheduling duration are confirmed by the team.{% endblock %}
+{% block content %}
+{{ block.super }}
+{% if form.instance.attachment_links %}
+<section class="dash-panel"><h2>Attachments</h2>
+{% for attachment in form.instance.attachment_links %}<p><a href="{{ attachment.url }}" target="_blank" rel="noopener">{{ attachment.name }}</a></p>{% endfor %}
+</section>
+{% endif %}
+{% endblock %}
