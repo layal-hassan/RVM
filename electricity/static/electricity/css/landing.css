@@ -1271,14 +1271,24 @@ html[lang|="sv" i] .home-hero-swedish {
 
   .home-hero-title {
     max-width: 100%;
-    font-size: clamp(26px, 8vw, 36px) !important;
-    line-height: 1.15 !important;
-    letter-spacing: -0.025em;
+    font-family: Arial, sans-serif !important;
+    font-size: clamp(24px, 8vw, 34px) !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+    letter-spacing: -0.02em;
     overflow-wrap: anywhere;
     text-wrap: balance;
   }
 
+  .home-hero-swedish .home-hero-opening {
+    display: block;
+    white-space: nowrap;
+  }
+
   .home-hero-copy {
+    font-family: Arial, sans-serif !important;
+    font-size: 22px !important;
+    line-height: 1.36 !important;
     text-align: center;
     overflow-wrap: anywhere;
   }

@@ -5,7 +5,7 @@
 {% block body_class %}landing-body{% endblock %}
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'electricity/css/consultation-start.css' %}?v=20261103-7">
-  <link rel="stylesheet" href="{% static 'electricity/css/landing.css' %}?v=20261105-2">
+  <link rel="stylesheet" href="{% static 'electricity/css/landing.css' %}?v=20261105-3">
 {% endblock %}
 
 {% block content %}
@@ -23,7 +23,7 @@
         {% comment %}Keep the approved Swedish copy independent of automatic translation.{% endcomment %}
         <span class="home-hero-swedish notranslate" lang="sv" translate="no">
           {% language "sv" %}
-          {% trans "Safe electrical installations." %}
+          <span class="home-hero-opening">{% trans "Safe electrical installations." %}</span>
           <span class="home-hero-price">{% trans "Honest prices." %}</span>
           <strong>{% trans "Quality that lasts." %}</strong>
           {% endlanguage %}
