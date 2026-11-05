@@ -233,8 +233,11 @@ body.rwm-mobile-menu-open {
 /* Keep Linguise's automatic language control fixed at the viewport's bottom-right. */
 body > .linguise_switcher,
 body > [class*="linguise_switcher"] {
+  display: block !important;
   position: fixed !important;
   right: 16px !important;
+  left: auto !important;
+  top: auto !important;
   bottom: calc(16px + env(safe-area-inset-bottom)) !important;
   max-width: calc(100vw - 32px) !important;
   z-index: 45 !important;
@@ -799,11 +802,6 @@ html[lang="sv"] .rwm-electricity-global-header .rwm-egh-btn {
     margin: 0;
     padding: 1px 5px;
     z-index: 20;
-  }
-
-  body > .linguise_switcher,
-  body > [class*="linguise_switcher"] {
-    display: none !important;
   }
 
   .rwm-electricity-global-header .rwm-electricity-global-header__inner {

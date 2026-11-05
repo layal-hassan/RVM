@@ -1992,13 +1992,13 @@ msgstr "Behöriga elektriker. Tydliga råd. Inget krav."
 msgid "Safe electrical installations."
 msgstr "Trygga elinstallationer."
 
-msgid "Fair prices."
+msgid "Honest prices."
 msgstr "Ärliga priser."
 
 msgid "Quality that lasts."
 msgstr "Kvalitet som håller."
 
-msgid "We help with everything from small electrical jobs to larger installations. With personal service, transparent pricing, and work carried out with care, you can feel confident with your electrician."
+msgid "We help you with everything from small electrical jobs to larger installations. With personal service, clear pricing and carefully completed work, we make it easy to feel confident in your electrician."
 msgstr "Vi hjälper dig med allt från mindre elarbeten till större installationer. Med personlig service, tydliga priser och noggrant utfört arbete gör vi det enkelt att känna sig trygg med sin elektriker."
 
 #, fuzzy
