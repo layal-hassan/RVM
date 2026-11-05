@@ -5,7 +5,7 @@
 {% block body_class %}landing-body{% endblock %}
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'electricity/css/consultation-start.css' %}?v=20261103-7">
-  <link rel="stylesheet" href="{% static 'electricity/css/landing.css' %}?v=20261101-1">
+  <link rel="stylesheet" href="{% static 'electricity/css/landing.css' %}?v=20261105-2">
 {% endblock %}
 
 {% block content %}
@@ -15,12 +15,23 @@
     <div class="home-hero-overlay"></div>
     <div class="home-hero-content">
       <h1 class="home-hero-title">
-        {% trans "Safe electrical installations." %}
-        <span>{% trans "Honest prices." %}</span>
-        <strong>{% trans "Quality that lasts." %}</strong>
+        <span class="home-hero-default">
+          {% trans "Safe electrical installations." %}
+          <span class="home-hero-price">{% trans "Honest prices." %}</span>
+          <strong>{% trans "Quality that lasts." %}</strong>
+        </span>
+        {% comment %}Keep the approved Swedish copy independent of automatic translation.{% endcomment %}
+        <span class="home-hero-swedish notranslate" lang="sv" translate="no">
+          {% language "sv" %}
+          {% trans "Safe electrical installations." %}
+          <span class="home-hero-price">{% trans "Honest prices." %}</span>
+          <strong>{% trans "Quality that lasts." %}</strong>
+          {% endlanguage %}
+        </span>
       </h1>
       <p class="home-hero-copy">
-        {% trans "We help you with everything from small electrical jobs to larger installations. With personal service, clear pricing and carefully completed work, we make it easy to feel confident in your electrician." %}
+        <span class="home-hero-default">{% trans "We help you with everything from small electrical jobs to larger installations. With personal service, clear pricing and carefully completed work, we make it easy to feel confident in your electrician." %}</span>
+        <span class="home-hero-swedish notranslate" lang="sv" translate="no">{% language "sv" %}{% trans "We help you with everything from small electrical jobs to larger installations. With personal service, clear pricing and carefully completed work, we make it easy to feel confident in your electrician." %}{% endlanguage %}</span>
       </p>
       <div class="home-hero-rates" aria-label="{% trans 'Service rates' %}">
         <div class="home-hero-rate">
