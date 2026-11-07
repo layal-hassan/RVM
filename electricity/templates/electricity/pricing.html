@@ -3,7 +3,7 @@
 
 {% block title %}{% trans "Electrical Pricing" %} | RWM EL{% endblock %}
 {% block body_class %}pricing-page{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/pricing-page.css' %}?v=20261022-12">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'electricity/css/pricing-page.css' %}?v=20261107-2">{% endblock %}
 
 {% block content %}
 <main class="pp-main" data-labor="{{ labor_rate }}" data-transport="{{ transport_fee }}" data-rot="{{ rot_percent }}" data-currency="{{ currency }}">
@@ -17,7 +17,11 @@
         <a class="pp-btn pp-btn-gold" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}</a>
         <a class="pp-btn pp-btn-outline" href="{% url 'electricity:quote_request_step' 1 %}">{% trans "Request a free quote" %}</a>
       </div>
-      <div class="pp-hero-trust"><span>◉ {% trans "Licensed & insured" %}</span><span>⌖ {% trans "Reliable & on time" %}</span><span>⌾ {% trans "Serving Stockholm" %}</span></div>
+      <div class="pp-hero-trust">
+        <span><svg class="pp-trust-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 3 8 3v5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3Z"/><path d="m8 12 2.5 2.5L16 9"/></svg>{% trans "Licensed & insured" %}</span>
+        <span><svg class="pp-trust-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>{% trans "Reliable & on time" %}</span>
+        <span><svg class="pp-trust-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>{% trans "Serving Stockholm" %}</span>
+      </div>
     </div>
   </section>
 
@@ -48,7 +52,7 @@
 
   <section class="pp-rot-info"><div class="pp-rot-photo"></div><div class="pp-rot-copy"><div class="pp-section-label">{% trans "ROT deduction" %}</div><h2>{% trans "Save on eligible electrical work" %}</h2><p>{% trans "Homeowners may receive a tax deduction on qualifying labour costs." %}</p><ul><li>{% trans "30% deduction on eligible labour." %}</li><li>{% trans "The deduction can be applied directly to your invoice." %}</li><li>{% trans "Available for qualifying work in eligible residential properties." %}</li></ul><aside><strong>{% trans "What isn't covered?" %}</strong><p>{% trans "Materials, travel, call-out fees and other non-labour costs are not included in the ROT deduction. Eligibility depends on the homeowner, property and type of work." %}</p></aside></div></section>
 
-  <section class="pp-book"><div class="container pp-book-inner"><div><div class="pp-section-label">{% trans "Ready to get started?" %}</div><h2>{% trans "Book an Electrician Today" %}</h2><p>{% trans "Choose a service, select a time that works for you, and our electrician will take care of the rest." %}</p><div class="pp-actions"><a class="pp-btn pp-btn-gold" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}</a><a class="pp-btn pp-btn-outline" href="{% url 'electricity:quote_request_step' 1 %}">{% trans "Request a quote" %}</a></div></div></div><div class="container pp-book-trust"><span>♢ <b>{% trans "Certified & insured" %}</b></span><span>◇ <b>{% trans "Quality & safety" %}</b></span><span>⌖ <b>{% trans "Stockholm & surrounding areas" %}</b></span><span>◎ <b>{% trans "Clear communication" %}</b></span></div></section>
+  <section class="pp-book"><div class="container pp-book-inner"><div><div class="pp-section-label">{% trans "Ready to get started?" %}</div><h2>{% trans "Book an Electrician Today" %}</h2><p>{% trans "Choose a service, select a time that works for you, and our electrician will take care of the rest." %}</p><div class="pp-actions"><a class="pp-btn pp-btn-gold" href="{% url 'electricity:electrician_booking_step' 1 %}">{% trans "Book an electrician" %}</a><a class="pp-btn pp-btn-outline" href="{% url 'electricity:quote_request_step' 1 %}">{% trans "Request a quote" %}</a></div></div></div><div class="container pp-book-trust"><span><svg class="pp-trust-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 3 8 3v5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3Z"/><path d="m8 12 2.5 2.5L16 9"/></svg><b>{% trans "Certified & insured" %}</b></span><span><svg class="pp-trust-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="9" r="6"/><path d="m9 9 2 2 4-4M8 14l-2 7 6-3 6 3-2-7"/></svg><b>{% trans "Quality & safety" %}</b></span><span><svg class="pp-trust-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><b>{% trans "Stockholm & surrounding areas" %}</b></span><span><svg class="pp-trust-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 11a8 8 0 0 1-8 8H8l-5 3V11a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8Z"/><path d="M7 9h10M7 13h7"/></svg><b>{% trans "Clear communication" %}</b></span></div></section>
 </main>
 {% endblock %}
 {% block extra_js %}<script defer src="{% static 'electricity/js/pricing-page.js' %}?v=20261019-1"></script>{% endblock %}

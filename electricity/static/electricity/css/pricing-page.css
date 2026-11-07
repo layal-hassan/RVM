@@ -14,7 +14,12 @@
 .pp-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
 .pp-btn { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 18px; padding: 0 25px; border: 1px solid #c99b22; color: #fff5d9; font: 700 10px/1 Arial,sans-serif; letter-spacing: .15em; text-decoration: none; text-transform: uppercase; transition: .2s ease; }
 .pp-btn:hover { transform: translateY(-2px); }.pp-btn-gold { background: linear-gradient(100deg,#d6a72c,#efc758); color: #171005; }.pp-btn-outline { background: rgba(3,9,6,.65); }
-.pp-hero-trust { display: flex; flex-wrap: wrap; gap: 32px; margin-top: 38px; color: rgba(255,255,255,.8); font: 11px Arial,sans-serif; }.pp-hero-trust span::first-letter { color: #e2b832; }
+.pp-hero-trust { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 32px; margin-top: 38px; color: rgba(255,255,255,.8); font: 14px/1.5 Arial,sans-serif; }
+.pp-hero-trust > span { display: inline-flex; align-items: center; gap: 12px; }
+.pp-hero-trust .pp-trust-icon,
+.pp-book-trust .pp-trust-icon { display: block; width: 30px; height: 30px; flex: 0 0 30px; fill: none; stroke: #e2b832; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.pp-book-trust > span { display: flex; align-items: center; gap: 12px; }
+.pp-book-trust > span > b { margin: 0; line-height: 1.4; }
 .pp-section { padding: 76px 0; }.pp-section h2 { margin: 9px 0 8px; font-size: clamp(28px,3vw,43px); font-weight: 500; }.pp-lead { margin: 0; color: rgba(255,255,255,.63); font: 14px/1.6 Arial,sans-serif; }
 .pp-rates { background: radial-gradient(circle at 50% 0,rgba(59,81,37,.2),transparent 38%),#07110d; }
 .pp-rate-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 14px; margin-top: 33px; }
