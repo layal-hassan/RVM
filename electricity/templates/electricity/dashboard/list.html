@@ -27,7 +27,14 @@
             {% record_dashboard_section_edit_url row as section_edit_url %}
             <div class="panel-row" id="record-{{ row.pk }}">
                 {% for field in fields %}
+                    {% if compact_messages and field == "message" and row.message|length > 120 %}
+                    <div class="inquiry-message-cell">
+                        <p class="inquiry-message-preview">{{ row.message|truncatechars:100 }}</p>
+                        <button type="button" class="inquiry-message-open" data-inquiry-message="inquiry-message-{{ row.pk }}">{% trans "View message" %}</button>
+                    </div>
+                    {% else %}
                     <span>{{ row|display_value:field }}</span>
+                    {% endif %}
                 {% endfor %}
                 {% if edit_url %}<span class="row-actions">
                     {% if assign_url %}
@@ -43,9 +50,27 @@
                     <a class="danger" href="{% url delete_url row.id %}">Delete</a>
                 </span>{% endif %}
             </div>
+            {% if compact_messages and row.message|length > 120 %}
+            <dialog class="inquiry-message-dialog" id="inquiry-message-{{ row.pk }}" aria-labelledby="inquiry-message-title-{{ row.pk }}">
+                <div class="inquiry-message-header">
+                    <h3 id="inquiry-message-title-{{ row.pk }}">{{ row.full_name }}</h3>
+                    <form method="dialog"><button type="submit" class="dash-btn">{% trans "Close" %}</button></form>
+                </div>
+                <div class="inquiry-message-body">{{ row.message }}</div>
+            </dialog>
+            {% endif %}
         {% empty %}
             <div class="panel-empty">No records yet.</div>
         {% endfor %}
     </div>
 </section>
+{% if compact_messages %}
+<script>
+    document.querySelectorAll('[data-inquiry-message]').forEach((button) => {
+        button.addEventListener('click', () => {
+            document.getElementById(button.dataset.inquiryMessage).showModal();
+        });
+    });
+</script>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,306 @@
+/* Local, page-scoped styles. No runtime CSS compiler or icon font. */
+.privacy-page{font-family:Arial,sans-serif}.privacy-page :is(h1,h2,h3,h4){font-family:"Vesper Libre",Georgia,serif}
+.privacy-page .w-full{width:100%}
+.privacy-page .w-72{width:18rem}
+.privacy-page .w-12{width:3rem}
+.privacy-page .h-12{height:3rem}
+.privacy-page .w-2{width:.5rem}
+.privacy-page .h-2{height:.5rem}
+.privacy-page .hidden{display:none}
+.privacy-page .block{display:block}
+.privacy-page .inline-block{display:inline-block}
+.privacy-page .flex{display:flex}
+.privacy-page .inline-flex{display:inline-flex}
+.privacy-page .grid{display:grid}
+.privacy-page .flex-col{flex-direction:column}
+.privacy-page .flex-wrap{flex-wrap:wrap}
+.privacy-page .flex-1{flex:1 1 0%;min-width:0}
+.privacy-page .shrink-0{flex-shrink:0}
+.privacy-page .items-center{align-items:center}
+.privacy-page .items-start{align-items:flex-start}
+.privacy-page .justify-center{justify-content:center}
+.privacy-page .grid-cols-1{grid-template-columns:minmax(0,1fr)}
+.privacy-page .mx-auto{margin-inline:auto}
+.privacy-page .text-center{text-align:center}
+.privacy-page .font-serif{font-family:"Vesper Libre",Georgia,serif}
+.privacy-page .italic{font-style:italic}
+.privacy-page .font-medium{font-weight:500}
+.privacy-page .font-semibold{font-weight:600}
+.privacy-page .font-bold{font-weight:700}
+.privacy-page .font-black{font-weight:900}
+.privacy-page .uppercase{text-transform:uppercase}
+.privacy-page .tracking-widest{letter-spacing:.1em}
+.privacy-page .tracking-\[0\.2em\]{letter-spacing:.2em}
+.privacy-page .leading-tight{line-height:1.25}
+.privacy-page .leading-relaxed{line-height:1.625}
+.privacy-page .leading-loose{line-height:2}
+.privacy-page .overflow-y-auto{overflow-y:auto}
+.privacy-page .sticky{position:sticky}
+.privacy-page .top-32{top:8rem}
+.privacy-page .max-w-3xl{max-width:48rem}
+.privacy-page .max-w-4xl{max-width:56rem}
+.privacy-page .max-w-\[1200px\]{max-width:1200px}
+.privacy-page .max-w-\[1400px\]{max-width:1400px}
+.privacy-page .max-h-\[calc\(100vh-160px\)\]{max-height:calc(100vh - 160px)}
+.privacy-page .border{border:1px solid var(--privacy-border)}
+.privacy-page .border-b{border-bottom:1px solid var(--privacy-border)}
+.privacy-page .border-navy-deep\/5{border-color:var(--privacy-border)}
+.privacy-page .border-white\/10{border-color:rgba(255,255,255,.1)}
+.privacy-page .text-primary{color:var(--privacy-gold)}
+.privacy-page .text-white{color:var(--privacy-ink)}
+.privacy-page .text-navy-deep{color:var(--privacy-ink)}
+.privacy-page .bg-white{background:var(--privacy-panel)}
+.privacy-page .bg-primary{background:var(--privacy-gold)}
+.privacy-page .bg-primary\/10{background:rgba(202,161,61,.1)}
+.privacy-page .bg-primary\/20{background:rgba(202,161,61,.2)}
+.privacy-page .bg-white\/5{background:rgba(255,255,255,.05)}
+.privacy-page .bg-navy-deep{background:#0a0c12}
+.privacy-page .text-sm{font-size:.875rem}
+.privacy-page .text-lg{font-size:1.125rem}
+.privacy-page .text-xl{font-size:1.25rem}
+.privacy-page .text-2xl{font-size:1.5rem}
+.privacy-page .text-3xl{font-size:1.875rem}
+.privacy-page .text-6xl{font-size:3.75rem}
+.privacy-page .text-\[10px\]{font-size:10px}
+.privacy-page .rounded{border-radius:.25rem}
+.privacy-page .rounded-lg{border-radius:.5rem}
+.privacy-page .rounded-xl{border-radius:.75rem}
+.privacy-page .rounded-full{border-radius:999px}
+.privacy-page .gap-1{gap:0.25rem}
+.privacy-page .gap-2{gap:0.5rem}
+.privacy-page .gap-3{gap:0.75rem}
+.privacy-page .gap-4{gap:1rem}
+.privacy-page .gap-6{gap:1.5rem}
+.privacy-page .gap-16{gap:4rem}
+.privacy-page .mb-0{margin-bottom:0rem}
+.privacy-page .mb-1{margin-bottom:0.25rem}
+.privacy-page .mb-2{margin-bottom:0.5rem}
+.privacy-page .mb-6{margin-bottom:1.5rem}
+.privacy-page .mb-8{margin-bottom:2rem}
+.privacy-page .mb-10{margin-bottom:2.5rem}
+.privacy-page .mb-12{margin-bottom:3rem}
+.privacy-page .mt-1{margin-top:0.25rem}
+.privacy-page .mt-8{margin-top:2rem}
+.privacy-page .my-10{margin-block:2.5rem}
+.privacy-page .p-3{padding:0.75rem}
+.privacy-page .p-4{padding:1rem}
+.privacy-page .p-5{padding:1.25rem}
+.privacy-page .p-6{padding:1.5rem}
+.privacy-page .px-3{padding-inline:0.75rem}
+.privacy-page .px-4{padding-inline:1rem}
+.privacy-page .px-6{padding-inline:1.5rem}
+.privacy-page .px-8{padding-inline:2rem}
+.privacy-page .py-1{padding-block:0.25rem}
+.privacy-page .py-2{padding-block:0.5rem}
+.privacy-page .py-3{padding-block:0.75rem}
+.privacy-page .py-16{padding-block:4rem}
+.privacy-page .pt-0{padding-top:0rem}
+.privacy-page .pt-24{padding-top:6rem}
+.privacy-page .pb-20{padding-bottom:5rem}
+.privacy-page .pr-4{padding-right:1rem}
+.privacy-page .space-y-6 > * + *{margin-top:1.5rem}
+.privacy-page .hover\:underline:hover{text-decoration:underline}
+@media(min-width:768px){.privacy-page .md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.privacy-page .md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.privacy-page .md\:text-7xl{font-size:4.5rem}}
+@media(min-width:1024px){.privacy-page .lg\:block{display:block}.privacy-page .lg\:flex-row{flex-direction:row}}
+.privacy-page .nav-link{display:flex;align-items:center;gap:.75rem;padding:.5rem .75rem;font-size:14px;font-weight:500;text-decoration:none;transition:background .15s,color .15s}.privacy-page .nav-link.active{font-weight:600}
+.privacy-page .section-number{display:block;margin-bottom:1rem;color:var(--privacy-gold)!important;font:24px "Vesper Libre",Georgia,serif}.privacy-page .glass-card{border-radius:1rem;padding:2.5rem}.privacy-page .right-card{border-radius:.75rem;padding:1.5rem}
+body.electricity-body.privacy-page {
+      --privacy-bg: #090c07;
+      --privacy-panel: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
+      --privacy-panel-strong: linear-gradient(180deg, rgba(29, 34, 20, 0.98), rgba(16, 19, 10, 0.98));
+      --privacy-border: rgba(202, 161, 61, 0.18);
+      --privacy-border-strong: rgba(202, 161, 61, 0.3);
+      --privacy-gold: #caa13d;
+      --privacy-ink: #f5f1e6;
+      --privacy-muted: rgba(236, 230, 214, 0.72);
+      background:
+        radial-gradient(circle at top, rgba(202, 161, 61, 0.12), transparent 34%),
+        linear-gradient(180deg, #090c07 0%, #0d1009 40%, #080a06 100%);
+      color: var(--privacy-ink);
+      font-family: Arial, sans-serif;
+    }
+
+    .privacy-page h1,
+    .privacy-page h2,
+    .privacy-page h3,
+    .privacy-page h4 {
+      color: var(--privacy-ink) !important;
+    }
+
+    .privacy-page p,
+    .privacy-page li,
+    .privacy-page span,
+    .privacy-page .text-navy-deep\/80,
+    .privacy-page .text-navy-deep\/70,
+    .privacy-page .text-navy-deep\/60,
+    .privacy-page .text-navy-deep\/40,
+    .privacy-page .text-sm,
+    .privacy-page .prose {
+      color: var(--privacy-muted);
+    }
+
+    .privacy-page .text-primary {
+      color: var(--privacy-gold) !important;
+    }
+
+    .privacy-page section.w-full.bg-white {
+      background:
+        linear-gradient(180deg, rgba(9, 12, 7, 0.9), rgba(9, 12, 7, 0.72)),
+        radial-gradient(circle at top, rgba(202, 161, 61, 0.14), transparent 38%) !important;
+      border-bottom: 1px solid rgba(202, 161, 61, 0.12) !important;
+    }
+
+    .privacy-page section.w-full.bg-white > div {
+      width: min(1100px, calc(100% - 32px));
+      padding: 92px 32px 86px;
+      border: 1px solid rgba(202, 161, 61, 0.16);
+      border-radius: 32px;
+      background: linear-gradient(180deg, rgba(16, 20, 11, 0.76), rgba(9, 12, 7, 0.92));
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.26);
+
+    }
+
+    .privacy-page .inline-block.py-1.px-3.bg-primary\/10 {
+      background: rgba(202, 161, 61, 0.1) !important;
+      border: 1px solid rgba(202, 161, 61, 0.28);
+      color: #f3e4bb !important;
+      border-radius: 999px;
+      padding: 10px 18px;
+    }
+
+    .privacy-page .max-w-3xl .font-serif.italic {
+      color: rgba(245, 241, 230, 0.82) !important;
+    }
+
+    .privacy-page .w-full.max-w-\[1400px\] {
+      gap: 28px;
+      align-items: flex-start;
+    }
+
+    .privacy-page aside .sticky {
+      background: var(--privacy-panel);
+      border: 1px solid var(--privacy-border);
+      border-radius: 28px;
+      box-shadow: 0 22px 54px rgba(0, 0, 0, 0.22);
+      top: calc(var(--rwmh-height) + 24px);
+      padding: 28px 18px;
+      max-height: calc(100vh - 140px);
+    }
+
+    .privacy-page .nav-link {
+      color: var(--privacy-muted);
+      border-radius: 16px;
+      border: 1px solid transparent;
+    }
+
+    .privacy-page .nav-link:hover {
+      background: rgba(202, 161, 61, 0.08);
+      border-color: rgba(202, 161, 61, 0.16);
+      color: var(--privacy-ink) !important;
+      transform: translateX(2px);
+    }
+
+    .privacy-page .nav-link.active {
+      background: linear-gradient(180deg, rgba(202, 161, 61, 0.18), rgba(202, 161, 61, 0.1));
+      border-color: rgba(202, 161, 61, 0.28);
+      color: var(--privacy-ink) !important;
+    }
+
+    .privacy-page .policy-section {
+      background: var(--privacy-panel);
+      border: 1px solid var(--privacy-border);
+      border-radius: 30px;
+      padding: 48px 40px;
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .privacy-page .policy-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(202, 161, 61, 0.12), transparent 32%);
+      pointer-events: none;
+    }
+
+    .privacy-page .policy-section > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .privacy-page .bg-white,
+    .privacy-page .right-card,
+    .privacy-page .bg-white.border,
+    .privacy-page .p-6.border.border-navy-deep\/5.bg-white.rounded-xl,
+    .privacy-page .bg-white.border.border-navy-deep\/5.p-5.rounded-lg,
+    .privacy-page li.bg-white {
+      background: var(--privacy-panel) !important;
+      border: 1px solid var(--privacy-border) !important;
+      color: var(--privacy-ink) !important;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
+    }
+
+    .privacy-page .glass-card {
+      background: var(--privacy-panel-strong) !important;
+      border: 1px solid var(--privacy-border-strong) !important;
+    }
+
+    .privacy-page .glass-card p,
+    .privacy-page .glass-card .text-white\/80,
+    .privacy-page .glass-card .text-white\/60 {
+      color: var(--privacy-muted) !important;
+    }
+
+    .privacy-page .glass-card .bg-white\/5 {
+      background: rgba(202, 161, 61, 0.08) !important;
+      border-color: rgba(202, 161, 61, 0.18) !important;
+    }
+
+    .privacy-page .bg-navy-deep,
+    .privacy-page .inline-flex.items-center.gap-2.text-sm.font-bold.uppercase.tracking-widest.bg-navy-deep {
+      background: linear-gradient(180deg, rgba(202, 161, 61, 0.18), rgba(202, 161, 61, 0.1)) !important;
+      border: 1px solid rgba(202, 161, 61, 0.24);
+      color: var(--privacy-ink) !important;
+    }
+
+    .privacy-page .w-12.h-12.bg-primary\/10.rounded-full,
+    .privacy-page .p-3.bg-primary\/20.rounded-lg.text-primary {
+      background: rgba(202, 161, 61, 0.12) !important;
+    }
+
+    .privacy-page .w-2.h-2.bg-primary.rounded-full {
+      background: var(--privacy-gold) !important;
+    }
+
+    .privacy-page a.text-primary {
+      color: var(--privacy-gold) !important;
+    }
+
+    @media (max-width: 900px) {
+      .privacy-page section.w-full.bg-white > div {
+        width: calc(100% - 24px);
+        padding: 72px 24px 64px;
+        border-radius: 24px;
+      }
+
+      .privacy-page .policy-section {
+        padding: 34px 22px;
+        border-radius: 24px;
+      }
+    }
+
+.privacy-page section.privacy-hero.w-full.bg-white{
+  background:linear-gradient(90deg,rgba(9,12,7,.82),rgba(9,12,7,.58)),url('../img/privacy-electrical-work.webp') center 48%/cover no-repeat!important;
+}
+.privacy-page section.privacy-hero.w-full.bg-white > div{background:rgba(9,12,7,.58);box-shadow:none}
+.privacy-page .privacy-hero h1{font-size:clamp(42px,5vw,68px)!important;line-height:1.1!important}
+.privacy-page .privacy-hero p{font-size:16px!important;line-height:1.7!important}
+.privacy-page .policy-section{scroll-margin-top:calc(var(--rwmh-height,80px) + 24px)}
+.privacy-page .policy-section h2{font-size:clamp(24px,2.2vw,32px)!important;line-height:1.25!important}
+.privacy-page .policy-section :is(p,li){font-size:15px!important;line-height:1.8!important}
+.privacy-page .policy-section h4{font-size:18px!important}
+.privacy-page .policy-icon{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:600px){.privacy-page section.privacy-hero{padding:40px 0}.privacy-page .privacy-hero > div{padding:44px 20px}.privacy-page .privacy-hero p{font-size:14px!important}.privacy-page .policy-layout{padding:32px 16px}.privacy-page .glass-card{padding:24px}.privacy-page .policy-section .flex.gap-6{gap:14px}}
+@media(prefers-reduced-motion:no-preference){.privacy-page{scroll-behavior:smooth}}

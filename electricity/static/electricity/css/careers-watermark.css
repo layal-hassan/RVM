@@ -328,7 +328,7 @@
   border: 1px solid rgba(227, 181, 39, 0.2);
   border-radius: 6px;
   color: #f4efe3;
-  background: #102018;
+  background: #000;
   box-shadow: none;
 }
 
@@ -354,6 +354,30 @@
   box-shadow: none;
 }
 
+/* Keep application fields black, including enhanced selects and autofill. */
+.careers-page .careers-field input,
+.careers-page .careers-field select,
+.careers-page .careers-field textarea,
+.careers-page .careers-field .ts-wrapper .ts-control,
+.careers-page .careers-field .ts-wrapper .ts-control:hover,
+.careers-page .careers-field .ts-wrapper.focus .ts-control,
+.careers-page .careers-field .ts-wrapper.dropdown-active .ts-control {
+  background: #000 !important;
+}
+
+.careers-page .careers-field :is(input, textarea, select):-webkit-autofill,
+.careers-page .careers-field :is(input, textarea, select):-webkit-autofill:hover,
+.careers-page .careers-field :is(input, textarea, select):-webkit-autofill:focus {
+  -webkit-text-fill-color: #f4efe3 !important;
+  caret-color: #f4efe3;
+  -webkit-box-shadow: 0 0 0 1000px #000 inset !important;
+  box-shadow: 0 0 0 1000px #000 inset !important;
+}
+
+.careers-page .careers-field :is(input, textarea, select):autofill {
+  background-color: #000 !important;
+}
+
 .careers-page > .ts-dropdown {
   border: 1px solid rgba(227, 181, 39, 0.25);
   border-radius: 6px;
@@ -375,6 +399,125 @@
 .careers-page .careers-field--file input {
   padding: 14px 16px;
   font-size: 14px !important;
+  cursor: pointer;
+}
+
+.careers-page .careers-field .careers-upload input {
+  padding-inline-end: 52px;
+}
+
+html.careers-confirmation-open {
+  overflow: hidden;
+}
+
+.careers-confirmation {
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
+  width: min(480px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 44px 32px 32px;
+  overflow: auto;
+  border: 1px solid rgba(227, 181, 39, .5);
+  border-radius: 18px;
+  background: radial-gradient(circle at 50% 0, rgba(227, 181, 39, .1), transparent 60%), #08120c;
+  color: #f4efe3;
+  text-align: center;
+  box-shadow: 0 24px 90px rgba(0, 0, 0, .6);
+}
+
+.careers-confirmation::backdrop {
+  background: rgba(0, 0, 0, .75);
+  backdrop-filter: blur(5px);
+}
+
+.careers-confirmation__close {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #b6beb7;
+  cursor: pointer;
+}
+
+.careers-confirmation svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.careers-confirmation__icon {
+  box-sizing: border-box;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 24px;
+  padding: 16px;
+  border: 1px solid #e3b527;
+  border-radius: 50%;
+  background: rgba(227, 181, 39, .08);
+  color: #e3b527;
+}
+
+.careers-confirmation h2 {
+  margin: 0 0 16px;
+  color: #f4efe3;
+  font: 500 clamp(28px, 6vw, 36px)/1.15 "Vesper Libre", Georgia, serif;
+  text-transform: none;
+}
+
+.careers-confirmation p {
+  margin: 0 0 12px;
+  color: #b6beb7;
+  font: 15px/1.65 Arial, sans-serif;
+}
+
+.careers-confirmation__done {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 16px;
+  padding: 12px 24px;
+  border: 1px solid #e3b527;
+  border-radius: 6px;
+  color: #151005;
+  background: linear-gradient(110deg, #e3b527, #ffda64);
+  font: 700 14px/1.2 Arial, sans-serif;
+  cursor: pointer;
+}
+
+.careers-confirmation button:focus-visible {
+  outline: 2px solid #f4efe3;
+  outline-offset: 4px;
+}
+
+.careers-upload {
+  position: relative;
+}
+
+.careers-upload__icon {
+  position: absolute;
+  inset-inline-end: 16px;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  transform: translateY(-50%);
+  fill: none;
+  stroke: var(--career-gold, #e3b527);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
 }
 
 .careers-page .careers-form button {

@@ -154,19 +154,19 @@ h4,
 }
 
 .on-call-page .oncall-actions .btn {
-  font-size: 13px !important;
-}
-
-.on-call-page .oncall-call-button small {
   font-size: 11px !important;
 }
 
+.on-call-page .oncall-call-button small {
+  font-size: 9px !important;
+}
+
 .on-call-page .oncall-call-button strong {
-  font-size: 22px !important;
+  font-size: 16px !important;
 }
 
 .on-call-page .oncall-trust-row,
-.on-call-page .oncall-trust-row span {
+.on-call-page .oncall-trust-row span:not(.oncall-trust-icon) {
   font-size: 14px !important;
 }
 

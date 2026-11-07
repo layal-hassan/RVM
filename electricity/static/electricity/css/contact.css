@@ -1,5 +1,4 @@
-.contact-v2-hero{position:relative;min-height:clamp(300px,38vw,520px);display:grid;place-items:center;isolation:isolate;overflow:hidden;border-bottom:1px solid rgba(215,174,54,.25);background:url('../img/contact-hero-electrician.jpg') 50% 43%/cover no-repeat}
-.contact-v2-hero::before{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,rgba(4,8,6,.84),rgba(4,8,6,.5) 48%,rgba(4,8,6,.78)),linear-gradient(0deg,rgba(4,8,6,.7),transparent 50%,rgba(4,8,6,.28))}
+.contact-v2-hero{position:relative;min-height:clamp(300px,38vw,520px);display:grid;place-items:center;isolation:isolate;overflow:hidden;border-bottom:1px solid rgba(215,174,54,.25);background:linear-gradient(90deg,rgba(4,8,6,.84),rgba(4,8,6,.5) 48%,rgba(4,8,6,.78)),linear-gradient(0deg,rgba(4,8,6,.7),transparent 50%,rgba(4,8,6,.28)),url('../img/contact-hero-electrician.jpg') 50% 43%/cover no-repeat;background-clip:padding-box}
 .contact-v2-hero-content{width:min(720px,90vw);padding:62px 24px;text-align:center;text-shadow:0 2px 18px rgba(0,0,0,.8)}
 .contact-v2-hero-content>span{display:block;margin-bottom:12px;color:#e0b34a;font:800 10px/1 Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase}
 .contact-v2-hero h1{margin:0;color:#fffaf0;font:600 clamp(38px,5vw,68px)/1.05 Georgia,serif;text-transform:none}
@@ -112,6 +111,21 @@
 .contact-v2-form input,.contact-v2-form select,.contact-v2-form textarea{padding:14px 15px;border-color:rgba(198,171,80,.22);border-radius:8px;background:linear-gradient(110deg,rgba(255,255,255,.065),rgba(255,255,255,.025));font-size:14px}
 .contact-v2-form input,.contact-v2-form select{min-height:52px}
 .contact-v2-form textarea{min-height:96px}
+/* Keep contact fields black, including the browser's autofill paint layer. */
+.contact-page-v2 .contact-v2-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+.contact-page-v2 .contact-v2-form textarea,
+.contact-page-v2 .contact-v2-form select,
+.contact-page-v2 .contact-v2-form .ts-control{
+  background:#000!important;
+  color:#f6f2e8;
+  caret-color:#f6f2e8;
+}
+.contact-page-v2 .contact-v2-form :is(input,textarea,select):is(:-webkit-autofill,:autofill){
+  -webkit-text-fill-color:#f6f2e8!important;
+  -webkit-box-shadow:0 0 0 1000px #000 inset!important;
+  box-shadow:0 0 0 1000px #000 inset!important;
+  transition:none;
+}
 .contact-v2-form input::placeholder,.contact-v2-form textarea::placeholder{color:rgba(255,255,255,.55)}
 .contact-v2-form select{cursor:pointer}
 .contact-v2-customer-type{min-width:0;margin:0;padding:0;border:0}

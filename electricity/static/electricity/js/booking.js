@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.querySelectorAll(selector).forEach((item) => {
                         const itemInput = item.querySelector("input");
                         if (itemInput?.type === "radio" && itemInput.name === radioGroup) {
-                            item.classList.remove("is-active");
+                            item.classList.toggle("is-active", itemInput.checked);
                         }
                     });
                 }

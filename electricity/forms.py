@@ -451,17 +451,27 @@ class Step6Form(forms.Form):
 class Step7Form(forms.Form):
     preferred_date = forms.DateField(
         required=False,
-        widget=forms.DateInput(attrs={"type": "date", "class": "form-control booking-input"}),
+        widget=forms.DateInput(
+            format="%Y-%m-%d",
+            attrs={
+                "type": "text",
+                "class": "form-control booking-input",
+                "data-site-date": "true",
+                "placeholder": "YYYY-MM-DD",
+                "readonly": True,
+                "autocomplete": "off",
+            },
+        ),
     )
     preferred_time = forms.CharField(
         required=False,
         max_length=5,
         widget=forms.TimeInput(
             attrs={
-                "type": "time",
+                "type": "text",
                 "class": "form-control booking-input time-slot-input",
-                "placeholder": "00:00",
-                "step": "60",
+                "placeholder": "HH:MM",
+                "readonly": True,
                 "autocomplete": "off",
             }
         ),

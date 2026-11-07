@@ -1,6 +1,6 @@
 (() => {
-  const inputs = [...document.querySelectorAll('input[type="date"]')]
-    .filter((input) => !input.closest('.date-input-shell') && !input.dataset.nativeDate);
+  const inputs = [...document.querySelectorAll('input[type="date"], input[data-site-date]')]
+    .filter((input) => !input.closest('.date-input-shell, .site-date-shell') && !input.dataset.nativeDate);
   if (!inputs.length) return;
 
   const locale = document.documentElement.lang || 'en';
@@ -33,6 +33,7 @@
     input.parentNode.insertBefore(shell, input);
     shell.appendChild(input);
     input.type = 'text';
+    if (!input.placeholder) input.placeholder = 'YYYY-MM-DD';
     input.readOnly = true;
     input.inputMode = 'none';
     input.autocomplete = 'off';

@@ -91,12 +91,15 @@ class ElectricianCustomerPopupTests(SimpleTestCase):
                 self.assertEqual(response.url, reverse("electricity:service_booking_step", args=[2]))
                 self.assertEqual(request.session[views.SERVICE_BOOKING_SESSION_KEY]["account_type"], customer_type)
 
-    def test_on_call_private_opens_residential_booking(self):
-        request = self.factory.post("/on-call-booking/step-1/", {"customer_type": "private"})
+    def test_on_call_stale_private_choice_stays_in_agreement(self):
+        request = self.factory.post("/on-call-booking/step-1/", {
+            "customer_type": "private", "coverage_times": ["evenings"],
+            "response_speed": "standard", "coverage_scope": ["power_outages"],
+        })
         request.session = Session(electricity_zip_checks={"on_call": "11144"})
         response = views.on_call_booking_step(request, 1)
-        self.assertEqual(response.url, reverse("electricity:electrician_booking_step", args=[2]))
-        self.assertEqual(request.session[views.ELECTRICIAN_BOOKING_SESSION_KEY]["customer_type"], "private")
+        self.assertEqual(response.url, reverse("electricity:on_call_booking_step", args=[2]))
+        self.assertNotIn(views.ELECTRICIAN_BOOKING_SESSION_KEY, request.session)
 
     def test_on_call_business_continues_agreement(self):
         request = self.factory.post("/on-call-booking/step-1/", {
@@ -106,17 +109,24 @@ class ElectricianCustomerPopupTests(SimpleTestCase):
         request.session = Session(electricity_zip_checks={"on_call": "11144"})
         response = views.on_call_booking_step(request, 1)
         self.assertEqual(response.url, reverse("electricity:on_call_booking_step", args=[2]))
-        self.assertEqual(request.session[views.ON_CALL_BOOKING_SESSION_KEY]["customer_type"], "business")
+        self.assertEqual(request.session[views.ON_CALL_BOOKING_SESSION_KEY]["coverage_times"], ["evenings"])
 
-    def test_on_call_requires_customer_choice(self):
+    def test_on_call_continues_without_extra_customer_choice(self):
         with patch.object(views, "_get_active_pricing", return_value=None):
             request = self.factory.post("/on-call-booking/step-1/", {
                 "coverage_times": ["evenings"], "response_speed": "standard", "coverage_scope": ["power_outages"],
             })
             request.session = Session(electricity_zip_checks={"on_call": "11144"})
             response = views.on_call_booking_step(request, 1)
-            self.assertContains(response, "Please choose Private or Business.")
-            self.assertContains(response, "data-submit-on-private")
+            self.assertEqual(response.url, reverse("electricity:on_call_booking_step", args=[2]))
+
+    def test_on_call_entry_has_no_residential_redirect_popup(self):
+        with patch.object(views, "_get_active_pricing", return_value=None):
+            request = self.factory.get("/on-call-booking/step-1/")
+            request.session = Session(electricity_zip_checks={"on_call": "11144"})
+            response = views.on_call_booking_step(request, 1)
+            self.assertNotContains(response, "data-submit-on-private")
+            self.assertNotContains(response, "data-customer-popup")
 
     def test_consultation_and_quote_use_shared_popup(self):
         from django.template.loader import render_to_string

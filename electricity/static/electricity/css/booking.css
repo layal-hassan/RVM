@@ -1617,3 +1617,161 @@ body.booking-flow.booking-wrapper.electricity-body {
             #0a0f08;
     }
 }
+
+.booking-flow .review-field-wrap .rwm-calendar {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    width: min(320px, calc(100vw - 64px));
+}
+
+.booking-time-shell { position: relative; width: 100%; }
+.booking-time-shell.is-open { z-index: 1201; }
+.booking-flow .booking-time-shell input { width: 100%; padding-inline-end: 50px; cursor: pointer; }
+.booking-time-picker[hidden] { display: none !important; }
+.booking-time-picker {
+    position: absolute;
+    z-index: 1202;
+    top: calc(100% + 10px);
+    inset-inline-end: 0;
+    width: min(280px, calc(100vw - 64px));
+    padding: 16px;
+    border: 1px solid rgba(220, 177, 51, .52);
+    border-radius: 12px;
+    background: #10160d;
+    color: #f6f0e2;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .58);
+    text-align: start;
+}
+.booking-time-picker > strong { display: block; margin-bottom: 16px; color: #f1d995; }
+.booking-time-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.booking-time-columns > div > div:first-child { margin-bottom: 8px; color: #bcbcaf; text-align: center; }
+.booking-time-list { position: relative; height: 180px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #8b7133 #10160d; }
+.booking-time-list button { display: block; width: 100%; padding: 10px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: #f6f0e2; font-family: inherit; font-size: 13px; line-height: 1.3; cursor: pointer; }
+.booking-time-list button:hover { background: rgba(216, 170, 50, .12); }
+.booking-time-list button.is-selected { background: #d7b656; color: #171205; font-weight: 700; }
+.booking-time-picker button:focus-visible { outline: 2px solid #edc866; outline-offset: -2px; }
+.booking-time-actions { display: flex; justify-content: space-between; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(216, 170, 50, .18); }
+.booking-time-actions button { padding: 9px 15px; border: 1px solid rgba(216, 170, 50, .35); border-radius: 7px; background: transparent; color: #edc866; cursor: pointer; }
+.booking-time-actions [data-apply] { background: #d7b656; color: #171205; }
+
+/* Clear, matching schedule icons for the consultation review. */
+.booking-flow .review-field-wrap input[type="date"] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23edc866' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='3'/%3E%3Cpath d='M7 3v4m10-4v4M3 11h18m-12 5 2 2 4-4'/%3E%3C/svg%3E") !important;
+}
+
+.booking-flow .review-field-wrap input[type="time"] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23edc866' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3.5 2'/%3E%3C/svg%3E") !important;
+}
+
+.booking-flow .review-field-wrap input:is([type="date"], [type="time"]) {
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 22px 22px;
+    padding-inline-end: 50px;
+}
+
+[dir="rtl"] .booking-flow .review-field-wrap input:is([type="date"], [type="time"]) {
+    background-position: left 16px center;
+}
+
+/* Tom Select copies booking-input onto its wrapper; style only the control. */
+.booking-flow .booking-input.ts-wrapper {
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent !important;
+    box-shadow: none;
+}
+
+.booking-flow .booking-input.ts-wrapper .ts-control {
+    min-height: 48px;
+    padding: 12px 44px 12px 16px;
+    border: 1px solid rgba(214, 170, 56, .28) !important;
+    border-radius: 8px;
+    line-height: 1.4;
+    transform: none;
+}
+
+.booking-flow .booking-input.ts-wrapper.focus .ts-control {
+    border-color: #caa13d !important;
+    box-shadow: 0 0 0 3px rgba(202, 161, 61, .12) !important;
+}
+
+.booking-flow input[name="year_built"] + .form-note {
+    margin-top: 10px;
+}
+
+/* Compact, balanced format choices on the first consultation step. */
+.booking-flow .booking-choice-section .option-card-large {
+    min-height: 268px;
+    padding: 46px 20px 20px;
+    gap: 14px;
+    justify-content: flex-start;
+    border-radius: 14px;
+}
+
+.booking-flow .booking-choice-section .option-pill {
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 12px;
+    font-size: 9px;
+    line-height: 1.4;
+    letter-spacing: .1em;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.booking-flow .booking-choice-section .option-icon {
+    width: 56px;
+    height: 56px;
+    flex: 0 0 56px;
+}
+
+.booking-flow .booking-choice-section .option-svg {
+    width: 25px;
+    height: 25px;
+}
+
+.booking-flow .booking-choice-section .option-title {
+    font-size: 15px;
+    line-height: 1.4;
+    margin-bottom: 7px;
+}
+
+.booking-flow .booking-choice-section .option-text {
+    max-width: 28ch;
+    margin-inline: auto;
+    font-size: 12px;
+    line-height: 1.65;
+    color: #bcbcaf;
+}
+
+.booking-flow .booking-choice-section .option-check {
+    position: relative;
+    flex: 0 0 20px;
+    margin-top: auto;
+}
+
+.booking-flow .booking-choice-section .is-active .option-check::after {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 9px;
+    top: 2px;
+    left: 5px;
+    border: solid #17150f;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.booking-flow .booking-choice-section .option-card:focus-within {
+    outline: 2px solid #f2ca63;
+    outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .booking-flow .booking-choice-section .option-card-large {
+        padding-inline: 18px;
+    }
+}

@@ -5,6 +5,7 @@ import json
 import datetime
 import logging
 from decimal import Decimal, ROUND_HALF_UP
+from urllib.parse import urlencode, urlsplit
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -743,6 +744,15 @@ def services(request):
     )
 
 
+def _service_page_quote_cta_url(page):
+    configured = page.cta_secondary_url
+    target = urlsplit(configured)
+    if target.hostname not in {None, "rwmel.se", "www.rwmel.se"} or target.path != reverse("electricity:booking_step_1"):
+        return configured
+    source = "detail" if isinstance(page, ServiceDetailPage) else "category"
+    return reverse("electricity:quote_request_step", args=[1]) + "?" + urlencode({"page": page.slug, "source": source})
+
+
 def service_category_detail(request, slug):
     page = get_object_or_404(
         ServiceCategoryPage.objects.prefetch_related(
@@ -765,6 +775,7 @@ def service_category_detail(request, slug):
             "spec_rows": spec_rows,
             "spec_columns": _build_spec_table(page, spec_rows),
             "faq_items": faq_items,
+            "cta_secondary_url": _service_page_quote_cta_url(page),
         },
     )
 
@@ -797,6 +808,7 @@ def service_detail(request, slug):
             "spec_rows": spec_rows,
             "spec_columns": _build_spec_table(page, spec_rows),
             "faq_items": faq_items,
+            "cta_secondary_url": _service_page_quote_cta_url(page),
         },
     )
 
@@ -831,6 +843,24 @@ def quote_request_step(request, step):
                 ),
             }
             request.session[QUOTE_SESSION_KEY] = data
+
+    elif step == 1 and request.method == "GET" and request.GET.get("page"):
+        source = request.GET.get("source", "category")
+        if source not in {"category", "detail"}:
+            raise Http404
+        model = ServiceDetailPage if source == "detail" else ServiceCategoryPage
+        page = get_object_or_404(model, slug=request.GET["page"], is_active=True)
+        data = {
+            "source": source,
+            "service_title": page.name,
+            "service_description": page.hero_description,
+            "service_image": page.hero_image.url if page.hero_image else "",
+            "service_url": reverse(
+                "electricity:service_detail" if source == "detail" else "electricity:service_category_detail",
+                kwargs={"slug": page.slug},
+            ),
+        }
+        request.session[QUOTE_SESSION_KEY] = data
 
     if step > 1 and not data.get("service_title"):
         return redirect("electricity:services")
@@ -3137,16 +3167,8 @@ def on_call_booking_step(request, step):
 
     if request.method == "POST":
         if step == 1:
-            customer_type = request.POST.get("customer_type", data.get("customer_type", ""))
-            if customer_type == "private":
-                electrician_data = _get_electrician_booking_data(request)
-                electrician_data["customer_type"] = "private"
-                _set_electrician_booking_data(request, electrician_data)
-                request.session[ELECTRICIAN_CUSTOMER_CONFIRMED_SESSION_KEY] = "private"
-                return redirect("electricity:electrician_booking_step", step=2)
-            data["customer_type"] = customer_type
-            if customer_type != "business":
-                errors.append("Please choose Private or Business.")
+            # Entity selection belongs to step two of the on-call agreement.
+            # Keep this flow independent of residential electrician bookings.
             data["coverage_times"] = request.POST.getlist("coverage_times")
             data["response_speed"] = request.POST.get("response_speed", "")
             data["coverage_scope"] = request.POST.getlist("coverage_scope")
@@ -3969,6 +3991,7 @@ def dashboard_contact_inquiries(request):
         return guard
     return render(request, "electricity/dashboard/list.html", {
         "title": "Contact Inquiries",
+        "compact_messages": True,
         "items": ContactInquiry.objects.order_by("-created_at"),
         "fields": ["full_name", "email", "phone", "inquiry_type", "request_type", "address", "message", "created_at"],
     })

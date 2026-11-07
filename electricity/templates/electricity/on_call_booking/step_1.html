@@ -3,7 +3,6 @@
 {% block booking_content %}
 <form method="post" class="on-call-form">
   {% csrf_token %}
-  {% include "electricity/partials/customer_type_popup.html" with choice_name="customer_type" selected_customer_type=data.customer_type private_redirect=True %}
 
   <div class="oncall-hero">
     <div class="hero-badge">{% trans "Enterprise Grade" %}</div>

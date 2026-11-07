@@ -19,7 +19,21 @@
 
 .feedback-page .feedback-field label,
 .feedback-page .feedback-field legend { font-size: 12px !important; }
-.feedback-page .feedback-field .form-control { min-height: 50px; font-size: 14px !important; }
+.feedback-page .feedback-field .form-control { min-height: 50px; font-size: 14px !important; background: #000; }
+
+/* Keep autofill from painting the feedback fields navy. */
+.feedback-page .feedback-field .form-control:-webkit-autofill,
+.feedback-page .feedback-field .form-control:-webkit-autofill:hover,
+.feedback-page .feedback-field .form-control:-webkit-autofill:focus {
+  -webkit-text-fill-color: #f5f1e6 !important;
+  caret-color: #f5f1e6;
+  -webkit-box-shadow: 0 0 0 1000px #000 inset !important;
+  box-shadow: 0 0 0 1000px #000 inset !important;
+}
+
+.feedback-page .feedback-field .form-control:autofill {
+  background-color: #000 !important;
+}
 .feedback-field textarea.form-control { min-height: 155px; }
 .feedback-page .feedback-rating small { font-size: 12px !important; }
 .feedback-page .feedback-stars label { font-size: 36px !important; }
@@ -55,12 +69,14 @@
 }
 
 .feedback-page .feedback-btn-arrow {
-  width: 21px;
-  height: 21px;
-  flex: 0 0 21px;
+  display: block;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  align-self: center;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.7;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
   transition: transform .2s ease;
@@ -68,6 +84,26 @@
 
 .feedback-page .feedback-btn:hover .feedback-btn-arrow {
   transform: translateX(3px);
+}
+
+.feedback-page .feedback-btn.feedback-home-btn {
+  justify-content: center;
+  gap: 14px;
+}
+
+.feedback-page .feedback-home-btn:hover .feedback-btn-arrow {
+  transform: translateX(-3px);
+}
+
+[dir="rtl"] .feedback-page .feedback-btn-arrow {
+  rotate: 180deg;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feedback-page .feedback-btn .feedback-btn-arrow {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* Keep the enlarged copy and artwork in normal flow so they never overlap. */

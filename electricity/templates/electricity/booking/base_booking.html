@@ -13,7 +13,8 @@
     {% endif %}
     <link rel="stylesheet" href="{% static 'electricity/css/select-system.css' %}?v=20261019-2">
     <link href="{% static 'electricity/css/electricity.css' %}?v=20261018-2" rel="stylesheet">
-    <link href="{% static 'electricity/css/booking.css' %}?v=20261022-1" rel="stylesheet">
+    <link href="{% static 'electricity/css/site_calendar.css' %}?v=20261021-3" rel="stylesheet">
+    <link href="{% static 'electricity/css/booking.css' %}?v=20261107-5" rel="stylesheet">
     {% block extra_css %}{% endblock %}
     <link href="{% static 'electricity/css/global_header.css' %}?v=20261105-1" rel="stylesheet">
     <link href="{% static 'electricity/css/responsive.css' %}?v=20261020-2" rel="stylesheet">
@@ -105,9 +106,11 @@
 <script defer src="{% static 'electricity/vendor/tom-select/tom-select.complete.min.js' %}"></script>
 <script defer src="{% static 'electricity/js/global.js' %}"></script>
 <script defer src="{% static 'electricity/js/site-back.js' %}?v=20261103-1"></script>
-<script src="{% static 'electricity/js/booking.js' %}?v=20261027-1"></script>
+<script src="{% static 'electricity/js/booking.js' %}?v=20261107-1"></script>
 <script defer src="{% static 'electricity/js/global_header.js' %}?v=20261027-3"></script>
 
 {% block extra_js %}{% endblock %}
+<script defer src="{% static 'electricity/js/site_calendar.js' %}?v=20261107-2"></script>
+<script defer src="{% static 'electricity/js/booking_schedule.js' %}?v=20261107-1"></script>
 </body>
 </html>

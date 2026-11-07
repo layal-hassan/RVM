@@ -5,251 +5,12 @@
 {% block body_class %}privacy-page{% endblock %}
 
 {% block extra_head %}
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-  <script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#f4c025",
-            "navy-deep": "#0a0c12",
-            "navy-muted": "#161b22",
-            "off-white": "#fcfcf9"
-          },
-          fontFamily: {
-            "serif": ["Playfair Display", "serif"],
-            "sans": ["Inter", "sans-serif"]
-          }
-        }
-      }
-    }
-  </script>
-  <style type="text/tailwindcss">
-    @layer base {
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        @apply font-sans antialiased;
-      }
-      h1, h2, h3, h4 {
-        @apply font-serif;
-      }
-      .nav-link {
-        @apply flex items-center gap-3 py-2 px-3 text-sm font-medium transition-all border-l-2 border-transparent;
-      }
-      .nav-link.active {
-        @apply font-semibold;
-      }
-      .policy-section {
-        @apply py-16 last:border-0;
-      }
-      .section-number {
-        @apply font-serif text-primary text-2xl mb-4 block;
-      }
-      .glass-card {
-        @apply backdrop-blur-md rounded-2xl p-10 shadow-2xl;
-      }
-      .right-card {
-        @apply rounded-xl p-6 transition-shadow;
-      }
-    }
-  </style>
-  <style>
-    body.electricity-body.privacy-page {
-      --privacy-bg: #090c07;
-      --privacy-panel: linear-gradient(180deg, rgba(22, 26, 15, 0.98), rgba(12, 15, 8, 0.98));
-      --privacy-panel-strong: linear-gradient(180deg, rgba(29, 34, 20, 0.98), rgba(16, 19, 10, 0.98));
-      --privacy-border: rgba(202, 161, 61, 0.18);
-      --privacy-border-strong: rgba(202, 161, 61, 0.3);
-      --privacy-gold: #caa13d;
-      --privacy-ink: #f5f1e6;
-      --privacy-muted: rgba(236, 230, 214, 0.72);
-      background:
-        radial-gradient(circle at top, rgba(202, 161, 61, 0.12), transparent 34%),
-        linear-gradient(180deg, #090c07 0%, #0d1009 40%, #080a06 100%);
-      color: var(--privacy-ink);
-      font-family: "Inter", sans-serif;
-    }
-
-    .privacy-page h1,
-    .privacy-page h2,
-    .privacy-page h3,
-    .privacy-page h4 {
-      color: var(--privacy-ink) !important;
-    }
-
-    .privacy-page p,
-    .privacy-page li,
-    .privacy-page span,
-    .privacy-page .text-navy-deep\/80,
-    .privacy-page .text-navy-deep\/70,
-    .privacy-page .text-navy-deep\/60,
-    .privacy-page .text-navy-deep\/40,
-    .privacy-page .text-sm,
-    .privacy-page .prose {
-      color: var(--privacy-muted);
-    }
-
-    .privacy-page .text-primary {
-      color: var(--privacy-gold) !important;
-    }
-
-    .privacy-page section.w-full.bg-white {
-      background:
-        linear-gradient(180deg, rgba(9, 12, 7, 0.9), rgba(9, 12, 7, 0.72)),
-        radial-gradient(circle at top, rgba(202, 161, 61, 0.14), transparent 38%) !important;
-      border-bottom: 1px solid rgba(202, 161, 61, 0.12) !important;
-    }
-
-    .privacy-page section.w-full.bg-white > div {
-      width: min(1100px, calc(100% - 32px));
-      padding: 92px 32px 86px;
-      border: 1px solid rgba(202, 161, 61, 0.16);
-      border-radius: 32px;
-      background: linear-gradient(180deg, rgba(16, 20, 11, 0.76), rgba(9, 12, 7, 0.92));
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.26);
-      backdrop-filter: blur(6px);
-    }
-
-    .privacy-page .inline-block.py-1.px-3.bg-primary\/10 {
-      background: rgba(202, 161, 61, 0.1) !important;
-      border: 1px solid rgba(202, 161, 61, 0.28);
-      color: #f3e4bb !important;
-      border-radius: 999px;
-      padding: 10px 18px;
-    }
-
-    .privacy-page .max-w-3xl .font-serif.italic {
-      color: rgba(245, 241, 230, 0.82) !important;
-    }
-
-    .privacy-page .w-full.max-w-\[1400px\] {
-      gap: 28px;
-      align-items: flex-start;
-    }
-
-    .privacy-page aside .sticky {
-      background: var(--privacy-panel);
-      border: 1px solid var(--privacy-border);
-      border-radius: 28px;
-      box-shadow: 0 22px 54px rgba(0, 0, 0, 0.22);
-      top: calc(var(--rwmh-height) + 24px);
-      padding: 28px 18px;
-      max-height: calc(100vh - 140px);
-    }
-
-    .privacy-page .nav-link {
-      color: var(--privacy-muted);
-      border-radius: 16px;
-      border: 1px solid transparent;
-    }
-
-    .privacy-page .nav-link:hover {
-      background: rgba(202, 161, 61, 0.08);
-      border-color: rgba(202, 161, 61, 0.16);
-      color: var(--privacy-ink) !important;
-      transform: translateX(2px);
-    }
-
-    .privacy-page .nav-link.active {
-      background: linear-gradient(180deg, rgba(202, 161, 61, 0.18), rgba(202, 161, 61, 0.1));
-      border-color: rgba(202, 161, 61, 0.28);
-      color: var(--privacy-ink) !important;
-    }
-
-    .privacy-page .policy-section {
-      background: var(--privacy-panel);
-      border: 1px solid var(--privacy-border);
-      border-radius: 30px;
-      padding: 48px 40px;
-      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.2);
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 24px;
-    }
-
-    .privacy-page .policy-section::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top right, rgba(202, 161, 61, 0.12), transparent 32%);
-      pointer-events: none;
-    }
-
-    .privacy-page .policy-section > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .privacy-page .bg-white,
-    .privacy-page .right-card,
-    .privacy-page .bg-white.border,
-    .privacy-page .p-6.border.border-navy-deep\/5.bg-white.rounded-xl,
-    .privacy-page .bg-white.border.border-navy-deep\/5.p-5.rounded-lg,
-    .privacy-page li.bg-white {
-      background: var(--privacy-panel) !important;
-      border: 1px solid var(--privacy-border) !important;
-      color: var(--privacy-ink) !important;
-      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
-    }
-
-    .privacy-page .glass-card {
-      background: var(--privacy-panel-strong) !important;
-      border: 1px solid var(--privacy-border-strong) !important;
-    }
-
-    .privacy-page .glass-card p,
-    .privacy-page .glass-card .text-white\/80,
-    .privacy-page .glass-card .text-white\/60 {
-      color: var(--privacy-muted) !important;
-    }
-
-    .privacy-page .glass-card .bg-white\/5 {
-      background: rgba(202, 161, 61, 0.08) !important;
-      border-color: rgba(202, 161, 61, 0.18) !important;
-    }
-
-    .privacy-page .bg-navy-deep,
-    .privacy-page .inline-flex.items-center.gap-2.text-sm.font-bold.uppercase.tracking-widest.bg-navy-deep {
-      background: linear-gradient(180deg, rgba(202, 161, 61, 0.18), rgba(202, 161, 61, 0.1)) !important;
-      border: 1px solid rgba(202, 161, 61, 0.24);
-      color: var(--privacy-ink) !important;
-    }
-
-    .privacy-page .w-12.h-12.bg-primary\/10.rounded-full,
-    .privacy-page .p-3.bg-primary\/20.rounded-lg.text-primary {
-      background: rgba(202, 161, 61, 0.12) !important;
-    }
-
-    .privacy-page .w-2.h-2.bg-primary.rounded-full {
-      background: var(--privacy-gold) !important;
-    }
-
-    .privacy-page a.text-primary {
-      color: var(--privacy-gold) !important;
-    }
-
-    @media (max-width: 900px) {
-      .privacy-page section.w-full.bg-white > div {
-        width: calc(100% - 24px);
-        padding: 72px 24px 64px;
-        border-radius: 24px;
-      }
-
-      .privacy-page .policy-section {
-        padding: 34px 22px;
-        border-radius: 24px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="{% static 'electricity/css/privacy.css' %}?v=20261107-2">
+  <link rel="preload" as="image" href="{% static 'electricity/img/privacy-electrical-work.webp' %}" fetchpriority="high">
 {% endblock %}
 
 {% block content %}
-<section class="w-full bg-white pt-24 pb-20 px-8 border-b border-navy-deep/5">
+<section class="privacy-hero w-full bg-white pt-24 pb-20 px-8 border-b border-navy-deep/5">
   <div class="max-w-[1200px] mx-auto text-center">
     <span class="inline-block py-1 px-3 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-[0.2em] rounded mb-6">{% trans "Transparency & Security" %}</span>
     <h1 class="text-6xl md:text-7xl font-bold leading-tight mb-8">{% trans "Privacy Policy" %}</h1>
@@ -262,7 +23,7 @@
   </div>
 </section>
 
-<div class="w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row px-8 py-16 gap-16">
+<div class="policy-layout w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row px-8 py-16 gap-16">
   <aside class="hidden lg:block w-72 shrink-0">
     <div class="sticky top-32 max-h-[calc(100vh-160px)] overflow-y-auto pr-4 scrollbar-hide">
       <h4 class="text-[10px] font-black uppercase tracking-widest text-navy-deep/30 mb-6 px-3">{% trans "Contents" %}</h4>
@@ -319,7 +80,7 @@
       <div class="space-y-6">
         <div class="flex gap-6 items-start">
           <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-primary">person_check</span>
+            <svg class="policy-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="7" r="3"/><path d="M3 21v-2a6 6 0 0 1 12 0v2m0-11 3 3 4-5"/></svg>
           </div>
           <div>
             <h4 class="font-bold text-lg mb-1">{% trans "Direct Interaction" %}</h4>
@@ -328,7 +89,7 @@
         </div>
         <div class="flex gap-6 items-start">
           <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-primary">language</span>
+            <svg class="policy-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg>
           </div>
           <div>
             <h4 class="font-bold text-lg mb-1">{% trans "Automated Systems" %}</h4>
@@ -337,7 +98,7 @@
         </div>
         <div class="flex gap-6 items-start">
           <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-primary">account_balance</span>
+            <svg class="policy-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m3 8 9-5 9 5H3Zm2 3v7m7-7v7m7-7v7M3 21h18"/></svg>
           </div>
           <div>
             <h4 class="font-bold text-lg mb-1">{% trans "Public Registries" %}</h4>
@@ -376,7 +137,7 @@
       <div class="glass-card my-10">
         <div class="flex items-center gap-4 mb-8">
           <div class="p-3 bg-primary/20 rounded-lg text-primary">
-            <span class="material-symbols-outlined text-3xl">gavel</span>
+            <svg class="policy-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14 3 7 7-3 3-7-7 3-3Zm-6 6 7 7-3 3-7-7 3-3Zm4 3-8 8M2 22h12"/></svg>
           </div>
           <div>
             <h3 class="text-2xl text-white font-serif">{% trans "ROT & Legal Disclosures" %}</h3>
@@ -387,7 +148,7 @@
         </p>
         <div class="p-4 bg-white/5 rounded border border-white/10">
           <p class="text-primary text-sm font-bold uppercase tracking-widest mb-0 flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm">warning</span>
+            <svg class="policy-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 3 10 18H2L12 3Zm0 6v5m0 3v.01"/></svg>
             {% trans "Required Action" %}
           </p>
           <p class="text-white/60 text-sm italic mt-1">{% trans "Failure to provide this information may result in the full invoice amount being charged without the tax benefit." %}</p>
@@ -450,42 +211,42 @@
       <h2 class="text-3xl font-bold mb-12">{% trans "Your GDPR Rights" %}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="right-card flex items-start gap-4">
-          <span class="material-symbols-outlined text-primary">visibility</span>
+          <svg class="policy-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
           <div>
             <h4 class="font-bold mb-1">{% trans "Right to Access" %}</h4>
             <p class="text-sm text-navy-deep/60">{% trans "Request a full extract of all personal data we hold about you." %}</p>
           </div>
         </div>
         <div class="right-card flex items-start gap-4">
-          <span class="material-symbols-outlined text-primary">edit_note</span>
+          <svg class="policy-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5h12M4 10h8M4 15h4m4 5 1-5 6-6 3 3-6 6-4 2Z"/></svg>
           <div>
             <h4 class="font-bold mb-1">{% trans "Right to Rectification" %}</h4>
             <p class="text-sm text-navy-deep/60">{% trans "Demand the correction of inaccurate or incomplete information." %}</p>
           </div>
         </div>
         <div class="right-card flex items-start gap-4">
-          <span class="material-symbols-outlined text-primary">delete_forever</span>
+          <svg class="policy-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M9 11l6 6m0-6-6 6"/></svg>
           <div>
             <h4 class="font-bold mb-1">{% trans "Right to Erasure" %}</h4>
             <p class="text-sm text-navy-deep/60">{% trans "Request deletion where data is no longer necessary for legal reasons." %}</p>
           </div>
         </div>
         <div class="right-card flex items-start gap-4">
-          <span class="material-symbols-outlined text-primary">move_up</span>
+          <svg class="policy-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20V4m-6 6 6-6 6 6M4 20h16"/></svg>
           <div>
             <h4 class="font-bold mb-1">{% trans "Data Portability" %}</h4>
             <p class="text-sm text-navy-deep/60">{% trans "Receive your data in a structured, machine-readable format." %}</p>
           </div>
         </div>
         <div class="right-card flex items-start gap-4">
-          <span class="material-symbols-outlined text-primary">block</span>
+          <svg class="policy-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m6 6 12 12"/></svg>
           <div>
             <h4 class="font-bold mb-1">{% trans "Right to Object" %}</h4>
             <p class="text-sm text-navy-deep/60">{% trans "Object to data processing based on our legitimate interests." %}</p>
           </div>
         </div>
         <div class="right-card flex items-start gap-4">
-          <span class="material-symbols-outlined text-primary">lock_clock</span>
+          <svg class="policy-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="10" width="14" height="11" rx="2"/><path d="M6 10V6a4 4 0 0 1 8 0v4m5 1v4l3 2"/></svg>
           <div>
             <h4 class="font-bold mb-1">{% trans "Restriction" %}</h4>
             <p class="text-sm text-navy-deep/60">{% trans "Request the limitation of how we process your personal data." %}</p>
@@ -537,7 +298,7 @@
       <p class="text-lg text-navy-deep/80 mb-6">{% trans "If you believe we have mishandled your data, you have the right to lodge a complaint with the Swedish Authority for Privacy Protection (Integritetsskyddsmyndigheten - IMY)." %}</p>
       <div class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest bg-navy-deep text-white px-6 py-3 rounded">
         {% trans "Visit IMY.se" %}
-        <span class="material-symbols-outlined text-sm">open_in_new</span>
+        <svg class="policy-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 3h7v7m0-7L10 14M10 3H4v17h17v-6"/></svg>
       </div>
     </section>
   </main>
@@ -545,18 +306,18 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const links = document.querySelectorAll('.nav-link');
-      const sections = document.querySelectorAll('.policy-section');
-      function changeActiveLink() {
-        let index = sections.length;
-        while (--index && window.scrollY + 200 < sections[index].offsetTop) {}
-        links.forEach((link) => link.classList.remove('active'));
-        if (links[index]) links[index].classList.add('active');
-      }
-      changeActiveLink();
-      window.addEventListener('scroll', changeActiveLink);
-    });
-  </script>
+<script>
+  (() => {
+    const sections = [...document.querySelectorAll('.policy-section')];
+    const links = [...document.querySelectorAll('.privacy-page .nav-link')];
+    const visible = new Set();
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.isIntersecting ? visible.add(entry.target) : visible.delete(entry.target));
+      const current = sections.find((section) => visible.has(section));
+      if (current) links.forEach((link) => link.classList.toggle('active', link.hash === '#' + current.id));
+    }, { rootMargin: '-100px 0px -50% 0px' });
+    sections.forEach((section) => observer.observe(section));
+    links[0]?.classList.add('active');
+  })();
+</script>
 {% endblock %}
