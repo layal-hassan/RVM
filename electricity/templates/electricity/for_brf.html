@@ -146,7 +146,7 @@
       </article>
       {% else %}
       <form class="brf-quote-form" method="post" action="{% url 'electricity:for_brf' %}#brf-quote" id="brf-quote">
-        {% csrf_token %}
+        {% csrf_token %}{% load turnstile_tags %}{% turnstile_widget %}
         <header>
           <h3>{% trans "Request a BRF quote" %}</h3>
           <p>{% trans "Fill in the form and we'll get back to you shortly." %}</p>

@@ -61,7 +61,7 @@
       <p class="careers-kicker">{% trans "Interested in joining us?" %}</p><h2 id="apply-title">{% if selected_job %}{% trans "Apply for" %} {{ selected_job.title }}{% else %}{% trans "Send an Open Application" %}{% endif %}</h2><p>{% if active_jobs %}{% trans "Even if we don't have a specific vacancy that matches your profile right now, we're always interested in hearing from skilled and motivated professionals." %}{% else %}{% trans "We are always interested in hearing from skilled and motivated professionals. Tell us a little about yourself and we'll keep your information for future opportunities." %}{% endif %}</p>
       {% if selected_job %}<div class="careers-selected-job">{% trans "Applying for" %}: <strong>{{ selected_job.title }}</strong></div>{% endif %}
       <form class="careers-form" action="{% url 'electricity:careers' %}#apply" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
+        {% csrf_token %}{% load turnstile_tags %}{% turnstile_widget %}
         {{ career_form.job }}
         <div class="careers-field"><label for="career-name">{% trans "Full name" %} *</label>{{ career_form.full_name }}{{ career_form.full_name.errors }}</div>
         <div class="careers-field"><label for="career-email">{% trans "Email address" %} *</label>{{ career_form.email }}{{ career_form.email.errors }}</div>

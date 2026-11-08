@@ -128,7 +128,7 @@
     {% endif %}
 
     <form method="post" class="support-form">
-      {% csrf_token %}
+      {% csrf_token %}{% load turnstile_tags %}{% turnstile_widget %}
       <div class="form-grid">
         <div>
           <label>{% trans "Full Name" %}</label>

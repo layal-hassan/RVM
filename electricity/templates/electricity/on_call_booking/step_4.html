@@ -35,7 +35,7 @@
   </script>
 {% else %}
 <form method="post" class="on-call-form">
-  {% csrf_token %}
+  {% csrf_token %}{% load turnstile_tags %}{% turnstile_widget %}
 
   <div class="oncall-header">
     <div class="section-label">{% trans "Finalize Registration" %}</div>

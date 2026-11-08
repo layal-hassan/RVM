@@ -1,5 +1,5 @@
 ﻿{% extends "electricity/dashboard/base.html" %}
-{% load electricity_extras i18n %}
+{% load electricity_extras i18n tz %}
 
 {% block page_title %}{{ title }}{% endblock %}
 {% block page_subtitle %}Manage all records directly in this dashboard.{% endblock %}
@@ -18,7 +18,7 @@
     <div class="panel-table">
         <div class="panel-row panel-row-head">
             {% for field in fields %}
-                <span>{{ field|title }}</span>
+                <span>{% if show_submission_timestamp and field == "created_at" %}{% trans "Submitted at" %}{% else %}{{ field|title }}{% endif %}</span>
             {% endfor %}
             {% if edit_url %}<span>Actions</span>{% endif %}
         </div>
@@ -27,7 +27,9 @@
             {% record_dashboard_section_edit_url row as section_edit_url %}
             <div class="panel-row" id="record-{{ row.pk }}">
                 {% for field in fields %}
-                    {% if compact_messages and field == "message" and row.message|length > 120 %}
+                    {% if show_submission_timestamp and field == "created_at" %}
+                    <span><time datetime="{{ row.created_at|date:'c' }}">{{ row.created_at|localtime|date:"Y-m-d H:i:s T" }}</time></span>
+                    {% elif compact_messages and field == "message" and row.message|length > 120 %}
                     <div class="inquiry-message-cell">
                         <p class="inquiry-message-preview">{{ row.message|truncatechars:100 }}</p>
                         <button type="button" class="inquiry-message-open" data-inquiry-message="inquiry-message-{{ row.pk }}">{% trans "View message" %}</button>

@@ -3,7 +3,7 @@
 
 {% block booking_content %}
 <form method="post" class="eb-form eb-review-form">
-  {% csrf_token %}
+  {% csrf_token %}{% load turnstile_tags %}{% turnstile_widget %}
   {% if data.customer_type == "business" %}
   <section class="eb-card eb-review-card">
     <div class="eb-card-header"><span class="eb-step-badge">7</span><div><h1>{% trans "Final review & confirmation" %}</h1><p>{% trans "Please review all details below before confirming your booking." %}</p></div></div>

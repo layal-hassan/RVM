@@ -72,7 +72,7 @@
       <div><dt><span>☎</span>{% trans "Call Us" %}</dt><dd><a href="tel:+46700391611">0046 70 03 91 611</a></dd></div>
       <div class="contact-v2-whatsapp"><dt><span>{% include "electricity/partials/whatsapp_icon.html" %}</span>{% trans "WhatsApp Us" %}</dt><dd><a href="https://wa.me/46700391611" target="_blank" rel="noopener">0046 70 03 91 611</a></dd></div>
     </dl></aside>
-    <form id="contact-form" class="contact-v2-form" method="post" action="{% url 'electricity:contact' %}">{% csrf_token %}<input type="hidden" name="inquiry_type" value="new_booking">
+    <form id="contact-form" class="contact-v2-form" method="post" action="{% url 'electricity:contact' %}">{% csrf_token %}{% load turnstile_tags %}{% turnstile_widget %}<input type="hidden" name="inquiry_type" value="new_booking">
       <div class="contact-v2-row"><label>{% trans "Full Name" %}<input type="text" name="full_name" placeholder="{% trans 'John Doe' %}" required></label><label>{% trans "Email Address" %}<input type="email" name="email" placeholder="john@example.com" required></label></div>
       <div class="contact-v2-row"><label>{% trans "Phone Number" %}<input type="tel" name="phone" placeholder="070 03 91 611"></label><label>{% trans "Project Address" %}<input type="text" name="address" placeholder="{% trans 'Street address, City' %}"></label></div>
       <fieldset class="contact-v2-customer-type">

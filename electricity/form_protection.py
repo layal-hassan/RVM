@@ -132,6 +132,10 @@ def reject_public_submission(request):
     if context is None:
         return None
     scope, data = context
+    from .turnstile import verify_submission
+    rejection = verify_submission(request, scope)
+    if rejection is not None:
+        return rejection
     retry_after = public_submission_retry_after(request, scope, data)
     if not retry_after:
         return None

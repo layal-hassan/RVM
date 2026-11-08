@@ -178,7 +178,7 @@
           <span>{% trans "Same great service. A faster start." %}</span>
         </div>
         <form method="post" action="{% url 'electricity:home' %}#quick-quote" class="home-quote-form">
-          {% csrf_token %}
+          {% csrf_token %}{% load turnstile_tags %}{% turnstile_widget %}
           <input type="hidden" name="form_type" value="quick_quote">
           {{ quote_form.website }}
           {{ quote_form.submission_token }}

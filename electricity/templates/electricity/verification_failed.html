@@ -1,0 +1,10 @@
+{% extends "electricity/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Security verification" %} | RWM EL{% endblock %}
+{% block content %}
+<section class="container" style="padding: 5rem 1.5rem; min-height: 55vh; max-width: 760px;">
+  <h1>{% trans "Security verification" %}</h1>
+  <p role="alert">{{ verification_message }}</p>
+  <button type="button" class="btn btn-primary" onclick="window.history.back()">{% trans "Back to form" %}</button>
+</section>
+{% endblock %}

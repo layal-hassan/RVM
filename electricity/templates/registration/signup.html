@@ -37,7 +37,7 @@
       {% endif %}
 
       <form method="post" class="signup-form">
-        {% csrf_token %}
+        {% csrf_token %}{% load turnstile_tags %}{% turnstile_widget %}
         {{ form.non_field_errors }}
 
         <!-- Account Type -->
@@ -248,5 +248,6 @@
       update();
     });
   </script>
+{% load turnstile_tags %}{% turnstile_scripts %}
 </body>
 </html>

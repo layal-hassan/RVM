@@ -153,7 +153,7 @@
     if (!dialog.querySelector("[data-confirm]").checked) return setError("Please confirm that the information is correct.");
     syncHidden(); const submit = dialog.querySelector("[data-submit]"); submit.disabled = true; const original = submit.textContent; submit.textContent = "Sending…";
     try { const response = await fetch(form.dataset.submitUrl, { method: "POST", body: new FormData(form), headers: { "X-Requested-With": "XMLHttpRequest" } }); const result = await response.json(); if (!response.ok) throw new Error(result.error || "Could not send your request."); dialog.querySelector("[data-reference]").textContent = result.reference; cart = []; files = []; renderCart(); show(6); }
-    catch (error) { setError(error.message); } finally { submit.disabled = false; submit.textContent = original; }
+    catch (error) { setError(error.message); } finally { window.resetSubmissionVerification?.(form); submit.disabled = false; submit.textContent = original; }
   });
   dialog.querySelector("[data-finish]").addEventListener("click", () => { restoreParkedCart(); dialog.close(); form.reset(); renderCart(); updateFiles(); window.scrollTo({ top: 0, behavior: "smooth" }); });
 })();

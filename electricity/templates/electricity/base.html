@@ -84,5 +84,6 @@
   <script defer src="{% static 'electricity/js/global_header.js' %}?v=20261027-3"></script>
 
   {% block extra_js %}{% endblock %}
+{% load turnstile_tags %}{% turnstile_scripts %}
 </body>
 </html>

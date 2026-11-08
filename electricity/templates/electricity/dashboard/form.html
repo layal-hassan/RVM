@@ -1,10 +1,13 @@
 ﻿{% extends "electricity/dashboard/base.html" %}
-{% load electricity_extras i18n %}
+{% load electricity_extras i18n tz %}
 
 {% block page_title %}{{ title }}{% endblock %}
 {% block page_subtitle %}Fill the details and save.{% endblock %}
 
 {% block content %}
+{% if submitted_at %}
+<p class="panel-meta">{% trans "Submitted at" %}: <time datetime="{{ submitted_at|date:'c' }}">{{ submitted_at|localtime|date:"Y-m-d H:i:s T" }}</time></p>
+{% endif %}
 {% record_preview_url form.instance as preview_url %}
 {% record_dashboard_section_edit_url form.instance as section_edit_url %}
 {% dashboard_related_actions form.instance as related_actions %}

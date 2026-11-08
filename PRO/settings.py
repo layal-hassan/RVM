@@ -48,6 +48,14 @@ if DJANGO_ENV not in {"production", "development", "test"}:
 # A leftover DEBUG=True in a copied .env must not enable production tracebacks.
 DEBUG = DJANGO_ENV == "development" and _env_bool("DEBUG", False)
 
+# Configure both keys in the deployment environment to enable bot protection.
+TURNSTILE_SITE_KEY = os.getenv("TURNSTILE_SITE_KEY", "").strip()
+TURNSTILE_SECRET_KEY = os.getenv("TURNSTILE_SECRET_KEY", "").strip()
+TURNSTILE_ENABLED = _env_bool("TURNSTILE_ENABLED", bool(TURNSTILE_SITE_KEY or TURNSTILE_SECRET_KEY))
+TURNSTILE_TIMEOUT = 10
+if TURNSTILE_ENABLED and not (TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY):
+    raise ImproperlyConfigured("Turnstile requires TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY.")
+
 _default_allowed_hosts = ["127.0.0.1", "localhost"]
 _production_hosts = ["45.93.137.166", "rwmel.se", "www.rwmel.se"]
 _env_allowed_hosts = [

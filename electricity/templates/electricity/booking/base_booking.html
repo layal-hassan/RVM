@@ -47,6 +47,7 @@
             <form method="post" enctype="multipart/form-data" class="booking-form">
                 {% csrf_token %}
                 {% block content %}{% endblock %}
+                {% if step == 7 %}{% load turnstile_tags %}{% turnstile_widget %}{% endif %}
                 <div class="booking-actions">
                     {% block actions %}{% endblock %}
                 </div>
@@ -112,5 +113,6 @@
 {% block extra_js %}{% endblock %}
 <script defer src="{% static 'electricity/js/site_calendar.js' %}?v=20261107-2"></script>
 <script defer src="{% static 'electricity/js/booking_schedule.js' %}?v=20261107-1"></script>
+{% load turnstile_tags %}{% turnstile_scripts %}
 </body>
 </html>

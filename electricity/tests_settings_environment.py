@@ -4,6 +4,7 @@ import runpy
 from unittest.mock import patch
 
 from django.test import RequestFactory, SimpleTestCase, override_settings
+from django.core.exceptions import ImproperlyConfigured
 
 
 class SettingsEnvironmentTests(SimpleTestCase):
@@ -31,3 +32,13 @@ class SettingsEnvironmentTests(SimpleTestCase):
     def test_explicit_production_cannot_enable_debug(self):
         values = self.load(DJANGO_ENV="production", DEBUG="true")
         self.assertFalse(values["DEBUG"])
+
+    def test_turnstile_requires_both_keys_when_enabled(self):
+        for config in ({"TURNSTILE_ENABLED": "true"}, {"TURNSTILE_SITE_KEY": "site"},
+                       {"TURNSTILE_SECRET_KEY": "secret"}):
+            with self.assertRaises(ImproperlyConfigured):
+                self.load(**config)
+
+    def test_turnstile_enables_when_both_keys_are_configured(self):
+        self.assertFalse(self.load()["TURNSTILE_ENABLED"])
+        self.assertTrue(self.load(TURNSTILE_SITE_KEY="site", TURNSTILE_SECRET_KEY="secret")["TURNSTILE_ENABLED"])

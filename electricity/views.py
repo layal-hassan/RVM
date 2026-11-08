@@ -4707,6 +4707,7 @@ def dashboard_career_applications(request):
         {
             "title": "Career Applications",
             "items": CareerApplication.objects.all(),
+            "show_submission_timestamp": True,
             "fields": ["full_name", "email", "job", "position", "years_of_experience", "status", "created_at"],
             "create_url": "electricity:dashboard_career_applications_add",
             "edit_url": "electricity:dashboard_career_applications_edit",
@@ -4742,6 +4743,7 @@ def dashboard_career_applications_edit(request, pk):
         return redirect("electricity:dashboard_career_applications")
     return render(request, "electricity/dashboard/form.html", {
         "title": "Career Application", "form": form,
+        "submitted_at": item.created_at,
         "back_url": "electricity:dashboard_career_applications",
     })
 

@@ -39,7 +39,7 @@
       <h2>{% trans "Apply for this position" %}</h2>
       <p>{% trans "Fill in the form and attach your CV. We look forward to hearing from you." %}</p>
       <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}{{ career_form.job }}
+        {% csrf_token %}{% load turnstile_tags %}{% turnstile_widget %}{{ career_form.job }}
         {% for field in career_form %}{% if field.name != "job" and field.name != "position" %}<div class="career-detail-field"><label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>{{ field }}{{ field.errors }}</div>{% endif %}{% endfor %}
         <button type="submit">{% trans "Send application" %}{% include "electricity/partials/arrow_icon.html" %}</button>
         <p class="career-detail-privacy">{% trans "Your personal data will be handled in accordance with our Privacy Policy and only used for recruitment purposes." %}</p>
