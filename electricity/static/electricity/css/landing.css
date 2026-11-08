@@ -703,10 +703,29 @@ html[lang|="sv" i] .home-hero-swedish {
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 7px;
   outline: none;
-  background: rgba(255, 255, 255, 0.035);
+  background: #0b1f3a;
   color: #fff;
   font: inherit;
   font-size: 11px;
+}
+body.landing-body .home-quote-fields input,
+body.landing-body .home-quote-fields textarea {
+  background-color: #0b1f3a;
+}
+body.landing-body .home-quote-fields input:-webkit-autofill,
+body.landing-body .home-quote-fields input:-webkit-autofill:hover,
+body.landing-body .home-quote-fields input:-webkit-autofill:focus,
+body.landing-body .home-quote-fields textarea:-webkit-autofill,
+body.landing-body .home-quote-fields textarea:-webkit-autofill:hover,
+body.landing-body .home-quote-fields textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: #fff !important;
+  -webkit-box-shadow: 0 0 0 1000px #0b1f3a inset !important;
+  box-shadow: 0 0 0 1000px #0b1f3a inset !important;
+}
+body.landing-body .home-quote-fields input:autofill,
+body.landing-body .home-quote-fields textarea:autofill {
+  background-color: #0b1f3a !important;
+  color: #fff !important;
 }
 .home-quote-fields .home-quote-input input { padding-right: 40px; }
 .home-quote-fields input:focus,

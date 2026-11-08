@@ -11,7 +11,7 @@ from django.urls import resolve, reverse
 
 from .form_protection import reject_public_submission
 from .middleware import PublicFormSpamProtectionMiddleware
-from .models import PublicFormSubmissionBucket, SupportTicket
+from .models import ConsultationRequest, PublicFormSubmissionBucket, SupportTicket
 from .turnstile import verify_submission
 
 
@@ -101,6 +101,21 @@ class TurnstileVerificationTests(TestCase):
 
 @override_settings(**CONFIG, EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
 class TurnstileSubmissionTests(TestCase):
+    def test_quick_quote_requires_verification_before_saving_or_sending(self):
+        page = self.client.get(reverse("electricity:home"))
+        html = page.content.decode()
+        self.assertLess(html.index('name="message"'), html.index('data-turnstile'))
+        response = self.client.post(reverse("electricity:home"), {
+            "form_type": "quick_quote", "full_name": "Test Customer",
+            "email": "customer@example.com", "phone": "0701234567",
+            "message": "Please inspect the fuse board.", "website": "",
+            "submission_token": page.context["quote_form"]["submission_token"].value(),
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(ConsultationRequest.objects.exists())
+        self.assertFalse(PublicFormSubmissionBucket.objects.exists())
+        self.assertEqual(len(mail.outbox), 0)
+
     def payload(self, **extra):
         return {"full_name": "Test Customer", "email": "customer@example.com", "phone": "0701234567",
                 "message": "Help with my electrical project", "request_type": "Support", **extra}

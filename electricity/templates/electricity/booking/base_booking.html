@@ -3,6 +3,7 @@
 {% get_current_language as CURRENT_LANGUAGE %}
 <html lang="{{ CURRENT_LANGUAGE }}" dir="{% if CURRENT_LANGUAGE == 'ar' %}rtl{% else %}ltr{% endif %}">
 <head>
+  {% include "electricity/partials/favicon.html" %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% trans "Consultation Booking" %}{% endblock %}</title>
