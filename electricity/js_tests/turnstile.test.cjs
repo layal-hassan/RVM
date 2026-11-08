@@ -7,16 +7,24 @@ const vm = require('node:vm');
 function setup() {
   const form = {};
   const message = { hidden: true };
+  const loading = { hidden: false };
+  const unavailable = { hidden: true };
+  const states = { '[data-turnstile-error]': message, '[data-turnstile-loading]': loading, '[data-turnstile-unavailable]': unavailable };
   const node = {
     dataset: { sitekey: 'public-key' }, visible: true,
-    closest: selector => selector === 'form' ? form : { querySelector: () => message },
+    closest: selector => selector === 'form' ? form : { querySelector: name => states[name] },
     getClientRects() { return this.visible ? [{}] : []; },
     scrollIntoView() {},
   };
   const listeners = {};
   let observer;
   let script;
-  const window = { addEventListener(type, fn) { listeners[type] = fn; } };
+  let timeout;
+  const window = {
+    addEventListener(type, fn) { listeners[type] = fn; },
+    setTimeout(fn) { timeout = fn; return 1; },
+    clearTimeout() { timeout = null; },
+  };
   const document = {
     querySelectorAll: () => [node], body: {},
     addEventListener(type, fn, capture) { assert.equal(capture, true); listeners[type] = fn; },
@@ -28,7 +36,7 @@ function setup() {
       observe() {}
     },
   });
-  return { window, node, form, message, listeners, get script() { return script; }, observe: () => observer() };
+  return { window, node, form, message, loading, unavailable, listeners, get script() { return script; }, observe: () => observer(), expire: () => timeout?.() };
 }
 
 test('blocks submission before AJAX handlers while verification is unavailable', () => {
@@ -54,6 +62,8 @@ test('renders a hidden review widget when visible, accepts token, and resets for
   env.observe();
   env.observe();
   assert.equal(rendered, 1);
+  assert.equal(env.loading.hidden, true);
+  assert.equal(env.unavailable.hidden, true);
   assert.equal(options.sitekey, 'public-key');
   env.listeners.submit({ target: env.form, preventDefault() { assert.fail('Verified form was blocked'); } });
   options['expired-callback']();
@@ -69,5 +79,13 @@ test('renders a hidden review widget when visible, accepts token, and resets for
 test('shows retry message if the Cloudflare script fails to load', () => {
   const env = setup();
   env.script.onerror();
-  assert.equal(env.message.hidden, false);
+  assert.equal(env.unavailable.hidden, false);
+  assert.equal(env.loading.hidden, true);
+});
+
+test('shows a loading failure when the Cloudflare script never responds', () => {
+  const env = setup();
+  env.expire();
+  assert.equal(env.unavailable.hidden, false);
+  assert.equal(env.loading.hidden, true);
 });

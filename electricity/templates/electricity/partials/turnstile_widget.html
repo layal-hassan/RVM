@@ -1,7 +1,9 @@
 {% load i18n %}
 {% if enabled %}
 <div class="submission-verification" style="margin: 1rem 0; grid-column: 1 / -1; min-width: 0;">
+  <p data-turnstile-loading role="status">{% trans "Loading security verification…" %}</p>
   <div data-turnstile data-sitekey="{{ site_key }}"></div>
+  <p data-turnstile-unavailable role="alert" hidden>{% trans "Security verification could not load. Please check your connection and refresh the page." %}</p>
   <p data-turnstile-error role="alert" hidden>{% trans "Please complete the security verification and try again." %}</p>
   <noscript>{% trans "Please enable JavaScript to complete the security verification." %}</noscript>
 </div>

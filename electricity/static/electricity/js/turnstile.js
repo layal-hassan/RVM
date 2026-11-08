@@ -3,6 +3,12 @@
   if (!widgets.length) return;
   const ids = new Map();
   const error = node => node.closest(".submission-verification").querySelector("[data-turnstile-error]");
+  const state = (node, selector) => node.closest(".submission-verification").querySelector(selector);
+  const showLoadFailure = () => widgets.forEach(node => {
+    if (ids.has(node)) return;
+    state(node, "[data-turnstile-loading]").hidden = true;
+    state(node, "[data-turnstile-unavailable]").hidden = false;
+  });
   const reset = form => widgets.filter(node => node.closest("form") === form).forEach(node => {
     if (ids.has(node) && window.turnstile) window.turnstile.reset(ids.get(node));
   });
@@ -30,13 +36,22 @@
         "error-callback": () => { error(node).hidden = false; },
         "expired-callback": () => { error(node).hidden = false; },
       }));
+      state(node, "[data-turnstile-loading]").hidden = true;
+      state(node, "[data-turnstile-unavailable]").hidden = true;
     });
   };
-  window.onSubmissionTurnstileLoad = renderVisible;
+  const loadTimeout = window.setTimeout(showLoadFailure, 15000);
+  window.onSubmissionTurnstileLoad = () => {
+    window.clearTimeout(loadTimeout);
+    renderVisible();
+  };
   const script = document.createElement("script");
   script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onSubmissionTurnstileLoad&render=explicit";
   script.async = true;
-  script.onerror = () => widgets.forEach(node => { error(node).hidden = false; });
+  script.onerror = () => {
+    window.clearTimeout(loadTimeout);
+    showLoadFailure();
+  };
   document.head.append(script);
   new MutationObserver(renderVisible).observe(document.body, {
     subtree: true, attributes: true, attributeFilter: ["class", "style", "hidden", "open"],

@@ -101,6 +101,14 @@ class TurnstileVerificationTests(TestCase):
 
 @override_settings(**CONFIG, EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
 class TurnstileSubmissionTests(TestCase):
+    def test_contact_verification_is_between_consent_and_submit(self):
+        response = self.client.get(reverse("electricity:contact"))
+        form = response.content.decode().split('id="contact-form"', 1)[1].split('</form>', 1)[0]
+        self.assertLess(form.index('name="consent"'), form.index('data-turnstile data-sitekey='))
+        self.assertLess(form.index('data-turnstile data-sitekey='), form.index('type="submit"'))
+        self.assertIn('data-turnstile-loading', form)
+        self.assertIn('data-turnstile-unavailable', form)
+
     def test_quick_quote_requires_verification_before_saving_or_sending(self):
         page = self.client.get(reverse("electricity:home"))
         html = page.content.decode()

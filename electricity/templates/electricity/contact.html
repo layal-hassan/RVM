@@ -72,7 +72,7 @@
       <div><dt><span>☎</span>{% trans "Call Us" %}</dt><dd><a href="tel:+46700391611">0046 70 03 91 611</a></dd></div>
       <div class="contact-v2-whatsapp"><dt><span>{% include "electricity/partials/whatsapp_icon.html" %}</span>{% trans "WhatsApp Us" %}</dt><dd><a href="https://wa.me/46700391611" target="_blank" rel="noopener">0046 70 03 91 611</a></dd></div>
     </dl></aside>
-    <form id="contact-form" class="contact-v2-form" method="post" action="{% url 'electricity:contact' %}">{% csrf_token %}{% load turnstile_tags %}{% turnstile_widget %}<input type="hidden" name="inquiry_type" value="new_booking">
+    <form id="contact-form" class="contact-v2-form" method="post" action="{% url 'electricity:contact' %}">{% csrf_token %}{% load turnstile_tags %}<input type="hidden" name="inquiry_type" value="new_booking">
       <div class="contact-v2-row"><label>{% trans "Full Name" %}<input type="text" name="full_name" placeholder="{% trans 'John Doe' %}" required></label><label>{% trans "Email Address" %}<input type="email" name="email" placeholder="john@example.com" required></label></div>
       <div class="contact-v2-row"><label>{% trans "Phone Number" %}<input type="tel" name="phone" placeholder="070 03 91 611"></label><label>{% trans "Project Address" %}<input type="text" name="address" placeholder="{% trans 'Street address, City' %}"></label></div>
       <fieldset class="contact-v2-customer-type">
@@ -95,6 +95,7 @@
       <label>{% trans "Service Needed" %}<select name="request_type"><option value="">{% trans "Select a service" %}</option><option>{% trans "Residential" %}</option><option>{% trans "Commercial" %}</option><option>{% trans "Emergency service" %}</option></select></label>
       <label>{% trans "Your Message" %}<textarea rows="4" name="message" placeholder="{% trans 'Tell us more about your project...' %}" required></textarea></label>
       <label class="contact-v2-consent"><input type="checkbox" name="consent" required><span>{% trans "I consent to the processing of my information for this inquiry." %}</span></label>
+      {% turnstile_widget %}
       <button type="submit">{% trans "Submit Inquiry" %}</button>{% if contact_status == "error" %}<p class="contact-v2-error" role="alert">{% trans "We could not send your message right now. Please try again." %}</p>{% endif %}<small>♙ {% trans "Your information is handled securely and will only be used for this inquiry." %}</small>
     </form>
     {% if contact_status == "sent" %}<aside class="contact-v2-success" role="status"><span class="contact-v2-check">✓</span><h2>{% trans "Enquiry Successfully Submitted!" %}</h2><p>{% trans "Thank you! We have received your request." %}</p><p>{% trans "We've received your enquiry and our team will review your request and get back to you as soon as possible." %}</p><a data-site-back href="{% url 'electricity:services' %}">{% trans "Back" %}</a><div class="contact-v2-quick"><span>{% trans "Need assistance sooner?" %}</span><div><a href="tel:+46700391611">☎ {% trans "Call Us" %}</a><a class="contact-v2-whatsapp-link" href="https://wa.me/46700391611" target="_blank" rel="noopener">{% include "electricity/partials/whatsapp_icon.html" %} WhatsApp</a></div><strong>0046 70 03 91 611</strong></div></aside>{% endif %}
